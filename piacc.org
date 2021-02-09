@@ -1,0 +1,396 @@
+#+TITLE: PIACC data processing
+
+# https://orgmode.org/manual/Export-Settings.html#Export-Settings
+#+OPTIONS: H:4 num:nil toc:nil pri:t ::t |:t f:t <:t -:t \n:nil ':t ^:{}
+#+OPTIONS: d:nil todo:t tags:not-in-toc tex:t
+
+#+STARTUP: overview inlineimages logdone indent noalign
+# noindent
+
+# comment out for reveal.js
+# #+SETUPFILE: ~/setup/my-theme-readtheorg.setup
+
+#+PROPERTY: header-args :tangle
+#+PROPERTY: header-args :eval never-export
+#+PROPERTY: header-args:ein :session localhost
+#+PROPERTY: header-args:jupyter-python :session *jupyter-piacc* :kernel tf
+
+* email transitions
+#+begin_src R
+library(dplyr)
+load('Problem solving/Problem-solving_cleaned_1110.rdata')
+email = PS[PS$CODEBOOK == "U01a000S",]
+email$action = paste(email$event_type, email$event_description)
+email$action[email$event_num == 1] = "START"
+email$action[email$action == "END END"] = "END"
+## email$action = email$event_type
+#+end_src
+
+#+begin_src R
+n = nrow(email)
+trans = paste(email$action[1:(n-1)], "->", email$action[2:n])
+trans = trans[trans != "END -> START"]
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+length(unique(trans))
+#+end_src
+
+#+RESULTS:
+: [1] 1775
+
+#+begin_src R
+tab = table(trans)
+ntab = as.numeric(tab)
+summary(ntab)
+sum(ntab > 1)
+#+end_src
+
+#+RESULTS:
+:    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+:    1.00    1.00    2.00   19.11    7.00 1353.00
+: [1] 1014
+
+#+begin_src R
+toend = grepl("END$",trans)
+nonext = grepl("NEXT\\_INQUIRY REQUEST ->",trans)
+trans[toend & !nonext]
+#+end_src
+
+#+RESULTS:
+#+begin_example
+ [1] "TEXTBOX_KILLFOCUS id=endtask_txt2|*$value=Are you sure you want to continue to the next part of this task? -
+END"
+ [2] "TEXTBOX_KILLFOCUS id=endtask_txt2|*$value=Are you sure you want to continue to the next part of this task? -
+END"
+ [3] "KEYPRESS num=3_time=1000 -
+END"
+ [4] "TEXTBOX_KILLFOCUS id=endtask_txt2|*$value=Are you sure you want to continue to the next part of this task? -
+END"
+ [5] "KEYPRESS num=1_time=0 -
+END"
+ [6] "TEXTBOX_KILLFOCUS id=hlpMC_txt10|*$value=Send -
+END"
+ [7] "BREAKOFF REQUEST -
+END"
+ [8] "TEXTBOX_KILLFOCUS id=email_message|*$value= -
+END"
+ [9] "BREAKOFF REQUEST -
+END"
+[10] "BREAKOFF REQUEST -
+END"
+[11] "KEYPRESS num=3_time=0 -
+END"
+#+end_example
+
+#+begin_src R
+texton = grepl("TEXTBOX_ONFOCUS", trans)
+textoff = grepl("TEXTBOX_KILLFOCUS", trans)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+edes = email$event_description
+cfolder = grepl("createfoldernameinput", edes)
+email$SEQID[cfolder]
+#+end_src
+
+#+RESULTS:
+:  [1] 1120 1120  208  208  208  208  208  208 2339 2339 2339 2339 2487 2487 2487
+: [16] 2487 2778 2778 3010 3010 3689 3689 3768 3768 3768 3768 3789 3789 3789 3789
+: [31] 3838 3838 3909 3909 4042 4042 4080 4080 4087 4087 4149 4149 4149 4149 4435
+: [46] 4435 4444 4444 4652 4652 4652 4652 4842 4842   74   74   74   74   74   74
+: [61]   74   74   74   74  782  782  842  842
+
+#+begin_src R
+email %>% filter(SEQID == 4444) %>% select(event_type, event_description)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+           event_type                              event_description
+1               START                                  TEST_TIME=332
+2                MENU                                   id=edit-menu
+3  MENUITEM_newfolder                                  key=newfolder
+4     TEXTBOX_ONFOCUS              id=createfoldernameinput|*$value=
+5            KEYPRESS                               num=37_time=9000
+6   TEXTBOX_KILLFOCUS    id=createfoldernameinput|*$value=Can Attend
+7       ADD_FOLDER_ok                               id=addValidation
+8       ADD_FOLDER_ok                               id=addValidation
+9   ADD_FOLDER_cancel                                   id=addCancel
+10          MAIL_DRAG                                id=u01a_item101
+11        MAIL_VIEWED                                id=u01a_item102
+12      FOLDER_VIEWED                          id=u01a_CanComeFolder
+13         MAIL_MOVED    id=u01a_item101|*$target=u01a_CanComeFolder
+14        MAIL_VIEWED                                id=u01a_item102
+15          MAIL_DRAG                                id=u01a_item102
+16      FOLDER_VIEWED                       id=u01a_CannotComeFolder
+17         MAIL_MOVED id=u01a_item102|*$target=u01a_CannotComeFolder
+18        MAIL_VIEWED                                id=u01a_item104
+19        MAIL_VIEWED                                id=u01a_item103
+20        MAIL_VIEWED                                id=u01a_item104
+21        MAIL_VIEWED                                id=u01a_item104
+22        MAIL_VIEWED                                id=u01a_item105
+23          MAIL_DRAG                                id=u01a_item104
+24      FOLDER_VIEWED                          id=u01a_CanComeFolder
+25         MAIL_MOVED    id=u01a_item104|*$target=u01a_CanComeFolder
+26        MAIL_VIEWED                                id=u01a_item105
+27        MAIL_VIEWED                                id=u01a_item103
+28        MAIL_VIEWED                                id=u01a_item105
+29          MAIL_DRAG                                id=u01a_item103
+30        MAIL_VIEWED                                id=u01a_item103
+31      FOLDER_VIEWED                                   id=undefined
+32      FOLDER_VIEWED                          id=u01a_CanComeFolder
+33        MAIL_VIEWED                                id=u01a_item201
+34        MAIL_VIEWED                                id=u01a_item202
+35        MAIL_VIEWED                                id=u01a_item101
+36        MAIL_VIEWED                                id=u01a_item104
+37       NEXT_INQUIRY                                        REQUEST
+38                END                                            END
+#+end_example
+
+#+begin_src R
+email %>% filter(SEQID == 782) %>% select(event_type, event_description)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+           event_type                         event_description
+1               START                             TEST_TIME=332
+2         MAIL_VIEWED                           id=u01a_item104
+3         MAIL_VIEWED                           id=u01a_item101
+4         MAIL_VIEWED                           id=u01a_item102
+5         MAIL_VIEWED                           id=u01a_item104
+6         MAIL_VIEWED                           id=u01a_item104
+7         MAIL_VIEWED                           id=u01a_item104
+8         MAIL_VIEWED                           id=u01a_item104
+9         MAIL_VIEWED                           id=u01a_item104
+10        MAIL_VIEWED                           id=u01a_item104
+11      FOLDER_VIEWED                     id=u01a_CanComeFolder
+12               MENU                              id=file-menu
+13 MENUITEM_newfolder                             key=newfolder
+14      FOLDER_VIEWED                           id=u01a_myMails
+15    TEXTBOX_ONFOCUS         id=createfoldernameinput|*$value=
+16           KEYPRESS                           num=8_time=4000
+17  TEXTBOX_KILLFOCUS id=createfoldernameinput|*$value=CAN COME
+18      ADD_FOLDER_ok                          id=addValidation
+19        MAIL_VIEWED                           id=u01a_item104
+20       TOOLBAR_help                                   id=help
+21  TOOLBAR_replymail                              id=replymail
+22        MAIL_VIEWED                           id=u01a_item105
+23        MAIL_VIEWED                           id=u01a_item105
+24        MAIL_VIEWED                           id=u01a_item105
+25        MAIL_VIEWED                           id=u01a_item101
+26               MENU                              id=edit-menu
+27    MENUITEM_delete                                key=delete
+28        MAIL_VIEWED                           id=u01a_item105
+29               MENU                           id=message-menu
+30    MENUITEM_delete                                key=delete
+31    TOOLBAR_mailApp                                id=mailApp
+32      FOLDER_VIEWED                     id=u01a_CanComeFolder
+33               MENU                              id=file-menu
+34 MENUITEM_newfolder                             key=newfolder
+35      FOLDER_VIEWED                     id=u01a_CanComeFolder
+36      ADD_FOLDER_ok                          id=addValidation
+37       NEXT_INQUIRY                                   REQUEST
+38                END                                       END
+#+end_example
+
+* Keras word2vec
+:PROPERTIES:
+:header-args:R: :results silent :session *R-Keras* :exports both :noweb yes :eval never-export
+:END:
+
+see https://blogs.rstudio.com/ai/posts/2017-12-22-word-embeddings-with-keras/
+
+#+begin_src emacs-lisp
+;; python
+(require 'conda)
+(conda-env-activate "tf")
+#+end_src
+
+#+RESULTS:
+: Switched to conda environment: /Users/yunj/.conda/envs/r-tensorflow/
+
+#+begin_src R :tangle word2vec.R
+library(readr)
+library(stringr)
+reviews <- read_lines("finefoods.txt.gz", n_max = 100)
+reviews <- reviews[str_sub(reviews, 1, 12) == "review/text:"]
+reviews <- str_sub(reviews, start = 14)
+reviews <- iconv(reviews, to = "UTF-8")
+#+end_src
+
+#+begin_src R :tangle word2vec.R
+library(keras)
+tokenizer <- text_tokenizer(num_words = 200)
+tokenizer %>% fit_text_tokenizer(reviews)
+#+end_src
+
+#+begin_src R :tangle word2vec.R
+library(reticulate)
+library(purrr)
+skipgrams_generator <- function(text, tokenizer, window_size, negative_samples) {
+  gen <- texts_to_sequences_generator(tokenizer, sample(text))
+  function() {
+    skip <- generator_next(gen) %>%
+      skipgrams(
+        vocabulary_size = tokenizer$num_words,
+        window_size = window_size,
+        negative_samples = 0
+      )
+    x <- transpose(skip$couples) %>% map(. %>% unlist %>% as.matrix(ncol = 1))
+    y <- skip$labels %>% as.matrix(ncol = 1)
+    list(x, y)
+  }
+}
+#+end_src
+
+#+begin_src R :tangle word2vec.R
+## embedding_size <- 128  # Dimension of the embedding vector.
+embedding_size <- 8  # Dimension of the embedding vector.
+skip_window <- 1       # How many words to consider left and right.
+num_sampled <- 1       # Number of negative examples to sample for each word.
+input_target <- layer_input(shape = 1)
+input_context <- layer_input(shape = 1)
+#+end_src
+
+#+begin_src R :tangle word2vec.R
+embedding <- layer_embedding(
+  input_dim = tokenizer$num_words + 1,
+  output_dim = embedding_size,
+  input_length = 1,
+  name = "embedding"
+)
+
+target_vector <- input_target %>%
+  embedding() %>%
+  layer_flatten()
+
+context_vector <- input_context %>%
+  embedding() %>%
+  layer_flatten()
+
+dot_product <- layer_dot(list(target_vector, context_vector), axes = 1)
+output <- layer_dense(dot_product, units = 1, activation = "sigmoid")
+
+#+end_src
+
+#+begin_src R :tangle word2vec.R
+
+
+model <- keras_model(list(input_target, input_context), output)
+model %>% compile(loss = "binary_crossentropy", optimizer = "adam")
+summary(model)
+
+#+end_src
+
+
+#+begin_src R :tangle word2vec.R
+model %>%
+  fit_generator(
+    skipgrams_generator(reviews, tokenizer, skip_window, negative_samples),
+    ## steps_per_epoch = 100000, epochs = 5
+    steps_per_epoch = 100, epochs = 5
+    )
+#+end_src
+
+* word2vec preprocessing
+goal: process actions to be used for =word2vec=
+- [-] remove =event_description= with no information
+- [-] remove *consecutive* action repetition.
+- [X] concat =event_type= and =event_description=
+- [X] substitue SPACE with "_"
+- [X] concat actions into a sequence
+- [X] remove START and END.
+- [X] write sequences to a txt file
+#+begin_src R
+library(dplyr)
+library(stringr)
+setwd('~/workspace/procmod-code/')
+load('./data/PIAAC_cleaned_data_1110/Problem solving/Problem-solving_cleaned_1110.rdata')
+email = PS %>% filter(CODEBOOK == "U01a000S")
+email = email %>% mutate(event_description = ifelse(event_type == "START","",event_description)) %>%
+mutate(event_description = ifelse(event_type == "END","",event_description)) %>%
+  mutate(event_description = ifelse(event_type == "KEYPRESS","",event_description)) %>%
+  mutate(event_concat = ifelse(event_description == "", event_type, paste0(event_type,"--",event_description))) %>%
+mutate(word = gsub(" ", "_", event_concat))
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+n = nrow(email)
+pre = email$word[1:(n-1)]
+cur = email$word[2:n]
+dif = c(TRUE, !(cur == pre))
+
+idx = logical(n)
+for (i in 2:n) {
+if(dif[i] == FALSE && dif[i-1] == FALSE) {
+  idx[i] = TRUE
+  }
+}
+
+email = email[!idx,]
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+id = unique(email$SEQID)
+seqs = character(length(id))
+for (i in id) {
+  for (word in email$word[email$SEQID == i]) {
+    seqs[i] = paste0(seqs[i], " ", word)
+  }}
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+for (i in id) {
+    seqs[i] = gsub(" START ", "", seqs[i])
+    seqs[i] = gsub(" END", "", seqs[i])
+}
+seqs = seqs[id]
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R
+data.table::fwrite(as.data.frame(seqs), "email_sentence.txt", col.names=F)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+mm = 0
+for (i in id) {
+  mm = max(mm, length(email$word[email$SEQID == i]))
+  }
+#+end_src
+
+#+RESULTS:
+
+* email word2vec
+See [[file:email_word2vec.ipynb]]
+* ticket
+#+begin_src R
+library(dplyr)
+library(stringr)
+load('.data/PIAAC_cleaned_data_1110/Problem solving/Problem-solving_cleaned_1110.rdata')
+ticket = PS %>% filter(CODEBOOK == "U21x000S")
+#+end_src
+
+#+RESULTS:
+
+* COMMENT Local Variables
+# Local Variables:
+# org-babel-default-header-args:R: ((:session . "*R-Org*") (:export . "both") (:results . "output replace"))
+# flyspell-mode: -1
+# End:
