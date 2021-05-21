@@ -1,29 +1,181 @@
 #+TITLE: PIACC data processing
 
 # https://orgmode.org/manual/Export-Settings.html#Export-Settings
-#+OPTIONS: H:4 num:nil toc:nil pri:t ::t |:t f:t <:t -:t \n:nil ':t ^:{}
-#+OPTIONS: d:nil todo:t tags:not-in-toc tex:t
+#+options:   H:10 num:nil toc:t \n:nil @:t ::t |:t ^:nil ^:{} -:t f:t *:t <:t ':nil -:nil pri:t
+#+options:   TeX:t LaTeX:t skip:nil d:nil todo:nil pri:nil tags:nil
 
-#+STARTUP: overview inlineimages logdone indent noalign
-# noindent
+#+startup: overview inlineimages logdone indent
+
+#+latex_class: article
+#+latex_class_options: [letterpaper,11pt]
+
+#+latex_compiler: pdflatex
 
 # comment out for reveal.js
-# #+SETUPFILE: ~/setup/my-theme-readtheorg.setup
+#+setupfile: ~/setup/my-theme-readtheorg.setup
+#+setupfile: ~/org/latex_header.setup
+#+setupfile: ~/org/orgmode_header.setup
+# https://orgmode.org/manual/Export-Settings.html#Export-Settings
 
 #+PROPERTY: header-args :tangle
 #+PROPERTY: header-args :eval never-export
 #+PROPERTY: header-args:ein :session localhost
 #+PROPERTY: header-args:jupyter-python :session *jupyter-piacc* :kernel tf
+* discussion
+- [2021-05-09 Sun] note
+  I drop event description and tryed a few more embeddings.
+it seems incorrect process actions have low cosine similarity. This means they are difficult to form a semantic cluster(s).
+actions associated to the task (or problem solving) has high similarity. so as long as event description remains the same, I can set the subsequence as a new action. embedding of a new action is determined by the mean (center) embeddings of its members.
+** Email invitation I :noexport:ATTACH:
+:PROPERTIES:
+:ID:       468ae777-6949-4e3f-9521-fa63037fdf73
+:END:
+#+caption: Email invitation
+#+attr_org: :width 300
+[[attachment:_20210426_142403screenshot.png]]
+[[https://piaac-logdata.tba-hosting.de/confidential/problemsolving/PartyInvitations1/pages/pi-start.html][Party Invitations Part 1]]
 
-* email transitions
+#+begin_src R
+source("email_word2vec_preproc.r")
+email %>% filter(SEQID == 101) %>% select(event_type,  event_description, timestamp, diff)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+       event_type        event_description timestamp   diff
+ 1:         START                                  0  32679
+ 2:     MAIL_DRAG                  item101     32679   2784
+ 3:   MAIL_VIEWED                  item104     35463      4
+ 4: FOLDER_VIEWED            CanComeFolder     35467     70
+ 5:    MAIL_MOVED    item101|CanComeFolder     35537   5294
+ 6:   MAIL_VIEWED                  item102     40831   4551
+ 7:     MAIL_DRAG                  item102     45382   1912
+ 8:   MAIL_VIEWED                  item105     47294      4
+ 9: FOLDER_VIEWED         CannotComeFolder     47298     56
+10:    MAIL_MOVED item102|CannotComeFolder     47354   5049
+11:   MAIL_VIEWED                  item104     52403   3589
+12:     MAIL_DRAG                  item104     55992   1542
+13:   MAIL_VIEWED                  item105     57534      4
+14: FOLDER_VIEWED            CanComeFolder     57538     50
+15:    MAIL_MOVED    item104|CanComeFolder     57588   4722
+16:   MAIL_VIEWED                  item105     62310   6690
+17:   MAIL_VIEWED                  item103     69000   4563
+18: FOLDER_VIEWED            CanComeFolder     73563   3468
+19:   MAIL_VIEWED                  item101     77031   9667
+20:  NEXT_INQUIRY                              86698   5229
+21:           END                              91927 -91927
+       event_type        event_description timestamp   diff
+#+end_example
+** [[mu4e:msgid:CAC72WzTzKpZBEHrobD4TFkHZrUHqVu6NR24qsHOYcDZ-dHFP=g@mail.gmail.com][Re: Questions about Data]] :noexport:
+- initial location
+  + inbox: 100s
+  + can come: 200s
+  + cannot come: 301
+
+- response = (0 - 3)
+  + can come: 101, 104
+  + cannot come: 102
+  + can come: 201, 202 (don't move, or move but put back(e.g ~TOOLBAR_trash~))
+  + anywhere: 103, 105
+** to sequence
+- discard actions being taken for very short time (100ms)
+- otherwise embeddings doesn't help much
+#+begin_src R
+seqs[4]
+#+end_src
+
+#+RESULTS:
+: [1] "MAIL_DRAG-item101 MAIL_MOVED-item101|CanComeFolder MAIL_VIEWED-item102 MAIL_DRAG-item102 MAIL_MOVED-item102|CannotComeFolder MAIL_VIEWED-item104 MAIL_DRAG-item104 MAIL_MOVED-item104|CanComeFolder MAIL_VIEWED-item105 MAIL_VIEWED-item103 FOLDER_VIEWED-CanComeFolder MAIL_VIEWED-item101 NEXT_INQUIRY"
+** [[id:02fc4776-ea2d-4770-91ed-92d35c08a81d][word2vec embedding]] :noexport:
+https://www.tensorflow.org/tutorials/text/word2vec
+- Words that tend to “behave similarly” end up close to one another in the embedding space. Instead of using the word symbol as a feature in the model, we can use its vector, which exploits such similarities.
+
+\[
+  p\left(w_{j} \mid w_{0}, u, v\right)=\frac{\exp \left(u\left(w_{0}\right)^{\top} v\left(w_{j}\right)\right)}{\sum_{w \in V} \exp \left(u\left(w_{0}\right)^{\top} v(w)\right)}
+\]
+where \(u: V \rightarrow \mathbb{R}^{k} \) and \(v: V \rightarrow \mathbb{R}^{k}\) are functions which map words to a word embedding—one for the pivot words, and the other for context.
+** transition models
+- action based transition: >= 500
+- embeddings based transition (~embedding_dim~)
+
+The intensity function $q_{ml}(\cdot)$ represents the instantaneous risk of moving from action $m$ to $l$. It may depend on covariates $\mathbf{z}(t)$, the time t itself, and possibly also the “history” of the process up to that time, $\mathbf{F}_t$: the states previously visited or the length of time spent in them.
+\begin{align*}
+  q_{ml} (t ; \boldsymbol{\alpha}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{k,m \rightarrow l}(t) \exp( \alpha_m + \alpha_l + \boldsymbol{\beta}_{m,l}' \mathbf{z}_{i,m,l}(t) ),
+\end{align*}
+\begin{align*}
+  q_{ml} (t ; \boldsymbol{\alpha}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{k,m \rightarrow l}(t) \exp( \alpha_m + \alpha_l + \boldsymbol{\beta} d_{i,m,l} ),
+\end{align*}
+where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ is coefficients associated with $\mathbf{z}(t)$, $\lambda_{k,m\rightarrow l}(t)$ is a baseline intensity function. For each state $l$, there are competing transitions $m_1, \ldots, m_{n_l}$. This mean there are $n_{l}$ corresponding survival models for state $l$, and overall $K=\sum_l n_l$ models. Models with no shared parameters can be estimated separately.
+** ticket :noexport:ATTACH:
+:PROPERTIES:
+:ID:       a183bf8a-10f9-4ccb-861b-9658d5b2b9f5
+:header-args:R: :results silent :session *R-PIACC* :exports both :noweb yes :eval never-export
+:END:
+#+attr_org: :width 300
+[[attachment:_20210426_040805screenshot.png]]
+
+[[https://piaac-logdata.tba-hosting.de/confidential/problemsolving/FootballTickets/pages/ft-home.html][Football Tickets]]
+- calendar: TAB-id=tabbutton2
+- ticketing: TAB-id=tabbutton1
+- event type: COMBOBOX-id=u021_default_menu1|*$index=7 (football)
+- location: COMBOBOX-id=u021_default_menu2|*$index=2 (Bakerton)
+- response = 1 (correct) 7 (incorrect) 0 missing
+  menu1 and 6 = 9 (8 seems ok too)
+- N = 1344
+  src_R[:session *R-PIACC* :exports results]{length(unique(df$SEQID))}
+
+#+transclude: t
+[[id:673df774-623f-44b5-a262-b22739c9a506][CD Tally]]
+* draft
+We assume a continuously observed process, recurrent actions. The process seems to be irreversible, but I need to double check. See https://www.mrc-bsu.cam.ac.uk/wp-content/uploads/2017/10/multistate_enar_webinar.pdf
+
+The intensity function $q_{ml}(\cdot)$ represents the instantaneous risk of moving from action $m$ to $l$. It may depend on covariates $\mathbf{z}(t)$, the time t itself, and possibly also the “history” of the process up to that time, $\mathbf{F}_t$: the states previously visited or the length of time spent in them.
+
+\begin{align*}
+  q_{ml} (t ; \boldsymbol{\alpha}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{k,m \rightarrow l}(t) \exp( \alpha_m + \alpha_l + \boldsymbol{\beta}_{m,l}' \mathbf{z}_{i,m,l}(t) ),
+\end{align*}
+where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ is coefficients associated with $\mathbf{z}(t)$, $\lambda_{k,m\rightarrow l}(t)$ is a baseline intensity function. For each state $l$, there are competing transitions $m_1, \ldots, m_{n_l}$. This mean there are $n_{l}$ corresponding survival models for state $l$, and overall $K=\sum_l n_l$ models. Models with no shared parameters can be estimated separately.
+
+What questions can you answer using these models? The below are quantities of interests in the multi-state survival model. All functions of the transition intensities (similar to the fact that estimable quantities are all functions of hazard rates in competing risk analysis) are estimable.
+
+- total time that is expected to spend in state $l$ before time $t$.
+- expected first passage time (first visit time to a state)
+- expected number of visits to a state
+- if possible, prob. of first action
+
+In Discussion, we decided to use time-scale: in-homogeneous and number of terminal states: one.
+* filtering
+remove people with at least one missing.
+[[file:data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv]]
 #+begin_src R
 library(dplyr)
-load('Problem solving/Problem-solving_cleaned_1110.rdata')
+library(stringr)
+setwd('~/workspace/procmod-code/')
+load('./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_cleaned_1110.rdata')
+PS$response = as.numeric(PS$response)
+to_drop = PS$SEQID[is.na(PS$response)]
+PS = na.omit(PS)
+to_drop = c(to_drop, PS$SEQID[which(PS$response == 0 & !(PS$CODEBOOK %in% c("U01a000S", "U04a000S","U19b000S", "U02x000S", "U11b000S", "U11b000S")))])
+to_drop = unique(to_drop)
+PS = PS %>% filter(!SEQID %in% to_drop)
+save(PS, file = "./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_no_missing.rdata")
+#+end_src
+* COMMENT email transitions
+#+begin_src R
+library(dplyr)
+load('data/PIAAC_cleaned_data_1110/Problem solving/Problem-solving_cleaned_1110.rdata')
 email = PS[PS$CODEBOOK == "U01a000S",]
+
+## only core event description included
+## core_event = c("MAIL_DRAG", "MAIL_VIEWED", "FOLDER_VIEWED", "MAIL_MOVED")
+core_event = c("MAIL_DRAG", "MAIL_MOVED")
+email$event_description[!(email$event_type %in% core_event)] <- ""
+
 email$action = paste(email$event_type, email$event_description)
 email$action[email$event_num == 1] = "START"
 email$action[email$action == "END END"] = "END"
 ## email$action = email$event_type
+ee = email %>% select(SEQID, event_type, event_description)
 #+end_src
 
 #+begin_src R
@@ -35,8 +187,24 @@ trans = trans[trans != "END -> START"]
 #+RESULTS:
 
 #+begin_src R
+aa = email
+aa = aa %>% filter(event_description != "") %>% select(SEQID,event_type,event_description)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+length(unique(email$event_type))
+length(unique(email$action))
 length(unique(trans))
 #+end_src
+
+#+RESULTS:
+: [1] 51
+: [1] 109
+: [1] 752
+
+: [1] 1774
 
 #+begin_src R
 tab = table(trans)
@@ -45,16 +213,26 @@ summary(ntab)
 sum(ntab > 1)
 #+end_src
 
+#+RESULTS:
+:    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+:     1.0     1.0     2.0    45.1     9.0  3932.0
+: [1] 479
+
 #+begin_src R
 toend = grepl("END$",trans)
 nonext = grepl("NEXT\\_INQUIRY REQUEST ->",trans)
 trans[toend & !nonext]
 #+end_src
 
+#+RESULTS:
+: character(0)
+
 #+begin_src R
 texton = grepl("TEXTBOX_ONFOCUS", trans)
 textoff = grepl("TEXTBOX_KILLFOCUS", trans)
 #+end_src
+
+#+RESULTS:
 
 #+begin_src R
 edes = email$event_description
@@ -62,17 +240,105 @@ cfolder = grepl("createfoldernameinput", edes)
 email$SEQID[cfolder]
 #+end_src
 
-#+begin_src R
+#+RESULTS:
+: numeric(0)
+
+#+begin_src R :tangle no
 email %>% filter(SEQID == 4444) %>% select(event_type, event_description)
 #+end_src
 
-#+begin_src R
+#+RESULTS:
+#+begin_example
+           event_type                              event_description
+1               START
+2                MENU
+3  MENUITEM_newfolder
+4     TEXTBOX_ONFOCUS
+5            KEYPRESS
+6   TEXTBOX_KILLFOCUS
+7       ADD_FOLDER_ok
+8       ADD_FOLDER_ok
+9   ADD_FOLDER_cancel
+10          MAIL_DRAG                                id=u01a_item101
+11        MAIL_VIEWED
+12      FOLDER_VIEWED
+13         MAIL_MOVED    id=u01a_item101|*$target=u01a_CanComeFolder
+14        MAIL_VIEWED
+15          MAIL_DRAG                                id=u01a_item102
+16      FOLDER_VIEWED
+17         MAIL_MOVED id=u01a_item102|*$target=u01a_CannotComeFolder
+18        MAIL_VIEWED
+19        MAIL_VIEWED
+20        MAIL_VIEWED
+21        MAIL_VIEWED
+22        MAIL_VIEWED
+23          MAIL_DRAG                                id=u01a_item104
+24      FOLDER_VIEWED
+25         MAIL_MOVED    id=u01a_item104|*$target=u01a_CanComeFolder
+26        MAIL_VIEWED
+27        MAIL_VIEWED
+28        MAIL_VIEWED
+29          MAIL_DRAG                                id=u01a_item103
+30        MAIL_VIEWED
+31      FOLDER_VIEWED
+32      FOLDER_VIEWED
+33        MAIL_VIEWED
+34        MAIL_VIEWED
+35        MAIL_VIEWED
+36        MAIL_VIEWED
+37       NEXT_INQUIRY
+38                END
+#+end_example
+
+#+begin_src R :tangle no
 email %>% filter(SEQID == 782) %>% select(event_type, event_description)
 #+end_src
 
-* Keras word2vec
+#+RESULTS:
+#+begin_example
+           event_type event_description
+1               START
+2         MAIL_VIEWED
+3         MAIL_VIEWED
+4         MAIL_VIEWED
+5         MAIL_VIEWED
+6         MAIL_VIEWED
+7         MAIL_VIEWED
+8         MAIL_VIEWED
+9         MAIL_VIEWED
+10        MAIL_VIEWED
+11      FOLDER_VIEWED
+12               MENU
+13 MENUITEM_newfolder
+14      FOLDER_VIEWED
+15    TEXTBOX_ONFOCUS
+16           KEYPRESS
+17  TEXTBOX_KILLFOCUS
+18      ADD_FOLDER_ok
+19        MAIL_VIEWED
+20       TOOLBAR_help
+21  TOOLBAR_replymail
+22        MAIL_VIEWED
+23        MAIL_VIEWED
+24        MAIL_VIEWED
+25        MAIL_VIEWED
+26               MENU
+27    MENUITEM_delete
+28        MAIL_VIEWED
+29               MENU
+30    MENUITEM_delete
+31    TOOLBAR_mailApp
+32      FOLDER_VIEWED
+33               MENU
+34 MENUITEM_newfolder
+35      FOLDER_VIEWED
+36      ADD_FOLDER_ok
+37       NEXT_INQUIRY
+38                END
+#+end_example
+* COMMENT Keras word2vec
 :PROPERTIES:
-:header-args:R: :results silent :session *R-Keras* :exports both :noweb yes :eval never-export
+:header-args:R: :results silent :exports both :noweb yes :eval never-export
 :END:
 
 see https://blogs.rstudio.com/ai/posts/2017-12-22-word-embeddings-with-keras/
@@ -169,7 +435,10 @@ model %>%
     )
 #+end_src
 
-* word2vec preprocessing
+* email word2vec preprocessing
+:PROPERTIES:
+:header-args:R: :results silent :tangle email_word2vec_preproc.r :eval never-export
+:END:
 goal: process actions to be used for =word2vec=
 - [-] remove =event_description= with no information
 - [-] remove *consecutive* action repetition.
@@ -178,18 +447,66 @@ goal: process actions to be used for =word2vec=
 - [X] concat actions into a sequence
 - [X] remove START and END.
 - [X] write sequences to a txt file
+
+  #+begin_src R :tangle no
+source("email_word2vec_preproc.r")
+  #+end_src
+
+- keep a small number of event_description that are highly relevant to movement of emails.
+- remove action taking < 50ms ([[https://www.tobiipro.com/learn-and-support/learn/eye-tracking-essentials/how-fast-is-human-perception/][How fast is human perception? About 80 ms | Find out more]])
 #+begin_src R
 library(dplyr)
 library(stringr)
 setwd('~/workspace/procmod-code/')
-load('./data/PIAAC_cleaned_data_1110/Problem solving/Problem-solving_cleaned_1110.rdata')
+load('./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_no_missing.rdata')
 email = PS %>% filter(CODEBOOK == "U01a000S")
+
+## core_event = c("MAIL_DRAG", "MAIL_MOVED")
+core_event = c("MAIL_DRAG", "MAIL_MOVED", "MAIL_VIEWED")
+## core_event = c("MAIL_MOVED")
+email$event_description[!(email$event_type %in% core_event)] <- ""
+## email$event_description <- ""
+
+timestamp = email$timestamp
+diff = c(diff(timestamp), 99999)
+email$diff = diff
+email = email[(diff > 99) || (diff < 0 ), ]
+
+email$event_description = stringr::str_replace(email$event_description, "(.*)\\*\\$target=u01a_(.*)",  "\\1\\2")
+email$event_description = stringr::str_replace(email$event_description, "id=u01a_",  "")
+email$event_description = stringr::str_replace(email$event_description, "\\*\\$target=",  "")
+
 email = email %>% mutate(event_description = ifelse(event_type == "START","",event_description)) %>%
 mutate(event_description = ifelse(event_type == "END","",event_description)) %>%
   mutate(event_description = ifelse(event_type == "KEYPRESS","",event_description)) %>%
-  mutate(event_concat = ifelse(event_description == "", event_type, paste0(event_type,"--",event_description))) %>%
+  mutate(event_concat = ifelse(event_description == "", event_type, paste0(event_type,"-",event_description))) %>%
 mutate(word = gsub(" ", "_", event_concat))
 #+end_src
+
+we need to remove transition between the same action
+#+begin_src R
+ww = email$word
+id = email$SEQID
+ww0 = ww[1:(length(ww)-1)]
+ww1 = ww[2:(length(ww))]
+
+dup = ww0 == ww1
+dup0 = c(dup,  FALSE )
+dup1 = c( FALSE ,  dup)
+
+idx = dup1
+
+cw = "NULL"
+cid = 9999999999
+for (kk in which(dup1)) {
+  if(cw != ww[kk] && cid != id[kk]) idx[kk] = FALSE
+  cw = ww[kk]
+  cid = id[kk]
+}
+
+email = email[!idx, ]
+#+end_src
+
 
 #+begin_src R
 n = nrow(email)
@@ -213,44 +530,307 @@ email = email[!idx,]
 id = unique(email$SEQID)
 seqs = character(length(id))
 for (i in id) {
-  for (word in email$word[email$SEQID == i]) {
-    seqs[i] = paste0(seqs[i], " ", word)
-  }}
+  ## for (word in email$word[email$SEQID == i]) {
+    ## seqs[i] = paste0(seqs[i], " ", word)
+  ## }
+  seqs[i] = paste(email$word[email$SEQID == i] , collapse = " ")
+}
 #+end_src
 
+#+RESULTS:
+
+this leave only one action in some cases... let's keep start and end
 #+begin_src R
-for (i in id) {
-    seqs[i] = gsub(" START ", "", seqs[i])
-    seqs[i] = gsub(" END", "", seqs[i])
-}
+## for (i in id) {
+##     seqs[i] = gsub("START ", "", seqs[i])
+##     seqs[i] = gsub(" END", "", seqs[i])
+## }
 seqs = seqs[id]
 #+end_src
+
+#+RESULTS:
 
 
 #+begin_src R
 data.table::fwrite(as.data.frame(seqs), "email_sentence.txt", col.names=F)
 #+end_src
 
-#+begin_src R
-mm = 0
+#+RESULTS:
+
+#+begin_src R :tangle no
+vv = numeric(max(id))
 for (i in id) {
-  mm = max(mm, length(email$word[email$SEQID == i]))
+  vv[i] =length(email$word[email$SEQID == i])
   }
+
+length(unique(email$word))
+n = nrow(email)
+trans = paste(email$word[1:(n-1)], "->", email$word[2:n])
+trans = trans[trans != "END -> START"]
+length(unique(trans))
+90 * 89 / 2
+
+ee = PS %>% filter(CODEBOOK == "U01a000S")
+ww = paste(ee$event_type, ee$event_description)
+length(unique(ww))
+nn = nrow(ee)
+trans = paste(ww[1:(nn-1)], "->", ww[2:nn])
+length(unique(trans))
+#+end_src
+* email word2vec
+window_size = 2 should be [5,20] for a small data set.
+(negative samples) num_ns = 4
+See [[file:email_word2vec.ipynb]]
+Download the vectors.tsv and metadata.tsv to analyze the obtained embeddings in the Embedding Projector. https://projector.tensorflow.org/
+* email multi-state model
+- https://www.mrc-bsu.cam.ac.uk/wp-content/uploads/2017/10/multistate_enar_webinar.pdf
+- https://cran.r-project.org/web/packages/msm/msm.pdf
+- [[id:57b08111-9c48-4fa9-b289-10f01fc7a0d6][cite:hill_relaxing_2021]]
+* email subject segmentation
+#+begin_src R :results silent
+source("email_word2vec_preproc.r")
 #+end_src
 
-* email word2vec
-See [[file:email_word2vec.ipynb]]
-* ticket
+#+begin_src R :results silent
+vv = readr::read_tsv("vectors.tsv")
+mm = readr::read_tsv("metadata.tsv")
+
+ww = email$word
+#+end_src
+
+#+begin_src R
+myvv = matrix(0, length(id), ncol(vv))
+mymm=numeric(length(id))
+
+idx =0
+for (ii in id) {
+  idx=idx+1
+  ss=ww[email$SEQID==ii]
+  ss=ss[ss != "START"]
+  ss=ss[ss != "END  "]
+ ss=ss[ss != "END_CANCEL"]
+  ## ss=ss[ss != "MENUITEM_help"]
+ee = numeric(length(ss))
+  for (kk in 1:length(ss)) {
+    ee[kk]= which(ss[kk] == mm)
+  }
+  myvv[idx,]=colMeans(vv[ee,])
+  mymm[idx]=email$response[email$SEQID==ii][1]
+}
+
+readr::write_tsv(as.data.frame(mymm),"mymm.tsv", col_names=F)
+readr::write_tsv(as.data.frame(myvv),"myvv.tsv", col_names=F)
+#+end_src
+
+#+RESULTS:
+
+- I didn't remove START and END.
+- those with small event duration are deleted.
+- centroid of action sequence is calculated and used for the clustering.
+- timestamp information is not used for clustring
+TSNE can identify many subect groups. wouldn't that be useful for futher analysis?
+* Football ticket
+
 #+begin_src R
 library(dplyr)
 library(stringr)
-load('.data/PIAAC_cleaned_data_1110/Problem solving/Problem-solving_cleaned_1110.rdata')
-ticket = PS %>% filter(CODEBOOK == "U21x000S")
+load('./data/PIAAC_cleaned_data_1110/Problem solving/Problem-solving_cleaned_1110.rdata')
+df = PS %>% filter(CODEBOOK == "U21x000S")
+
+ww = paste(df$event_type, ee$event_description)
+length(unique(ww))
+nn = nrow(df)
+trans = paste(ww[1:(nn-1)], "->", ww[2:nn])
+length(unique(trans))
 #+end_src
 
+#+begin_src R
+core_event = c("COMBOBOX", "TAB", "CHECKBOX")
+## core_event = c("MAIL_MOVED")
+df$event_description[!(df$event_type %in% core_event)] <- ""
+timestamp = df$timestamp
+diff = c(0, diff(timestamp))
+df = df[diff > 50, ]
+
+df$event_description = stringr::str_replace_all(df$event_description, "\\*\\$index=", "")
+df$event_description = stringr::str_replace_all(df$event_description, "u021_(.*?)_","")
+df$event_description = stringr::str_replace(df$event_description, "id=",  "")
+df$event_description = stringr::str_replace(df$event_description, "button",  "")
+
+df = df %>% mutate(event_description = ifelse(event_type == "START","",event_description)) %>%
+mutate(event_description = ifelse(event_type == "END","",event_description)) %>%
+  mutate(event_description = ifelse(event_type == "KEYPRESS","",event_description)) %>%
+  mutate(event_concat = ifelse(event_description == "", event_type, paste0(event_type,"-",event_description))) %>%
+mutate(word = gsub(" ", "_", event_concat))
+#+end_src
+
+#+begin_src R
+n = nrow(df)
+pre = df$word[1:(n-1)]
+cur = df$word[2:n]
+dif = c(TRUE, !(cur == pre))
+
+idx = logical(n)
+for (i in 2:n) {
+if(dif[i] == FALSE && dif[i-1] == FALSE) {
+  idx[i] = TRUE
+  }
+}
+
+df = df[!idx,]
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+id = unique(df$SEQID)
+seqs = character(length(id))
+for (i in id) {
+  ## for (word in df$word[df$SEQID == i]) {
+    ## seqs[i] = paste0(seqs[i], " ", word)
+  ## }
+  seqs[i] = paste(df$word[df$SEQID == i] , collapse = " ")
+}
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+for (i in id) {
+    seqs[i] = gsub("START ", "", seqs[i])
+    seqs[i] = gsub(" END", "", seqs[i])
+}
+seqs = seqs[id]
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src R
+data.table::fwrite(as.data.frame(seqs), "ticket_sentence.txt", col.names=F)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+mm = 0
+for (i in id) {
+  mm = max(mm, length(df$word[df$SEQID == i]))
+  }
+mm
+length(unique(df$word))
+n = nrow(df)
+trans = paste(df$word[1:(n-1)], "->", df$word[2:n])
+trans = trans[trans != "END -> START"]
+length(unique(trans))
+#+end_src
+* CD Tally :ATTACH:
+:PROPERTIES:
+:header-args:R: :results silent :session *R-PIACC* :exports both :noweb yes :eval never-export
+:ID:       673df774-623f-44b5-a262-b22739c9a506
+:END:
+
+#+attr_org: :width 700
+[[attachment:_20210426_063856screenshot.png]]
+
+[[https://piaac-logdata.tba-hosting.de/confidential/problemsolving/CDTallyPart1/pages/cd-start.html][CD Tally Part 1]]
+- look at the spreadsheet and calculate the value
+
+#+begin_src R
+library(dplyr)
+library(stringr)
+load('./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_cleaned_1110.rdata')
+df = PS %>% filter(CODEBOOK == "U03a000S")
+
+ww = paste(df$event_type, df$event_description)
+length(unique(ww))
+nn = nrow(df)
+trans = paste(ww[1:(nn-1)], "->", ww[2:nn])
+length(unique(trans))
+#+end_src
+
+#+begin_src R
+core_event = c("COMBOBOX", "TAB", "CHECKBOX")
+## core_event = c("MAIL_MOVED")
+df$event_description[!(df$event_type %in% core_event)] <- ""
+timestamp = df$timestamp
+diff = c(diff(timestamp), 9999)
+df = df[diff > 99, ]
+
+df$event_description = stringr::str_replace_all(df$event_description, "\\*\\$index=", "")
+df$event_description = stringr::str_replace_all(df$event_description, "u021_(.*?)_","")
+df$event_description = stringr::str_replace(df$event_description, "id=",  "")
+df$event_description = stringr::str_replace(df$event_description, "button",  "")
+
+df = df %>% mutate(event_description = ifelse(event_type == "START","",event_description)) %>%
+mutate(event_description = ifelse(event_type == "END","",event_description)) %>%
+  mutate(event_description = ifelse(event_type == "KEYPRESS","",event_description)) %>%
+  mutate(event_concat = ifelse(event_description == "", event_type, paste0(event_type,"-",event_description))) %>%
+mutate(word = gsub(" ", "_", event_concat))
+#+end_src
+
+#+begin_src R
+n = nrow(df)
+pre = df$word[1:(n-1)]
+cur = df$word[2:n]
+dif = c(TRUE, !(cur == pre))
+
+idx = logical(n)
+for (i in 2:n) {
+if(dif[i] == FALSE && dif[i-1] == FALSE) {
+  idx[i] = TRUE
+  }
+}
+
+df = df[!idx,]
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+id = unique(df$SEQID)
+seqs = character(length(id))
+for (i in id) {
+  ## for (word in df$word[df$SEQID == i]) {
+    ## seqs[i] = paste0(seqs[i], " ", word)
+  ## }
+  seqs[i] = paste(df$word[df$SEQID == i] , collapse = " ")
+}
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+for (i in id) {
+    seqs[i] = gsub("START ", "", seqs[i])
+    seqs[i] = gsub(" END", "", seqs[i])
+}
+seqs = seqs[id]
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+data.table::fwrite(as.data.frame(seqs), "ticket_sentence.txt", col.names=F)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+mm = 0
+for (i in id) {
+  mm = max(mm, length(df$word[df$SEQID == i]))
+  }
+mm
+length(unique(df$word))
+n = nrow(df)
+trans = paste(df$word[1:(n-1)], "->", df$word[2:n])
+trans = trans[trans != "END -> START"]
+length(unique(trans))
+#+end_src
 * COMMENT Local Variables
 # Local Variables:
-# org-babel-default-header-args:R: ((:session . "*R-Org*") (:export . "both") (:results . "output replace"))
+# org-babel-default-header-args:R: ((:session . "*R-PIACC*") (:export . "both") (:results . "output replace"))
 # eval: (flyspell-mode -1)
 # eval: (spell-fu-mode -1)
 # End:
