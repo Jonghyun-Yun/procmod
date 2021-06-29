@@ -66,7 +66,7 @@ email %>% filter(SEQID == 101) %>% select(event_type,  event_description, timest
 21:           END                              91927 -91927
        event_type        event_description timestamp   diff
 #+end_example
-** [[mu4e:msgid:CAC72WzTzKpZBEHrobD4TFkHZrUHqVu6NR24qsHOYcDZ-dHFP=g@mail.gmail.com][Re: Questions about Data]] :noexport:
+* [[mu4e:msgid:CAC72WzTzKpZBEHrobD4TFkHZrUHqVu6NR24qsHOYcDZ-dHFP=g@mail.gmail.com][Re: Questions about Data]] :noexport:
 - initial location
   + inbox: 100s
   + can come: 200s
@@ -126,6 +126,138 @@ where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ 
 
 #+transclude: t
 [[id:673df774-623f-44b5-a262-b22739c9a506][CD Tally]]
+
+* model and action space
+Proportional baseline:
+\[
+  \lambda_{ml}(t) = \lambda_{m1}(t) e^{\theta_{l}} \text{ for } l \neq 1.
+\]
+Or
+\[
+  \lambda_{ml}(t) = \lambda_{m} + \lambda_{j} + \theta_{\lambda},
+\]
+out-of-action, item, person parameters.
+
+Proportional hazard term:
+\[
+  e^{(\beta_m + \beta_k + \theta_{\beta}) D_{ml}}
+\]
+out-of-state, item, person parameters.
+- no incercept term in prop. hazard if baseline contains constant in the same level.
+- action m leads to more/less coherent action
+- \(D_{ml}\) is bi-directional similarity mapping.
+- including \(\beta_m\) doesn't make it directional.
+- is \(\beta_k\) meaningful for item-specific action space? certainly not! this opens up the question about how actions should be defined. loosely defined without event_desciption or not.
+
+** option1: similar items share the same action space
+no event description should be used.
+** option2: each item has its own action space (item-specific action space)
+
+- use multi-state modeling framework to explain?
+- target journal:
+- grant application (check deadline)
+- meeting at 4pm (CST)
+- online learning platform: interaction with online resources, with instructors, with other people (communication length, contents) - team collaboration.
+  - data will be available on Aug.
+  + team science program (NIH)
+
+
+The intensity function $q_{ml}(\cdot)$ represents the instantaneous risk of moving from action $m$ to $l$.
+
+\begin{align*}
+  q_{ml} (t ; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{ml}(t)  e^{\beta_j + (\beta_m +  \theta_{\beta}) D_{ml}},
+\end{align*}
+where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ is coefficients associated with $\mathbf{z}(t)$, $\lambda_{k,m\rightarrow l}(t)$ is a baseline intensity function. For each state $l$, there are competing transitions $m_1, \ldots, m_{n_l}$. This mean there are $n_{l}$ corresponding survival models for state $l$, and overall $K=\sum_l n_l$ models. Models with no shared parameters can be estimated
+Common out of state transition: \(\beta_{ml}=\beta_{m}\).
+
+Baseline hazard:
+\[
+  \lambda_{ml}(t) = \alpha_{m1}(t) \alpha_{l} + \theta_{\lambda} \text{ for } l \neq 1.
+\]
+Proportional hazard term:
+\[
+  e^{\beta_j + (\beta_m +  \theta_{\beta}) D_{ml}}
+\]
+- \(D_{ml}\) is bi-directional similarity embedding between actions $m$ and $l$.
+
+The piecewise-constant baseline hazard is used:
+\begin{equation}
+\label{eq:1}
+\lambda(t) = \lambda_j \text{ if } s_{j-1} \le t < s_{j},
+\end{equation}
+for $j = 1,\ldots,J$. $\lambda_{j}$ could be a function of the similarity. This would be similar to have a piecewise constant transition matrix (time-inhomogeneous Markov chain), but much simpler as you have a parametric model for constants. The cosine similiarity should be normalized before used.
+\begin{align*}
+  q_{ml} (t ; \boldsymbol{\alpha}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{ml}(t) \exp( \boldsymbol{\beta}_{m,l}' \mathbf{z}_{i,m,l}(t) ),
+\end{align*}
+\begin{align*}
+  q_{ml} (t ; \boldsymbol{\alpha}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{k,m \rightarrow l}(t) \exp( \alpha_m + \alpha_l + \boldsymbol{\beta} d_{i,m,l} ),
+\end{align*}
+where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ is coefficients associated with $\mathbf{z}(t)$, $\lambda_{k,m\rightarrow l}(t)$ is a baseline intensity function. For each state $l$, there are competing transitions $m_1, \ldots, m_{n_l}$. This mean there are $n_{l}$ corresponding survival models for state $l$, and overall $K=\sum_l n_l$ models. Models with no shared parameters can be estimated separately.
+** likelihood
+\[
+  f_{ml}(t) = q_{ml}(t) S_{ml}(t)
+\]
+\[
+  likelihood =\prod_{all people} f_{ml}(t) \prod_{g \in possible actions} S_{mg}(t)
+\]
+** data structure
+*** mstate R package
+- how to format data to follow the below?
+| person | entry time | exit time | from | to | observed | covariate1 | covariate2 | covariate3    | time dependent covaraite |
+|      1 |          0 |        10 |    1 |  2 |        1 | D_{12}     | \theta D_{12}   | total actions | none                     |
+|      1 |          0 |        10 |    1 |  3 |        0 | D_{12}     | \theta D_{12}   | total actions | none                     |
+|        |            |           |      |    |          |            |            |               |                          |
+|        |            |           |      |    |          |            |            |               |                          |
+- mstate: cannot handle recurrent states
+#+begin_src R
+library(mstate)
+# Transition matrix for illness-death model
+tmat <- trans.illdeath()
+# Data in wide format, for transition 1 this is dataset E1 of
+# Therneau & Grambsch (T&G)
+tg <- data.frame(id=1:6,illt=c(1,1,6,6,8,9),ills=c(1,0,1,1,0,1),
+                 dt=c(5,1,9,7,8,12),ds=c(1,1,1,1,1,1),
+                 x1=c(1,1,1,0,0,0),x2=c(6:1))
+# Data in long format using msprep
+tglong <- msprep(time=c(NA,"illt","dt"),status=c(NA,"ills","ds"),
+                 data=tg,keep=c("x1","x2"),trans=tmat, id="id")
+#+end_src
+
+#+RESULTS:
+: Loading required package: survival
+
+#+begin_src R
+# Same thing in etm format
+tra <- trans2tra(tmat)
+tgetm <- msdata2etm(tglong, id="id")
+tgetm <- msdata2etm(tglong, id="id", covs=c("x1", "x2")) # with covariates
+# And back
+etm2msdata(tgetm, id="id", tra=tra)
+etm2msdata(tgetm, id="id", tra=tra, covs=c("x1", "x2")) # with covariates
+#+end_src
+
+*** msm R package
+https://www.rdocumentation.org/packages/msm/versions/1.6.8/topics/msm2Surv
+#+begin_src R
+library(msm)
+msmdat <- data.frame(
+ subj = c(1, 1, 1, 1, 1, 2, 2, 2),
+ days = c(0, 27, 75, 97, 1106, 0, 90, 1037),
+ status = c(1, 2, 3, 4, 4, 1, 2, 2),
+ age = c(66, 66, 66, 66, 69, 49, 49, 51),
+ treat = c(1, 1, 1, 1, 1, 0, 0, 0)
+)
+# transitions only allowed to next state up or state 4
+Q <- rbind(c(1, 1, 0, 1),
+           c(0, 1, 1, 1),
+           c(0, 0, 1, 1),
+           c(0, 0, 0, 0))
+dat <- msm2Surv(data=msmdat, subject="subj", time="days", state="status",
+         Q=Q)
+dat
+attr(dat, "trans")
+#+end_src
+
 * draft
 We assume a continuously observed process, recurrent actions. The process seems to be irreversible, but I need to double check. See https://www.mrc-bsu.cam.ac.uk/wp-content/uploads/2017/10/multistate_enar_webinar.pdf
 
@@ -160,6 +292,14 @@ to_drop = unique(to_drop)
 PS = PS %>% filter(!SEQID %in% to_drop)
 save(PS, file = "./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_no_missing.rdata")
 #+end_src
+* R packaging
+#+begin_src emacs-lisp
+(progn (setq default-directory "~/Dropbox/research/procmod/procmod-code/diprom")
+(ess-r-devtools-clean-and-rebuild-package))
+#+end_src
+
+#+RESULTS:
+
 * COMMENT email transitions
 #+begin_src R
 library(dplyr)
@@ -246,49 +386,6 @@ email$SEQID[cfolder]
 #+begin_src R :tangle no
 email %>% filter(SEQID == 4444) %>% select(event_type, event_description)
 #+end_src
-
-#+RESULTS:
-#+begin_example
-           event_type                              event_description
-1               START
-2                MENU
-3  MENUITEM_newfolder
-4     TEXTBOX_ONFOCUS
-5            KEYPRESS
-6   TEXTBOX_KILLFOCUS
-7       ADD_FOLDER_ok
-8       ADD_FOLDER_ok
-9   ADD_FOLDER_cancel
-10          MAIL_DRAG                                id=u01a_item101
-11        MAIL_VIEWED
-12      FOLDER_VIEWED
-13         MAIL_MOVED    id=u01a_item101|*$target=u01a_CanComeFolder
-14        MAIL_VIEWED
-15          MAIL_DRAG                                id=u01a_item102
-16      FOLDER_VIEWED
-17         MAIL_MOVED id=u01a_item102|*$target=u01a_CannotComeFolder
-18        MAIL_VIEWED
-19        MAIL_VIEWED
-20        MAIL_VIEWED
-21        MAIL_VIEWED
-22        MAIL_VIEWED
-23          MAIL_DRAG                                id=u01a_item104
-24      FOLDER_VIEWED
-25         MAIL_MOVED    id=u01a_item104|*$target=u01a_CanComeFolder
-26        MAIL_VIEWED
-27        MAIL_VIEWED
-28        MAIL_VIEWED
-29          MAIL_DRAG                                id=u01a_item103
-30        MAIL_VIEWED
-31      FOLDER_VIEWED
-32      FOLDER_VIEWED
-33        MAIL_VIEWED
-34        MAIL_VIEWED
-35        MAIL_VIEWED
-36        MAIL_VIEWED
-37       NEXT_INQUIRY
-38                END
-#+end_example
 
 #+begin_src R :tangle no
 email %>% filter(SEQID == 782) %>% select(event_type, event_description)
