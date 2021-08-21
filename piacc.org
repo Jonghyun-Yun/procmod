@@ -21,11 +21,22 @@
 #+PROPERTY: header-args :eval never-export
 #+PROPERTY: header-args:ein :session localhost
 #+PROPERTY: header-args:jupyter-python :session *jupyter-piacc* :kernel tf
+
+#+begin_src emacs-lisp
+  ;; fast, no unicode-math
+  (setq org-preview-latex-default-process 'dvipng)
+  ;; slow, supprts unicode-math
+  (setq org-preview-latex-default-process 'dvisvgm)
+#+end_src
+
+#+RESULTS:
+: dvisvgm
+
 * discussion
 - [2021-05-09 Sun] note
   I drop event description and tryed a few more embeddings.
 it seems incorrect process actions have low cosine similarity. This means they are difficult to form a semantic cluster(s).
-actions associated to the task (or problem solving) has high similarity. so as long as event description remains the same, I can set the subsequence as a new action. embedding of a new action is determined by the mean (center) embeddings of its members.
+actions associated to the task (or problem solving) has high similarity. so as long as event description reoains the same, I can set the subsequence as a new action. embedding of a new action is determined by the mean (center) embeddings of its members.
 ** Email invitation I :noexport:ATTACH:
 :PROPERTIES:
 :ID:       468ae777-6949-4e3f-9521-fa63037fdf73
@@ -66,7 +77,7 @@ email %>% filter(SEQID == 101) %>% select(event_type,  event_description, timest
 21:           END                              91927 -91927
        event_type        event_description timestamp   diff
 #+end_example
-* [[mu4e:msgid:CAC72WzTzKpZBEHrobD4TFkHZrUHqVu6NR24qsHOYcDZ-dHFP=g@mail.gmail.com][Re: Questions about Data]] :noexport:
+** [[mu4e:msgid:CAC72WzTzKpZBEHrobD4TFkHZrUHqVu6NR24qsHOYcDZ-dHFP=g@mail.gmail.com][Re: Questions about Data]] :noexport:
 - initial location
   + inbox: 100s
   + can come: 200s
@@ -127,28 +138,25 @@ where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ 
 #+transclude: t
 [[id:673df774-623f-44b5-a262-b22739c9a506][CD Tally]]
 
-* model and action space
+* running model and action space
+See cite:jackson_flexsurv_2016 for available baseline functions.
 Proportional baseline:
 \[
-  \lambda_{ml}(t) = \lambda_{m1}(t) e^{\theta_{l}} \text{ for } l \neq 1.
+  \lambda_{ml}(dt_{k,n}) = \lambda_{m0}(t) \lambda_{l} \tau_{k} \text{ for } l \in S_{m} \text{and} \lambda_{s_{m,1}}=1.
 \]
-Or
-\[
-  \lambda_{ml}(t) = \lambda_{m} + \lambda_{j} + \theta_{\lambda},
-\]
-out-of-action, item, person parameters.
+\(dt_{k,n}\) denotes t_{k,n}^{stop} - t_{k,n}^{start}
 
 Proportional hazard term:
 \[
-  e^{(\beta_m + \beta_k + \theta_{\beta}) D_{ml}}
+  e^{(\theta_{k} + \beta) D_{ml} }
 \]
+- add covariate later.
 out-of-state, item, person parameters.
 - no incercept term in prop. hazard if baseline contains constant in the same level.
 - action m leads to more/less coherent action
 - \(D_{ml}\) is bi-directional similarity mapping.
 - including \(\beta_m\) doesn't make it directional.
 - is \(\beta_k\) meaningful for item-specific action space? certainly not! this opens up the question about how actions should be defined. loosely defined without event_desciption or not.
-
 ** option1: similar items share the same action space
 no event description should be used.
 ** option2: each item has its own action space (item-specific action space)
@@ -193,19 +201,129 @@ for $j = 1,\ldots,J$. $\lambda_{j}$ could be a function of the similarity. This 
   q_{ml} (t ; \boldsymbol{\alpha}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{k,m \rightarrow l}(t) \exp( \alpha_m + \alpha_l + \boldsymbol{\beta} d_{i,m,l} ),
 \end{align*}
 where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ is coefficients associated with $\mathbf{z}(t)$, $\lambda_{k,m\rightarrow l}(t)$ is a baseline intensity function. For each state $l$, there are competing transitions $m_1, \ldots, m_{n_l}$. This mean there are $n_{l}$ corresponding survival models for state $l$, and overall $K=\sum_l n_l$ models. Models with no shared parameters can be estimated separately.
+* simplified one (it's probably ok)
+Proportional baseline (based on current and next action)
+\[
+  \lambda_{ml}(dt_{k,n}) = \kappa_{m} \omega_{l} \tau_{k} \text{ for } l \in A_{m} \text{and} \omega_{s_{m,1}}=1.
+\]
+\(dt_{k,n}\) denotes t_{k,n}^{stop} - t_{k,n}^{start}
+- large \kappa -> fast out-of-state action
+- how about \(\kappa_{}_{}_{}_{ml}\)?
+- \(\omega\) should be dropped.
+
+Proportional hazard term:
+\[
+  e^{(\theta_{k} + \beta) D_{ml} }
+\]
+- \(D_{ml}\): cosine similarity([0,1])
+- \beta should be dropped. (no keep it, and $\Theta$ has a mean zero).
+- large \theta: do similar action
+- small (negative) \theta: do dis-similar actions
+- fit the model for each response group
+- add covariate terms later.
+- no incercept term in prop. hazard if baseline contains constant in the same level.
+- action m leads to more/less coherent action
+- determine absorbing state(s): END? NEXT?
 ** likelihood
 \[
   f_{ml}(t) = q_{ml}(t) S_{ml}(t)
 \]
 \[
-  likelihood =\prod_{all people} f_{ml}(t) \prod_{g \in possible actions} S_{mg}(t)
+  likelihood =\prod_{k} f_{ml}(dt) \prod_{g \in A_{m}} S_{mg}(t),
 \]
+\[
+  f_{ml} = q_{ml}(t) S_{ml}(t),
+  S_{ml}(t) = e^{-\int_{0}^{t^{stop} - t^{start}} q_{ml}(t)\dd t}
+\]
+
+\[
+  S_{ml}(dt) =  e^{-dt \kappa_{m} \omega_{l} \tau_{k} e^{(\theta_{k} + \beta) D_{ml} }}
+\]
+
+\(n = 1,\ldots,M_{k}\): n-th action of k-th person, $M_k$: sequence length
+
+\(  \delta_{k,n,m} = 1 \) if person k's n-th action is m.
+
+\( \delta_{k,n,m}  \delta_{k,n+1,l} = 1 \) for $n < M_{k}$ if person k's n-th transition is m to l.
+
+time at starting state (one after START) is set to the first action (n=1), and the corresponding time is set to 0.
+** prior
+The proposed method use a fully Bayesian approach for estimating the proposed latent space model, using MCMC methods. Our prior specification is as follows:
+
+\begin{align*}
+\pi\left(\kappa_{m}\right) & \sim \operatorname{Gamma}\left(\text{mean} = \tilde \kappa_{m}, \text{var} = 2 \cdot \tilde \kappa_{m})\right); \\
+\pi\left(\tau_{k}\right) & \sim \operatorname{Gamma}\left(\text{mean} = \tilde \tau_{k}, \text{var} = 2 \cdot \tilde \tau_{k})\right); \\
+\pi\left(\theta_{k} | \sigma^{2}\right) & \sim \mathrm{N}\left(0, \sigma^{2}\right); \\
+\pi\left(\beta_{k} | \sigma_{\beta}^{2}\right) & \sim \mathrm{N}\left(\mu_{\beta}, \sigma_{\beta}^{2}\right); \\
+\pi\left(\mu_{\beta}) ~
+\pi\left(\sigma^{2}\right) & \sim \operatorname{lnv}-\operatorname{Gamma}\left(a_{\sigma}, b_{\sigma}\right); \\
+\pi\left(\sigma_{\beta}^{2}\right) & \sim \operatorname{lnv}-\operatorname{Gamma}\left(a_{\sigma_{\beta}}, b_{\sigma_{\beta}}\right),
+\end{align*}
+
+where $\mathrm{MVN}_{d}$ denotes a $d$ dimensional normal distribution,   $\mathbf{I}_{d}$ is a $d \times d$ identity matrix, $\tilde{\lambda}_{j}=G / \left\{U \left(G-j+0.5\right)\right\}$. Other hyperparameters are chosen as
+\[a_{\sigma}=0.0001, b_{\sigma}=0.0001, \mu_{\gamma}=0, \text { and } \tau_{\gamma}^{}=2.\]
+A similar vague prior for $\lambda_{ic,j}$ has been used in cite:jin_using_2014.
+
+Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive to its variance $\sigma^2$. Also, the configuration of latent embeddings highly depends on the scale parameter $\gamma$ of the latent space. Rather than choosing sub-optimal tuning parameters, we use a layer of hyper-priors to learn optimal values of these parameters from data. We choose hyperparameters such that priors are minimally informative to facilitate the flexible Bayesian learning.
+** pseudo code
+*** update \(\kappa_{m}\)
+- all $k$ person's having action m, all l \in A_m (all possible actions that can jump from m)
+- transition start and stop time $dt_{k,n}$ for all $\delta_{k,n,m} = 1$
+- For each $k,c$, a symmetric MH jumping $J(\kappa_{m}^{(l-1)} \rightarrow \kappa_{m}^{* }$ is used to propose a new sample.
+- We accept $\kappa_{m}^{(l)} = \kappa_{m}^{* }$ with probability $\min(1, r_{{\kappa_{m}}^{* )}})$ where
+\begin{align*}
+\log r_{{\kappa_{m}}^{* }} =&
+\sum \delta_{k,n,m} (\log \kappa_{m}^{* } - \log \kappa_{m}^{(l-1)})\\
+&-\sum dt (\kappa_{m}^{* } - \kappa_{m}^{(l-1)}) \tau_{k} e^{(\theta_{k} + \beta) D_{ml} }
++ \log \frac{\pi(\kappa_{m}^{* })}{\pi(\kappa_{m}^{t})}.
+\end{align*}
+
+*** update \(\sigma\)
+\[
+ p( \sigma^2|e.e.) \propto invGamma(\sigma^{2}|a,b) \prod N(\theta_{k} | \mu, \sigma^2)
+\]
+
+
+\(\sigma^{2} \sim inv-gamma(a + 0.5 * N, b + 0.5 + \sum \theta_{k}^2)\)
+*** update \(\omega_{l}\)
+- all $k$ person's having action l, all m \in B_l (all possible actions that can jump to l)
+- transition start and stop time $dt_{k,n-1}$ for all $\delta_{k,n,l} = 1$
+*** update \(\tau_{k}\)
+- all $k$ person's m and l \in A_m
+- all kth person's transition start and stop time
+\begin{align*}
+\log r_{{\tau_{k}}^{* }} =&
+\sum \delta_{k,n,m} (\log \tau_{k}^{* } - \log \tau_{k}^{(l-1)})\\
+&-\sum dt \kappa_{m}e^{(\theta_{k} + \beta) D_{ml}} ( \tau_{k}^{* } -  \tau_{k}^{(l-1)} )
++ \log \frac{\pi(\tau_{k}^{* })}{\pi(\theta_{k}^{t})}.
+\end{align*}
+*** update \(\theta_{k}\)
+- all $k$ person's m and l \in A_m
+- all kth person's transition start and stop time
+- For each $k$, a symmetric MH jumping $J(\theta_{k}^{(l-1)} \rightarrow \theta_{k}^{* }$ is used to propose a new sample.
+- We accept $\theta_{k}^{(l)} = \theta_{k}^{* }$ with probability $\min(1, r_{{\theta_{k}}^{* )}})$ where
+\begin{align*}
+\log r_{{\theta_{k}}^{* }} =&
+\sum \delta_{k,n,m} (\theta_{k}^{* } - \theta_{k}^{(l-1)})D_{ml}\\
+&-\sum dt \kappa_{m} \tau_{k} e^{ \beta D_{ml} }(e^{\theta_{k}^{* }D_{ml}} -  e^{\theta_{k}^{(l-1)} D_{ml} })
++ \log \frac{\pi(\theta_{k}^{* })}{\pi(\theta_{k}^{(l-1)})}.
+\end{align*}
+
+*** update \(\beta\)
+- a symmetric MH jumping $J(\beta_{k}^{(l-1)} \rightarrow \beta_{k}^{* }$ is used to propose a new sample.
+- We accept $\beta_{k}^{(l)} = \beta_{k}^{* }$ with probability $\min(1, r_{{\beta_{k}}^{* )}})$ where
+\begin{align*}
+\log r_{{\beta_{k}}^{* }} =&
+\sum \delta_{k,n,m} (\beta_{k}^{* } - \beta_{k}^{(l-1)})D_{ml}\\
+&-\sum dt \kappa_{m} \tau_{k} e^{ \theta_k D_{ml} }(e^{\beta_{k}^{* }D_{ml}} -  e^{\beta_{k}^{(l-1)} D_{ml} })
++ \log \frac{\pi(\beta_{k}^{* })}{\pi(\beta_{k}^{(l-1)})}.
+\end{align*}
 ** data structure
 *** mstate R package
 - how to format data to follow the below?
 | person | entry time | exit time | from | to | observed | covariate1 | covariate2 | covariate3    | time dependent covaraite |
-|      1 |          0 |        10 |    1 |  2 |        1 | D_{12}     | \theta D_{12}   | total actions | none                     |
-|      1 |          0 |        10 |    1 |  3 |        0 | D_{12}     | \theta D_{12}   | total actions | none                     |
+|      1 |          0 |        10 |    1 |  2 |        1 | D_{12}        | \theta D_{12}      | total actions | none                     |
+|      1 |          0 |        10 |    1 |  3 |        0 | D_{12}        | \theta D_{12}      | total actions | none                     |
 |        |            |           |      |    |          |            |            |               |                          |
 |        |            |           |      |    |          |            |            |               |                          |
 - mstate: cannot handle recurrent states
@@ -258,6 +376,254 @@ dat
 attr(dat, "trans")
 #+end_src
 
+** possible transitions
+:PROPERTIES:
+:header-args:R: :tangle preproc-data.r
+:END:
+#+begin_src R :results value list drawer silent
+source("email_word2vec_preproc.r")
+library(dplyr)
+library(stringr)
+library(diprom)
+setwd('~/workspace/procmod-code/')
+load('./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_no_missing.rdata')
+email = PS %>% filter(CODEBOOK == "U01a000S")
+
+## core_event = c("MAIL_DRAG", "MAIL_MOVED")
+## core_event = c("MAIL_DRAG", "MAIL_MOVED", "MAIL_VIEWED")
+## core_event = c("MAIL_MOVED")
+## email$event_description[!(email$event_type %in% core_event)] <- ""
+## email$event_description <- ""
+
+timestamp = email$timestamp
+diff = c(diff(timestamp), 99999)
+email$diff = diff
+email = email[(diff >= 10) || (diff < 0 ), ]
+
+email$event_description = stringr::str_replace(email$event_description, "(.*)\\*\\$target=u01a_(.*)",  "\\1\\2")
+email$event_description = stringr::str_replace(email$event_description, "id=u01a_",  "")
+email$event_description = stringr::str_replace(email$event_description, "\\*\\$target=",  "")
+
+email = email %>% mutate(event_description = ifelse(event_type == "START","",event_description)) %>%
+mutate(event_description = ifelse(event_type == "END","",event_description)) %>%
+  mutate(event_description = ifelse(event_type == "KEYPRESS","",event_description)) %>%
+  mutate(event_concat = ifelse(event_description == "", event_type, paste0(event_type,"-",event_description))) %>%
+mutate(word = gsub(" ", "_", event_concat))
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+email = email %>% filter(word !="START")
+state = unique(email$word)
+ntate = numeric(nrow(email))
+ii = 0
+for (ww in email$word) {
+  ii = ii + 1
+  ntate[ii] = which(state == ww)
+  }
+email$state = ntate
+#+end_src
+
+#+RESULTS:
+: Error in email %>% filter(word != "START") :
+:   could not find function "%>%"
+: Error in unique(email$word) : object 'email' not found
+: Error in nrow(email) : object 'email' not found
+: Error in email : object 'email' not found
+: Error: object 'ntate' not found
+
+#+begin_src R
+uid = unique(email$SEQID)
+pid = numeric(nrow(email))
+ii = 0
+for (nn in email$SEQID) {
+  ii = ii + 1
+  pid[ii] = which(uid == nn)
+  }
+email$pid = pid
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+id = unique(email$SEQID)
+L = length(state)
+Q = matrix(0, L, L)
+for (i in id) {
+  ## for (word in email$word[email$SEQID == i]) {
+    ## seqs[i] = paste0(seqs[i], " ", word)
+  ## }
+  seq = email$state[email$SEQID == i]
+  for (k in 1:(length(seq)-1))
+    Q[seq[k], seq[k+1]] = 1
+  cat(seq[length(seq)-1])
+}
+
+rsq = rowSums(Q) > 0
+diag(Q) = 1 * rsq
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+metadata = readr::read_tsv("metadata.tsv", col_names = FALSE)
+vectors = readr::read_tsv("vectors.tsv", col_names = FALSE)
+#+end_src
+
+#+begin_src R
+dem = ncol(vectors)
+vv = array(0, dim=c(M <- length(state),dem))
+for (m in 1:M) {
+  if (sum(state[m] == metadata[,1]) > 0)
+  vv[m, ] = unlist(vectors[which(state[m] == metadata[,1]), ] )
+}
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+Dml = cosdist(as.matrix(vv))
+#+end_src
+
+#+RESULTS:
+
+** write data
+:PROPERTIES:
+:header-args:R: :tangle write-data.R
+:END:
+
+#+begin_src R :results none
+library(msm)
+df = email %>% select(pid, timestamp, response, state)
+dat <- msm2Surv(data=df, subject="pid", time="timestamp", state="state",
+         Q=Q)
+##dat
+## attr(dat, "trans")
+dat$time = dat$time / max(dat$Tstop)
+dat$Tstart = dat$Tstart / max(dat$Tstop)
+dat$Tstop = dat$Tstop / max(dat$Tstop)
+#+end_src
+
+#+begin_src R :results none
+library(foreach)
+library(doParallel)
+##registerDoParallel(cores = detectCores() - 1)
+stopImplicitCluster()
+registerDoParallel(2)
+
+dat$dist = foreach (i = 1:nrow(dat), .combine="c") %dopar% Dml[dat$from[i], dat$to[i]]
+#+end_src
+
+#+begin_src R :results none
+M = length(state)
+N = length(unique(dat$id))
+dq = nrow(Q)
+dn = nrow(dat)
+dc = ncol(dat)
+#+end_src
+
+#+begin_src R
+## R to C index conversion
+wat = dat
+wat$id = wat$id - 1
+wat$from = wat$from - 1
+wat$to = wat$to - 1
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+readr::write_csv(wat,"input/dat.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(Q),"input/trans.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(cbind(M, N, dq, dn, dc)),"input/mvar.csv", col_names = FALSE)
+readr::write_csv(data.frame(Dml),  "input/Dml.csv", col_names = FALSE)
+#+end_src
+
+#+RESULTS:
+
+** init
+:PROPERTIES:
+:header-args:R: :tangle write-init.r
+:END:
+#+begin_src R
+kappa = rep(0.1, M)
+tau = rep(0.1, N)
+theta = rep(0.1, N)
+beta = 0
+sigma = 1
+
+readr::write_csv(as.data.frame(kappa),"input/init_kappa.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(tau),"input/init_tau.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(theta),"input/init_theta.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(sigma),"input/init_sigma.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(beta),"input/init_beta.csv", col_names = FALSE)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :results none
+## lambda
+a_kappa = matrix(0.1,M,1)
+b_kappa = matrix(0.1,M,1)
+jump_kappa = matrix(0.5,M,1)
+
+mu_beta = matrix(0.0,1,1)
+sigma_beta = matrix(1.0,1,1)
+jump_beta = matrix(0.1,1,1)
+
+mu_theta = matrix(0.0,N,1)
+sigma_theta = matrix(1.0,N,1)
+jump_theta = matrix(1.0,N,1)
+
+a_sigma = 1.0
+b_sigma = 1.0
+
+a_tau = matrix(0.1,N,1)
+b_tau = matrix(0.1,N,1)
+jump_tau = matrix(0.5,N,1)
+#+end_src
+
+#+RESULTS:
+: Error in cbind(M, N, dq, dn, dc) : object 'M' not found
+
+#+begin_src R
+readr::write_csv(as.data.frame(cbind(a_kappa,b_kappa,jump_kappa)),"input/hyper_kappa.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(cbind(mu_beta,sigma_beta,jump_beta)),"input/hyper_beta.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(cbind(mu_theta,sigma_theta,jump_theta)),"input/hyper_theta.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(cbind(a_sigma,b_sigma)),"input/hyper_sigma.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(cbind(a_tau,b_tau,jump_tau)),"input/hyper_tau.csv", col_names = FALSE)
+#+end_src
+
+#+RESULTS:
+
+
+** for-loop index
+:PROPERTIES:
+:header-args:R: :tangle write-loop-index.r
+:END:
+#+begin_src R
+sink("input/out-of-state_index.txt")
+for (m in 1:M)
+  if(sum(dat$from==m)>0) {
+cat(which(dat$from == m) - 1,"\n") # R to C index conversion
+  } else cat(-99,"\n")
+sink()
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R
+sink("input/person_index.txt")
+for (k in 1:max(email$pid))
+  if(sum(dat$id==k)>0) {
+cat(which(dat$id == k) - 1,"\n") # R to C index conversion
+  } else cat(-99,"\n")
+sink()
+#+end_src
+
+#+RESULTS:
+
 * draft
 We assume a continuously observed process, recurrent actions. The process seems to be irreversible, but I need to double check. See https://www.mrc-bsu.cam.ac.uk/wp-content/uploads/2017/10/multistate_enar_webinar.pdf
 
@@ -292,6 +658,10 @@ to_drop = unique(to_drop)
 PS = PS %>% filter(!SEQID %in% to_drop)
 save(PS, file = "./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_no_missing.rdata")
 #+end_src
+
+#+RESULTS:
+: Warning message:
+: NAs introduced by coercion
 * R packaging
 #+begin_src emacs-lisp
 (progn (setq default-directory "~/Dropbox/research/procmod/procmod-code/diprom")
@@ -812,7 +1182,7 @@ data.table::fwrite(as.data.frame(seqs), "ticket_sentence.txt", col.names=F)
 #+begin_src R
 mm = 0
 for (i in id) {
-  mm = max(mm, length(df$word[df$SEQID == i]))
+  mm  = max(mm , length(df$word[df$SEQID == i]))
   }
 mm
 length(unique(df$word))
