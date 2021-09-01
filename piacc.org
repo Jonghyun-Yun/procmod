@@ -254,11 +254,22 @@ The proposed method use a fully Bayesian approach for estimating the proposed la
 \pi\left(\kappa_{m}\right) & \sim \operatorname{Gamma}\left(\text{mean} = \tilde \kappa_{m}, \text{var} = 2 \cdot \tilde \kappa_{m})\right); \\
 \pi\left(\tau_{k}\right) & \sim \operatorname{Gamma}\left(\text{mean} = \tilde \tau_{k}, \text{var} = 2 \cdot \tilde \tau_{k})\right); \\
 \pi\left(\theta_{k} | \sigma^{2}\right) & \sim \mathrm{N}\left(0, \sigma^{2}\right); \\
-\pi\left(\beta_{k} | \sigma_{\beta}^{2}\right) & \sim \mathrm{N}\left(\mu_{\beta}, \sigma_{\beta}^{2}\right); \\
-\pi\left(\mu_{\beta}) ~
+\pi\left(\beta_{k} |\mu_{\beta}, \sigma_{\beta}^{2}\right) & \sim \mathrm{N}\left(\mu_{\beta}, \sigma_{\beta}^{2}\right); \\
+\pi\left(\mu_{\beta}|\sigma_{\beta}) & \sim \mathrm{N}\left(0, \sigma^{2}_{\mu_{\beta}}\right);\\
 \pi\left(\sigma^{2}\right) & \sim \operatorname{lnv}-\operatorname{Gamma}\left(a_{\sigma}, b_{\sigma}\right); \\
-\pi\left(\sigma_{\beta}^{2}\right) & \sim \operatorname{lnv}-\operatorname{Gamma}\left(a_{\sigma_{\beta}}, b_{\sigma_{\beta}}\right),
+\pi\left(\sigma_{\beta}^{2}\right) & \sim \operatorname{lnv}-\operatorname{Gamma}\left(a_{\sigma_{\beta}}, b_{\sigma_{\beta}}\right),\\
 \end{align*}
+
+\begin{align*}
+\pi\left(\sigma^{2}\right) & \propto \sigma^{-2}\\
+\pi\left(\mu_{\beta}, \sigma_{\beta}^{2}\right) & \propto \sigma_{\beta}^{-2},
+\end{align*}
+
+inv-Gamma(\theta|\alpha,\beta)
+\[
+p(\theta)=\frac{\beta^{\alpha}}{\Gamma(\alpha)} \theta^{-(\alpha+1)} e^{-\beta / \theta}, \quad \theta>0
+\]
+
 
 where $\mathrm{MVN}_{d}$ denotes a $d$ dimensional normal distribution,   $\mathbf{I}_{d}$ is a $d \times d$ identity matrix, $\tilde{\lambda}_{j}=G / \left\{U \left(G-j+0.5\right)\right\}$. Other hyperparameters are chosen as
 \[a_{\sigma}=0.0001, b_{\sigma}=0.0001, \mu_{\gamma}=0, \text { and } \tau_{\gamma}^{}=2.\]
@@ -266,6 +277,11 @@ A similar vague prior for $\lambda_{ic,j}$ has been used in cite:jin_using_2014.
 
 Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive to its variance $\sigma^2$. Also, the configuration of latent embeddings highly depends on the scale parameter $\gamma$ of the latent space. Rather than choosing sub-optimal tuning parameters, we use a layer of hyper-priors to learn optimal values of these parameters from data. We choose hyperparameters such that priors are minimally informative to facilitate the flexible Bayesian learning.
 ** pseudo code
+:PROPERTIES:
+:ID:       5c29e214-f86d-41d5-89a0-e164602bf6b8
+:END:
+- [[skim:///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::79;;1][3.2 Normal data with a noninformative prior distribution org-id:{ce3939d9-fb55-4b01-8747-0f486c98c9e7}:org-id]]
+- [[skim:///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::591;;1][Continuous distributions org-id:{5c29e214-f86d-41d5-89a0-e164602bf6b8}:org-id]]
 *** update \(\kappa_{m}\)
 - all $k$ person's having action m, all l \in A_m (all possible actions that can jump from m)
 - transition start and stop time $dt_{k,n}$ for all $\delta_{k,n,m} = 1$
@@ -282,9 +298,9 @@ Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive 
 \[
  p( \sigma^2|e.e.) \propto invGamma(\sigma^{2}|a,b) \prod N(\theta_{k} | \mu, \sigma^2)
 \]
-
-
 \(\sigma^{2} \sim inv-gamma(a + 0.5 * N, b + 0.5 + \sum \theta_{k}^2)\)
+with flat prior:
+\(\sigma^{2} \sim inv-gamma(0.5 * N, 0.5 + \sum \theta_{k}^2)\)
 *** update \(\omega_{l}\)
 - all $k$ person's having action l, all m \in B_l (all possible actions that can jump to l)
 - transition start and stop time $dt_{k,n-1}$ for all $\delta_{k,n,l} = 1$
@@ -310,14 +326,24 @@ Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive 
 \end{align*}
 
 *** update \(\beta\)
-- a symmetric MH jumping $J(\beta_{k}^{(l-1)} \rightarrow \beta_{k}^{* }$ is used to propose a new sample.
+- a symmetric MH jumping $J(\beta_{k}^{(l-1)} \rightarrow \beta_{k}^{* })$ is used to propose a new sample.
 - We accept $\beta_{k}^{(l)} = \beta_{k}^{* }$ with probability $\min(1, r_{{\beta_{k}}^{* )}})$ where
 \begin{align*}
 \log r_{{\beta_{k}}^{* }} =&
 \sum \delta_{k,n,m} (\beta_{k}^{* } - \beta_{k}^{(l-1)})D_{ml}\\
-&-\sum dt \kappa_{m} \tau_{k} e^{ \theta_k D_{ml} }(e^{\beta_{k}^{* }D_{ml}} -  e^{\beta_{k}^{(l-1)} D_{ml} })
+&-\sum dt \kappa_{m} \tau_{k} e^{ \theta_k D_{ml} }(e^{\beta^{* }D_{ml}} -  e^{\beta^{(l-1)} D_{ml} })
 + \log \frac{\pi(\beta_{k}^{* })}{\pi(\beta_{k}^{(l-1)})}.
 \end{align*}
+*** update \(\mu_{\beta}, \sigma_{\beta}\)
+\begin{align*}
+  \rho &= 1/\sigma_{\beta}^{2} + 1/\sigma_{\mu_{\beta}}^2 \\
+  p(\mu_{\beta}|..)&= N(\frac{1/\sigma_{\beta}^2 \times \beta}{\rho}, 1/\rho )
+\end{align*}
+\[
+  p(\sigma_{\beta}^{2}|ee) = inv-Gamma(a + 0.5, b + 0.5 (\beta - \mu_{\beta})^2)
+\]
+
+
 ** data structure
 *** mstate R package
 - how to format data to follow the below?
@@ -426,12 +452,6 @@ email$state = ntate
 #+end_src
 
 #+RESULTS:
-: Error in email %>% filter(word != "START") :
-:   could not find function "%>%"
-: Error in unique(email$word) : object 'email' not found
-: Error in nrow(email) : object 'email' not found
-: Error in email : object 'email' not found
-: Error: object 'ntate' not found
 
 #+begin_src R
 uid = unique(email$SEQID)
@@ -470,6 +490,39 @@ diag(Q) = 1 * rsq
 metadata = readr::read_tsv("metadata.tsv", col_names = FALSE)
 vectors = readr::read_tsv("vectors.tsv", col_names = FALSE)
 #+end_src
+
+#+RESULTS:
+#+begin_example
+
+[36m──[39m [1m[1mColumn specification[1m[22m [36m──────────────────────────────────────────────────────────────────[39m
+cols(
+  X1 = [31mcol_character()[39m
+)
+
+Warning: 1 parsing failure.
+row col                     expected actual           file
+165  X1 closing quote at end of file        'metadata.tsv'
+
+[36m──[39m [1m[1mColumn specification[1m[22m [36m──────────────────────────────────────────────────────────────────[39m
+cols(
+  X1 = [32mcol_double()[39m,
+  X2 = [32mcol_double()[39m,
+  X3 = [32mcol_double()[39m,
+  X4 = [32mcol_double()[39m,
+  X5 = [32mcol_double()[39m,
+  X6 = [32mcol_double()[39m,
+  X7 = [32mcol_double()[39m,
+  X8 = [32mcol_double()[39m,
+  X9 = [32mcol_double()[39m,
+  X10 = [32mcol_double()[39m,
+  X11 = [32mcol_double()[39m,
+  X12 = [32mcol_double()[39m,
+  X13 = [32mcol_double()[39m,
+  X14 = [32mcol_double()[39m,
+  X15 = [32mcol_double()[39m,
+  X16 = [32mcol_double()[39m
+)
+#+end_example
 
 #+begin_src R
 dem = ncol(vectors)
@@ -552,12 +605,16 @@ tau = rep(0.1, N)
 theta = rep(0.1, N)
 beta = 0
 sigma = 1
+mu_beta = 0
+sigma_beta = 1
 
 readr::write_csv(as.data.frame(kappa),"input/init_kappa.csv", col_names = FALSE)
 readr::write_csv(as.data.frame(tau),"input/init_tau.csv", col_names = FALSE)
 readr::write_csv(as.data.frame(theta),"input/init_theta.csv", col_names = FALSE)
 readr::write_csv(as.data.frame(sigma),"input/init_sigma.csv", col_names = FALSE)
 readr::write_csv(as.data.frame(beta),"input/init_beta.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(mu_beta),"input/init_mu_beta.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(sigma_beta),"input/init_sigma_beta.csv", col_names = FALSE)
 #+end_src
 
 #+RESULTS:
@@ -568,12 +625,10 @@ a_kappa = matrix(0.1,M,1)
 b_kappa = matrix(0.1,M,1)
 jump_kappa = matrix(0.5,M,1)
 
-mu_beta = matrix(0.0,1,1)
-sigma_beta = matrix(1.0,1,1)
 jump_beta = matrix(0.1,1,1)
 
-mu_theta = matrix(0.0,N,1)
-sigma_theta = matrix(1.0,N,1)
+## mu_theta = matrix(0.0,N,1)
+## sigma_theta = matrix(1.0,N,1)
 jump_theta = matrix(1.0,N,1)
 
 a_sigma = 1.0
@@ -582,6 +637,12 @@ b_sigma = 1.0
 a_tau = matrix(0.1,N,1)
 b_tau = matrix(0.1,N,1)
 jump_tau = matrix(0.5,N,1)
+
+a_sigma_beta = 1.0
+b_sigma_beta = 1.0
+
+mu_mu_beta = 0.0
+sigma_mu_beta = 10.0;
 #+end_src
 
 #+RESULTS:
@@ -589,10 +650,12 @@ jump_tau = matrix(0.5,N,1)
 
 #+begin_src R
 readr::write_csv(as.data.frame(cbind(a_kappa,b_kappa,jump_kappa)),"input/hyper_kappa.csv", col_names = FALSE)
-readr::write_csv(as.data.frame(cbind(mu_beta,sigma_beta,jump_beta)),"input/hyper_beta.csv", col_names = FALSE)
-readr::write_csv(as.data.frame(cbind(mu_theta,sigma_theta,jump_theta)),"input/hyper_theta.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(jump_beta),"input/hyper_beta.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(jump_theta),"input/hyper_theta.csv", col_names = FALSE)
 readr::write_csv(as.data.frame(cbind(a_sigma,b_sigma)),"input/hyper_sigma.csv", col_names = FALSE)
 readr::write_csv(as.data.frame(cbind(a_tau,b_tau,jump_tau)),"input/hyper_tau.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(cbind(a_sigma_beta,b_sigma_beta)),"input/hyper_sigma_beta.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(cbind(mu_mu_beta,sigma_mu_beta)),"input/hyper_mu_beta.csv", col_names = FALSE)
 #+end_src
 
 #+RESULTS:
