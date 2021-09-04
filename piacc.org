@@ -37,12 +37,12 @@
   I drop event description and tryed a few more embeddings.
 it seems incorrect process actions have low cosine similarity. This means they are difficult to form a semantic cluster(s).
 actions associated to the task (or problem solving) has high similarity. so as long as event description reoains the same, I can set the subsequence as a new action. embedding of a new action is determined by the mean (center) embeddings of its members.
-** Email invitation I :noexport:ATTACH:
+** party invitation I :noexport:ATTACH:
 :PROPERTIES:
 :ID:       468ae777-6949-4e3f-9521-fa63037fdf73
 :END:
 #+caption: Email invitation
-#+attr_org: :width 300
+#+attr_org: :width 500
 [[attachment:_20210426_142403screenshot.png]]
 [[https://piaac-logdata.tba-hosting.de/confidential/problemsolving/PartyInvitations1/pages/pi-start.html][Party Invitations Part 1]]
 
@@ -77,6 +77,14 @@ email %>% filter(SEQID == 101) %>% select(event_type,  event_description, timest
 21:           END                              91927 -91927
        event_type        event_description timestamp   diff
 #+end_example
+** party invitation II :ATTACH:
+:PROPERTIES:
+:ID:       b782e36e-45f5-40c7-947c-a3f668b53610
+:END:
+
+#+attr_org: :width 500
+[[attachment:_20210903_105241screenshot.png]]
+
 ** [[mu4e:msgid:CAC72WzTzKpZBEHrobD4TFkHZrUHqVu6NR24qsHOYcDZ-dHFP=g@mail.gmail.com][Re: Questions about Data]] :noexport:
 - initial location
   + inbox: 100s
@@ -138,6 +146,10 @@ where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ 
 #+transclude: t
 [[id:673df774-623f-44b5-a262-b22739c9a506][CD Tally]]
 
+* multi-state model
+- https://www.mrc-bsu.cam.ac.uk/wp-content/uploads/2017/10/multistate_enar_webinar.pdf
+- https://cran.r-project.org/web/packages/msm/msm.pdf
+- [[id:57b08111-9c48-4fa9-b289-10f01fc7a0d6][cite:hill_relaxing_2021]]
 * running model and action space
 See cite:jackson_flexsurv_2016 for available baseline functions.
 Proportional baseline:
@@ -402,173 +414,196 @@ dat
 attr(dat, "trans")
 #+end_src
 
-** possible transitions
+* piacc preproc
+#+begin_src emacs-lisp
+(delete-directory "input" t)
+(make-directory "input")
+#+end_src
+
+#+RESULTS:
+** item codebook
 :PROPERTIES:
-:header-args:R: :tangle preproc-data.r
+:header-args:R: :tangle R/itemcode.R
 :END:
+example for email. see the codebook! [[file:data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv][PS_BOOKLET_ITEM.csv]]
+#+begin_src R
+booklet = readr::read_csv("~/Dropbox/research/procmod/procmod-code/data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv")
+booklet$NAME = stringr::str_replace_all(booklet$NAME, " ", "_")
+booklet$NAME = stringr::str_replace_all(booklet$NAME, "_-", "-")
+booklet$NAME = stringr::str_replace_all(booklet$NAME, "-_", "-")
+booklet$NAME = tolower(booklet$NAME)
+#+end_src
+
+#+RESULTS:
+:
+: [36m──[39m [1m[1mColumn specification[1m[22m [36m──────────────────────────────────────────────────────────────────[39m
+: cols(
+:   ITEM = [31mcol_character()[39m,
+:   NAME = [31mcol_character()[39m,
+:   CODEBOOK = [31mcol_character()[39m,
+:   RESPONSE = [31mcol_character()[39m
+: )
+
+*** party_invitation-1
 #+begin_src R :results value list drawer silent
-source("email_word2vec_preproc.r")
-library(dplyr)
-library(stringr)
-library(diprom)
-setwd('~/workspace/procmod-code/')
-load('./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_no_missing.rdata')
-email = PS %>% filter(CODEBOOK == "U01a000S")
-
-## core_event = c("MAIL_DRAG", "MAIL_MOVED")
-## core_event = c("MAIL_DRAG", "MAIL_MOVED", "MAIL_VIEWED")
-## core_event = c("MAIL_MOVED")
-## email$event_description[!(email$event_type %in% core_event)] <- ""
-## email$event_description <- ""
-
-timestamp = email$timestamp
-diff = c(diff(timestamp), 99999)
-email$diff = diff
-email = email[(diff >= 10) || (diff < 0 ), ]
-
-email$event_description = stringr::str_replace(email$event_description, "(.*)\\*\\$target=u01a_(.*)",  "\\1\\2")
-email$event_description = stringr::str_replace(email$event_description, "id=u01a_",  "")
-email$event_description = stringr::str_replace(email$event_description, "\\*\\$target=",  "")
-
-email = email %>% mutate(event_description = ifelse(event_type == "START","",event_description)) %>%
-mutate(event_description = ifelse(event_type == "END","",event_description)) %>%
-  mutate(event_description = ifelse(event_type == "KEYPRESS","",event_description)) %>%
-  mutate(event_concat = ifelse(event_description == "", event_type, paste0(event_type,"-",event_description))) %>%
-mutate(word = gsub(" ", "_", event_concat))
-#+end_src
-
-#+RESULTS:
-
-#+begin_src R
-email = email %>% filter(word !="START")
-state = unique(email$word)
-ntate = numeric(nrow(email))
-ii = 0
-for (ww in email$word) {
-  ii = ii + 1
-  ntate[ii] = which(state == ww)
-  }
-email$state = ntate
-#+end_src
-
-#+RESULTS:
-
-#+begin_src R
-uid = unique(email$SEQID)
-pid = numeric(nrow(email))
-ii = 0
-for (nn in email$SEQID) {
-  ii = ii + 1
-  pid[ii] = which(uid == nn)
-  }
-email$pid = pid
-#+end_src
-
-#+RESULTS:
-
-#+begin_src R
-id = unique(email$SEQID)
-L = length(state)
-Q = matrix(0, L, L)
-for (i in id) {
-  ## for (word in email$word[email$SEQID == i]) {
-    ## seqs[i] = paste0(seqs[i], " ", word)
-  ## }
-  seq = email$state[email$SEQID == i]
-  for (k in 1:(length(seq)-1))
-    Q[seq[k], seq[k+1]] = 1
-  cat(seq[length(seq)-1])
-}
-
-rsq = rowSums(Q) > 0
-diag(Q) = 1 * rsq
-#+end_src
-
-#+RESULTS:
-
-#+begin_src R
-metadata = readr::read_tsv("metadata.tsv", col_names = FALSE)
-vectors = readr::read_tsv("vectors.tsv", col_names = FALSE)
-#+end_src
-
-#+RESULTS:
-#+begin_example
-
-[36m──[39m [1m[1mColumn specification[1m[22m [36m──────────────────────────────────────────────────────────────────[39m
-cols(
-  X1 = [31mcol_character()[39m
-)
-
-Warning: 1 parsing failure.
-row col                     expected actual           file
-165  X1 closing quote at end of file        'metadata.tsv'
-
-[36m──[39m [1m[1mColumn specification[1m[22m [36m──────────────────────────────────────────────────────────────────[39m
-cols(
-  X1 = [32mcol_double()[39m,
-  X2 = [32mcol_double()[39m,
-  X3 = [32mcol_double()[39m,
-  X4 = [32mcol_double()[39m,
-  X5 = [32mcol_double()[39m,
-  X6 = [32mcol_double()[39m,
-  X7 = [32mcol_double()[39m,
-  X8 = [32mcol_double()[39m,
-  X9 = [32mcol_double()[39m,
-  X10 = [32mcol_double()[39m,
-  X11 = [32mcol_double()[39m,
-  X12 = [32mcol_double()[39m,
-  X13 = [32mcol_double()[39m,
-  X14 = [32mcol_double()[39m,
-  X15 = [32mcol_double()[39m,
-  X16 = [32mcol_double()[39m
-)
-#+end_example
-
-#+begin_src R
-dem = ncol(vectors)
-vv = array(0, dim=c(M <- length(state),dem))
-for (m in 1:M) {
-  if (sum(state[m] == metadata[,1]) > 0)
-  vv[m, ] = unlist(vectors[which(state[m] == metadata[,1]), ] )
+if (item_code == "U01a000S") {
+sub_str = rbind(c("(.*)\\*\\$target=u01a_(.*)","\\1\\2"), c("id=u01a_",  ""), c("\\*\\$target=",  ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
 }
 #+end_src
 
-#+RESULTS:
+*** party_invitation-2
+#+begin_src R :results value list drawer silent
+## instruction is not clear. too many actions
+## respondents got confused (create or not create a folder to organize??)
 
-#+begin_src R
-Dml = cosdist(as.matrix(vv))
+if (item_code == "U01b000S") {
+sub_str = rbind(c("(.*)\\*\\$target=u01b_(.*)","\\1\\2"), c("id=u01b_",  ""), c("\\*\\$target=",  ""), c("\\*\\$value=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
 #+end_src
 
-#+RESULTS:
+*** cd_tally
+#+begin_src R :results value list drawer silent
+## instruction is not clear. too many actions
+## respondents got confused (create or not create a folder to organize??)
+if (item_code == "U03a000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
 
-** write data
+*** sprained_ankle-1
+#+begin_src R :results value list drawer silent
+## instruction is not clear. too many actions
+## respondents got confused (create or not create a folder to organize??)
+if (item_code == "U06a000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+*** sprained_ankle-2
+*** tickets
+#+begin_src R :results value list drawer silent
+## instruction is not clear. too many actions
+## respondents got confused (create or not create a folder to organize??)
+if (item_code == "U21x000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+*** class_attendance
+*** club_membership-1
+*** club_membership-2
+*** book_order
+*** meeting_room
+*** reply_all
+*** locate_email
+*** lamp_return
+** all-in-one R script
 :PROPERTIES:
-:header-args:R: :tangle write-data.R
+:header-args:R: :tangle R/preproc-data.R
 :END:
 
-#+begin_src R :results none
-library(msm)
-df = email %>% select(pid, timestamp, response, state)
-dat <- msm2Surv(data=df, subject="pid", time="timestamp", state="state",
-         Q=Q)
-##dat
-## attr(dat, "trans")
-dat$time = dat$time / max(dat$Tstop)
-dat$Tstart = dat$Tstart / max(dat$Tstop)
-dat$Tstop = dat$Tstop / max(dat$Tstop)
+- preprocess data, word2vec, prepare for C, run C, post analysis!
+#+begin_src R :tangle R/all_in_one.R
+item_code = "U03a000S"
+source("R/itemcode.R")
+out_dir = paste0(booklet$NAME[booklet$CODEBOOK == item_code], "/")
+source("R/preproc-data.R")
+system(paste0("sh run.sh ", out_dir))
 #+end_src
 
-#+begin_src R :results none
-library(foreach)
-library(doParallel)
-##registerDoParallel(cores = detectCores() - 1)
+#+begin_src R :tangle R/all_in_one.R
+item_code = "U21x000S"
+source("R/itemcode.R")
+out_dir = paste0(booklet$NAME[booklet$CODEBOOK == item_code], "/")
+source("R/preproc-data.R")
+system(paste0("sh run.sh ", out_dir))
+#+end_src
+
+#+begin_src R :results value list drawer silent
+library(diprom)
+## library(dplyr)
+## library(stringr)
+## library(msm)
+## library(foreach)
+## library(doParallel)
 stopImplicitCluster()
-registerDoParallel(2)
+registerDoParallel(cores = detectCores() - 1)
+## doParallel::registerDoParallel(2)
+#+end_src
 
-dat$dist = foreach (i = 1:nrow(dat), .combine="c") %dopar% Dml[dat$from[i], dat$to[i]]
+#+begin_src R :results value list drawer silent
+setwd('~/workspace/procmod-code/')
+piacc_orig_path = "./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_cleaned_1110.rdata"
+piacc_path = "./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_no_missing.rdata"
+## piacc_na.omit()
+#+end_src
+
+#+begin_src R :results value list drawer silent
+item = read_piacc(piacc_path, item_code, sub_str, ignore_str)
+item2sen(item)
+item %>% group_by(SEQID) %>% summarise(mnum = max(event_num))
+#+end_src
+
+Run Python codes to do ~word2vec~.
+#+begin_src R :results silent
+system(". activate tf; python piacc_word2vec.py")
+#+end_src
+
+#+begin_src R :results silent
+metadata_path = "input/metadata.tsv"
+vectors_path = "input/vectors.tsv"
+metadata = readr::read_tsv(metadata_path, col_names = FALSE)
+vectors = readr::read_tsv(vectors_path, col_names = FALSE)
+
+item = filter_item(item)
+Q = get_trans(item)
+Dml = get_cosdist()
 #+end_src
 
 #+begin_src R :results none
+dat = item2long(item)
+
 M = length(state)
 N = length(unique(dat$id))
 dq = nrow(Q)
@@ -576,86 +611,278 @@ dn = nrow(dat)
 dc = ncol(dat)
 #+end_src
 
-#+begin_src R
+#+begin_src R :results none
+write_data()
+source("R/init.R")
+write_loop_index()
+#+end_src
+
+#+RESULTS:
+
+** internal functions
+#+begin_src R :tangle diprom/R/preproc.R :results value list drawer silent
+read_piacc = function(piacc_path, item_code, sub_str, ignore_str, core_event = NULL) {
+  load(piacc_path)
+  item = PS %>% filter(CODEBOOK == item_code)
+
+## core_event = c("MAIL_DRAG", "MAIL_MOVED", "MAIL_VIEWED")
+## email$event_description[!(email$event_type %in% core_event)] <- ""
+
+  timestamp = item$timestamp
+  diff = c(diff(timestamp), 99999)
+  item$diff = diff
+  item = item[(diff >= 10) || (diff < 0 ), ]
+
+  if (length(sub_str) != 0) {
+    for (ii in 1:nrow(sub_str)){
+      item$event_description = stringr::str_replace_all(item$event_description,
+                                                    sub_str[ii,1], sub_str[ii,2])}
+  }
+
+  if (length(ignore_desc) != 0) {
+    for (ii in 1:length(ignore_desc)) {
+      item = item %>% mutate(event_description = ifelse(event_type == ignore_desc[ii],"",event_description)) }
+  }
+
+  item = item %>%
+    mutate(event_concat = ifelse(event_description == "", event_type, paste0(event_type,"-",event_description))) %>%
+    mutate(word = gsub(" ", "_", event_concat))
+
+  return(item)
+}
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :tangle diprom/R/preproc.R
+item2sen = function(item) {
+ww = item$word
+id = item$SEQID
+ww0 = ww[1:(length(ww)-1)]
+ww1 = ww[2:(length(ww))]
+
+dup = ww0 == ww1
+dup0 = c(dup,  FALSE )
+dup1 = c(FALSE ,  dup)
+
+idx = dup1
+
+cw = "NULL"
+cid = 9999999999
+for (kk in which(dup1)) {
+  if(cw != ww[kk] && cid != id[kk]) idx[kk] = FALSE
+  cw = ww[kk]
+  cid = id[kk]
+}
+
+item = item[!idx, ]
+
+n = nrow(item)
+pre = item$word[1:(n-1)]
+cur = item$word[2:n]
+dif = c(TRUE, !(cur == pre))
+
+idx = logical(n)
+for (i in 2:n) {
+if(dif[i] == FALSE && dif[i-1] == FALSE) {
+  idx[i] = TRUE
+  }
+}
+
+item = item[!idx,]
+
+id = unique(item$SEQID)
+seqs = character(length(id))
+for (i in id) {
+  ## for (word in item$word[item$SEQID == i]) {
+    ## seqs[i] = paste0(seqs[i], " ", word)
+  ## }
+  seqs[i] = paste(item$word[item$SEQID == i] , collapse = " ")
+}
+
+## for (i in id) {
+##     seqs[i] = gsub("START ", "", seqs[i])
+##     seqs[i] = gsub(" END", "", seqs[i])
+## }
+seqs = seqs[id]
+
+data.table::fwrite(as.data.frame(seqs), "input/item_sentence.txt", col.names=F)
+}
+#+end_src
+
+#+begin_src R :tangle diprom/R/preproc.R
+filter_item = function(item) {
+  ## a few more processing
+  ## state to global env
+item =  item %>% filter(word !="START")
+state <<- unique(item$word)
+ntate = numeric(nrow(item))
+ii = 0
+for (ww in item$word) {
+  ii = ii + 1
+  ntate[ii] = which(state == ww)
+}
+item$state = ntate
+
+uid = unique(item$SEQID)
+pid = numeric(nrow(item))
+ii = 0
+for (nn in item$SEQID) {
+  ii = ii + 1
+  pid[ii] = which(uid == nn)
+  }
+item$pid = pid
+return(item)}
+
+get_trans = function(item) {
+id = unique(item$SEQID)
+L = length(state <<- unique(item$word))
+Q = matrix(0, L, L)
+for (i in id) {
+  ## for (word in item$word[item$SEQID == i]) {
+    ## seqs[i] = paste0(seqs[i], " ", word)
+  ## }
+  seq = item$state[item$SEQID == i]
+  for (k in 1:(length(seq)-1))
+    Q[seq[k], seq[k+1]] = 1
+  ## cat(seq[length(seq)-1])
+}
+
+rsq = rowSums(Q) > 0
+diag(Q) = 1 * rsq
+
+return(Q)}
+#+end_src
+
+#+RESULTS:
+#+begin_src R :tangle diprom/R/proproc.R
+get_cosdist = function() {
+dem = ncol(vectors)
+vv = array(0, dim=c(M <- length(state), dem))
+for (m in 1:M) {
+  if (sum(state[m] == metadata[,1]) > 0)
+  vv[m, ] = unlist(vectors[which(state[m] == metadata[,1]), ] )
+}
+Dml = cosdist(as.matrix(vv))
+
+return(Dml)
+}
+#+end_src
+
+#+RESULTS:
+
+** write data
+:PROPERTIES:
+:header-args:R: :tangle R/write-data.R
+:END:
+#+begin_src R :results none :tangle diprom/R/proproc.R
+item2long = function(item) {
+df = item %>% select(pid, timestamp, response, state)
+dat <- msm::msm2Surv(data=df, subject="pid", time="timestamp", state="state",
+         Q=Q)
+##dat
+## attr(dat, "trans")
+dat$time = dat$time / max(dat$Tstop)
+dat$Tstart = dat$Tstart / max(dat$Tstop)
+dat$Tstop = dat$Tstop / max(dat$Tstop)
+dat$dist = foreach (i = 1:nrow(dat), .combine="c") %dopar%
+  Dml[dat$from[i], dat$to[i]]
+return(dat)
+}
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :tangle diprom/R/preproc.R
+write_data = function(){
 ## R to C index conversion
 wat = dat
 wat$id = wat$id - 1
 wat$from = wat$from - 1
 wat$to = wat$to - 1
-#+end_src
 
-#+RESULTS:
-
-#+begin_src R
+## to be read from cpp
+readr::write_csv(as.data.frame(state),"input/state.csv", col_names = FALSE)
 readr::write_csv(wat,"input/dat.csv", col_names = FALSE)
 readr::write_csv(as.data.frame(Q),"input/trans.csv", col_names = FALSE)
 readr::write_csv(as.data.frame(cbind(M, N, dq, dn, dc)),"input/mvar.csv", col_names = FALSE)
-readr::write_csv(data.frame(Dml),  "input/Dml.csv", col_names = FALSE)
+readr::write_csv(data.frame(Dml), "input/Dml.csv", col_names = FALSE)
+}
 #+end_src
-
-#+RESULTS:
 
 ** init
 :PROPERTIES:
-:header-args:R: :tangle write-init.r
+:header-args:R:
 :END:
-#+begin_src R
-kappa = rep(0.1, M)
-tau = rep(0.1, N)
-theta = rep(0.1, N)
-beta = 0
-sigma = 1
-mu_beta = 0
+#+begin_src R :tangle R/init.R
+init_val = list(
+kappa = rep(0.1, M),
+tau = rep(0.1, N),
+theta = rep(0.1, N),
+beta = 0,
+sigma = 1,
+mu_beta = 0,
 sigma_beta = 1
-
-readr::write_csv(as.data.frame(kappa),"input/init_kappa.csv", col_names = FALSE)
-readr::write_csv(as.data.frame(tau),"input/init_tau.csv", col_names = FALSE)
-readr::write_csv(as.data.frame(theta),"input/init_theta.csv", col_names = FALSE)
-readr::write_csv(as.data.frame(sigma),"input/init_sigma.csv", col_names = FALSE)
-readr::write_csv(as.data.frame(beta),"input/init_beta.csv", col_names = FALSE)
-readr::write_csv(as.data.frame(mu_beta),"input/init_mu_beta.csv", col_names = FALSE)
-readr::write_csv(as.data.frame(sigma_beta),"input/init_sigma_beta.csv", col_names = FALSE)
+)
 #+end_src
 
 #+RESULTS:
 
-#+begin_src R :results none
+#+begin_src R :tangle R/init.R
 ## lambda
-a_kappa = matrix(0.1,M,1)
-b_kappa = matrix(0.1,M,1)
-jump_kappa = matrix(0.5,M,1)
+params = c(init_val, list(
+a_kappa = matrix(0.1,M,1),
+b_kappa = matrix(0.1,M,1),
+jump_kappa = matrix(0.5,M,1),
 
-jump_beta = matrix(0.1,1,1)
+jump_beta = matrix(0.1,1,1),
 
 ## mu_theta = matrix(0.0,N,1)
 ## sigma_theta = matrix(1.0,N,1)
-jump_theta = matrix(1.0,N,1)
+jump_theta = matrix(1.0,N,1),
 
-a_sigma = 1.0
-b_sigma = 1.0
+a_sigma = 1.0,
+b_sigma = 1.0,
 
-a_tau = matrix(0.1,N,1)
-b_tau = matrix(0.1,N,1)
-jump_tau = matrix(0.5,N,1)
+a_tau = matrix(0.1,N,1),
+b_tau = matrix(0.1,N,1),
+jump_tau = matrix(0.5,N,1),
 
-a_sigma_beta = 1.0
-b_sigma_beta = 1.0
+a_sigma_beta = 1.0,
+b_sigma_beta = 1.0,
 
-mu_mu_beta = 0.0
-sigma_mu_beta = 10.0;
+mu_mu_beta = 0.0,
+sigma_mu_beta = 10.0
+))
 #+end_src
 
 #+RESULTS:
-: Error in cbind(M, N, dq, dn, dc) : object 'M' not found
 
-#+begin_src R
-readr::write_csv(as.data.frame(cbind(a_kappa,b_kappa,jump_kappa)),"input/hyper_kappa.csv", col_names = FALSE)
-readr::write_csv(as.data.frame(jump_beta),"input/hyper_beta.csv", col_names = FALSE)
-readr::write_csv(as.data.frame(jump_theta),"input/hyper_theta.csv", col_names = FALSE)
-readr::write_csv(as.data.frame(cbind(a_sigma,b_sigma)),"input/hyper_sigma.csv", col_names = FALSE)
-readr::write_csv(as.data.frame(cbind(a_tau,b_tau,jump_tau)),"input/hyper_tau.csv", col_names = FALSE)
-readr::write_csv(as.data.frame(cbind(a_sigma_beta,b_sigma_beta)),"input/hyper_sigma_beta.csv", col_names = FALSE)
-readr::write_csv(as.data.frame(cbind(mu_mu_beta,sigma_mu_beta)),"input/hyper_mu_beta.csv", col_names = FALSE)
+#+begin_src R :tangle R/init.R
+write_init(params)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :tangle diprom/R/preproc.R
+write_init = function(params) {
+## parameter init
+readr::write_csv(as.data.frame(params$kappa),"input/init_kappa.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(params$tau),"input/init_tau.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(params$theta),"input/init_theta.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(params$sigma),"input/init_sigma.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(params$beta),"input/init_beta.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(params$mu_beta),"input/init_mu_beta.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(params$sigma_beta),"input/init_sigma_beta.csv", col_names = FALSE)
+## hyper-parameter + jump
+readr::write_csv(as.data.frame(cbind(params$a_kappa,params$b_kappa,params$jump_kappa)),"input/hyper_kappa.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(params$jump_beta),"input/hyper_beta.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(params$jump_theta),"input/hyper_theta.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(cbind(params$a_sigma,params$b_sigma)),"input/hyper_sigma.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(cbind(params$a_tau,params$b_tau,params$jump_tau)),"input/hyper_tau.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(cbind(params$a_sigma_beta,params$b_sigma_beta)),"input/hyper_sigma_beta.csv", col_names = FALSE)
+readr::write_csv(as.data.frame(cbind(params$mu_mu_beta,params$sigma_mu_beta)),"input/hyper_mu_beta.csv", col_names = FALSE)
+  }
 #+end_src
 
 #+RESULTS:
@@ -663,26 +890,57 @@ readr::write_csv(as.data.frame(cbind(mu_mu_beta,sigma_mu_beta)),"input/hyper_mu_
 
 ** for-loop index
 :PROPERTIES:
-:header-args:R: :tangle write-loop-index.r
+:header-args:R: :tangle diprom/R/preproc.R
 :END:
 #+begin_src R
+write_loop_index = function() {
+  fstr = NULL
+  for (m in 1:M) {
+    if(sum(dat$from==m)>0) {
+      fstr = c(fstr, paste(which(dat$from == m) - 1, collapse = " ")) # R to C index conversion
+    } else fstr = c(fstr, "-99")
+  }
+  fname = "input/out-of-state_index.txt"
+  if (file.exists(fname)) {
+    ##Delete file if it exists
+    file.remove(fname)
+  }
+  fcon = file(fname)
+  writeLines(fstr, fcon) # R to C index conversion
+  close(fcon)
+
+  fstr = NULL
+  for (k in 1:max(item$pid)) {
+    if(sum(dat$id==k)>0) {
+      fstr = c(fstr, paste(which(dat$id == k) - 1, collapse = " ")) # R to C index conversion
+    } else fstr = c(fstr, "-99")
+}
+fname = "input/person_index.txt"
+if (file.exists(fname)) {
+  ##Delete file if it exists
+  file.remove(fname)
+}
+fcon = file(fname)
+writeLines(fstr, fcon) # R to C index conversion
+close(fcon)
+}
+#+end_src
+
+#+begin_src R
+write_loop_index_deprecated = function() {
 sink("input/out-of-state_index.txt")
 for (m in 1:M)
   if(sum(dat$from==m)>0) {
 cat(which(dat$from == m) - 1,"\n") # R to C index conversion
   } else cat(-99,"\n")
 sink()
-#+end_src
-
-#+RESULTS:
-
-#+begin_src R
 sink("input/person_index.txt")
-for (k in 1:max(email$pid))
+for (k in 1:max(item$pid))
   if(sum(dat$id==k)>0) {
 cat(which(dat$id == k) - 1,"\n") # R to C index conversion
   } else cat(-99,"\n")
 sink()
+}
 #+end_src
 
 #+RESULTS:
@@ -705,26 +963,6 @@ What questions can you answer using these models? The below are quantities of in
 - if possible, prob. of first action
 
 In Discussion, we decided to use time-scale: in-homogeneous and number of terminal states: one.
-* filtering
-remove people with at least one missing.
-[[file:data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv]]
-#+begin_src R
-library(dplyr)
-library(stringr)
-setwd('~/workspace/procmod-code/')
-load('./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_cleaned_1110.rdata')
-PS$response = as.numeric(PS$response)
-to_drop = PS$SEQID[is.na(PS$response)]
-PS = na.omit(PS)
-to_drop = c(to_drop, PS$SEQID[which(PS$response == 0 & !(PS$CODEBOOK %in% c("U01a000S", "U04a000S","U19b000S", "U02x000S", "U11b000S", "U11b000S")))])
-to_drop = unique(to_drop)
-PS = PS %>% filter(!SEQID %in% to_drop)
-save(PS, file = "./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_no_missing.rdata")
-#+end_src
-
-#+RESULTS:
-: Warning message:
-: NAs introduced by coercion
 * R packaging
 #+begin_src emacs-lisp
 (progn (setq default-directory "~/Dropbox/research/procmod/procmod-code/diprom")
@@ -733,7 +971,445 @@ save(PS, file = "./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_
 
 #+RESULTS:
 
-* COMMENT email transitions
+#+begin_src R :tangle diprom/R/misc.R :results silent
+cl_plot <- function(x, cl, myname = NULL, size_ = 1, xlim = NA, ylim = NA) {
+  ## plot 2d array x
+  ## mark points by groups specified by cl
+
+  cl <- as.factor(cl)
+  position <- as.data.frame(x)
+  ndim <- dim(x)[2]
+
+  colnames(position) <- paste("position", 1:ndim, sep = "")
+
+  padding <- 1.05
+  if (any(is.na(xlim))) {
+    x1 <- -max(abs(position[, 1])) * padding
+    x2 <- max(abs(position[, 1])) * padding
+  } else {
+    x1 <- xlim[1]
+    x2 <- xlim[2]
+  }
+  if (any(is.na(ylim))) {
+    y1 <- -max(abs(position[, 2])) * padding
+    y2 <- max(abs(position[, 2])) * padding
+  } else {
+    y1 <- ylim[1]
+    y2 <- ylim[2]
+  }
+
+  mytheme <- theme(
+    axis.line = element_line(colour = "black"),
+    ## panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    ## panel.border = element_blank(),
+    panel.background = element_blank()
+  )
+
+  ## plot
+  pp <- ggplot(position, aes(x = position1, y = position2, colour = cl)) +
+    ## theme(text=element_text(size=20)) +
+    ## geom_point()+
+    xlim(x1, x2) +
+    ylim(y1, y2) +
+    xlab(myname[1]) +
+    ylab(myname[2]) +
+    ## xlab("Position 1") + ylab("Position 2") +
+    geom_hline(yintercept = 0, color = "gray70", linetype = 2) +
+    geom_vline(xintercept = 0, color = "gray70", linetype = 2) +
+    mytheme
+  pp <- pp + geom_point(size = size_)
+  ## pp +
+  ##   geom_text(
+  ##     data = subset(position, idx == "w"), aes(x = position1, y = position2, label = (1:n_w), colour = cl_w),
+  ##     ## segment.color = "grey50",
+  ##     check_overlap = FALSE, show.legend = FALSE, size = 4
+  ##   )
+}
+#+end_src
+
+#+RESULTS:
+
+* Shell script to run C-code
+#+begin_src sh :tangle run.sh
+#!/usr/bin/env bash
+# out_dir="party_invitations-1/"
+# out_dir="cd_tally/"
+# out_dir="sprained_ankle-1/"
+# prename="R/party_invitations-1-preprocess.R"
+# initname="R/party_invitations-1-init.R"
+
+# first argument = output dir
+out_dir=$1
+n_chain=2
+figlet "running MCMC"
+
+echo "================================"
+echo "output dir:" $out_dir
+echo "preprocessing:" $prename
+echo "initializing:" $initname
+echo "n_chain:" $n_chain
+echo "================================"
+
+export STAN_NUM_THREADS=2
+mkdir -p output
+rm output/*
+# rm input/*
+
+# Rscript $prename
+cp -r input output/
+cp run.sh output/
+# cp $prename output/
+# cp $initname output/
+
+for ((v = 1; v <= $n_chain; v++))
+do
+    # Rscript $initname
+    ./main $v 10000 10000 10 parallel
+done
+## main function argument
+ # chain #, iteration, burn-in, thin
+ # parallel serial -> parallel computation?
+
+mkdir -p $out_dir
+mv output/* $out_dir
+# Rscript R/run-analysis.R $out_dir $n_chain
+echo "Outputs are moved to" $out_dir"."
+echo "================================"
+#+end_src
+
+* R post MCMC analysis
+#+begin_src R :tangle R/run-analysis.R
+#!/usr/bin/env Rscript
+args <- commandArgs(trailingOnly = TRUE)
+# test if there is at least one argument: if not, return an error
+
+if (length(args) < 1) {
+  stop("out_dir must be supplied.\n", call. = FALSE)
+} else out_dir <- args[1]
+
+if (length(args) == 2) {
+num_chain <- args[2]
+  } else if (length(args) == 1) {
+num_chain = NULL
+num_chain = get_nchain(out_dir)
+  }
+## out_dir <- "chessB-singleZ-singleW/"
+system(paste0("rm figure/*.pdf"))
+source("R/analysis.R")
+system(paste0("mkdir -p ", out_dir, "figure/"))
+system(paste0("rsync -rv figure/*.pdf ", out_dir, "figure/"))
+#+end_src
+
+set the output directory. run the chain of analytic tools. move the results to the output dir.
+#+begin_src R :results none
+num_chain = 2
+out_dir="party_invitations-1/"
+out_dir="cd_tally/"
+## out_dir="sprained_ankle-1/"
+out_dir="tickets/"
+
+system(paste0("rm figure/*.pdf"))
+system(paste0("mkdir -p figure/"))
+
+setwd("~/workspace/procmod-code")
+source("R/analysis.R")
+
+system(paste0("mkdir -p ", out_dir, "figure/"))
+system(paste0("rsync -rv figure/*.pdf ", out_dir,"figure/"))
+#+end_src
+
+#+begin_src R :results none :tangle R/Renviron.R
+library(diprom)
+## library(coda)
+## library(dplyr)
+## library(ggplot2)
+## library(stringr)
+## library(magrittr)
+## library(bayesplot)
+## library(foreach)
+## library(doParallel)
+stopImplicitCluster()
+registerDoParallel(cores = detectCores() - 1)
+## doParallel::registerDoParallel(2)
+#+end_src
+
+#+RESULTS:
+#+begin_src R :tangle R/analysis.R
+source("R/Renviron.R")
+source("R/load-outputs.R")
+source("R/summary.R")
+source("R/visual.R")
+#+end_src
+
+* load outputs
+This section contains scripts to create an mcmc object. 1) read MCMC samples, 2) set their column names, and 3) Procrustean matching.
+#+begin_src R :tangle diprom/R/post.R
+set_cnames = function(M = M_, N = N_, dq = dq_, dn = dn_, dc = dc_) {
+  cnames <- c(".chain", ".iteration")
+
+  ## CSVFormat prints by row-major order!
+  for (m in 1:M) {
+    cnames <- c(cnames, paste0("kappa.", m))
+  }
+  for (m in 1:N) {
+    cnames <- c(cnames, paste0("tau.", m))
+  }
+  for (k in 1:N) {
+    cnames <- c(cnames, paste0("theta.", k))
+  }
+  cnames <- c(cnames, "sigma", "beta", "mu_beta", "sigma_beta", "llike_", "lpri_", "lp_")
+  return(cnames)
+}
+
+get_nchain = function(out_dir) {
+  ## use all sample files if nchain is not set
+  ## assign if NULL
+  if (is.null(num_chain)) {
+    num_chain <- length(list.files(path = out_dir, pattern="sample_chain[0-9]+\\.csv"))
+  }
+  return(num_chain)
+}
+
+read_output = function(num_chain, cnames) {
+  dlist <- list()
+  for (cid in 1:num_chain) {
+    dlist[[cid]] <- readr::read_csv(paste0(out_dir, "sample_chain", cid, ".csv"), col_names = F, skip = 0) %>% as.data.frame()
+    colnames(dlist[[cid]]) <- cnames
+  }
+  return(dlist)
+}
+
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :tangle R/load-outputs.R :results silent
+mvar <- readr::read_csv(paste0(out_dir, "input/mvar.csv"), col_names = F) %>% as.matrix()
+M = M_ = mvar[1]
+N = N_ = mvar[2]
+dq = dq_ = mvar[3]
+dn = dn_ = mvar[4]
+dc = dc_ = mvar[5]
+
+cnames = diprom::set_cnames(M, N, dq, dn, dc)
+dlist = diprom::read_output(num_chain, cnames)
+
+## unlist
+## df <- bind_rows(dlist, .id = "column_label")
+
+mclist <- mcmc.list()
+for (cid in 1:num_chain) {
+  mclist[[cid]] <- mcmc(dlist[[cid]])
+}
+#+end_src
+
+#+RESULTS:
+
+The posterior means of \beta, \theta, \lambda are exported to CSV files.
+#+begin_src R :tangle R/summary.R
+ss <- summary(mclist)
+mm <- ss$statistics[, "Mean"]
+## rr <- c(grep("^kappa", names(mm)), grep("^tau", names(mm)))
+## dout <- data.frame(vname = names(mm[rr]), mean = mm[rr])
+dout <- data.frame(vname = names(mm), mean = mm)
+
+readr::write_csv(dout, paste0(out_dir, "param_mean.csv"))
+#+end_src
+
+#+RESULTS:
+
+[[file:figure/theta_res.pdf]]
+[[file:figure/theta_tau_res.pdf]]
+[[file:figure/tau_res.pdf]]
+#+begin_src R :results silent :tangle R/summary.R
+mtheta <- dout[grep("^theta", dout$vname), 2]
+mtau <- dout[grep("^tau", dout$vname), 2]
+mkappa <- dout[grep("^kappa", dout$vname), 2]
+dat <- readr::read_csv(paste0(out_dir,"input/dat.csv"), col_names = FALSE)
+rr <- dat[, c(1, 8)] %>% as.data.frame()
+rr <- rr[!duplicated(rr), 2]
+#+end_src
+
+#+begin_src R :results silent :tangle R/summary.R
+pdf("figure/theta_res.pdf")
+dd <- data.frame(theta = mtheta, res = rr)
+boxp <- ggplot(dd, aes(x = factor(res), y = theta, fill = factor(res))) +
+  geom_boxplot() +
+  theme(legend.position = "none")
+print(boxp)
+dev.off(which = dev.cur())
+#+end_src
+
+#+begin_src R :results silent :tangle R/summary.R
+pdf("figure/tau_res.pdf")
+dd <- data.frame(tau = mtau, res = rr)
+boxp <- ggplot(dd, aes(x = factor(res), y = tau, fill = factor(res))) +
+  geom_boxplot() +
+  theme(legend.position = "none")
+boxp
+dev.off(which = dev.cur())
+#+end_src
+
+#+begin_src R :results silent :tangle R/summary.R
+pdf("figure/theta_tau_res.pdf")
+pp = cl_plot(cbind(mtheta, log(mtau)), rr, c("theta","log(tau)"))
+print(pp)
+dev.off(which = dev.cur())
+#+end_src
+
+#+begin_src R :results none
+## sink("output/mcmc_summary.txt")
+cat("==================================")
+cat("Rejection Rate")
+cat("==================================")
+rejectionRate(mclist)
+cat("==================================")
+cat("Effective Size")
+cat("==================================")
+effectiveSize(mclist)
+cat("==================================")
+cat("Summary")
+cat("==================================")
+summary(mclist)
+## sink()
+#+end_src
+
+* MCMC trace plots
+#+begin_src R :tangle diprom/R/post.R
+plot_intervals = function(param, trans_ = "log", save_plot = TRUE){
+  regexp = paste0("^",param,"\\.")
+  if (save_plot) pdf(paste0("figure/",param,"_mcmc_intervals.pdf"))
+  p0 <- bayesplot::mcmc_intervals(
+    mclist,
+    regex_pars = regexp,
+    transformations = trans_
+  )
+  ## mcmc_areas(
+  ##  lambda0.sam,
+  ##  prob = 0.8, # 80% intervals
+  ##  prob_outer = 0.99, # 99%
+  ##  point_est = "mean"
+  ## )
+  print(p0)
+  if (save_plot) dev.off(which = dev.cur())
+}
+
+plot_parcoord = function(param, trans_ = "log", save_plot = TRUE){
+  regexp = paste0("^",param,"\\.")
+  if (save_plot) pdf(paste0("figure/",param,"_mcmc_parcoord.pdf"))
+  p0 <- bayesplot::mcmc_parcoord(
+    mclist,
+    regex_pars = regexp,
+    transformations = trans_
+  )
+  ## mcmc_areas(
+  ##  lambda0.sam,
+  ##  prob = 0.8, # 80% intervals
+  ##  prob_outer = 0.99, # 99%
+  ##  point_est = "mean"
+  ## )
+  print(p0)
+  if (save_plot) dev.off(which = dev.cur())
+}
+
+#+end_src
+
+#+RESULTS:
+
+#+begin_src R :tangle diprom/R/post.R
+plot_trace = function(param, max_, trans_ = "log", save_plot = TRUE){
+  if (save_plot) pdf(paste0("figure/",param,"_mcmc_trace.pdf"))
+    regexp = paste0("^",param,"\\.[0-9]$")
+  for (ii in 0:floor(max_/10)) {
+ if (ii > 0) regexp = paste0("^",param,"\\.", ii, "[0-9]$")
+  p <- bayesplot::mcmc_trace(
+    mclist,
+    regex_pars = regexp,
+    transformations = trans_,
+    facet_args = list(nrow = 4, labeller = label_parsed)
+  )
+  print(p <- p + bayesplot::facet_text(size = 10))
+  ## mcmc_areas(
+  ##  lambda0.sam,
+  ##  prob = 0.8, # 80% intervals
+  ##  prob_outer = 0.99, # 99%
+  ##  point_est = "mean"
+  ## )
+ }
+  if (save_plot) dev.off(which = dev.cur())
+  }
+#+end_src
+
+#+RESULTS:
+
+[[file:figure/theta_mcmc_intervals.pdf]]
+[[file:figure/tau_mcmc_intervals.pdf]]
+[[file:figure/theta_mcmc_intervals.pdf]]
+#+begin_src R :tangle R/visual.R
+diprom::plot_intervals("kappa")
+diprom::plot_intervals("tau")
+diprom::plot_intervals("theta", list())
+#+end_src
+
+#+RESULTS:
+: Error in array(NA, dim = c(n_iter, n_chain, n_param)) :
+:   'list' object cannot be coerced to type 'integer'
+: Error in array(NA, dim = c(n_iter, n_chain, n_param)) :
+:   'list' object cannot be coerced to type 'integer'
+: Error in array(NA, dim = c(n_iter, n_chain, n_param)) :
+:   'list' object cannot be coerced to type 'integer'
+
+[[file:figure/theta_mcmc_parcoord.pdf]]
+[[file:figure/tau_mcmc_parcoord.pdf]]
+[[file:figure/theta_mcmc_parcoord.pdf]]
+#+begin_src R
+diprom::plot_parcoord("kappa")
+diprom::plot_parcoord("tau")
+diprom::plot_parcoord("theta", list())
+#+end_src
+
+#+RESULTS:
+: Error in array(NA, dim = c(n_iter, n_chain, n_param)) :
+:   'list' object cannot be coerced to type 'integer'
+: Error in array(NA, dim = c(n_iter, n_chain, n_param)) :
+:   'list' object cannot be coerced to type 'integer'
+: Error in array(NA, dim = c(n_iter, n_chain, n_param)) :
+:   'list' object cannot be coerced to type 'integer'
+
+[[file:figure/kappa_mcmc_trace.pdf]]
+[[file:figure/tau_mcmc_trace.pdf]]
+[[file:figure/theta_mcmc_trace.pdf]]
+#+begin_src R :tangle R/visual.R
+bayesplot::color_scheme_set("mix-blue-pink")
+diprom::plot_trace("kappa", M)
+diprom::plot_trace("tau", N)
+diprom::plot_trace("theta", 20, list())
+#+end_src
+
+#+RESULTS:
+: Error in facet_text(size = 10) : could not find function "facet_text"
+: Error in facet_text(size = 10) : could not find function "facet_text"
+: Error in facet_text(size = 10) : could not find function "facet_text"
+
+[[file:figure/other_params_trace.pdf]]
+#+begin_src R :tangle R/visual.R
+pdf("figure/other_params_trace.pdf")
+bayesplot::color_scheme_set("mix-blue-pink")
+p <- bayesplot::mcmc_trace(mclist[[1]],
+                           pars = c("sigma", "beta", "mu_beta", "sigma_beta", "llike_", "lpri_", "lp_"),
+                           facet_args = list(nrow = 3, labeller = label_parsed)
+                           )
+print(p <- p + bayesplot::facet_text(size = 10))
+dev.off(which = dev.cur())
+#+end_src
+
+#+RESULTS:
+: pdf
+:   2
+
+* word2vec code
+** COMMENT email transitions
 #+begin_src R
 library(dplyr)
 load('data/PIAAC_cleaned_data_1110/Problem solving/Problem-solving_cleaned_1110.rdata')
@@ -866,7 +1542,7 @@ email %>% filter(SEQID == 782) %>% select(event_type, event_description)
 37       NEXT_INQUIRY
 38                END
 #+end_example
-* COMMENT Keras word2vec
+** COMMENT Keras word2vec
 :PROPERTIES:
 :header-args:R: :results silent :exports both :noweb yes :eval never-export
 :END:
@@ -965,7 +1641,7 @@ model %>%
     )
 #+end_src
 
-* email word2vec preprocessing
+** email word2vec preprocessing
 :PROPERTIES:
 :header-args:R: :results silent :tangle email_word2vec_preproc.r :eval never-export
 :END:
@@ -1107,15 +1783,11 @@ nn = nrow(ee)
 trans = paste(ww[1:(nn-1)], "->", ww[2:nn])
 length(unique(trans))
 #+end_src
-* email word2vec
+** email word2vec
 window_size = 2 should be [5,20] for a small data set.
 (negative samples) num_ns = 4
 See [[file:email_word2vec.ipynb]]
 Download the vectors.tsv and metadata.tsv to analyze the obtained embeddings in the Embedding Projector. https://projector.tensorflow.org/
-* email multi-state model
-- https://www.mrc-bsu.cam.ac.uk/wp-content/uploads/2017/10/multistate_enar_webinar.pdf
-- https://cran.r-project.org/web/packages/msm/msm.pdf
-- [[id:57b08111-9c48-4fa9-b289-10f01fc7a0d6][cite:hill_relaxing_2021]]
 * email subject segmentation
 #+begin_src R :results silent
 source("email_word2vec_preproc.r")
