@@ -17,6 +17,6 @@ double fun_lp(double &llike_, double &lpri_, const Eigen::VectorXd a_kappa,
               const Eigen::VectorXd &theta, const double beta,
               const std::vector<int> &sid, const std::vector<int> &acfrom,
               const Eigen::VectorXd &tdiff, const std::vector<int> &status,
-              const Eigen::VectorXd &dist, const int dn);
+              const Eigen::VectorXd &dist, const int dn, const bool RUN_PAR);
 
 #endif // __FUN_LP_H_

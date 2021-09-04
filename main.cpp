@@ -125,8 +125,9 @@ int main(int argc, const char *argv[]) {
   }
   // if (is_empty(osummary)) inp << ".chain, " << "seed, " << "iter, " << "warm,
   // " << "thin" << std::endl;
-  osummary << chain_id << ", " << rseed << ", " << num_samples << ", " << num_warmup
-           << ", " << thin << std::endl;
+  osummary << chain_id    << ", " << rseed << ", "
+           << num_samples << ", "
+           << num_warmup  << ", " << thin  << std::endl;
   osummary.close();
 
   std::cout << "Reading data sets...\n";
@@ -139,7 +140,7 @@ int main(int argc, const char *argv[]) {
   const int dc = mvar(0, 4); // data columns
 
   Eigen::MatrixXd dat(dn, dc);
-  Eigen::MatrixXd trans(dq, dq); // transition
+  Eigen::MatrixXd trans(dq, dq); // transition matrix
   // Eigen::MatrixXd Dml(M, M); // cosine similarity-ish
 
   dat = readCSV("input/dat.csv", dn, dc);
@@ -179,11 +180,14 @@ int main(int argc, const char *argv[]) {
   std::ifstream fperson("input/person_index.txt");
   std::ifstream foos("input/out-of-state_index.txt");
 
-  std::vector<std::vector<int>> person_idx;
-  std::vector<std::vector<int>> oos_idx;
-  person_idx = txt2vec(fperson);
-  oos_idx = txt2vec(foos);
+  // std::vector<std::vector<int>> person_idx;
+  // std::vector<std::vector<int>> oos_idx;
+  // person_idx = txt2vec(fperson);
+  // oos_idx = txt2vec(foos);
 
+  std::vector<std::vector<int>> person_idx{txt2vec(fperson)};
+  std::vector<std::vector<int>> oos_idx{txt2vec(foos)};
+   
   // // integer conversion
   // mseg = tmp_mseg.cast<int>();
   // mY = tmp_mY.cast<int>();
@@ -259,7 +263,7 @@ int main(int argc, const char *argv[]) {
   double sigma_beta;
 
   // accept_stat
-  Eigen::VectorXd acc_kappa = Eigen::VectorXd::Zero(M);
+  Eigen::VectorXd acc_kappa= Eigen::VectorXd::Zero(M);
   Eigen::VectorXd acc_tau = Eigen::VectorXd::Zero(N);
   Eigen::VectorXd acc_theta = Eigen::VectorXd::Zero(N);
   double acc_beta = 0.0;
@@ -317,7 +321,6 @@ int main(int argc, const char *argv[]) {
     }    // end of RUN_PAR
     else // single thread
     {
-
       // std::cout << "sampling kappa...\n";
       for (int m = 0; m < M; m++) {
         if (oos_idx.at(m).at(0) >= 0) {
@@ -343,17 +346,16 @@ int main(int argc, const char *argv[]) {
     } // end of serial updating
 
     // updating beta...
-      update_beta(beta, acc_beta, mu_beta, sigma_beta, jump_beta, sigma, kappa,
-                  tau, theta, sid, acfrom, tdiff, status, dist, dn, rng, RUN_PAR);
-
+      // update_beta(beta, acc_beta, mu_beta, sigma_beta, jump_beta, sigma, kappa,
+      //             tau, theta, sid, acfrom, tdiff, status, dist, dn, rng, RUN_PAR);
 
     // std::cout << "updating sigma...\n";
     // updating sigma
     sigma = update_sigma(a_sigma, b_sigma, theta, rng);
 
     // updating beta hypers
-    mu_beta = update_mu(beta, sigma, mu_mu_beta, sigma_mu_beta, rng);
-    sigma_beta = update_sigma(a_sigma_beta, b_sigma_beta, (beta - mu_beta), rng);
+    // mu_beta = update_mu(beta, sigma, mu_mu_beta, sigma_mu_beta, rng);
+    // sigma_beta = update_sigma(a_sigma_beta, b_sigma_beta, (beta - mu_beta), rng);
 
     // rough estimated run time for 100 iterations
     if (ii == 10) {
@@ -378,27 +380,29 @@ int main(int argc, const char *argv[]) {
       // std::cout << "calculating log-posterior...\n";
       // evaluate log_posteriror
 
-      // TODO: match prior dimension with double / single z and w
-      if (RUN_PAR) {
-      } else {
         lp_ = fun_lp(llike_, lpri_, a_kappa, b_kappa, a_tau, b_tau, mu_theta,
                      sigma, mu_beta, sigma_beta, a_sigma, b_sigma, mu_mu_beta,
                      sigma_mu_beta, a_sigma_beta, b_sigma_beta, kappa, tau,
-                     theta, beta, sid, acfrom, tdiff, status, dist, dn);
-      }
+                     theta, beta, sid, acfrom, tdiff, status, dist, dn, RUN_PAR);
+
         // save samples to a csv file
         // NOTE: row-major order
         // NOTE: DO NOT change the stream order unless you want to change it
         // everywhere (R script too!)
-      osample << chain_id << ", " << ii << ", "
-              << kappa.format(CSVFormat) << ", "
-              << tau.format(CSVFormat) << ", "
-              << theta.format(CSVFormat) << ", "
-              << sigma << ", " 
-              << beta << ", " 
-              << mu_beta << ", " 
-              << sigma_beta << ", "
-              << llike_ << ", " << lpri_ << ", " << lp_ << std::endl;
+        // NOTE: don't reformat the below. a weird error could occur. 
+        osample << chain_id
+                << ", " << ii
+                << ", " << kappa.format(CSVFormat)
+                << ", " << tau.format(CSVFormat)
+                << ", " << theta.format(CSVFormat)
+                << ", " << sigma
+                << ", " << beta
+                << ", " << mu_beta
+                << ", " << sigma_beta
+                << ", " << llike_
+                << ", " << lpri_
+                << ", " << lp_
+                << std::endl;
     }
     }
     osample.close();

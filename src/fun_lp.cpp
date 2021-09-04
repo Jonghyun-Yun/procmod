@@ -11,7 +11,7 @@ double fun_lp(double &llike_, double &lpri_, const Eigen::VectorXd a_kappa,
               const Eigen::VectorXd &theta, const double beta,
               const std::vector<int> &sid, const std::vector<int> &acfrom,
               const Eigen::VectorXd &tdiff, const std::vector<int> &status,
-              const Eigen::VectorXd &dist, const int dn) {
+              const Eigen::VectorXd &dist, const int dn, const bool RUN_PAR) {
 
   using stan::math::to_vector;
   using stan::math::distance;
@@ -26,10 +26,20 @@ double fun_lp(double &llike_, double &lpri_, const Eigen::VectorXd a_kappa,
   // init for sum
   llike_ = 0.0;
 
+  if (RUN_PAR) {
+    tbb::parallel_for(
+        tbb::blocked_range<int>(0, dn), [&](tbb::blocked_range<int> r) {
+          for (int ii = r.begin(); ii < r.end(); ++ii) {
+      if (status.at(ii)==1)
+          llike_ += std::log(kappa(acfrom.at(ii))) + std::log(tau(sid.at(ii))) + (theta(sid.at(ii)) + beta) * dist(ii);
+      llike_ -= tdiff(ii) * kappa(acfrom.at(ii)) * tau(sid.at(ii)) * std::exp((theta(sid.at(ii)) + beta) * dist(ii));
+          }});
+  } else {
   for (int ii = 0; ii < dn; ii++) {
       if (status.at(ii)==1)
           llike_ += std::log(kappa(acfrom.at(ii))) + std::log(tau(sid.at(ii))) + (theta(sid.at(ii)) + beta) * dist(ii);
       llike_ -= tdiff(ii) * kappa(acfrom.at(ii)) * tau(sid.at(ii)) * std::exp((theta(sid.at(ii)) + beta) * dist(ii));
+  }
   }
   // priors...
   lpri_ = inv_gamma_lpdf(square(sigma), a_sigma, b_sigma) +
