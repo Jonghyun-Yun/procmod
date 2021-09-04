@@ -490,8 +490,6 @@ ignore_desc = c(
 
 *** sprained_ankle-1
 #+begin_src R :results value list drawer silent
-## instruction is not clear. too many actions
-## respondents got confused (create or not create a folder to organize??)
 if (item_code == "U06a000S") {
 sub_str = rbind(
   c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
@@ -509,11 +507,8 @@ ignore_desc = c(
 }
 #+end_src
 *** sprained_ankle-2
-*** tickets
 #+begin_src R :results value list drawer silent
-## instruction is not clear. too many actions
-## respondents got confused (create or not create a folder to organize??)
-if (item_code == "U21x000S") {
+if (item_code == "U06b000S") {
 sub_str = rbind(
   c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
   c("id=u03a_",  ""),
@@ -530,34 +525,215 @@ ignore_desc = c(
 }
 #+end_src
 
+*** tickets
+#+begin_src R :results value list drawer silent
+if (item_code == "U21x000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
 *** class_attendance
+#+begin_src R :results value list drawer silent
+if (item_code == "U04a000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
 *** club_membership-1
+#+begin_src R :results value list drawer silent
+if (item_code == "U19a000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
 *** club_membership-2
+#+begin_src R
+if (item_code == "U19b000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
 *** book_order
+#+begin_src R
+if (item_code == "U07x000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
 *** meeting_room
+#+begin_src R
+if (item_code == "U16x000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
 *** reply_all
+#+begin_src R
+if (item_code == "U02x000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
 *** locate_email
+#+begin_src R
+if (item_code == "U11b000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
 *** lamp_return
-** all-in-one R script
+#+begin_src R
+if (item_code == "U23x000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+** COMMENT all-in-one R script
 :PROPERTIES:
 :header-args:R: :tangle R/preproc-data.R
 :END:
 
 - preprocess data, word2vec, prepare for C, run C, post analysis!
 #+begin_src R :tangle R/all_in_one.R
-item_code = "U03a000S"
+ipath = "input"
+if (dir.exists(paths)) {
+  do.call(file.remove, list(list.files("input", full.names = TRUE)))
+  } else dir.create(ipath)
 source("R/itemcode.R")
 out_dir = paste0(booklet$NAME[booklet$CODEBOOK == item_code], "/")
+system(paste0("figlet ", item_code))
+system(paste0("figlet ", out_dir))
 source("R/preproc-data.R")
 system(paste0("sh run.sh ", out_dir))
 #+end_src
 
-#+begin_src R :tangle R/all_in_one.R
-item_code = "U21x000S"
-source("R/itemcode.R")
-out_dir = paste0(booklet$NAME[booklet$CODEBOOK == item_code], "/")
-source("R/preproc-data.R")
-system(paste0("sh run.sh ", out_dir))
+#+begin_src R :tangle R/run_all_in_one.R
+## item_code = "U04a000S" ## cannot convert to long format (msm)
+## item_code = "U01b000S"
+
+item_code = "U19a000S"
+source("R/all_in_one.R")
+
+item_code = "U07x000S"
+source("R/all_in_one.R")
+
+item_code = "U02x000S"
+source("R/all_in_one.R")
+
+item_code = "U16x000S"
+source("R/all_in_one.R")
+
+item_code = "U11b000S"
+source("R/all_in_one.R")
+
+item_code = "U23x000S"
+source("R/all_in_one.R")
 #+end_src
 
 #+begin_src R :results value list drawer silent
@@ -802,6 +978,7 @@ wat$from = wat$from - 1
 wat$to = wat$to - 1
 
 ## to be read from cpp
+readr::write_csv(as.data.frame(item),"input/item.csv", col_names = TRUE)
 readr::write_csv(as.data.frame(state),"input/state.csv", col_names = FALSE)
 readr::write_csv(wat,"input/dat.csv", col_names = FALSE)
 readr::write_csv(as.data.frame(Q),"input/trans.csv", col_names = FALSE)
@@ -887,7 +1064,6 @@ readr::write_csv(as.data.frame(cbind(params$mu_mu_beta,params$sigma_mu_beta)),"i
 
 #+RESULTS:
 
-
 ** for-loop index
 :PROPERTIES:
 :header-args:R: :tangle diprom/R/preproc.R
@@ -972,6 +1148,16 @@ In Discussion, we decided to use time-scale: in-homogeneous and number of termin
 #+RESULTS:
 
 #+begin_src R :tangle diprom/R/misc.R :results silent
+cl_box = function(y, cl, myname = NULL) {
+dd <- data.frame(y = y, cl = cl)
+boxp <- ggplot(dd, aes(x = factor(cl), y = y, fill = factor(cl))) +
+  geom_boxplot() +
+  theme(legend.position = "none")
+if (!is.null(myname)) {
+boxp = boxp + labs(y = myname[1], x = myname[2])}
+print(boxp)
+    }
+
 cl_plot <- function(x, cl, myname = NULL, size_ = 1, xlim = NA, ylim = NA) {
   ## plot 2d array x
   ## mark points by groups specified by cl
@@ -1027,8 +1213,6 @@ cl_plot <- function(x, cl, myname = NULL, size_ = 1, xlim = NA, ylim = NA) {
   ##   )
 }
 #+end_src
-
-#+RESULTS:
 
 * Shell script to run C-code
 #+begin_src sh :tangle run.sh
@@ -1104,8 +1288,8 @@ system(paste0("rsync -rv figure/*.pdf ", out_dir, "figure/"))
 set the output directory. run the chain of analytic tools. move the results to the output dir.
 #+begin_src R :results none
 num_chain = 2
-out_dir="party_invitations-1/"
-out_dir="cd_tally/"
+## out_dir="party_invitations-1/"
+## out_dir="cd_tally/"
 ## out_dir="sprained_ankle-1/"
 out_dir="tickets/"
 
@@ -1222,6 +1406,7 @@ readr::write_csv(dout, paste0(out_dir, "param_mean.csv"))
 [[file:figure/theta_res.pdf]]
 [[file:figure/theta_tau_res.pdf]]
 [[file:figure/tau_res.pdf]]
+[[file:figure/time_action.pdf]]
 #+begin_src R :results silent :tangle R/summary.R
 mtheta <- dout[grep("^theta", dout$vname), 2]
 mtau <- dout[grep("^tau", dout$vname), 2]
@@ -1258,6 +1443,55 @@ print(pp)
 dev.off(which = dev.cur())
 #+end_src
 
+#+begin_src R :results silent :tangle R/summary.R
+item <- readr::read_csv(paste0(out_dir, "input/item.csv"), col_names = TRUE)
+gg = item %>% group_by(pid) %>% summarize(time = timestamp[1] / 1000, naction = n(), spd = naction / time)
+
+pdf("figure/time_action.pdf")
+cl_box(log(gg$time), rr, c("log(first_action_time)", "res"))
+cl_box(log(gg$naction), rr, c("log(naction)", "res"))
+pp = cl_plot(cbind(mtheta, log(gg$time)), rr, c("theta","log(first_action_time)"))
+print(pp)
+pp = cl_plot(cbind(mtheta, log(gg$naction)), rr, c("theta","log(#actions)"))
+print(pp)
+pp = cl_plot(cbind(mtau, log(gg$time)), rr, c("tau","log(first_action_time)"))
+print(pp)
+pp = cl_plot(cbind(mtau, log(gg$naction)), rr, c("tau","log(#actions)"))
+print(pp)
+pp = cl_plot(cbind(log(gg$time), log(gg$naction)), rr, c("log(first_action_time)","log(#action)"))
+print(pp)
+dev.off(which = dev.cur())
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+[36m──[39m [1m[1mColumn specification[1m[22m [36m──────────────────────────────────────────────────────────────────[39m
+cols(
+  CNTRYID = [31mcol_character()[39m,
+  SEQID = [32mcol_double()[39m,
+  booklet_id = [31mcol_character()[39m,
+  item_id = [32mcol_double()[39m,
+  event_name = [31mcol_character()[39m,
+  event_type = [31mcol_character()[39m,
+  timestamp = [32mcol_double()[39m,
+  event_description = [31mcol_character()[39m,
+  NAME = [31mcol_character()[39m,
+  CODEBOOK = [31mcol_character()[39m,
+  response = [32mcol_double()[39m,
+  event_num = [32mcol_double()[39m,
+  diff = [32mcol_double()[39m,
+  event_concat = [31mcol_character()[39m,
+  word = [31mcol_character()[39m,
+  state = [32mcol_double()[39m,
+  pid = [32mcol_double()[39m
+)
+`summarise()` ungrouping output (override with `.groups` argument)
+#+end_example
+
+- first action time
+- number of actions
+-
 #+begin_src R :results none
 ## sink("output/mcmc_summary.txt")
 cat("==================================")
