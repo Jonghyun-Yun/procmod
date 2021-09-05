@@ -151,6 +151,11 @@ where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ 
 - https://cran.r-project.org/web/packages/msm/msm.pdf
 - [[id:57b08111-9c48-4fa9-b289-10f01fc7a0d6][cite:hill_relaxing_2021]]
 * running model and action space
+#+begin_src emacs-lisp
+  (setq jyun/org-latex-preview-scale 2.5)
+  ;; set default org-latex-preview size
+  (jyun/org-latex-set-options)
+#+end_src
 See cite:jackson_flexsurv_2016 for available baseline functions.
 Proportional baseline:
 \[
@@ -214,20 +219,20 @@ for $j = 1,\ldots,J$. $\lambda_{j}$ could be a function of the similarity. This 
 \end{align*}
 where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ is coefficients associated with $\mathbf{z}(t)$, $\lambda_{k,m\rightarrow l}(t)$ is a baseline intensity function. For each state $l$, there are competing transitions $m_1, \ldots, m_{n_l}$. This mean there are $n_{l}$ corresponding survival models for state $l$, and overall $K=\sum_l n_l$ models. Models with no shared parameters can be estimated separately.
 * simplified one (it's probably ok)
-Proportional baseline (based on current and next action)
+baseline (based on current and next action)
 \[
-  \lambda_{ml}(dt_{k,n}) = \kappa_{m} \omega_{l} \tau_{k} \text{ for } l \in A_{m} \text{and} \omega_{s_{m,1}}=1.
+  \lambda_{ml}(dt_{k,n}) = \kappa_{m} \tau_{k} \text{ for } l \in A_{m},
 \]
-\(dt_{k,n}\) denotes t_{k,n}^{stop} - t_{k,n}^{start}
-- large \kappa -> fast out-of-state action
-- how about \(\kappa_{}_{}_{}_{ml}\)?
-- \(\omega\) should be dropped.
-
+where \(A_{m}\) denotes a set of possible actions that can taken directly after action $m$, and
+\(dt_{k,n}\) denotes $t_{k,n}^{stop} - t_{k,n}^{start}$.
+- large $\kappa$: fast out-of-state action
+- large $\tau$: fast action transition
+  
 Proportional hazard term:
 \[
-  e^{(\theta_{k} + \beta) D_{ml} }
+  e^{\theta_{k} D_{ml} }
 \]
-- \(D_{ml}\): cosine similarity([0,1])
+- \(D_{ml}\): cosine similarity([-1,1]) between actions $m$ and $l$.
 - \beta should be dropped. (no keep it, and $\Theta$ has a mean zero).
 - large \theta: do similar action
 - small (negative) \theta: do dis-similar actions
@@ -236,6 +241,11 @@ Proportional hazard term:
 - no incercept term in prop. hazard if baseline contains constant in the same level.
 - action m leads to more/less coherent action
 - determine absorbing state(s): END? NEXT?
+
+hazard rate:
+\[
+q_{ml}(dt) = \lambda_{ml}(dt_{k,n}) e^{\theta_{k} D_{ml} }
+\]
 ** likelihood
 \[
   f_{ml}(t) = q_{ml}(t) S_{ml}(t)
@@ -263,14 +273,15 @@ time at starting state (one after START) is set to the first action (n=1), and t
 The proposed method use a fully Bayesian approach for estimating the proposed latent space model, using MCMC methods. Our prior specification is as follows:
 
 \begin{align*}
-\pi\left(\kappa_{m}\right) & \sim \operatorname{Gamma}\left(\text{mean} = \tilde \kappa_{m}, \text{var} = 2 \cdot \tilde \kappa_{m})\right); \\
-\pi\left(\tau_{k}\right) & \sim \operatorname{Gamma}\left(\text{mean} = \tilde \tau_{k}, \text{var} = 2 \cdot \tilde \tau_{k})\right); \\
+\pi\left(\kappa_{m}\right) & \sim \operatorname{Gamma}\left(a_{\kappa}, b_{\kappa})\right); \\
+\pi\left(\tau_{k}\right) & \sim \operatorname{Gamma}\left(a_{\kappa}, b_{\kappa})\right); \\
 \pi\left(\theta_{k} | \sigma^{2}\right) & \sim \mathrm{N}\left(0, \sigma^{2}\right); \\
-\pi\left(\beta_{k} |\mu_{\beta}, \sigma_{\beta}^{2}\right) & \sim \mathrm{N}\left(\mu_{\beta}, \sigma_{\beta}^{2}\right); \\
-\pi\left(\mu_{\beta}|\sigma_{\beta}) & \sim \mathrm{N}\left(0, \sigma^{2}_{\mu_{\beta}}\right);\\
 \pi\left(\sigma^{2}\right) & \sim \operatorname{lnv}-\operatorname{Gamma}\left(a_{\sigma}, b_{\sigma}\right); \\
-\pi\left(\sigma_{\beta}^{2}\right) & \sim \operatorname{lnv}-\operatorname{Gamma}\left(a_{\sigma_{\beta}}, b_{\sigma_{\beta}}\right),\\
 \end{align*}
+
+# \pi\left(\beta_{k} |\mu_{\beta}, \sigma_{\beta}^{2}\right) & \sim \mathrm{N}\left(\mu_{\beta}, \sigma_{\beta}^{2}\right); \\
+# \pi\left(\mu_{\beta}|\sigma_{\beta}) & \sim \mathrm{N}\left(0, \sigma^{2}_{\mu_{\beta}}\right);\\
+# \pi\left(\sigma_{\beta}^{2}\right) & \sim \operatorname{lnv}-\operatorname{Gamma}\left(a_{\sigma_{\beta}}, b_{\sigma_{\beta}}\right),\\
 
 \begin{align*}
 \pi\left(\sigma^{2}\right) & \propto \sigma^{-2}\\
@@ -355,7 +366,6 @@ with flat prior:
   p(\sigma_{\beta}^{2}|ee) = inv-Gamma(a + 0.5, b + 0.5 (\beta - \mu_{\beta})^2)
 \]
 
-
 ** data structure
 *** mstate R package
 - how to format data to follow the below?
@@ -423,9 +433,10 @@ attr(dat, "trans")
 #+RESULTS:
 ** item codebook
 :PROPERTIES:
-:header-args:R: :tangle R/itemcode.R
+:header-args:R: :tangle R/itemcode.R :exports none
+:EXPORT_FILE_NAME: item_home
 :END:
-example for email. see the codebook! [[file:data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv][PS_BOOKLET_ITEM.csv]]
+See the codebook! [[file:data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv][PS_BOOKLET_ITEM.csv]]
 #+begin_src R
 booklet = readr::read_csv("~/Dropbox/research/procmod/procmod-code/data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv")
 booklet$NAME = stringr::str_replace_all(booklet$NAME, " ", "_")
@@ -444,7 +455,10 @@ booklet$NAME = tolower(booklet$NAME)
 :   RESPONSE = [31mcol_character()[39m
 : )
 
-*** party_invitation-1
+*** party_invitation-1 :ATTACH:
+:PROPERTIES:
+:ID:       67fea2ad-8240-45dc-a4eb-da07f34a9e45
+:END:
 #+begin_src R :results value list drawer silent
 if (item_code == "U01a000S") {
 sub_str = rbind(c("(.*)\\*\\$target=u01a_(.*)","\\1\\2"), c("id=u01a_",  ""), c("\\*\\$target=",  ""))
@@ -455,7 +469,13 @@ ignore_desc = c(
 }
 #+end_src
 
-*** party_invitation-2
+#+attr_org: :width 700
+[[attachment:_20210904_171956pi-start.png]]
+
+*** party_invitation-2 :ATTACH:
+:PROPERTIES:
+:ID:       da5e5603-defc-43fb-a01c-16bfb293c5d8
+:END:
 #+begin_src R :results value list drawer silent
 ## instruction is not clear. too many actions
 ## respondents got confused (create or not create a folder to organize??)
@@ -469,7 +489,13 @@ ignore_desc = c(
 }
 #+end_src
 
-*** cd_tally
+#+attr_org: :width 700
+[[attachment:_20210904_172034pi-home.png]]
+
+*** cd_tally :ATTACH:
+:PROPERTIES:
+:ID:       0cfd0f21-14b5-4993-a006-d6c13f9027ef
+:END:
 #+begin_src R :results value list drawer silent
 ## instruction is not clear. too many actions
 ## respondents got confused (create or not create a folder to organize??)
@@ -488,7 +514,13 @@ ignore_desc = c(
 }
 #+end_src
 
-*** sprained_ankle-1
+#+attr_org: :width 700
+[[attachment:_20210904_172043cd-start.png]]
+
+*** sprained_ankle-1 :ATTACH:
+:PROPERTIES:
+:ID:       9c54e9eb-4153-4770-8b4c-0616c15bcebe
+:END:
 #+begin_src R :results value list drawer silent
 if (item_code == "U06a000S") {
 sub_str = rbind(
@@ -506,7 +538,13 @@ ignore_desc = c(
 "KEYPRESS")
 }
 #+end_src
-*** sprained_ankle-2
+
+[[attachment:_20210904_172056sa-start.png]]
+
+*** sprained_ankle-2 :ATTACH:
+:PROPERTIES:
+:ID:       c9b8890f-d9d6-4aa1-9505-48ed98d4f657
+:END:
 #+begin_src R :results value list drawer silent
 if (item_code == "U06b000S") {
 sub_str = rbind(
@@ -525,7 +563,13 @@ ignore_desc = c(
 }
 #+end_src
 
-*** tickets
+#+attr_org: :width 700
+[[attachment:_20210904_172105sa-start2.png]]
+
+*** tickets :ATTACH:
+:PROPERTIES:
+:ID:       47fa0d97-e0ab-44e8-87c7-dc6f6946f786
+:END:
 #+begin_src R :results value list drawer silent
 if (item_code == "U21x000S") {
 sub_str = rbind(
@@ -543,7 +587,14 @@ ignore_desc = c(
 "KEYPRESS")
 }
 #+end_src
-*** class_attendance
+
+#+attr_org: :width 700
+[[attachment:_20210904_172128ft-home.png]]
+
+*** class_attendance :ATTACH:
+:PROPERTIES:
+:ID:       994a4a41-2040-4276-bc5f-f67966d69bde
+:END:
 #+begin_src R :results value list drawer silent
 if (item_code == "U04a000S") {
 sub_str = rbind(
@@ -561,7 +612,14 @@ ignore_desc = c(
 "KEYPRESS")
 }
 #+end_src
-*** club_membership-1
+
+#+attr_org: :width 700
+[[attachment:_20210904_172140ca-email-home.png]]
+
+*** club_membership-1 :ATTACH:
+:PROPERTIES:
+:ID:       50a5f4a2-d333-4bb2-8639-9a0dbf3d7a09
+:END:
 #+begin_src R :results value list drawer silent
 if (item_code == "U19a000S") {
 sub_str = rbind(
@@ -580,7 +638,13 @@ ignore_desc = c(
 }
 #+end_src
 
-*** club_membership-2
+#+attr_org: :width 700
+[[attachment:_20210904_172148cm-start.png]]
+
+*** club_membership-2 :ATTACH:
+:PROPERTIES:
+:ID:       549f8614-8703-4373-b745-b44e3a7b84e3
+:END:
 #+begin_src R
 if (item_code == "U19b000S") {
 sub_str = rbind(
@@ -599,7 +663,13 @@ ignore_desc = c(
 }
 #+end_src
 
-*** book_order
+#+attr_org: :width 700
+[[attachment:_20210904_172157cm-home.png]]
+
+*** book_order :ATTACH:
+:PROPERTIES:
+:ID:       fcf87b1e-7433-422d-9ce4-3770e71cbb6a
+:END:
 #+begin_src R
 if (item_code == "U07x000S") {
 sub_str = rbind(
@@ -618,7 +688,13 @@ ignore_desc = c(
 }
 #+end_src
 
-*** meeting_room
+#+attr_org: :width 700
+[[attachment:_20210904_172208bo-start.png]]
+
+*** meeting_room :ATTACH:
+:PROPERTIES:
+:ID:       d9736569-11b6-4084-94a8-9782473453e1
+:END:
 #+begin_src R
 if (item_code == "U16x000S") {
 sub_str = rbind(
@@ -637,7 +713,13 @@ ignore_desc = c(
 }
 #+end_src
 
-*** reply_all
+#+attr_org: :width 700
+[[attachment:_20210904_172218mr-email-home.png]]
+
+*** reply_all :ATTACH:
+:PROPERTIES:
+:ID:       265dfcf6-ec9b-483e-b82b-8745a606ad0d
+:END:
 #+begin_src R
 if (item_code == "U02x000S") {
 sub_str = rbind(
@@ -656,7 +738,13 @@ ignore_desc = c(
 }
 #+end_src
 
-*** locate_email
+#+attr_org: :width 700
+[[attachment:_20210904_172228ra-home.png]]
+
+*** locate_email :ATTACH:
+:PROPERTIES:
+:ID:       ccbb321c-a463-47ba-bcf7-ac40fe1e8ff6
+:END:
 #+begin_src R
 if (item_code == "U11b000S") {
 sub_str = rbind(
@@ -675,7 +763,13 @@ ignore_desc = c(
 }
 #+end_src
 
-*** lamp_return
+#+attr_org: :width 700
+[[attachment:_20210904_172236le-home.png]]
+
+*** lamp_return :ATTACH:
+:PROPERTIES:
+:ID:       e0aef17d-55dd-4641-a529-f63b2acd9d92
+:END:
 #+begin_src R
 if (item_code == "U23x000S") {
 sub_str = rbind(
@@ -693,6 +787,9 @@ ignore_desc = c(
 "KEYPRESS")
 }
 #+end_src
+
+#+attr_org: :width 700
+[[attachment:_20210904_172248lr-home.png]]
 
 ** COMMENT all-in-one R script
 :PROPERTIES:
@@ -827,8 +924,6 @@ read_piacc = function(piacc_path, item_code, sub_str, ignore_str, core_event = N
   return(item)
 }
 #+end_src
-
-#+RESULTS:
 
 #+begin_src R :tangle diprom/R/preproc.R
 item2sen = function(item) {
@@ -1292,6 +1387,11 @@ num_chain = 2
 ## out_dir="cd_tally/"
 ## out_dir="sprained_ankle-1/"
 out_dir="tickets/"
+out_dir="club_membership-1/"
+## out_dir="book_order/"
+out_dir="meeting_room/"
+out_dir="locate_email/"
+out_dir="lamp_return/"
 
 system(paste0("rm figure/*.pdf"))
 system(paste0("mkdir -p figure/"))
