@@ -1,13 +1,3 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title></title>
-    <link>/</link>
-    <description>Recent content on </description>
-    <generator>Hugo -- gohugo.io</generator>
-    
-	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title/><link>/</link><description>Recent content on</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 06 Sep 2021 19:38:20 -0500</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>item codebook</title><link>/item_codebook/</link><pubDate>Mon, 06 Sep 2021 19:38:20 -0500</pubDate><guid>/item_codebook/</guid><description> party_invitation-1 party_invitation-2 cd_tally sprained_ankle-1 sprained_ankle-2 tickets class_attendance club_membership-1 club_membership-2 book_order meeting_room reply_all locate_email lamp_return See the codebook! PS_BOOKLET_ITEM.csv
+party_invitation-1 party_invitation-2 cd_tally sprained_ankle-1 sprained_ankle-2 tickets class_attendance club_membership-1 club_membership-2 book_order meeting_room reply_all locate_email lamp_return</description></item><item><title>item codebook</title><link>/item_home/</link><pubDate>Mon, 06 Sep 2021 19:35:36 -0500</pubDate><guid>/item_home/</guid><description> party_invitation-1 party_invitation-2 cd_tally sprained_ankle-1 sprained_ankle-2 tickets class_attendance club_membership-1 club_membership-2 book_order meeting_room reply_all locate_email lamp_return See the codebook! PS_BOOKLET_ITEM.csv
+party_invitation-1 party_invitation-2 cd_tally sprained_ankle-1 sprained_ankle-2 tickets class_attendance club_membership-1 club_membership-2 book_order meeting_room reply_all locate_email lamp_return</description></item></channel></rss>
