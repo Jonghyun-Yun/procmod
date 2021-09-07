@@ -21,6 +21,8 @@ jobs:
         uses: peaceiris/actions-hugo@v2.2.1
         with:
           hugo-version: '0.68.3'
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: Prepare Hugo
         run: |
                     git submodule sync && git submodule update --init
@@ -28,8 +30,6 @@ jobs:
         run: make docs
       - name: add nojekyll
         run: touch ./docs/public/.nojekyll
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v2.4.0
         with:
