@@ -1,7 +1,7 @@
 +++
-title = "item codebook"
+title = "item home"
 author = ["Jonghyun Yun"]
-lastmod = 2021-09-07T08:42:54-05:00
+lastmod = 2021-09-07T12:32:37-05:00
 draft = false
 +++
 
@@ -27,6 +27,10 @@ draft = false
 
 </div>
 <!--endtoc-->
+
+```emacs-lisp
+(add-to-list 'org-hugo-external-file-extensions-allowed-for-copying "csv")
+```
 
 See the codebook for details....... [PS\_BOOKLET\_ITEM.csv](data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv)
 
