@@ -39,6 +39,9 @@ done
 
 mkdir -p $out_dir
 mv output/* $out_dir
-# Rscript R/run-analysis.R $out_dir $n_chain
 echo "Outputs are moved to" $out_dir"."
+echo "================================"
+
+Rscript R/run-analysis.R $out_dir $n_chain
+echo "Post analysis is finished for " $out_dir"."
 echo "================================"

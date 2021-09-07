@@ -1,5 +1,11 @@
 #+TITLE: PIACC data processing
 
+#+HUGO_BASE_DIR: ./docs
+#+HUGO_AUTO_SET_LASTMOD: t
+#+HUGO_DATE_FORMAT: %Y-%m-%dT%T%z
+#+HUGO_FRONT_MATTER_FORMAT: toml
+#+HUGO_LEVEL_OFFSET: 4
+
 # https://orgmode.org/manual/Export-Settings.html#Export-Settings
 #+options:   H:10 num:nil toc:t \n:nil @:t ::t |:t ^:nil ^:{} -:t f:t *:t <:t ':nil -:nil pri:t
 #+options:   TeX:t LaTeX:t skip:nil d:nil todo:nil pri:nil tags:nil
@@ -31,6 +37,12 @@
 
 #+RESULTS:
 : dvisvgm
+
+#+begin_src emacs-lisp
+  (setq jyun/org-latex-preview-scale 2.5)
+  ;; set default org-latex-preview size
+  (jyun/org-latex-set-options)
+#+end_src
 
 * discussion
 - [2021-05-09 Sun] note
@@ -150,12 +162,7 @@ where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ 
 - https://www.mrc-bsu.cam.ac.uk/wp-content/uploads/2017/10/multistate_enar_webinar.pdf
 - https://cran.r-project.org/web/packages/msm/msm.pdf
 - [[id:57b08111-9c48-4fa9-b289-10f01fc7a0d6][cite:hill_relaxing_2021]]
-* running model and action space
-#+begin_src emacs-lisp
-  (setq jyun/org-latex-preview-scale 2.5)
-  ;; set default org-latex-preview size
-  (jyun/org-latex-set-options)
-#+end_src
+* Model V0.1 :ARCHIVE:
 See cite:jackson_flexsurv_2016 for available baseline functions.
 Proportional baseline:
 \[
@@ -218,35 +225,71 @@ for $j = 1,\ldots,J$. $\lambda_{j}$ could be a function of the similarity. This 
   q_{ml} (t ; \boldsymbol{\alpha}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{k,m \rightarrow l}(t) \exp( \alpha_m + \alpha_l + \boldsymbol{\beta} d_{i,m,l} ),
 \end{align*}
 where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ is coefficients associated with $\mathbf{z}(t)$, $\lambda_{k,m\rightarrow l}(t)$ is a baseline intensity function. For each state $l$, there are competing transitions $m_1, \ldots, m_{n_l}$. This mean there are $n_{l}$ corresponding survival models for state $l$, and overall $K=\sum_l n_l$ models. Models with no shared parameters can be estimated separately.
-* simplified one (it's probably ok)
+* Model V0.2
+Let $S$ denotes a set of all possible action. For each state $m \in S$, $A_{m}$ denotes a set of competing transitions $\{l_1, \ldots, l_{n_m}\}$ directly after $m$.
+Let \(Y_k(t)\) denote an action of k-th respondent at time $t$. All respondents begin problem solving processes at time $t=0$.
+
+The intensity function $q_{ml}(\cdot)$ represents the instantaneous risk of moving from action $m$ to $l$:
+\begin{align*}
+q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}_{t}\right)}{\delta t}, m \neq l, m, l \in S,
+\end{align*}
+where $\mathcal{F}_t$ denotes the process up to time $t$.
+
+\[
+q_{ml}\left(t ; \mathcal{F}_{t}\right)= q_{ml} \left(t - t_m; z(t)? \right)\]
+
+
+Cox model
+\begin{align*}
+    q_{ml} (t ; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{ml}(t)  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}}\\
+\end{align*}
+
+The time-inhomogeneous Markovian leads to
+\[
+  P(Y_k(t + dt) = l | Y_k(t) =m) = p_{ml,k}(dt),
+\]
+for all $m \in S$, $l \in A_{m}$, and $t>0$.
+
+The intensity function $q_{ml}(\cdot)$ represents the instantaneous risk of moving from action $m \in S$ to $l \in A_{m}$:
+\begin{align*}
+  q_{ml} (t ; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{ml}(t)  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}},
+\end{align*}
+for person $k = 1,\ldots,N$, where $\mathbf{z}(t)$ is time-varying covariates, $\lambda_{kml}(t)$ is a baseline intensity function, \(D_{ml} \in [-1,1]\) denotes the cosine similarity between actions $m$ and $l$. The cosine similarity is obtained using ~word2vec~ on action sequences of an item. The closer the cosine value to 1, the greater the similarity between actions. The closer the cosine value to -1, the greater the dis-similarity between actions. This mean there are $n_{m}$ corresponding intensity functions for state $m$, and overall $\sum_{m in S} n_m$ intensity functions.
+
+Action transition is assumed to follow Semi-Markovian (time-inhomogeneous Markovian), which means the intensity depends on the sojourn time (time spent on the current action). This is often called "clock reset" approach as opposed to "clock forward" approach. Let $dt$ denote the sojourn time.
+
+We use the constant baseline hazard:
+\[
+  \lambda_{ml}(dt) = \kappa_{m} \tau_{k} \text{ for } l \in A_{m}.
+\]
+
 baseline (based on current and next action)
 \[
-  \lambda_{ml}(dt_{k,n}) = \kappa_{m} \tau_{k} \text{ for } l \in A_{m},
-\]
-where \(A_{m}\) denotes a set of possible actions that can taken directly after action $m$, and
-\(dt_{k,n}\) denotes $t_{k,n}^{stop} - t_{k,n}^{start}$.
-- large $\kappa$: fast out-of-state action
-- large $\tau$: fast action transition
-  
-Proportional hazard term:
-\[
-  e^{\theta_{k} D_{ml} }
-\]
-- \(D_{ml}\): cosine similarity([-1,1]) between actions $m$ and $l$.
-- \beta should be dropped. (no keep it, and $\Theta$ has a mean zero).
-- large \theta: do similar action
-- small (negative) \theta: do dis-similar actions
-- fit the model for each response group
-- add covariate terms later.
-- no incercept term in prop. hazard if baseline contains constant in the same level.
-- action m leads to more/less coherent action
-- determine absorbing state(s): END? NEXT?
+  \lambda_{ml}(dt_{k,n}) = \kappa_{m} \tau_{k} \text{ for } l \in A_{m}/\]
 
-hazard rate:
+A running model has no coviarate terms::
 \[
-q_{ml}(dt) = \lambda_{ml}(dt_{k,n}) e^{\theta_{k} D_{ml} }
+q_{ml}(dt) = \lambda_{ml}(dt) e^{\theta_{k} D_{ml} }
 \]
+
+- larger $\kappa_{m}$, shorter time staying on action $m$ (faster out-of-state transition)
+- larger $\tau_{k}$, faster transition speed
+- larger $\theta_{k}$, larger trasition rate towards a similar action. A person with large $\theta_{k}$ tends to choose more coherent actions
+
 ** likelihood
+
+\begin{align*}
+
+    q_{ml} (t ; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{ml}(t)  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}}\\
+q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}_{t}\right)}{\delta t}, m \neq l, m, l \in S
+\end{align*}
+
+
+The survival function is written as
+\[
+  S_{ml}(dt) = e^{-\int_{0}^{dt} q_{ml}(x) \dd x}
+\]
+
 \[
   f_{ml}(t) = q_{ml}(t) S_{ml}(t)
 \]
@@ -434,7 +477,8 @@ attr(dat, "trans")
 ** item codebook
 :PROPERTIES:
 :header-args:R: :tangle R/itemcode.R :exports none
-:EXPORT_FILE_NAME: item_home
+:EXPORT_FILE_NAME: index
+:EXPORT_HUGO_BUNDLE: item_codebook
 :END:
 See the codebook! [[file:data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv][PS_BOOKLET_ITEM.csv]]
 #+begin_src R
@@ -1244,6 +1288,7 @@ In Discussion, we decided to use time-scale: in-homogeneous and number of termin
 
 #+begin_src R :tangle diprom/R/misc.R :results silent
 cl_box = function(y, cl, myname = NULL) {
+  ## side by side box plot
 dd <- data.frame(y = y, cl = cl)
 boxp <- ggplot(dd, aes(x = factor(cl), y = y, fill = factor(cl))) +
   geom_boxplot() +
@@ -1352,8 +1397,11 @@ done
 
 mkdir -p $out_dir
 mv output/* $out_dir
-# Rscript R/run-analysis.R $out_dir $n_chain
 echo "Outputs are moved to" $out_dir"."
+echo "================================"
+
+Rscript R/run-analysis.R $out_dir $n_chain
+echo "Post analysis is finished for " $out_dir"."
 echo "================================"
 #+end_src
 
