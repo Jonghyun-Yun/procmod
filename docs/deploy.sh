@@ -9,7 +9,7 @@ printf "\033[0;32mDeploying updates to GitHub Pages...\033[0m\n"
 git add .
 
 # Commit changes.
-msg="rebuilding site $(date)"
+msg="rebuilding GitHub Pages $(date)"
 if [ -n "$*" ]; then
 	msg="$*"
 fi

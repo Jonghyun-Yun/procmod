@@ -1,11 +1,13 @@
-[outputs]
-home = [ "HTML", "RSS", "JSON"]
 baseURL = "https://jonghyun-yun.github.io/procmod"
 languageCode = "en-us"
+
 title = "procmod"
 theme = "hugo-theme-learn"
 RelativeURLs=true
 CanonifyURLs=true
+
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
 
 [params]
   pygmentsCodeFences = true
