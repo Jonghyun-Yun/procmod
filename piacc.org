@@ -480,7 +480,7 @@ attr(dat, "trans")
 :EXPORT_FILE_NAME: index
 :EXPORT_HUGO_BUNDLE: item_codebook
 :END:
-See the codebook! [[file:data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv][PS_BOOKLET_ITEM.csv]]
+See the codebook for details! [[file:data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv][PS_BOOKLET_ITEM.csv]]
 #+begin_src R
 booklet = readr::read_csv("~/Dropbox/research/procmod/procmod-code/data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv")
 booklet$NAME = stringr::str_replace_all(booklet$NAME, " ", "_")
