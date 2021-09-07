@@ -110,7 +110,44 @@ ln -s Debug/compile_commands.json
 #+BEGIN_SRC sh
 cmake -H. -BRelease -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/Users/yunj/local/clang+llvm-10.0.0-x86_64-apple-darwin/ -DCMAKE_INSTALL_PREFIX=/usr/local/Cellar/ccls/HEAD-c5acf62 -DUSE_SYSTEM_RAPIDJSON=OFF -DCMAKE_CXX_COMPILER=/Users/yunj/local/clang+llvm-10.0.0-x86_64-apple-darwin/bin/clang++
 #+END_SRC
-* compiledb-generator
+* To use GDB for debugging
+  MakeFile in a project root doesn't build main with debugging flag (-g). Instead, use one in Debug (folder).
+  https://cs.baylor.edu/~donahoo/tools/gdb/tutorial.html
+  #+BEGIN_SRC sh
+  cd Debug
+  make
+  gbd --args main (arguments...)
+  #+END_SRC
+
+* Debug: LLDB
+  #+begin_src emacs-lisp :results none
+(dap-register-debug-template
+   "LLDB::diprom-main"
+  (list :type "lldb"
+        :request "launch"
+        :name "LLDB::diprom-main"
+        :arguments "1 100 100 10 serial "
+        :target "/Users/yunj/Dropbox/research/procmod/procmod-code/Debug/main"
+        :cwd "/Users/yunj/Dropbox/research/procmod/procmod-code/"
+        ))
+  #+end_src
+
+* Check if CCLS works
+To see if ccls works:
+#+BEGIN_SRC sh :async
+rm -rf .ccls-cache
+ccls --index=. -v=3
+#+END_SRC
+
+#+RESULTS:
+
+Prevent Dropbox from syncing a large cache folder:
+#+BEGIN_SRC sh
+mkdir -p ~/workspace/cache/procmod-code
+mv .ccls-cache ~/workspace/cache/procmod-code/
+ln -s ~/workspace/cache/procmod-code/.ccls-cache
+#+END_SRC
+* COMMENT compiledb-generator :ARCHIVE:
   Remove ~STAN_THREADS=TRUE~ for serial computing
 #+BEGIN_SRC sh
 conda activate compiledb
@@ -165,7 +202,7 @@ compiledb < build_log.txt # extract compile commands from the build log previous
 
 add directories from =clang -fsyntax-only -v -xc++ /dev/null= (not /usr/include).
 remove boost directory.
-* MakeFile :ARCHIVE:
+* COMMENT MakeFile :ARCHIVE:
   =compiledb-generator= can be used to generate the compilation database, but it doesn't generate a build system. So I may want to generate a Makefile to build sources. If I use CMAKE, which generate compilation database and build system, this step is not necessary.
 #+BEGIN_SRC sh :tangle Makefile
 MATH=/Users/yunj/stan-dev/math/
@@ -178,41 +215,4 @@ main:
 
 clean:
 	rm main
-#+END_SRC
-* To use GDB for debugging
-  MakeFile in a project root doesn't build main with debugging flag (-g). Instead, use one in Debug (folder).
-  https://cs.baylor.edu/~donahoo/tools/gdb/tutorial.html
-  #+BEGIN_SRC sh
-  cd Debug
-  make
-  gbd --args main (arguments...)
-  #+END_SRC
-
-* Debug: LLDB
-  #+begin_src emacs-lisp :results none
-(dap-register-debug-template
-   "LLDB::diprom-main"
-  (list :type "lldb"
-        :request "launch"
-        :name "LLDB::diprom-main"
-        :arguments "1 100 100 10 serial "
-        :target "/Users/yunj/Dropbox/research/procmod/procmod-code/Debug/main"
-        :cwd "/Users/yunj/Dropbox/research/procmod/procmod-code/"
-        ))
-  #+end_src
-
-* Check if CCLS works
-To see if ccls works:
-#+BEGIN_SRC sh :async
-rm -rf .ccls-cache
-ccls --index=. -v=3
-#+END_SRC
-
-#+RESULTS:
-
-Prevent Dropbox from syncing a large cache folder:
-#+BEGIN_SRC sh
-mkdir -p ~/workspace/cache/procmod-code
-mv .ccls-cache ~/workspace/cache/procmod-code/
-ln -s ~/workspace/cache/procmod-code/.ccls-cache
 #+END_SRC
