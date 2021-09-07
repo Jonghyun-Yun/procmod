@@ -89,6 +89,7 @@ You need to set ~MATH~ variable to indicate the Stan Math Library path (here, it
 #+BEGIN_SRC sh
 cmake .
 make -j8
+./main $num_chain $niter $nburn $thin parallel/serial
 #+END_SRC
 
     *You can safely ignore anything after this line. These are for my own reference.*
