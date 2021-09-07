@@ -4,7 +4,7 @@
 #+HUGO_AUTO_SET_LASTMOD: t
 #+HUGO_DATE_FORMAT: %Y-%m-%dT%T%z
 #+HUGO_FRONT_MATTER_FORMAT: toml
-#+HUGO_LEVEL_OFFSET: 4
+#+HUGO_LEVEL_OFFSET: 0
 
 # https://orgmode.org/manual/Export-Settings.html#Export-Settings
 #+options:   H:10 num:nil toc:t \n:nil @:t ::t |:t ^:nil ^:{} -:t f:t *:t <:t ':nil -:nil pri:t
@@ -163,6 +163,11 @@ where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ 
 - https://cran.r-project.org/web/packages/msm/msm.pdf
 - [[id:57b08111-9c48-4fa9-b289-10f01fc7a0d6][cite:hill_relaxing_2021]]
 * Model V0.1 :ARCHIVE:
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: model/V0.1
+:END:
+
 See cite:jackson_flexsurv_2016 for available baseline functions.
 Proportional baseline:
 \[
@@ -226,8 +231,12 @@ for $j = 1,\ldots,J$. $\lambda_{j}$ could be a function of the similarity. This 
 \end{align*}
 where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ is coefficients associated with $\mathbf{z}(t)$, $\lambda_{k,m\rightarrow l}(t)$ is a baseline intensity function. For each state $l$, there are competing transitions $m_1, \ldots, m_{n_l}$. This mean there are $n_{l}$ corresponding survival models for state $l$, and overall $K=\sum_l n_l$ models. Models with no shared parameters can be estimated separately.
 * Model V0.2
-Let $S$ denotes a set of all possible action. For each state $m \in S$, $A_{m}$ denotes a set of competing transitions $\{l_1, \ldots, l_{n_m}\}$ directly after $m$.
-Let \(Y_k(t)\) denote an action of k-th respondent at time $t$. All respondents begin problem solving processes at time $t=0$.
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: model/V0.2
+:END:
+Let $S$ denotes a set of all possible action. For each state $m \in S$, $A_{m}$ denotes a set of competing transitions $\{l_1, \ldots, l_{n_m}\}$ that can be taken directly after $m$.
+Let \(Y_k(t)\) denote an action of k-th respondent at time $t$. All respondents assmed to begin problem solving processes at time $t=0$.
 
 The intensity function $q_{ml}(\cdot)$ represents the instantaneous risk of moving from action $m$ to $l$:
 \begin{align*}
@@ -235,39 +244,22 @@ q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P
 \end{align*}
 where $\mathcal{F}_t$ denotes the process up to time $t$.
 
-\[
-q_{ml}\left(t ; \mathcal{F}_{t}\right)= q_{ml} \left(t - t_m; z(t)? \right)\]
-
+Action transition is assumed to follow Semi-Markovian, which means the intensity depends on the sojourn time (\(t - t_{m}\); time spent on the current action). This is often called "clock reset" approach as opposed to "clock forward" approach. Let $dt_{m}$ denote the sojourn time.
 
 Cox model
 \begin{align*}
-    q_{ml} (t ; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{ml}(t)  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}}\\
-\end{align*}
-
-The time-inhomogeneous Markovian leads to
-\[
-  P(Y_k(t + dt) = l | Y_k(t) =m) = p_{ml,k}(dt),
-\]
-for all $m \in S$, $l \in A_{m}$, and $t>0$.
-
-The intensity function $q_{ml}(\cdot)$ represents the instantaneous risk of moving from action $m \in S$ to $l \in A_{m}$:
-\begin{align*}
-  q_{ml} (t ; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{ml}(t)  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}},
+q_{ml}\left(t ; \mathcal{F}_{t}\right = &
+    q_{ml} (t - t_{m}; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t)) \\
+= & \lambda_{ml}(dt_{m})  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}},\\
 \end{align*}
 for person $k = 1,\ldots,N$, where $\mathbf{z}(t)$ is time-varying covariates, $\lambda_{kml}(t)$ is a baseline intensity function, \(D_{ml} \in [-1,1]\) denotes the cosine similarity between actions $m$ and $l$. The cosine similarity is obtained using ~word2vec~ on action sequences of an item. The closer the cosine value to 1, the greater the similarity between actions. The closer the cosine value to -1, the greater the dis-similarity between actions. This mean there are $n_{m}$ corresponding intensity functions for state $m$, and overall $\sum_{m in S} n_m$ intensity functions.
 
-Action transition is assumed to follow Semi-Markovian (time-inhomogeneous Markovian), which means the intensity depends on the sojourn time (time spent on the current action). This is often called "clock reset" approach as opposed to "clock forward" approach. Let $dt$ denote the sojourn time.
-
-We use the constant baseline hazard:
+We use the constant baseline hazard (based on current and next action):
 \[
   \lambda_{ml}(dt) = \kappa_{m} \tau_{k} \text{ for } l \in A_{m}.
 \]
 
-baseline (based on current and next action)
-\[
-  \lambda_{ml}(dt_{k,n}) = \kappa_{m} \tau_{k} \text{ for } l \in A_{m}/\]
-
-A running model has no coviarate terms::
+A running model has no coviarate terms:
 \[
 q_{ml}(dt) = \lambda_{ml}(dt) e^{\theta_{k} D_{ml} }
 \]
@@ -279,7 +271,6 @@ q_{ml}(dt) = \lambda_{ml}(dt) e^{\theta_{k} D_{ml} }
 ** likelihood
 
 \begin{align*}
-
     q_{ml} (t ; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{ml}(t)  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}}\\
 q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}_{t}\right)}{\delta t}, m \neq l, m, l \in S
 \end{align*}
@@ -384,11 +375,11 @@ with flat prior:
 - all kth person's transition start and stop time
 - For each $k$, a symmetric MH jumping $J(\theta_{k}^{(l-1)} \rightarrow \theta_{k}^{* }$ is used to propose a new sample.
 - We accept $\theta_{k}^{(l)} = \theta_{k}^{* }$ with probability $\min(1, r_{{\theta_{k}}^{* )}})$ where
+
 \begin{align*}
-\log r_{{\theta_{k}}^{* }} =&
-\sum \delta_{k,n,m} (\theta_{k}^{* } - \theta_{k}^{(l-1)})D_{ml}\\
+\log r_{{\theta_{k}}^{* }} =& \sum \delta_{k,n,m} (\theta_{k}^{* } - \theta_{k}^{(l-1)})D_{ml}\\
 &-\sum dt \kappa_{m} \tau_{k} e^{ \beta D_{ml} }(e^{\theta_{k}^{* }D_{ml}} -  e^{\theta_{k}^{(l-1)} D_{ml} })
-+ \log \frac{\pi(\theta_{k}^{* })}{\pi(\theta_{k}^{(l-1)})}.
++ \log \frac{\pi(\theta_{k}^{* })}{\pi(\theta_{k}^{(l-1)})}.\\
 \end{align*}
 
 *** update \(\beta\)
@@ -474,367 +465,6 @@ attr(dat, "trans")
 #+end_src
 
 #+RESULTS:
-** item codebook
-:PROPERTIES:
-:header-args:R: :tangle R/itemcode.R :exports none
-:EXPORT_FILE_NAME: index
-:EXPORT_HUGO_BUNDLE: item_codebook
-:END:
-See the codebook for details....... [[file:data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv][PS_BOOKLET_ITEM.csv]]
-#+begin_src R
-booklet = readr::read_csv("~/Dropbox/research/procmod/procmod-code/data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv")
-booklet$NAME = stringr::str_replace_all(booklet$NAME, " ", "_")
-booklet$NAME = stringr::str_replace_all(booklet$NAME, "_-", "-")
-booklet$NAME = stringr::str_replace_all(booklet$NAME, "-_", "-")
-booklet$NAME = tolower(booklet$NAME)
-#+end_src
-
-#+RESULTS:
-:
-: [36m──[39m [1m[1mColumn specification[1m[22m [36m──────────────────────────────────────────────────────────────────[39m
-: cols(
-:   ITEM = [31mcol_character()[39m,
-:   NAME = [31mcol_character()[39m,
-:   CODEBOOK = [31mcol_character()[39m,
-:   RESPONSE = [31mcol_character()[39m
-: )
-
-*** party_invitation-1 :ATTACH:
-:PROPERTIES:
-:ID:       67fea2ad-8240-45dc-a4eb-da07f34a9e45
-:END:
-#+begin_src R :results value list drawer silent
-if (item_code == "U01a000S") {
-sub_str = rbind(c("(.*)\\*\\$target=u01a_(.*)","\\1\\2"), c("id=u01a_",  ""), c("\\*\\$target=",  ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_171956pi-start.png]]
-
-*** party_invitation-2 :ATTACH:
-:PROPERTIES:
-:ID:       da5e5603-defc-43fb-a01c-16bfb293c5d8
-:END:
-#+begin_src R :results value list drawer silent
-## instruction is not clear. too many actions
-## respondents got confused (create or not create a folder to organize??)
-
-if (item_code == "U01b000S") {
-sub_str = rbind(c("(.*)\\*\\$target=u01b_(.*)","\\1\\2"), c("id=u01b_",  ""), c("\\*\\$target=",  ""), c("\\*\\$value=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172034pi-home.png]]
-
-*** cd_tally :ATTACH:
-:PROPERTIES:
-:ID:       0cfd0f21-14b5-4993-a006-d6c13f9027ef
-:END:
-#+begin_src R :results value list drawer silent
-## instruction is not clear. too many actions
-## respondents got confused (create or not create a folder to organize??)
-if (item_code == "U03a000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172043cd-start.png]]
-
-*** sprained_ankle-1 :ATTACH:
-:PROPERTIES:
-:ID:       9c54e9eb-4153-4770-8b4c-0616c15bcebe
-:END:
-#+begin_src R :results value list drawer silent
-if (item_code == "U06a000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-[[attachment:_20210904_172056sa-start.png]]
-
-*** sprained_ankle-2 :ATTACH:
-:PROPERTIES:
-:ID:       c9b8890f-d9d6-4aa1-9505-48ed98d4f657
-:END:
-#+begin_src R :results value list drawer silent
-if (item_code == "U06b000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172105sa-start2.png]]
-
-*** tickets :ATTACH:
-:PROPERTIES:
-:ID:       47fa0d97-e0ab-44e8-87c7-dc6f6946f786
-:END:
-#+begin_src R :results value list drawer silent
-if (item_code == "U21x000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172128ft-home.png]]
-
-*** class_attendance :ATTACH:
-:PROPERTIES:
-:ID:       994a4a41-2040-4276-bc5f-f67966d69bde
-:END:
-#+begin_src R :results value list drawer silent
-if (item_code == "U04a000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172140ca-email-home.png]]
-
-*** club_membership-1 :ATTACH:
-:PROPERTIES:
-:ID:       50a5f4a2-d333-4bb2-8639-9a0dbf3d7a09
-:END:
-#+begin_src R :results value list drawer silent
-if (item_code == "U19a000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172148cm-start.png]]
-
-*** club_membership-2 :ATTACH:
-:PROPERTIES:
-:ID:       549f8614-8703-4373-b745-b44e3a7b84e3
-:END:
-#+begin_src R
-if (item_code == "U19b000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172157cm-home.png]]
-
-*** book_order :ATTACH:
-:PROPERTIES:
-:ID:       fcf87b1e-7433-422d-9ce4-3770e71cbb6a
-:END:
-#+begin_src R
-if (item_code == "U07x000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172208bo-start.png]]
-
-*** meeting_room :ATTACH:
-:PROPERTIES:
-:ID:       d9736569-11b6-4084-94a8-9782473453e1
-:END:
-#+begin_src R
-if (item_code == "U16x000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172218mr-email-home.png]]
-
-*** reply_all :ATTACH:
-:PROPERTIES:
-:ID:       265dfcf6-ec9b-483e-b82b-8745a606ad0d
-:END:
-#+begin_src R
-if (item_code == "U02x000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172228ra-home.png]]
-
-*** locate_email :ATTACH:
-:PROPERTIES:
-:ID:       ccbb321c-a463-47ba-bcf7-ac40fe1e8ff6
-:END:
-#+begin_src R
-if (item_code == "U11b000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172236le-home.png]]
-
-*** lamp_return :ATTACH:
-:PROPERTIES:
-:ID:       e0aef17d-55dd-4641-a529-f63b2acd9d92
-:END:
-#+begin_src R
-if (item_code == "U23x000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172248lr-home.png]]
-
 ** COMMENT all-in-one R script
 :PROPERTIES:
 :header-args:R: :tangle R/preproc-data.R
@@ -2412,6 +2042,438 @@ trans = paste(df$word[1:(n-1)], "->", df$word[2:n])
 trans = trans[trans != "END -> START"]
 length(unique(trans))
 #+end_src
+* Documentations
+** Home
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_TITLE: Process data modeling
+:END:
+#+begin_export html
+# WIP: Process data modeling
+To be shared during meetings.
+#+end_export
+
+** PIACC
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_SECTION: piacc
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :chapter true
+:EXPORT_HUGO_WEIGHT: 1
+:EXPORT_TITLE: PIACC
+:END:
+
+#+begin_src toml :front_matter_extra t :exports none
+pre = "<b>1. </b>"
+#+end_src
+
+#+begin_export html
+### Chapter 1
+
+# PIACC
+#+end_export
+
+Programme for the International Assessment of Adult Competencies (PIAAC)
+
+** item home
+:PROPERTIES:
+:header-args:R: :tangle R/itemcode.R :exports none
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: piacc/item_home
+:END:
+
+#+begin_src emacs-lisp
+(add-to-list 'org-hugo-external-file-extensions-allowed-for-copying "csv")
+#+end_src
+
+#+RESULTS:
+| csv | jpg | jpeg | tiff | png | svg | gif | mp4 | pdf | odt | doc | ppt | xls | docx | pptx | xlsx |
+
+See the codebook for details....... [[file:data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv][PS_BOOKLET_ITEM.csv]]
+
+
+#+begin_src R
+booklet = readr::read_csv("~/Dropbox/research/procmod/procmod-code/data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv")
+booklet$NAME = stringr::str_replace_all(booklet$NAME, " ", "_")
+booklet$NAME = stringr::str_replace_all(booklet$NAME, "_-", "-")
+booklet$NAME = stringr::str_replace_all(booklet$NAME, "-_", "-")
+booklet$NAME = tolower(booklet$NAME)
+#+end_src
+
+#+RESULTS:
+:
+: [36m──[39m [1m[1mColumn specification[1m[22m [36m──────────────────────────────────────────────────────────────────[39m
+: cols(
+:   ITEM = [31mcol_character()[39m,
+:   NAME = [31mcol_character()[39m,
+:   CODEBOOK = [31mcol_character()[39m,
+:   RESPONSE = [31mcol_character()[39m
+: )
+
+**** party_invitation-1 :ATTACH:
+:PROPERTIES:
+:ID:       67fea2ad-8240-45dc-a4eb-da07f34a9e45
+:END:
+#+begin_src R :results value list drawer silent
+if (item_code == "U01a000S") {
+sub_str = rbind(c("(.*)\\*\\$target=u01a_(.*)","\\1\\2"), c("id=u01a_",  ""), c("\\*\\$target=",  ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+#+attr_org: :width 700
+[[attachment:_20210904_171956pi-start.png]]
+
+**** party_invitation-2 :ATTACH:
+:PROPERTIES:
+:ID:       da5e5603-defc-43fb-a01c-16bfb293c5d8
+:END:
+#+begin_src R :results value list drawer silent
+## instruction is not clear. too many actions
+## respondents got confused (create or not create a folder to organize??)
+
+if (item_code == "U01b000S") {
+sub_str = rbind(c("(.*)\\*\\$target=u01b_(.*)","\\1\\2"), c("id=u01b_",  ""), c("\\*\\$target=",  ""), c("\\*\\$value=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+#+attr_org: :width 700
+[[attachment:_20210904_172034pi-home.png]]
+
+**** cd_tally :ATTACH:
+:PROPERTIES:
+:ID:       0cfd0f21-14b5-4993-a006-d6c13f9027ef
+:END:
+#+begin_src R :results value list drawer silent
+## instruction is not clear. too many actions
+## respondents got confused (create or not create a folder to organize??)
+if (item_code == "U03a000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+#+attr_org: :width 700
+[[attachment:_20210904_172043cd-start.png]]
+
+**** sprained_ankle-1 :ATTACH:
+:PROPERTIES:
+:ID:       9c54e9eb-4153-4770-8b4c-0616c15bcebe
+:END:
+#+begin_src R :results value list drawer silent
+if (item_code == "U06a000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+[[attachment:_20210904_172056sa-start.png]]
+
+**** sprained_ankle-2 :ATTACH:
+:PROPERTIES:
+:ID:       c9b8890f-d9d6-4aa1-9505-48ed98d4f657
+:END:
+#+begin_src R :results value list drawer silent
+if (item_code == "U06b000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+#+attr_org: :width 700
+[[attachment:_20210904_172105sa-start2.png]]
+
+**** tickets :ATTACH:
+:PROPERTIES:
+:ID:       47fa0d97-e0ab-44e8-87c7-dc6f6946f786
+:END:
+#+begin_src R :results value list drawer silent
+if (item_code == "U21x000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+#+attr_org: :width 700
+[[attachment:_20210904_172128ft-home.png]]
+
+**** class_attendance :ATTACH:
+:PROPERTIES:
+:ID:       994a4a41-2040-4276-bc5f-f67966d69bde
+:END:
+#+begin_src R :results value list drawer silent
+if (item_code == "U04a000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+#+attr_org: :width 700
+[[attachment:_20210904_172140ca-email-home.png]]
+
+**** club_membership-1 :ATTACH:
+:PROPERTIES:
+:ID:       50a5f4a2-d333-4bb2-8639-9a0dbf3d7a09
+:END:
+#+begin_src R :results value list drawer silent
+if (item_code == "U19a000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+#+attr_org: :width 700
+[[attachment:_20210904_172148cm-start.png]]
+
+**** club_membership-2 :ATTACH:
+:PROPERTIES:
+:ID:       549f8614-8703-4373-b745-b44e3a7b84e3
+:END:
+#+begin_src R
+if (item_code == "U19b000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+#+attr_org: :width 700
+[[attachment:_20210904_172157cm-home.png]]
+
+**** book_order :ATTACH:
+:PROPERTIES:
+:ID:       fcf87b1e-7433-422d-9ce4-3770e71cbb6a
+:END:
+#+begin_src R
+if (item_code == "U07x000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+#+attr_org: :width 700
+[[attachment:_20210904_172208bo-start.png]]
+
+**** meeting_room :ATTACH:
+:PROPERTIES:
+:ID:       d9736569-11b6-4084-94a8-9782473453e1
+:END:
+#+begin_src R
+if (item_code == "U16x000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+#+attr_org: :width 700
+[[attachment:_20210904_172218mr-email-home.png]]
+
+**** reply_all :ATTACH:
+:PROPERTIES:
+:ID:       265dfcf6-ec9b-483e-b82b-8745a606ad0d
+:END:
+#+begin_src R
+if (item_code == "U02x000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+#+attr_org: :width 700
+[[attachment:_20210904_172228ra-home.png]]
+
+**** locate_email :ATTACH:
+:PROPERTIES:
+:ID:       ccbb321c-a463-47ba-bcf7-ac40fe1e8ff6
+:END:
+#+begin_src R
+if (item_code == "U11b000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+#+attr_org: :width 700
+[[attachment:_20210904_172236le-home.png]]
+
+**** lamp_return :ATTACH:
+:PROPERTIES:
+:ID:       e0aef17d-55dd-4641-a529-f63b2acd9d92
+:END:
+#+begin_src R
+if (item_code == "U23x000S") {
+sub_str = rbind(
+  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
+  c("id=u03a_",  ""),
+  c("id=u04a_",  ""),
+  c("id=u06a_",  ""),
+  c("\\*\\$target=", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", ""),
+  c("\\*\\$href=", ""))
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+}
+#+end_src
+
+#+attr_org: :width 700
+[[attachment:_20210904_172248lr-home.png]]
+
+** item codebook
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: piacc/item_codebook
+:END:
+
+| ITEM  | NAME                  | CODEBOOK | RESPONSE                                                                 |
+|-------+-----------------------+----------+--------------------------------------------------------------------------|
+| PS1_1 | Party Invitations - 1 | U01a000S | POLYTOMOUS (0 to 3), No response (R ), Not reached / not attempted (N)   |
+| PS1_2 | Party Invitations - 2 | U01b000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
+| PS1_3 | CD Tally              | U03a000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
+| PS1_4 | Sprained Ankle - 1    | U06a000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
+| PS1_5 | Sprained Ankle - 2    | U06b000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
+| PS1_6 | Tickets               | U21x000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
+| PS1_7 | Class Attendance      | U04a000S | POLYTOMOUS (0 to 2), No response (R ), Not reached / not attempted (N)   |
+| PS2_1 | Club Membership - 1   | U19a000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
+| PS2_2 | Club Membership - 2   | U19b000S | POLYTOMOUS (0 to 3), No response (R ), Not reached / not attempted (N)   |
+| PS2_3 | Book Order            | U07x000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
+| PS2_4 | Meeting Room          | U02x000S | POLYTOMOUS (0 to 3), No response (R ), Not reached / not attempted (N)   |
+| PS2_5 | Reply All             | U16x000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
+| PS2_6 | Locate Email          | U11b000S | POLYTOMOUS (0 to 3), No response (R ), Not reached / not attempted (N)   |
+| PS2_7 | Lamp Return           | U23x000S | POLYTOMOUS (0 to 3), No response (R ), Not reached / not attempted (N)   |
+** Model
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_SECTION: model
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :chapter true
+:EXPORT_HUGO_WEIGHT: 2
+:END:
 * COMMENT Local Variables
 # Local Variables:
 # org-babel-default-header-args:R: ((:session . "*R-PIACC*") (:export . "both") (:results . "output replace"))

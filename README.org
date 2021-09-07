@@ -1,0 +1,218 @@
+#+STARTUP: overview inlineimages logdone noindent
+
+#+include: ~/org/OSX.org::CMakeLists
+#+include: ~/org/OSX.org::compile_commands
+
+* [[https://jonghyun-yun.github.io/procmod/][GitHub Pages]]
+* Getting started...
+
+  Tempest (latent space competing risk model for response and response time) runs based on C++ for Gibbs samplers and R / Rcpp for data preprocessing and posterior sample analysis.
+The Tempest depends on the Stan math library. We should build the Stan math library, and then you can build the Tempest executable.
+
+* Building the Stan math library
+  First, you need to build ~Stan Math Library~ obtained from https://github.com/stan-dev/math. I am using
+develop commit fd1d8917ee5754810cfab4f7871760315e075135
+
+The below is a shell script borrowed from https://github.com/stan-dev/math. It downloads and builds the Stan Math Library. You may want to change the target directory ~path/to/stan-math~.
+#+BEGIN_SRC sh
+git clone https://github.com/stan-dev/math.git path/to/stan-math
+make -f path/to/stan-math/make/standalone math-clean
+make -j4 -f path/to/stan-math/make/standalone math-libs
+#+END_SRC
+
+The StanHeaders R package may be useful if you want to use the Stan Math Library in the Rcpp.
+#+BEGIN_SRC R
+install.packages("StanHeaders")
+#+END_SRC
+For more inforamtion, please see https://cran.r-project.org/web/packages/StanHeaders/vignettes/stanmath.html
+I initialized an R package in an ~art~ directory using the STAN header.
+
+* CMake
+  The below is a CMake build script.
+You need to set ~MATH~ variable to indicate the Stan Math Library path (here, it is set to ~/Users/yunj/stan-dev/math~). Then, save the script as ~CMakeLists.txt~.
+
+  #+begin_src cmake :tangle CMakeLists.txt
+  cmake_minimum_required(VERSION 3.0)
+  project(diprom)
+
+  set(MATH /Users/yunj/stan-dev/math)
+  set(PROJROOT .)
+  set(Xcode_CLT /Library/Developer/CommandLineTools)
+
+  # set(CMAKE_BUILD_TYPE Debug)
+  set(CMAKE_CXX_FLAGS_DEBUG "-g")
+  set(CMAKE_CXX_FLAGS_RELEASE "-O3") # remove this for debugging
+
+  set(CMAKE_CXX_STANDARD 14) # txt2vec needs this
+
+  # # STAN math lib
+  include_directories(${MATH}/lib/tbb_2019_U8/include)
+  include_directories(${MATH})
+  include_directories(${MATH}/lib/eigen_3.3.7)
+  include_directories(${MATH}/lib/boost_1.72.0)
+  include_directories(${MATH}/lib/sundials_5.2.0/include)
+
+  # xcode commandline toolchain
+  include_directories(${Xcode_CLT}/usr/include/c++/v1)
+  include_directories(${Xcode_CLT}/usr/lib/clang/11.0.0/include)
+  include_directories(${Xcode_CLT}/usr/include)
+  include_directories(${Xcode_CLT}/SDKs/MacOSX.sdk/usr/include)
+
+  # set compiler
+  # SET(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+  # SET(CMAKE_CC_COMPILER "/usr/bin/clnag")
+
+  # c++ linker
+  # SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -isystem/Library/Developer/CommandLineTools/usr/include/c++/v1")
+  # SET(CMAKE_CXX_FLAGS  "-g ${CMAKE_CXX_FLAGS}")
+  SET(CMAKE_CXX_FLAGS  "-Wno-unknown-warning-option -Wno-tautological-compare -Wno-sign-compare -D_REENTRANT ${CMAKE_CXX_FLAGS}")
+  SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -DSTAN_THREADS")
+  SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -DBOOST_DISABLE_ASSERTS")
+  SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wl,-L,${MATH}/lib/tbb -Wl,-rpath,${MATH}/lib/tbb")
+  SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -isysroot ${Xcode_CLT}/SDKs/MacOSX.sdk/usr/include")
+  SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk")
+  SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wno-unused-local-typedef -Wno-unused-function -Wno-ignored-qualifiers -Wno-unused-variable -Wno-sign-compare -Wno-infinite-recursion -Wunused-command-line-argument")
+
+ include_directories(${PROJROOT}/include)
+ file(GLOB SOURCES
+     ${PROJROOT}/include/*.h
+     ${PROJROOT}/include/*.hpp
+     ${PROJROOT}/src/*.cpp
+ )
+
+  add_executable(main main.cpp ${SOURCES})
+  target_link_libraries(main ${CMAKE_CXX_FLAGS} ${MATH}/lib/sundials_5.2.0/lib/libsundials_nvecserial.a ${MATH}/lib/sundials_5.2.0/lib/libsundials_cvodes.a ${MATH}/lib/sundials_5.2.0/lib/libsundials_idas.a ${MATH}/lib/sundials_5.2.0/lib/libsundials_kinsol.a ${MATH}/lib/tbb/libtbb.dylib ${MATH}/lib/tbb/libtbbmalloc.dylib ${MATH}/lib/tbb/libtbbmalloc_proxy.dylib)
+ #+end_src
+
+* How to use
+  In the project root folder, use ~cmake~ and then ~make~ to build the executable program ~main~.
+#+BEGIN_SRC sh
+cmake .
+make -j8
+#+END_SRC
+
+    *You can safely ignore anything after this line. These are for my own reference.*
+    
+* Generate =compile_commands.json= using CMAKE
+  This is for compiling with the -g flag for debugging. If you are not using ~gdb~, please ignore this part.
+  The executable will be compiled in a ~Debug~ directory.
+#+begin_src sh
+rm -r CMakeFiles/ Debug/ cmake_install.cmake CMakeCache.txt Makefile compile_commands.json
+# export CXX="/usr/local/opt/llvm/bin/clang++"
+# export CC="/usr/local/opt/llvm/bin/clang"
+cmake -H. -BDebug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
+ln -s Debug/compile_commands.json
+#+end_src
+
+* CCLS issue
+** https://github.com/MaskRay/ccls/issues/622#issuecomment-623115650
+
+#+BEGIN_SRC sh
+cmake -H. -BRelease -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/Users/yunj/local/clang+llvm-10.0.0-x86_64-apple-darwin/ -DCMAKE_INSTALL_PREFIX=/usr/local/Cellar/ccls/HEAD-c5acf62 -DUSE_SYSTEM_RAPIDJSON=OFF -DCMAKE_CXX_COMPILER=/Users/yunj/local/clang+llvm-10.0.0-x86_64-apple-darwin/bin/clang++
+#+END_SRC
+* compiledb-generator
+  Remove ~STAN_THREADS=TRUE~ for serial computing
+#+BEGIN_SRC sh
+conda activate compiledb
+
+compiledb -n make STAN_THREADS=TRUE -f /Users/yunj/stan-dev/math/make/standalone main # extract compile commands without executing the actual build
+
+make -w STAN_THREADS=TRUE -f /Users/yunj/stan-dev/math/make/standalone main | tee build_log.txt
+compiledb < build_log.txt # extract compile commands from the build log previously generated
+#+END_SRC
+
+** compilation database
+#+BEGIN_SRC json
+[
+ {
+  "directory": "/Users/yunj/Dropbox/research/lsjm-art/lsjm-code",
+  "arguments": [
+   "clang++",
+   "-std=c++1y",
+   "-Wno-unknown-warning-option",
+   "-Wno-tautological-compare",
+   "-Wno-sign-compare",
+   "-D_REENTRANT",
+   "-I",
+   "/Users/yunj/stan-dev/math/lib/tbb_2019_U8/include",
+   "-O3",
+   "-I",
+   "/Users/yunj/stan-dev/math/",
+   "-I",
+   "/Users/yunj/stan-dev/math/lib/eigen_3.3.7",
+   "-I",
+   "/Users/yunj/stan-dev/math/lib/boost_1.72.0",
+   "-I",
+   "/Users/yunj/stan-dev/math/lib/sundials_5.2.0/include",
+   "-DBOOST_DISABLE_ASSERTS",
+   "-Wl,-L,/Users/yunj/stan-dev/math/lib/tbb",
+   "-Wl,-rpath,/Users/yunj/stan-dev/math/lib/tbb",
+   "main.cpp",
+   "/Users/yunj/stan-dev/math/lib/sundials_5.2.0/lib/libsundials_nvecserial.a",
+   "/Users/yunj/stan-dev/math/lib/sundials_5.2.0/lib/libsundials_cvodes.a",
+   "/Users/yunj/stan-dev/math/lib/sundials_5.2.0/lib/libsundials_idas.a",
+   "/Users/yunj/stan-dev/math/lib/sundials_5.2.0/lib/libsundials_kinsol.a",
+   "/Users/yunj/stan-dev/math/lib/tbb/libtbb.dylib",
+   "/Users/yunj/stan-dev/math/lib/tbb/libtbbmalloc.dylib",
+   "/Users/yunj/stan-dev/math/lib/tbb/libtbbmalloc_proxy.dylib",
+   "-o",
+   "main"
+  ],
+  "file": "main.cpp"
+ }
+]
+#+END_SRC
+
+add directories from =clang -fsyntax-only -v -xc++ /dev/null= (not /usr/include).
+remove boost directory.
+* MakeFile :ARCHIVE:
+  =compiledb-generator= can be used to generate the compilation database, but it doesn't generate a build system. So I may want to generate a Makefile to build sources. If I use CMAKE, which generate compilation database and build system, this step is not necessary.
+#+BEGIN_SRC sh :tangle Makefile
+MATH=/Users/yunj/stan-dev/math/
+INC_DIR=/Users/yunj/Dropbox/procmod/procmod-code/include:/Users/yunj/Dropbox/procmod/procmod-code/src
+CFLAGS=-c -Wall -I$(INC_DIR)/..  #
+main:
+	make -f $(MATH)make/standalone main
+
+.PHONY: clean
+
+clean:
+	rm main
+#+END_SRC
+* To use GDB for debugging
+  MakeFile in a project root doesn't build main with debugging flag (-g). Instead, use one in Debug (folder).
+  https://cs.baylor.edu/~donahoo/tools/gdb/tutorial.html
+  #+BEGIN_SRC sh
+  cd Debug
+  make
+  gbd --args main (arguments...)
+  #+END_SRC
+
+* Debug: LLDB
+  #+begin_src emacs-lisp :results none
+(dap-register-debug-template
+   "LLDB::diprom-main"
+  (list :type "lldb"
+        :request "launch"
+        :name "LLDB::diprom-main"
+        :arguments "1 100 100 10 serial "
+        :target "/Users/yunj/Dropbox/research/procmod/procmod-code/Debug/main"
+        :cwd "/Users/yunj/Dropbox/research/procmod/procmod-code/"
+        ))
+  #+end_src
+
+* Check if CCLS works
+To see if ccls works:
+#+BEGIN_SRC sh :async
+rm -rf .ccls-cache
+ccls --index=. -v=3
+#+END_SRC
+
+#+RESULTS:
+
+Prevent Dropbox from syncing a large cache folder:
+#+BEGIN_SRC sh
+mkdir -p ~/workspace/cache/procmod-code
+mv .ccls-cache ~/workspace/cache/procmod-code/
+ln -s ~/workspace/cache/procmod-code/.ccls-cache
+#+END_SRC
