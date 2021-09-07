@@ -28,6 +28,8 @@ jobs:
         run: make docs
       - name: add nojekyll
         run: touch ./docs/public/.nojekyll
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v2.4.0
         with:
