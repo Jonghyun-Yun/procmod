@@ -1,4 +1,5 @@
 cl_box = function(y, cl, myname = NULL) {
+  ## side by side box plot
 dd <- data.frame(y = y, cl = cl)
 boxp <- ggplot(dd, aes(x = factor(cl), y = y, fill = factor(cl))) +
   geom_boxplot() +

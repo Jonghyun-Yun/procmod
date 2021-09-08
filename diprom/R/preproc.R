@@ -124,6 +124,32 @@ diag(Q) = 1 * rsq
 
 return(Q)}
 
+get_cosdist = function() {
+dem = ncol(vectors)
+vv = array(0, dim=c(M <- length(state), dem))
+for (m in 1:M) {
+  if (sum(state[m] == metadata[,1]) > 0)
+  vv[m, ] = unlist(vectors[which(state[m] == metadata[,1]), ] )
+}
+Dml = cosdist(as.matrix(vv))
+
+return(Dml)
+}
+
+item2long = function(item) {
+df = item %>% select(pid, timestamp, response, state)
+dat <- msm::msm2Surv(data=df, subject="pid", time="timestamp", state="state",
+         Q=Q)
+##dat
+## attr(dat, "trans")
+dat$time = dat$time / max(dat$Tstop)
+dat$Tstart = dat$Tstart / max(dat$Tstop)
+dat$Tstop = dat$Tstop / max(dat$Tstop)
+dat$dist = foreach (i = 1:nrow(dat), .combine="c") %dopar%
+  Dml[dat$from[i], dat$to[i]]
+return(dat)
+}
+
 write_data = function(){
 ## R to C index conversion
 wat = dat
