@@ -162,7 +162,7 @@ where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ 
 - https://www.mrc-bsu.cam.ac.uk/wp-content/uploads/2017/10/multistate_enar_webinar.pdf
 - https://cran.r-project.org/web/packages/msm/msm.pdf
 - [[id:57b08111-9c48-4fa9-b289-10f01fc7a0d6][cite:hill_relaxing_2021]]
-* Model V0.1 :ARCHIVE:
+* Model V0.1
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_BUNDLE: model/V0.1
@@ -244,30 +244,39 @@ q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P
 \end{align*}
 where $\mathcal{F}_t$ denotes the process up to time $t$.
 
-Action transition is assumed to follow Semi-Markovian, which means the intensity depends on the sojourn time (\(t - t_{m}\); time spent on the current action). This is often called "clock reset" approach as opposed to "clock forward" approach. Let $dt_{m}$ denote the sojourn time.
+Action transition is assumed to follow Semi-Markovian, which means the intensity depends on the sojourn time (\(t - t_{m}\) ; time spent on the current action). This is often called "clock reset" approach as opposed to "clock forward" approach. Let $dt_{m}$ denote the sojourn time.
 
 Cox model
-\begin{align*}
-q_{ml}\left(t ; \mathcal{F}_{t}\right = &
-    q_{ml} (t - t_{m}; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t)) \\
-= & \lambda_{ml}(dt_{m})  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}},\\
-\end{align*}
+\begin{align}
+q_{ml}\left(t ; \mathcal{F}_{t}\right) = & q_{ml} (t - t_{m}; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t))\\
+= & \lambda_{ml}(dt_{m})  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}},
+\end{align}
+
 for person $k = 1,\ldots,N$, where $\mathbf{z}(t)$ is time-varying covariates, $\lambda_{kml}(t)$ is a baseline intensity function, \(D_{ml} \in [-1,1]\) denotes the cosine similarity between actions $m$ and $l$. The cosine similarity is obtained using ~word2vec~ on action sequences of an item. The closer the cosine value to 1, the greater the similarity between actions. The closer the cosine value to -1, the greater the dis-similarity between actions. This mean there are $n_{m}$ corresponding intensity functions for state $m$, and overall $\sum_{m in S} n_m$ intensity functions.
 
-We use the constant baseline hazard (based on current and next action):
+We use the constant baseline hazard based on out-of-state transition speed and person's transition speed:
 \[
   \lambda_{ml}(dt) = \kappa_{m} \tau_{k} \text{ for } l \in A_{m}.
 \]
 
 A running model has no coviarate terms:
 \[
-q_{ml}(dt) = \lambda_{ml}(dt) e^{\theta_{k} D_{ml} }
+q_{ml}\left(t ; \mathcal{F}_{t}\right) = q_{ml}(dt) = \kappa_{m} \tau_{k} e^{\theta_{k} D_{ml} }.
 \]
 
-- larger $\kappa_{m}$, shorter time staying on action $m$ (faster out-of-state transition)
+- larger $\kappa_{m}$ shorter time staying on action $m$ (faster out-of-state transition)
 - larger $\tau_{k}$, faster transition speed
 - larger $\theta_{k}$, larger trasition rate towards a similar action. A person with large $\theta_{k}$ tends to choose more coherent actions
 
+  TODO
+  - divide tau by 1) number of actions
+  - use 2) total time for visualization
+  - 1) divided by 2)
+  - find persons (small # of actions, large # of actions: right vs wrong)
+    - 시간이 많이 걸리고 맞은사람 vs 적게 걸리고 맞은 사람. 
+    - 적은 액션으로 맞은 사람 vs 많은 액션으로 틀린 사람.
+  - 무조건 빨리 푼다고 잘하는게 아니고, 느리거나 혹은 상이한 액션 개수로 정답에 이르는 프로세스 발견에 초점.
+    
 ** likelihood
 
 \begin{align*}
@@ -276,11 +285,11 @@ q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P
 \end{align*}
 
 
-The survival function is written as
+The survival function is 
 \[
-  S_{ml}(dt) = e^{-\int_{0}^{dt} q_{ml}(x) \dd x}
+  S_{ml}(dt) = e^{-\int_{0}^{dt_{m}} q_{ml}(x) \dd x}. 
 \]
-
+Let $\nu_{mlk}(t) = 1$ if person $k$ jump from actions $m$ to $l$ at time $t$; 0 otherwise.
 \[
   f_{ml}(t) = q_{ml}(t) S_{ml}(t)
 \]
@@ -327,8 +336,7 @@ inv-Gamma(\theta|\alpha,\beta)
 p(\theta)=\frac{\beta^{\alpha}}{\Gamma(\alpha)} \theta^{-(\alpha+1)} e^{-\beta / \theta}, \quad \theta>0
 \]
 
-
-where $\mathrm{MVN}_{d}$ denotes a $d$ dimensional normal distribution,   $\mathbf{I}_{d}$ is a $d \times d$ identity matrix, $\tilde{\lambda}_{j}=G / \left\{U \left(G-j+0.5\right)\right\}$. Other hyperparameters are chosen as
+where .... Other hyperparameters are chosen as
 \[a_{\sigma}=0.0001, b_{\sigma}=0.0001, \mu_{\gamma}=0, \text { and } \tau_{\gamma}^{}=2.\]
 A similar vague prior for $\lambda_{ic,j}$ has been used in cite:jin_using_2014.
 
@@ -342,8 +350,8 @@ Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive 
 *** update \(\kappa_{m}\)
 - all $k$ person's having action m, all l \in A_m (all possible actions that can jump from m)
 - transition start and stop time $dt_{k,n}$ for all $\delta_{k,n,m} = 1$
-- For each $k,c$, a symmetric MH jumping $J(\kappa_{m}^{(l-1)} \rightarrow \kappa_{m}^{* }$ is used to propose a new sample.
-- We accept $\kappa_{m}^{(l)} = \kappa_{m}^{* }$ with probability $\min(1, r_{{\kappa_{m}}^{* )}})$ where
+- For each $k,c$, a symmetric MH jumping $J(\kappa_{m}^{(l-1)} \rightarrow \kappa_{m}^{* })$ is used to propose a new sample.
+- We accept $\kappa_{m}^{(l)} = \kappa_{m}^{* }$ with probability $\min(1, r_{{\kappa_{m}}^{* }})$ where
 \begin{align*}
 \log r_{{\kappa_{m}}^{* }} =&
 \sum \delta_{k,n,m} (\log \kappa_{m}^{* } - \log \kappa_{m}^{(l-1)})\\
@@ -365,10 +373,10 @@ with flat prior:
 - all $k$ person's m and l \in A_m
 - all kth person's transition start and stop time
 \begin{align*}
-\log r_{{\tau_{k}}^{* }} =&
-\sum \delta_{k,n,m} (\log \tau_{k}^{* } - \log \tau_{k}^{(l-1)})\\
-&-\sum dt \kappa_{m}e^{(\theta_{k} + \beta) D_{ml}} ( \tau_{k}^{* } -  \tau_{k}^{(l-1)} )
-+ \log \frac{\pi(\tau_{k}^{* })}{\pi(\theta_{k}^{t})}.
+\log r_{{\tau_{k}}^*} =&
+\sum \delta_{k,n,m} (\log \tau_{k}^* - \log \tau_{k}^{(l-1)})\\
+&-\sum dt \kappa_{m}e^{(\theta_{k} + \beta) D_{ml}} ( \tau_{k}^* -  \tau_{k}^{(l-1)} )
++ \log \frac{\pi(\tau_{k}^*)}{\pi(\theta_{k}^{t})}.
 \end{align*}
 *** update \(\theta_{k}\)
 - all $k$ person's m and l \in A_m
