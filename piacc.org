@@ -471,9 +471,7 @@ attr(dat, "trans")
 (delete-directory "input" t)
 (make-directory "input")
 #+end_src
-
-#+RESULTS:
-** COMMENT all-in-one R script
+** all-in-one R script
 :PROPERTIES:
 :header-args:R: :tangle R/preproc-data.R
 :END:
@@ -512,6 +510,9 @@ item_code = "U11b000S"
 source("R/all_in_one.R")
 
 item_code = "U23x000S"
+source("R/all_in_one.R")
+
+item_code = "U06a000S"
 source("R/all_in_one.R")
 #+end_src
 
@@ -708,7 +709,8 @@ return(Q)}
 #+end_src
 
 #+RESULTS:
-#+begin_src R :tangle diprom/R/proproc.R
+
+#+begin_src R :tangle diprom/R/preproc.R
 get_cosdist = function() {
 dem = ncol(vectors)
 vv = array(0, dim=c(M <- length(state), dem))
@@ -1067,26 +1069,51 @@ system(paste0("rsync -rv figure/*.pdf ", out_dir, "figure/"))
 #+end_src
 
 set the output directory. run the chain of analytic tools. move the results to the output dir.
-#+begin_src R :results none
+#+begin_src R :results none :async
+setwd("~/workspace/procmod-code")
+
 num_chain = 2
+
+ldir = c(
+"party_invitations-1/",
+"party_invitations-2/",
+"cd_tally/",
+"sprained_ankle-1/",
+## "sprained_ankle-2/", ## didn't run
+"tickets/",
+## "class_attendance/", ## didn't run
+"club_membership-1/",
+## "club_membership-2/", ## didn't run
+"book_order/",
+"meeting_room/",
+## "reply_all/", ## failed
+"locate_email/",
+"lamp_return/")
+
 ## out_dir="party_invitations-1/"
+## out_dir="party_invitations-2/"
 ## out_dir="cd_tally/"
 ## out_dir="sprained_ankle-1/"
-out_dir="tickets/"
-out_dir="club_membership-1/"
+## out_dir="sprained_ankle-2/"
+## out_dir="tickets/"
+## out_dir="class_attendance/"
+## out_dir="club_membership-1/"
+## out_dir="club_membership-2/"
 ## out_dir="book_order/"
-out_dir="meeting_room/"
-out_dir="locate_email/"
-out_dir="lamp_return/"
+## out_dir="meeting_room/"
+## out_dir="reply_all/"
+## out_dir="locate_email/"
+## out_dir="lamp_return/"
 
+for (out_dir in ldir) {
 system(paste0("rm figure/*.pdf"))
 system(paste0("mkdir -p figure/"))
 
-setwd("~/workspace/procmod-code")
 source("R/analysis.R")
 
 system(paste0("mkdir -p ", out_dir, "figure/"))
 system(paste0("rsync -rv figure/*.pdf ", out_dir,"figure/"))
+}
 #+end_src
 
 #+begin_src R :results none :tangle R/Renviron.R
@@ -1100,8 +1127,8 @@ library(diprom)
 ## library(foreach)
 ## library(doParallel)
 stopImplicitCluster()
-registerDoParallel(cores = detectCores() - 1)
 ## doParallel::registerDoParallel(2)
+registerDoParallel(cores = detectCores() - 1)
 #+end_src
 
 #+RESULTS:
@@ -1193,6 +1220,7 @@ readr::write_csv(dout, paste0(out_dir, "param_mean.csv"))
 [[file:figure/theta_tau_res.pdf]]
 [[file:figure/tau_res.pdf]]
 [[file:figure/time_action.pdf]]
+[[file:figure/time_action_more.pdf]]
 #+begin_src R :results silent :tangle R/summary.R
 mtheta <- dout[grep("^theta", dout$vname), 2]
 mtau <- dout[grep("^tau", dout$vname), 2]
@@ -1218,7 +1246,7 @@ dd <- data.frame(tau = mtau, res = rr)
 boxp <- ggplot(dd, aes(x = factor(res), y = tau, fill = factor(res))) +
   geom_boxplot() +
   theme(legend.position = "none")
-boxp
+print(boxp)
 dev.off(which = dev.cur())
 #+end_src
 
@@ -1231,20 +1259,47 @@ dev.off(which = dev.cur())
 
 #+begin_src R :results silent :tangle R/summary.R
 item <- readr::read_csv(paste0(out_dir, "input/item.csv"), col_names = TRUE)
-gg = item %>% group_by(pid) %>% summarize(time = timestamp[1] / 1000, naction = n(), spd = naction / time)
+gg = item %>% group_by(pid) %>% summarize(ftime = timestamp[1] / 1000, naction = n(), spd = naction / ftime, time = timestamp[n()] / 1000)
 
+pdf("figure/time_action_more.pdf")
+cl_box(log(gg$time), rr, c("log(time)", "res"))
+cl_box(log(gg$ftime / gg$time), rr, c("log(ftime / time)", "res"))
+cl_box(log(gg$ftime - gg$time), rr, c("log(ftime - time)", "res"))
+cl_box(log(gg$naction / gg$time), rr, c("log(#action / time)", "res"))
+pp = cl_plot(cbind(log(gg$time), log(gg$naction)), rr, c("log(time)","log(#actions)"))
+print(pp)
+pp = cl_plot(cbind(log(gg$time), log(gg$ftime)), rr, c("log(time)","log(ftime)"))
+print(pp)
+pp = cl_plot(cbind(mtheta, log(gg$time)), rr, c("theta","log(time)"))
+print(pp)
+pp = cl_plot(cbind(mtau, log(gg$time)), rr, c("tau","log(time)"))
+print(pp)
+pp = cl_plot(cbind(mtheta, log(gg$naction / gg$time)), rr, c("theta","log(#action / time)"))
+print(pp)
+pp = cl_plot(cbind(mtheta, log(gg$naction / (gg$time - gg$ftime))), rr, c("theta","log(#action / (time - ftime))"))
+print(pp)
+pp = cl_plot(cbind(mtau, log(gg$naction / gg$time)), rr, c("tau","log(#action / time)"))
+print(pp)
+pp = cl_plot(cbind(mtheta, log(gg$ftime / gg$time)), rr, c("theta","log(#action / time)"))
+print(pp)
+pp = cl_plot(cbind(mtau, log(gg$ftime / gg$time)), rr, c("tau","log(#action / time)"))
+print(pp)
+dev.off(which = dev.cur())
+#+end_src
+
+#+begin_src R :results silent :tangle R/summary.R
 pdf("figure/time_action.pdf")
-cl_box(log(gg$time), rr, c("log(first_action_time)", "res"))
+cl_box(log(gg$ftime), rr, c("log(first_action_time)", "res"))
 cl_box(log(gg$naction), rr, c("log(naction)", "res"))
-pp = cl_plot(cbind(mtheta, log(gg$time)), rr, c("theta","log(first_action_time)"))
+pp = cl_plot(cbind(mtheta, log(gg$ftime)), rr, c("theta","log(first_action_time)"))
 print(pp)
 pp = cl_plot(cbind(mtheta, log(gg$naction)), rr, c("theta","log(#actions)"))
 print(pp)
-pp = cl_plot(cbind(mtau, log(gg$time)), rr, c("tau","log(first_action_time)"))
+pp = cl_plot(cbind(mtau, log(gg$ftime)), rr, c("tau","log(first_action_time)"))
 print(pp)
 pp = cl_plot(cbind(mtau, log(gg$naction)), rr, c("tau","log(#actions)"))
 print(pp)
-pp = cl_plot(cbind(log(gg$time), log(gg$naction)), rr, c("log(first_action_time)","log(#action)"))
+pp = cl_plot(cbind(log(gg$ftime), log(gg$naction)), rr, c("log(first_action_time)","log(#action)"))
 print(pp)
 dev.off(which = dev.cur())
 #+end_src
@@ -2089,13 +2144,6 @@ Programme for the International Assessment of Adult Competencies (PIAAC)
 :EXPORT_HUGO_BUNDLE: piacc/item_home
 :END:
 
-#+begin_src emacs-lisp
-(add-to-list 'org-hugo-external-file-extensions-allowed-for-copying "csv")
-#+end_src
-
-#+RESULTS:
-| csv | jpg | jpeg | tiff | png | svg | gif | mp4 | pdf | odt | doc | ppt | xls | docx | pptx | xlsx |
-
 See the codebook for details....... [[file:data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv][PS_BOOKLET_ITEM.csv]]
 
 
@@ -2106,16 +2154,6 @@ booklet$NAME = stringr::str_replace_all(booklet$NAME, "_-", "-")
 booklet$NAME = stringr::str_replace_all(booklet$NAME, "-_", "-")
 booklet$NAME = tolower(booklet$NAME)
 #+end_src
-
-#+RESULTS:
-:
-: [36m──[39m [1m[1mColumn specification[1m[22m [36m──────────────────────────────────────────────────────────────────[39m
-: cols(
-:   ITEM = [31mcol_character()[39m,
-:   NAME = [31mcol_character()[39m,
-:   CODEBOOK = [31mcol_character()[39m,
-:   RESPONSE = [31mcol_character()[39m
-: )
 
 **** party_invitation-1 :ATTACH:
 :PROPERTIES:
@@ -2475,6 +2513,18 @@ ignore_desc = c(
 | PS2_5 | Reply All             | U16x000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
 | PS2_6 | Locate Email          | U11b000S | POLYTOMOUS (0 to 3), No response (R ), Not reached / not attempted (N)   |
 | PS2_7 | Lamp Return           | U23x000S | POLYTOMOUS (0 to 3), No response (R ), Not reached / not attempted (N)   |
+** item results
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: piacc/item_results
+:END:
+**** party_invitations-1
+[[file:party_invitations-1/figure/theta_res.pdf]]
+[[file:party_invitations-1/figure/theta_tau_res.pdf]]
+[[file:party_invitations-1/figure/tau_res.pdf]]
+[[file:party_invitations-1/figure/time_action.pdf]]
+[[file:party_invitations-1/figure/time_action_more.pdf]]
+
 ** Model
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
