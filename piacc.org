@@ -730,7 +730,7 @@ return(Dml)
 :PROPERTIES:
 :header-args:R: :tangle R/write-data.R
 :END:
-#+begin_src R :results none :tangle diprom/R/proproc.R
+#+begin_src R :results none :tangle diprom/R/preproc.R
 item2long = function(item) {
 df = item %>% select(pid, timestamp, response, state)
 dat <- msm::msm2Surv(data=df, subject="pid", time="timestamp", state="state",
