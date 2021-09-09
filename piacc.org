@@ -1202,7 +1202,7 @@ for (cid in 1:num_chain) {
 #+end_src
 
 #+RESULTS:
-
+* summary
 The posterior means of \beta, \theta, \lambda are exported to CSV files.
 #+begin_src R :tangle R/summary.R
 ss <- summary(mclist)
