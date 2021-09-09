@@ -1225,7 +1225,7 @@ readr::write_csv(dout, paste0(out_dir, "param_mean.csv"))
 mtheta <- dout[grep("^theta", dout$vname), 2]
 mtau <- dout[grep("^tau", dout$vname), 2]
 mkappa <- dout[grep("^kappa", dout$vname), 2]
-dat <- readr::read_csv(paste0(out_dir,"input/dat.csv"), col_names = FALSE)
+dat <- readr::read_csv(paste0(out_dir, "input/dat.csv"), col_names = FALSE)
 rr <- dat[, c(1, 8)] %>% as.data.frame()
 rr <- rr[!duplicated(rr), 2]
 #+end_src
@@ -1252,87 +1252,63 @@ dev.off(which = dev.cur())
 
 #+begin_src R :results silent :tangle R/summary.R
 pdf("figure/theta_tau_res.pdf")
-pp = cl_plot(cbind(mtheta, log(mtau)), rr, c("theta","log(tau)"))
+pp <- cl_plot(cbind(mtheta, log(mtau)), rr, c("theta", "log(tau)"))
 print(pp)
 dev.off(which = dev.cur())
 #+end_src
 
 #+begin_src R :results silent :tangle R/summary.R
 item <- readr::read_csv(paste0(out_dir, "input/item.csv"), col_names = TRUE)
-gg = item %>% group_by(pid) %>% summarize(ftime = timestamp[1] / 1000, naction = n(), spd = naction / ftime, time = timestamp[n()] / 1000)
+gg <- item %>%
+  group_by(pid) %>%
+  summarize(ftime = timestamp[1] / 1000, naction = n(), spd = naction / ftime, time = timestamp[n()] / 1000)
 
 pdf("figure/time_action_more.pdf")
 cl_box(log(gg$time), rr, c("log(time)", "res"))
 cl_box(log(gg$ftime / gg$time), rr, c("log(ftime / time)", "res"))
-cl_box(log(gg$ftime - gg$time), rr, c("log(ftime - time)", "res"))
+cl_box(log(gg$time - gg$ftime), rr, c("log(time - ftime)", "res"))
 cl_box(log(gg$naction / gg$time), rr, c("log(#action / time)", "res"))
-pp = cl_plot(cbind(log(gg$time), log(gg$naction)), rr, c("log(time)","log(#actions)"))
+pp <- cl_plot(cbind(log(gg$time), log(gg$naction)), rr, c("log(time)", "log(#actions)"))
 print(pp)
-pp = cl_plot(cbind(log(gg$time), log(gg$ftime)), rr, c("log(time)","log(ftime)"))
+pp <- cl_plot(cbind(log(gg$time), log(gg$ftime)), rr, c("log(time)", "log(ftime)"))
 print(pp)
-pp = cl_plot(cbind(mtheta, log(gg$time)), rr, c("theta","log(time)"))
+pp <- cl_plot(cbind(mtheta, log(gg$time)), rr, c("theta", "log(time)"))
 print(pp)
-pp = cl_plot(cbind(mtau, log(gg$time)), rr, c("tau","log(time)"))
+pp <- cl_plot(cbind(mtheta, log(gg$time - gg$ftime)), rr, c("theta", "log(time - ftime)"))
 print(pp)
-pp = cl_plot(cbind(mtheta, log(gg$naction / gg$time)), rr, c("theta","log(#action / time)"))
+pp <- cl_plot(cbind(mtheta, log(gg$naction / gg$time)), rr, c("theta", "log(#action / time)"))
 print(pp)
-pp = cl_plot(cbind(mtheta, log(gg$naction / (gg$time - gg$ftime))), rr, c("theta","log(#action / (time - ftime))"))
+pp <- cl_plot(cbind(mtheta, log(gg$naction / (gg$time - gg$ftime))), rr, c("theta", "log(#action / (time - ftime))"))
 print(pp)
-pp = cl_plot(cbind(mtau, log(gg$naction / gg$time)), rr, c("tau","log(#action / time)"))
+pp <- cl_plot(cbind(mtau, log(gg$time)), rr, c("tau", "log(time)"))
 print(pp)
-pp = cl_plot(cbind(mtheta, log(gg$ftime / gg$time)), rr, c("theta","log(#action / time)"))
+pp <- cl_plot(cbind(mtau, log(gg$time - gg$ftime)), rr, c("tau", "log(time - ftime)"))
 print(pp)
-pp = cl_plot(cbind(mtau, log(gg$ftime / gg$time)), rr, c("tau","log(#action / time)"))
+pp <- cl_plot(cbind(mtau, log(gg$naction / gg$time)), rr, c("tau", "log(#action / time)"))
+print(pp)
+pp <- cl_plot(cbind(mtau, log(gg$naction / (gg$time - gg$ftime))), rr, c("tau", "log(#action / (time - ftime))"))
 print(pp)
 dev.off(which = dev.cur())
 #+end_src
 
+- first action time and number of actions
 #+begin_src R :results silent :tangle R/summary.R
 pdf("figure/time_action.pdf")
 cl_box(log(gg$ftime), rr, c("log(first_action_time)", "res"))
 cl_box(log(gg$naction), rr, c("log(naction)", "res"))
-pp = cl_plot(cbind(mtheta, log(gg$ftime)), rr, c("theta","log(first_action_time)"))
+pp <- cl_plot(cbind(mtheta, log(gg$ftime)), rr, c("theta", "log(first_action_time)"))
 print(pp)
-pp = cl_plot(cbind(mtheta, log(gg$naction)), rr, c("theta","log(#actions)"))
+pp <- cl_plot(cbind(mtheta, log(gg$naction)), rr, c("theta", "log(#actions)"))
 print(pp)
-pp = cl_plot(cbind(mtau, log(gg$ftime)), rr, c("tau","log(first_action_time)"))
+pp <- cl_plot(cbind(mtau, log(gg$ftime)), rr, c("tau", "log(first_action_time)"))
 print(pp)
-pp = cl_plot(cbind(mtau, log(gg$naction)), rr, c("tau","log(#actions)"))
+pp <- cl_plot(cbind(mtau, log(gg$naction)), rr, c("tau", "log(#actions)"))
 print(pp)
-pp = cl_plot(cbind(log(gg$ftime), log(gg$naction)), rr, c("log(first_action_time)","log(#action)"))
+pp <- cl_plot(cbind(log(gg$ftime), log(gg$naction)), rr, c("log(first_action_time)", "log(#action)"))
 print(pp)
 dev.off(which = dev.cur())
 #+end_src
 
-#+RESULTS:
-#+begin_example
-
-[36m──[39m [1m[1mColumn specification[1m[22m [36m──────────────────────────────────────────────────────────────────[39m
-cols(
-  CNTRYID = [31mcol_character()[39m,
-  SEQID = [32mcol_double()[39m,
-  booklet_id = [31mcol_character()[39m,
-  item_id = [32mcol_double()[39m,
-  event_name = [31mcol_character()[39m,
-  event_type = [31mcol_character()[39m,
-  timestamp = [32mcol_double()[39m,
-  event_description = [31mcol_character()[39m,
-  NAME = [31mcol_character()[39m,
-  CODEBOOK = [31mcol_character()[39m,
-  response = [32mcol_double()[39m,
-  event_num = [32mcol_double()[39m,
-  diff = [32mcol_double()[39m,
-  event_concat = [31mcol_character()[39m,
-  word = [31mcol_character()[39m,
-  state = [32mcol_double()[39m,
-  pid = [32mcol_double()[39m
-)
-`summarise()` ungrouping output (override with `.groups` argument)
-#+end_example
-
-- first action time
-- number of actions
--
 #+begin_src R :results none
 ## sink("output/mcmc_summary.txt")
 cat("==================================")
@@ -2155,7 +2131,7 @@ booklet$NAME = stringr::str_replace_all(booklet$NAME, "-_", "-")
 booklet$NAME = tolower(booklet$NAME)
 #+end_src
 
-**** party_invitation-1 :ATTACH:
+**** party_invitations-1 :ATTACH:
 :PROPERTIES:
 :ID:       67fea2ad-8240-45dc-a4eb-da07f34a9e45
 :END:
@@ -2172,7 +2148,7 @@ ignore_desc = c(
 #+attr_org: :width 700
 [[attachment:_20210904_171956pi-start.png]]
 
-**** party_invitation-2 :ATTACH:
+**** party_invitations-2 :ATTACH:
 :PROPERTIES:
 :ID:       da5e5603-defc-43fb-a01c-16bfb293c5d8
 :END:
@@ -2519,11 +2495,11 @@ ignore_desc = c(
 :EXPORT_HUGO_BUNDLE: piacc/item_results
 :END:
 **** party_invitations-1
-[[file:party_invitations-1/figure/theta_res.pdf]]
-[[file:party_invitations-1/figure/theta_tau_res.pdf]]
-[[file:party_invitations-1/figure/tau_res.pdf]]
-[[file:party_invitations-1/figure/time_action.pdf]]
-[[file:party_invitations-1/figure/time_action_more.pdf]]
+[[file:./party_invitations-1/figure/theta_res.pdf]]
+[[file:./party_invitations-1/figure/theta_tau_res.pdf]]
+[[file:./party_invitations-1/figure/tau_res.pdf]]
+[[file:./party_invitations-1/figure/time_action.pdf]]
+[[file:./party_invitations-1/figure/time_action_more.pdf]]
 
 ** Model
 :PROPERTIES:
