@@ -268,7 +268,7 @@ q_{ml}\left(t ; \mathcal{F}_{t}\right) = q_{ml}(dt) = \kappa_{m} \tau_{k} e^{\th
 - larger $\tau_{k}$, faster transition speed
 - larger $\theta_{k}$, larger trasition rate towards a similar action. A person with large $\theta_{k}$ tends to choose more coherent actions
 
-  TODO
+*** TODO pattern discovery
   - divide tau by 1) number of actions
   - use 2) total time for visualization
   - 1) divided by 2)
