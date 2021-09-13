@@ -20,7 +20,8 @@
 # comment out for reveal.js
 # #+setupfile: ~/setup/my-theme-readtheorg.setup
 #+setupfile: ~/org/latex_header.setup
-# #+setupfile: ~/org/orgmode_header.setup
+#
+#+setupfile: ~/org/orgmode_header.setup
 # https://orgmode.org/manual/Export-Settings.html#Export-Settings
 
 #+PROPERTY: header-args :tangle
