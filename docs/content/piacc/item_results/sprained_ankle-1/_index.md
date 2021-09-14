@@ -1,7 +1,7 @@
 +++
 title = "sprained_ankle-1"
 author = ["Jonghyun Yun"]
-lastmod = 2021-09-14T15:07:37-05:00
+lastmod = 2021-09-14T15:19:56-05:00
 draft = false
 +++
 
