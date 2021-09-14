@@ -1,7 +1,7 @@
 +++
 title = "tickets"
 author = ["Jonghyun Yun"]
-lastmod = 2021-09-14T15:19:41-05:00
+lastmod = 2021-09-14T15:39:47-05:00
 draft = false
 +++
 
