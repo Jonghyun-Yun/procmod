@@ -1,7 +1,7 @@
 +++
 title = "cd_tally"
 author = ["Jonghyun Yun"]
-lastmod = 2021-09-14T15:07:35-05:00
+lastmod = 2021-09-14T15:20:06-05:00
 draft = false
 +++
 
