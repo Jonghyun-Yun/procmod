@@ -1,12 +1,20 @@
 #+TITLE: PIACC data processing
 
-#+HUGO_BASE_DIR: ./docs
-#+HUGO_FRONT_MATTER_FORMAT: toml
+#+hugo_base_dir: ./docs
+#+hugo_auto_set_lastmod: t
+#+hugo_date_format: %Y-%m-%dT%T%z
+#+hugo_front_matter_format: toml
 #+HUGO_LEVEL_OFFSET: 0
 
+#+hugo_section:
+#+hugo_bundle:
+#+hugo_categories:
+
+#+hugo_export_rmarkdown:
+
 # https://orgmode.org/manual/Export-Settings.html#Export-Settings
-#+options:   H:10 num:nil toc:t \n:nil @:t ::t |:t ^:nil ^:{} -:t f:t *:t <:t ':nil -:nil pri:t
-#+options:   TeX:t LaTeX:t skip:nil d:nil todo:nil pri:nil tags:nil
+#+options: H:10 num:nil toc:t \n:nil @:t ::t |:t ^:nil ^:{} -:t f:t *:t <:t ':nil -:nil pri:t
+#+options: TeX:t LaTeX:t skip:nil d:nil todo:nil pri:nil tags:nil
 
 #+startup: overview inlineimages logdone indent
 
