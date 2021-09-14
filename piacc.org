@@ -1,8 +1,6 @@
 #+TITLE: PIACC data processing
 
 #+HUGO_BASE_DIR: ./docs
-#+HUGO_AUTO_SET_LASTMOD: t
-#+HUGO_DATE_FORMAT: %Y-%m-%dT%T%z
 #+HUGO_FRONT_MATTER_FORMAT: toml
 #+HUGO_LEVEL_OFFSET: 0
 
@@ -20,26 +18,21 @@
 # comment out for reveal.js
 # #+setupfile: ~/setup/my-theme-readtheorg.setup
 #+setupfile: ~/org/latex_header.setup
-#
 #+setupfile: ~/org/orgmode_header.setup
 # https://orgmode.org/manual/Export-Settings.html#Export-Settings
 
-#+PROPERTY: header-args :tangle
 #+PROPERTY: header-args :eval never-export
 #+PROPERTY: header-args:ein :session localhost
 #+PROPERTY: header-args:jupyter-python :session *jupyter-piacc* :kernel tf
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results silent
   ;; fast, no unicode-math
   (setq org-preview-latex-default-process 'dvipng)
   ;; slow, supprts unicode-math
   (setq org-preview-latex-default-process 'dvisvgm)
 #+end_src
 
-#+RESULTS:
-: dvisvgm
-
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results silent
   (setq jyun/org-latex-preview-scale 2.5)
   ;; set default org-latex-preview size
   (jyun/org-latex-set-options)
@@ -277,7 +270,35 @@ q_{ml}\left(t ; \mathcal{F}_{t}\right) = q_{ml}(dt) = \kappa_{m} \tau_{k} e^{\th
     - 시간이 많이 걸리고 맞은사람 vs 적게 걸리고 맞은 사람. 
     - 적은 액션으로 맞은 사람 vs 많은 액션으로 틀린 사람.
   - 무조건 빨리 푼다고 잘하는게 아니고, 느리거나 혹은 상이한 액션 개수로 정답에 이르는 프로세스 발견에 초점.
-    
+*** party_invitations-1
+out_dir="party_invitations-1/"
+*** party_invitations-2
+out_dir="party_invitations-2/"
+*** cd_tally
+out_dir="cd_tally/"
+*** sprained_ankle-1
+out_dir="sprained_ankle-1/"
+*** sprained_ankle-2
+out_dir="sprained_ankle-2/"
+*** tickets
+out_dir="tickets/"
+*** class_attendance
+out_dir="class_attendance/"
+*** club_membership-1
+out_dir="club_membership-1/"
+*** club_membership-2
+out_dir="club_membership-2/"
+*** book_order
+out_dir="book_order/"
+*** meeting_room
+out_dir="meeting_room/"
+*** reply_all
+out_dir="reply_all/"
+*** locate_email
+out_dir="locate_email/"
+*** lamp_return
+out_dir="lamp_return/"
+
 ** likelihood
 
 \begin{align*}
@@ -327,19 +348,18 @@ The proposed method use a fully Bayesian approach for estimating the proposed la
 # \pi\left(\mu_{\beta}|\sigma_{\beta}) & \sim \mathrm{N}\left(0, \sigma^{2}_{\mu_{\beta}}\right);\\
 # \pi\left(\sigma_{\beta}^{2}\right) & \sim \operatorname{lnv}-\operatorname{Gamma}\left(a_{\sigma_{\beta}}, b_{\sigma_{\beta}}\right),\\
 
-\begin{align*}
-\pi\left(\sigma^{2}\right) & \propto \sigma^{-2}\\
-\pi\left(\mu_{\beta}, \sigma_{\beta}^{2}\right) & \propto \sigma_{\beta}^{-2},
-\end{align*}
+# \begin{align*}
+# \pi\left(\sigma^{2}\right) & \propto \sigma^{-2}\\
+# \pi\left(\mu_{\beta}, \sigma_{\beta}^{2}\right) & \propto \sigma_{\beta}^{-2},
+# \end{align*}
 
 inv-Gamma(\theta|\alpha,\beta)
 \[
 p(\theta)=\frac{\beta^{\alpha}}{\Gamma(\alpha)} \theta^{-(\alpha+1)} e^{-\beta / \theta}, \quad \theta>0
 \]
 
-where .... Other hyperparameters are chosen as
-\[a_{\sigma}=0.0001, b_{\sigma}=0.0001, \mu_{\gamma}=0, \text { and } \tau_{\gamma}^{}=2.\]
-A similar vague prior for $\lambda_{ic,j}$ has been used in cite:jin_using_2014.
+where hyperparameters are chosen as
+\[a_{\sigma}=0.0001, b_{\sigma}=0.0001, \mu_{\theta}=0, \text { and } ....\]
 
 Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive to its variance $\sigma^2$. Also, the configuration of latent embeddings highly depends on the scale parameter $\gamma$ of the latent space. Rather than choosing sub-optimal tuning parameters, we use a layer of hyper-priors to learn optimal values of these parameters from data. We choose hyperparameters such that priors are minimally informative to facilitate the flexible Bayesian learning.
 ** pseudo code
@@ -360,16 +380,6 @@ Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive 
 + \log \frac{\pi(\kappa_{m}^{* })}{\pi(\kappa_{m}^{t})}.
 \end{align*}
 
-*** update \(\sigma\)
-\[
- p( \sigma^2|e.e.) \propto invGamma(\sigma^{2}|a,b) \prod N(\theta_{k} | \mu, \sigma^2)
-\]
-\(\sigma^{2} \sim inv-gamma(a + 0.5 * N, b + 0.5 + \sum \theta_{k}^2)\)
-with flat prior:
-\(\sigma^{2} \sim inv-gamma(0.5 * N, 0.5 + \sum \theta_{k}^2)\)
-*** update \(\omega_{l}\)
-- all $k$ person's having action l, all m \in B_l (all possible actions that can jump to l)
-- transition start and stop time $dt_{k,n-1}$ for all $\delta_{k,n,l} = 1$
 *** update \(\tau_{k}\)
 - all $k$ person's m and l \in A_m
 - all kth person's transition start and stop time
@@ -391,7 +401,17 @@ with flat prior:
 + \log \frac{\pi(\theta_{k}^{* })}{\pi(\theta_{k}^{(l-1)})}.\\
 \end{align*}
 
-*** update \(\beta\)
+*** update \(\sigma\)
+\[
+ p( \sigma^2|e.e.) \propto invGamma(\sigma^{2}|a,b) \prod N(\theta_{k} | \mu, \sigma^2)
+\]
+\(\sigma^{2} \sim inv-gamma(a + 0.5 * N, b + 0.5 + \sum \theta_{k}^2)\)
+with flat prior:
+\(\sigma^{2} \sim inv-gamma(0.5 * N, 0.5 + \sum \theta_{k}^2)\)
+*** update \(\omega_{l}\) :ARCHIVE:
+- all $k$ person's having action l, all m \in B_l (all possible actions that can jump to l)
+- transition start and stop time $dt_{k,n-1}$ for all $\delta_{k,n,l} = 1$
+*** update \(\beta\) :ARCHIVE:
 - a symmetric MH jumping $J(\beta_{k}^{(l-1)} \rightarrow \beta_{k}^{* })$ is used to propose a new sample.
 - We accept $\beta_{k}^{(l)} = \beta_{k}^{* }$ with probability $\min(1, r_{{\beta_{k}}^{* )}})$ where
 \begin{align*}
@@ -400,7 +420,7 @@ with flat prior:
 &-\sum dt \kappa_{m} \tau_{k} e^{ \theta_k D_{ml} }(e^{\beta^{* }D_{ml}} -  e^{\beta^{(l-1)} D_{ml} })
 + \log \frac{\pi(\beta_{k}^{* })}{\pi(\beta_{k}^{(l-1)})}.
 \end{align*}
-*** update \(\mu_{\beta}, \sigma_{\beta}\)
+*** update \(\mu_{\beta}, \sigma_{\beta}\) :ARCHIVE:
 \begin{align*}
   \rho &= 1/\sigma_{\beta}^{2} + 1/\sigma_{\mu_{\beta}}^2 \\
   p(\mu_{\beta}|..)&= N(\frac{1/\sigma_{\beta}^2 \times \beta}{\rho}, 1/\rho )
