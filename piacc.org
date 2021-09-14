@@ -1,10 +1,10 @@
-#+TITLE: PIACC data processing
+#+title: PIACC data processing
 
 #+hugo_base_dir: ./docs
 #+hugo_auto_set_lastmod: t
 #+hugo_date_format: %Y-%m-%dT%T%z
 #+hugo_front_matter_format: toml
-#+HUGO_LEVEL_OFFSET: 0
+#+hugo_level_offset: 0
 
 #+hugo_section:
 #+hugo_bundle:
@@ -29,9 +29,9 @@
 #+setupfile: ~/org/orgmode_header.setup
 # https://orgmode.org/manual/Export-Settings.html#Export-Settings
 
-#+PROPERTY: header-args :eval never-export
-#+PROPERTY: header-args:ein :session localhost
-#+PROPERTY: header-args:jupyter-python :session *jupyter-piacc* :kernel tf
+#+property: header-args :eval never-export
+#+property: header-args:ein :session localhost
+#+property: header-args:jupyter-python :session *jupyter-piacc* :kernel tf
 
 #+begin_src emacs-lisp :results silent
   ;; fast, no unicode-math
@@ -164,10 +164,10 @@ where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ 
 - https://www.mrc-bsu.cam.ac.uk/wp-content/uploads/2017/10/multistate_enar_webinar.pdf
 - https://cran.r-project.org/web/packages/msm/msm.pdf
 - [[id:57b08111-9c48-4fa9-b289-10f01fc7a0d6][cite:hill_relaxing_2021]]
-* Model V0.1
+* Model V1
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: model/V0.1
+:EXPORT_HUGO_BUNDLE: model/V1
 :END:
 
 See cite:jackson_flexsurv_2016 for available baseline functions.
@@ -232,10 +232,10 @@ for $j = 1,\ldots,J$. $\lambda_{j}$ could be a function of the similarity. This 
   q_{ml} (t ; \boldsymbol{\alpha}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{k,m \rightarrow l}(t) \exp( \alpha_m + \alpha_l + \boldsymbol{\beta} d_{i,m,l} ),
 \end{align*}
 where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ is coefficients associated with $\mathbf{z}(t)$, $\lambda_{k,m\rightarrow l}(t)$ is a baseline intensity function. For each state $l$, there are competing transitions $m_1, \ldots, m_{n_l}$. This mean there are $n_{l}$ corresponding survival models for state $l$, and overall $K=\sum_l n_l$ models. Models with no shared parameters can be estimated separately.
-* Model V0.2
+* Model V2
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: model/V0.2
+:EXPORT_HUGO_BUNDLE: model/V2
 :END:
 Let $S$ denotes a set of all possible action. For each state $m \in S$, $A_{m}$ denotes a set of competing transitions $\{l_1, \ldots, l_{n_m}\}$ that can be taken directly after $m$.
 Let \(Y_k(t)\) denote an action of k-th respondent at time $t$. All respondents assmed to begin problem solving processes at time $t=0$.
