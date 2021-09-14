@@ -2980,6 +2980,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 #+RESULTS:
 
 [[file:party_invitations-1/figure/theta_tau_res.png]]
+[[file:party_invitations-1/figure/tau_action.png]]
 [[file:party_invitations-1/figure/time_action-3.png]]
 [[file:party_invitations-1/figure/time_action_more-2.png]]
 [[file:party_invitations-1/figure/time_action_more-5.png]]
@@ -3006,6 +3007,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
 
 [[file:party_invitations-2/figure/theta_tau_res.png]]
+[[file:party_invitations-2/figure/tau_action.png]]
 [[file:party_invitations-2/figure/time_action-3.png]]
 [[file:party_invitations-2/figure/time_action_more-2.png]]
 [[file:party_invitations-2/figure/time_action_more-5.png]]
@@ -3034,6 +3036,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 #+RESULTS:
 
 [[file:cd_tally/figure/theta_tau_res.png]]
+[[file:cd_tally/figure/tau_action.png]]
 [[file:cd_tally/figure/time_action-3.png]]
 [[file:cd_tally/figure/time_action_more-2.png]]
 [[file:cd_tally/figure/time_action_more-5.png]]
@@ -3062,6 +3065,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 #+RESULTS:
 
 [[file:sprained_ankle-1/figure/theta_tau_res.png]]
+[[file:sprained_ankle-1/figure/tau_action.png]]
 [[file:sprained_ankle-1/figure/time_action-3.png]]
 [[file:sprained_ankle-1/figure/time_action_more-2.png]]
 [[file:sprained_ankle-1/figure/time_action_more-5.png]]
@@ -3088,6 +3092,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
 
 [[file:sprained_ankle-2/figure/theta_tau_res.png]]
+[[file:sprained_ankle-2/figure/tau_action.png]]
 [[file:sprained_ankle-2/figure/time_action-3.png]]
 [[file:sprained_ankle-2/figure/time_action_more-2.png]]
 [[file:sprained_ankle-2/figure/time_action_more-5.png]]
@@ -3117,6 +3122,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 : 04dca4c6663e5b40dc7d0d58cbf2eaa3
 
 [[file:tickets/figure/theta_tau_res.png]]
+[[file:tickets/figure/tau_action.png]]
 [[file:tickets/figure/time_action-3.png]]
 [[file:tickets/figure/time_action_more-2.png]]
 [[file:tickets/figure/time_action_more-5.png]]
@@ -3145,6 +3151,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 #+RESULTS:
 
 [[file:class_attendance/figure/theta_tau_res.png]]
+[[file:class_attendance/figure/tau_action.png]]
 [[file:class_attendance/figure/time_action-3.png]]
 [[file:class_attendance/figure/time_action_more-2.png]]
 [[file:class_attendance/figure/time_action_more-5.png]]
@@ -3173,6 +3180,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 #+RESULTS:
 
 [[file:club_membership-1/figure/theta_tau_res.png]]
+[[file:club_membership-1/figure/tau_action.png]]
 [[file:club_membership-1/figure/time_action-3.png]]
 [[file:club_membership-1/figure/time_action_more-2.png]]
 [[file:club_membership-1/figure/time_action_more-5.png]]
@@ -3199,6 +3207,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
 
 [[file:club_membership-2/figure/theta_tau_res.png]]
+[[file:club_membership-2/figure/tau_action.png]]
 [[file:club_membership-2/figure/time_action-3.png]]
 [[file:club_membership-2/figure/time_action_more-2.png]]
 [[file:club_membership-2/figure/time_action_more-5.png]]
@@ -3227,6 +3236,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 #+RESULTS:
 
 [[file:book_order/figure/theta_tau_res.png]]
+[[file:book_order/figure/tau_action.png]]
 [[file:book_order/figure/time_action-3.png]]
 [[file:book_order/figure/time_action_more-2.png]]
 [[file:book_order/figure/time_action_more-5.png]]
@@ -3255,6 +3265,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 #+RESULTS:
 
 [[file:meeting_room/figure/theta_tau_res.png]]
+[[file:meeting_room/figure/tau_action.png]]
 [[file:meeting_room/figure/time_action-3.png]]
 [[file:meeting_room/figure/time_action_more-2.png]]
 [[file:meeting_room/figure/time_action_more-5.png]]
@@ -3281,6 +3292,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
 
 [[file:reply_all/figure/theta_tau_res.png]]
+[[file:reply_all/figure/tau_action.png]]
 [[file:reply_all/figure/time_action-3.png]]
 [[file:reply_all/figure/time_action_more-2.png]]
 [[file:reply_all/figure/time_action_more-5.png]]
@@ -3308,6 +3320,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 #+RESULTS:
 
 [[file:locate_email/figure/theta_tau_res.png]]
+[[file:locate_email/figure/tau_action.png]]
 [[file:locate_email/figure/time_action-3.png]]
 [[file:locate_email/figure/time_action_more-2.png]]
 [[file:locate_email/figure/time_action_more-5.png]]
@@ -3334,6 +3347,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
 
 [[file:lamp_return/figure/theta_tau_res.png]]
+[[file:lamp_return/figure/tau_action.png]]
 [[file:lamp_return/figure/time_action-3.png]]
 [[file:lamp_return/figure/time_action_more-2.png]]
 [[file:lamp_return/figure/time_action_more-5.png]]
