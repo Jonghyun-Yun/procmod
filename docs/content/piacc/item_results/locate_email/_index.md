@@ -1,7 +1,7 @@
 +++
 title = "locate_email"
 author = ["Jonghyun Yun"]
-lastmod = 2021-09-14T15:08:04-05:00
+lastmod = 2021-09-14T15:17:22-05:00
 draft = false
 +++
 
