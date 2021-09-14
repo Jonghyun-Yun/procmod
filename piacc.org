@@ -1,16 +1,8 @@
 #+title: PIACC data processing
 
 #+hugo_base_dir: ./docs
-#+hugo_auto_set_lastmod: t
-#+hugo_date_format: %Y-%m-%dT%T%z
 #+hugo_front_matter_format: toml
 #+hugo_level_offset: 0
-
-#+hugo_section:
-#+hugo_bundle:
-#+hugo_categories:
-
-#+hugo_export_rmarkdown:
 
 # https://orgmode.org/manual/Export-Settings.html#Export-Settings
 #+options: H:10 num:nil toc:t \n:nil @:t ::t |:t ^:nil ^:{} -:t f:t *:t <:t ':nil -:nil pri:t
