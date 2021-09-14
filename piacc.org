@@ -46,6 +46,13 @@
   (jyun/org-latex-set-options)
 #+end_src
 
+#+begin_src emacs-lisp :results silent
+(setq org-image-actual-width 300)
+#+end_src
+
+#+RESULTS:
+: 300
+
 * discussion
 - [2021-05-09 Sun] note
   I drop event description and tryed a few more embeddings.
@@ -2971,8 +2978,8 @@ ignore_desc = c(
 out_dir="party_invitations-1/"
 cd $out_dir
 cd figure
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 tau_action.pdf tau_action.png
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
@@ -2997,14 +3004,17 @@ convert -density 300 time_action.pdf time_action-%d.png
 :EXPORT_HUGO_BUNDLE: party_invitations-2
 :END:
 
-#+begin_src sh
+#+begin_src sh :async
 out_dir="party_invitations-2/"
 cd $out_dir
 cd figure
+convert -density 300 tau_action.pdf tau_action.png
 convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
+
+#+RESULTS:
 
 [[file:party_invitations-2/figure/theta_tau_res.png]]
 [[file:party_invitations-2/figure/tau_action.png]]
@@ -3028,6 +3038,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 out_dir="cd_tally/"
 cd $out_dir
 cd figure
+convert -density 300 tau_action.pdf tau_action.png
 convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
@@ -3057,6 +3068,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 out_dir="sprained_ankle-1/"
 cd $out_dir
 cd figure
+convert -density 300 tau_action.pdf tau_action.png
 convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
@@ -3113,13 +3125,13 @@ convert -density 300 time_action.pdf time_action-%d.png
 out_dir="tickets/"
 cd $out_dir
 cd figure
+convert -density 300 tau_action.pdf tau_action.png
 convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
 
 #+RESULTS:
-: 04dca4c6663e5b40dc7d0d58cbf2eaa3
 
 [[file:tickets/figure/theta_tau_res.png]]
 [[file:tickets/figure/tau_action.png]]
@@ -3172,6 +3184,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 out_dir="club_membership-1/"
 cd $out_dir
 cd figure
+convert -density 300 tau_action.pdf tau_action.png
 convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
@@ -3228,6 +3241,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 out_dir="book_order/"
 cd $out_dir
 cd figure
+convert -density 300 tau_action.pdf tau_action.png
 convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
@@ -3257,6 +3271,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 out_dir="meeting_room/"
 cd $out_dir
 cd figure
+convert -density 300 tau_action.pdf tau_action.png
 convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
@@ -3312,6 +3327,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 out_dir="locate_email/"
 cd $out_dir
 cd figure
+convert -density 300 tau_action.pdf tau_action.png
 convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
@@ -3337,10 +3353,11 @@ convert -density 300 time_action.pdf time_action-%d.png
 :EXPORT_HUGO_BUNDLE: lamp_return
 :END:
 
-#+begin_src sh
+#+begin_src sh :async
 out_dir="lamp_return/"
 cd $out_dir
 cd figure
+convert -density 300 tau_action.pdf tau_action.png
 convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
