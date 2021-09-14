@@ -2975,9 +2975,32 @@ convert -density 300 time_action.pdf time_action-%d.png
 [[file:party_invitations-1/figure/time_action_more-13.png]]
 
 **** party_invitations-2
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: piacc/item_results/party_invitations-2
+:END:
+
 #+begin_src sh
 out_dir="party_invitations-2/"
+cd $out_dir
+cd figure
+# convert -density 300 theta_tau_res.pdf theta_tau_res-%d.png
+convert -density 300 time_action_more.pdf time_action_more-%d.png
+convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
+
+#+RESULTS:
+
+[[file:party_invitations-2/figure/theta_tau_res.pdf]]
+[[file:party_invitations-2/figure/time_action-3.png]]
+[[file:party_invitations-2/figure/time_action_more-2.png]]
+[[file:party_invitations-2/figure/time_action_more-5.png]]
+[[file:party_invitations-2/figure/time_action_more-7.png]]
+[[file:party_invitations-2/figure/time_action_more-8.png]]
+[[file:party_invitations-2/figure/time_action_more-9.png]]
+[[file:party_invitations-2/figure/time_action_more-10.png]]
+[[file:party_invitations-2/figure/time_action_more-11.png]]
+[[file:party_invitations-2/figure/time_action_more-13.png]]
 **** cd_tally
 #+begin_src sh
 out_dir="cd_tally/"
