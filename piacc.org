@@ -2945,6 +2945,7 @@ ignore_desc = c(
 | PS2_7 | Lamp Return           | U23x000S | POLYTOMOUS (0 to 3), No response (R ), Not reached / not attempted (N)   |
 ** item results
 :PROPERTIES:
+:header-args: :exports none
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_BUNDLE: piacc/item_results
 :END:
@@ -2959,7 +2960,7 @@ ignore_desc = c(
 **** party_invitations-1
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: piacc/item_results/party_invitations-1
+:EXPORT_HUGO_BUNDLE: party_invitations-1
 :END:
 #+begin_src sh :async
 out_dir="party_invitations-1/"
@@ -2986,7 +2987,7 @@ convert -density 300 time_action.pdf time_action-%d.png
 **** party_invitations-2
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: piacc/item_results/party_invitations-2
+:EXPORT_HUGO_BUNDLE: party_invitations-2
 :END:
 
 #+begin_src sh
