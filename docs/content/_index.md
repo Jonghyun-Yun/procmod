@@ -1,7 +1,7 @@
 +++
 title = "Process data modeling"
 author = ["Jonghyun Yun"]
-lastmod = 2021-09-07T14:18:01-05:00
+lastmod = 2021-09-14T14:37:10-05:00
 draft = false
 +++
 
