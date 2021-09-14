@@ -1688,6 +1688,14 @@ pid = unique(item$SEQID)
 #+RESULTS:
 
 #+begin_src R :results silent :tangle R/summary.R
+pdf("figure/tau_action.pdf")
+pp <- cl_plot(cbind(mtau, log(gg$naction / (gg$time - gg$ftime))), rr, c("tau", "log(#action / (time - ftime))"))
+print(pp)
+dev.off(which = dev.cur())
+#+end_src
+
+
+#+begin_src R :results silent :tangle R/summary.R
 pdf("figure/theta_res.pdf")
 dd <- data.frame(theta = mtheta, res = rr)
 boxp <- ggplot(dd, aes(x = factor(res), y = theta, fill = factor(res))) +
