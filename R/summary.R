@@ -23,7 +23,7 @@ gg <- item %>%
   summarize(ftime = timestamp[1] / 1000, naction = n(), spd = naction / ftime, time = timestamp[n()] / 1000)
 binfo = readr::read_csv("./data/PIAAC_cleaned_data_1110/PUFs_noN.csv")
 
-pdf("figure/tau_action.png")
+pdf("figure/tau_action.pdf")
 pp <- cl_plot(cbind(log(mtau), log(gg$naction)), rr, c("log(tau)", "log(#action)"))
 print(pp)
 dev.off(which = dev.cur())
