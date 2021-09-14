@@ -1682,12 +1682,9 @@ binfo = readr::read_csv("./data/PIAAC_cleaned_data_1110/PUFs_noN.csv")
 
 #+begin_src R
 pid = unique(item$SEQID)
-
 #+end_src
 
 #+RESULTS:
-
-
 
 #+begin_src R :results silent :tangle R/summary.R
 pdf("figure/theta_res.pdf")
