@@ -2962,6 +2962,12 @@ ignore_desc = c(
 :EXPORT_HUGO_BUNDLE: piacc/item_results
 :END:
 
+variables
+- ~ftime~: time until the first action taken
+- ~time~: total time of a person's process
+- ~naction~ or ~#action~: the number of actions of a person's process
+
+summaries
 - Total or first action time has weak association with \theta.
 - # of actions and first action time have weak or no assciation.
 - # of actions has some association with the response.
