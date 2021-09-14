@@ -270,69 +270,6 @@ q_{ml}\left(t ; \mathcal{F}_{t}\right) = q_{ml}(dt) = \kappa_{m} \tau_{k} e^{\th
     - 시간이 많이 걸리고 맞은사람 vs 적게 걸리고 맞은 사람. 
     - 적은 액션으로 맞은 사람 vs 많은 액션으로 틀린 사람.
   - 무조건 빨리 푼다고 잘하는게 아니고, 느리거나 혹은 상이한 액션 개수로 정답에 이르는 프로세스 발견에 초점.
-**** party_invitations-1
-#+begin_src sh :async
-out_dir="party_invitations-1/"
-cd $out_dir
-cd figure
-# convert -density 300 theta_tau_res.pdf theta_tau_res-%d.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-#+end_src
-
-#+RESULTS:
-
-**** party_invitations-2
-#+begin_src sh
-out_dir="party_invitations-2/"
-#+end_src
-**** cd_tally
-#+begin_src sh
-out_dir="cd_tally/"
-#+end_src
-**** sprained_ankle-1
-#+begin_src sh
-out_dir="sprained_ankle-1/"
-#+end_src
-**** sprained_ankle-2
-#+begin_src sh
-out_dir="sprained_ankle-2/"
-#+end_src
-**** tickets
-#+begin_src sh
-out_dir="tickets/"
-#+end_src
-**** class_attendance
-#+begin_src sh
-out_dir="class_attendance/"
-#+end_src
-**** club_membership-1
-#+begin_src sh
-out_dir="club_membership-1/"
-#+end_src
-**** club_membership-2
-#+begin_src sh
-out_dir="club_membership-2/"
-#+end_src
-**** book_order
-#+begin_src sh
-out_dir="book_order/"
-#+end_src
-**** meeting_room
-#+begin_src sh
-out_dir="meeting_room/"
-#+end_src
-**** reply_all
-#+begin_src sh
-out_dir="reply_all/"
-#+end_src
-**** locate_email
-#+begin_src sh
-out_dir="locate_email/"
-#+end_src
-**** lamp_return
-#+begin_src sh
-out_dir="lamp_return/"
-#+end_src
 
 ** likelihood
 
@@ -3004,11 +2941,68 @@ ignore_desc = c(
 :EXPORT_HUGO_BUNDLE: piacc/item_results
 :END:
 **** party_invitations-1
-[[file:./party_invitations-1/figure/theta_res.pdf]]
-[[file:./party_invitations-1/figure/theta_tau_res.pdf]]
-[[file:./party_invitations-1/figure/tau_res.pdf]]
-[[file:./party_invitations-1/figure/time_action.pdf]]
-[[file:./party_invitations-1/figure/time_action_more.pdf]]
+#+begin_src sh :async
+out_dir="party_invitations-1/"
+cd $out_dir
+cd figure
+# convert -density 300 theta_tau_res.pdf theta_tau_res-%d.png
+convert -density 300 time_action_more.pdf time_action_more-%d.png
+#+end_src
+
+#+RESULTS:
+
+**** party_invitations-2
+#+begin_src sh
+out_dir="party_invitations-2/"
+#+end_src
+**** cd_tally
+#+begin_src sh
+out_dir="cd_tally/"
+#+end_src
+**** sprained_ankle-1
+#+begin_src sh
+out_dir="sprained_ankle-1/"
+#+end_src
+**** sprained_ankle-2
+#+begin_src sh
+out_dir="sprained_ankle-2/"
+#+end_src
+**** tickets
+#+begin_src sh
+out_dir="tickets/"
+#+end_src
+**** class_attendance
+#+begin_src sh
+out_dir="class_attendance/"
+#+end_src
+**** club_membership-1
+#+begin_src sh
+out_dir="club_membership-1/"
+#+end_src
+**** club_membership-2
+#+begin_src sh
+out_dir="club_membership-2/"
+#+end_src
+**** book_order
+#+begin_src sh
+out_dir="book_order/"
+#+end_src
+**** meeting_room
+#+begin_src sh
+out_dir="meeting_room/"
+#+end_src
+**** reply_all
+#+begin_src sh
+out_dir="reply_all/"
+#+end_src
+**** locate_email
+#+begin_src sh
+out_dir="locate_email/"
+#+end_src
+**** lamp_return
+#+begin_src sh
+out_dir="lamp_return/"
+#+end_src
 
 ** Model
 :PROPERTIES:
