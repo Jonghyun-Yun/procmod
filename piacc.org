@@ -388,10 +388,10 @@ Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive 
 \(\sigma^{2} \sim inv-gamma(a + 0.5 * N, b + 0.5 + \sum \theta_{k}^2)\)
 with flat prior:
 \(\sigma^{2} \sim inv-gamma(0.5 * N, 0.5 + \sum \theta_{k}^2)\)
-*** update \(\omega_{l}\) :ARCHIVE:
+*** update \(\omega_{l}\) :noexport:ARCHIVE:
 - all $k$ person's having action l, all m \in B_l (all possible actions that can jump to l)
 - transition start and stop time $dt_{k,n-1}$ for all $\delta_{k,n,l} = 1$
-*** update \(\beta\) :ARCHIVE:
+*** update \(\beta\) :noexport:ARCHIVE:
 - a symmetric MH jumping $J(\beta_{k}^{(l-1)} \rightarrow \beta_{k}^{* })$ is used to propose a new sample.
 - We accept $\beta_{k}^{(l)} = \beta_{k}^{* }$ with probability $\min(1, r_{{\beta_{k}}^{* )}})$ where
 \begin{align*}
@@ -400,7 +400,7 @@ with flat prior:
 &-\sum dt \kappa_{m} \tau_{k} e^{ \theta_k D_{ml} }(e^{\beta^{* }D_{ml}} -  e^{\beta^{(l-1)} D_{ml} })
 + \log \frac{\pi(\beta_{k}^{* })}{\pi(\beta_{k}^{(l-1)})}.
 \end{align*}
-*** update \(\mu_{\beta}, \sigma_{\beta}\) :ARCHIVE:
+*** update \(\mu_{\beta}, \sigma_{\beta}\) :noexport:ARCHIVE:
 \begin{align*}
   \rho &= 1/\sigma_{\beta}^{2} + 1/\sigma_{\mu_{\beta}}^2 \\
   p(\mu_{\beta}|..)&= N(\frac{1/\sigma_{\beta}^2 \times \beta}{\rho}, 1/\rho )
@@ -410,7 +410,7 @@ with flat prior:
 \]
 
 ** data structure
-*** mstate R package
+*** mstate R package :noexport:
 - how to format data to follow the below?
 | person | entry time | exit time | from | to | observed | covariate1 | covariate2 | covariate3    | time dependent covaraite |
 |      1 |          0 |        10 |    1 |  2 |        1 | D_{12}        | \theta D_{12}      | total actions | none                     |
@@ -2966,14 +2966,14 @@ ignore_desc = c(
 out_dir="party_invitations-1/"
 cd $out_dir
 cd figure
-# convert -density 300 theta_tau_res.pdf theta_tau_res-%d.png
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
 
 #+RESULTS:
 
-[[file:party_invitations-1/figure/theta_tau_res.pdf]]
+[[file:party_invitations-1/figure/theta_tau_res.png]]
 [[file:party_invitations-1/figure/time_action-3.png]]
 [[file:party_invitations-1/figure/time_action_more-2.png]]
 [[file:party_invitations-1/figure/time_action_more-5.png]]
@@ -2994,14 +2994,12 @@ convert -density 300 time_action.pdf time_action-%d.png
 out_dir="party_invitations-2/"
 cd $out_dir
 cd figure
-# convert -density 300 theta_tau_res.pdf theta_tau_res-%d.png
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
 
-#+RESULTS:
-
-[[file:party_invitations-2/figure/theta_tau_res.pdf]]
+[[file:party_invitations-2/figure/theta_tau_res.png]]
 [[file:party_invitations-2/figure/time_action-3.png]]
 [[file:party_invitations-2/figure/time_action_more-2.png]]
 [[file:party_invitations-2/figure/time_action_more-5.png]]
@@ -3011,54 +3009,335 @@ convert -density 300 time_action.pdf time_action-%d.png
 [[file:party_invitations-2/figure/time_action_more-10.png]]
 [[file:party_invitations-2/figure/time_action_more-11.png]]
 [[file:party_invitations-2/figure/time_action_more-13.png]]
+
 **** cd_tally
-#+begin_src sh
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: cd_tally
+:END:
+
+#+begin_src sh :async
 out_dir="cd_tally/"
+cd $out_dir
+cd figure
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
+convert -density 300 time_action_more.pdf time_action_more-%d.png
+convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
+
+#+RESULTS:
+
+[[file:cd_tally/figure/theta_tau_res.png]]
+[[file:cd_tally/figure/time_action-3.png]]
+[[file:cd_tally/figure/time_action_more-2.png]]
+[[file:cd_tally/figure/time_action_more-5.png]]
+[[file:cd_tally/figure/time_action_more-7.png]]
+[[file:cd_tally/figure/time_action_more-8.png]]
+[[file:cd_tally/figure/time_action_more-9.png]]
+[[file:cd_tally/figure/time_action_more-10.png]]
+[[file:cd_tally/figure/time_action_more-11.png]]
+[[file:cd_tally/figure/time_action_more-13.png]]
+
 **** sprained_ankle-1
-#+begin_src sh
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: sprained_ankle-1
+:END:
+
+#+begin_src sh :async
 out_dir="sprained_ankle-1/"
+cd $out_dir
+cd figure
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
+convert -density 300 time_action_more.pdf time_action_more-%d.png
+convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
+
+#+RESULTS:
+
+[[file:sprained_ankle-1/figure/theta_tau_res.png]]
+[[file:sprained_ankle-1/figure/time_action-3.png]]
+[[file:sprained_ankle-1/figure/time_action_more-2.png]]
+[[file:sprained_ankle-1/figure/time_action_more-5.png]]
+[[file:sprained_ankle-1/figure/time_action_more-7.png]]
+[[file:sprained_ankle-1/figure/time_action_more-8.png]]
+[[file:sprained_ankle-1/figure/time_action_more-9.png]]
+[[file:sprained_ankle-1/figure/time_action_more-10.png]]
+[[file:sprained_ankle-1/figure/time_action_more-11.png]]
+[[file:sprained_ankle-1/figure/time_action_more-13.png]]
+
 **** sprained_ankle-2
-#+begin_src sh
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: sprained_ankle-2
+:END:
+
+#+begin_src sh :async
 out_dir="sprained_ankle-2/"
+cd $out_dir
+cd figure
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
+convert -density 300 time_action_more.pdf time_action_more-%d.png
+convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
+
+[[file:sprained_ankle-2/figure/theta_tau_res.png]]
+[[file:sprained_ankle-2/figure/time_action-3.png]]
+[[file:sprained_ankle-2/figure/time_action_more-2.png]]
+[[file:sprained_ankle-2/figure/time_action_more-5.png]]
+[[file:sprained_ankle-2/figure/time_action_more-7.png]]
+[[file:sprained_ankle-2/figure/time_action_more-8.png]]
+[[file:sprained_ankle-2/figure/time_action_more-9.png]]
+[[file:sprained_ankle-2/figure/time_action_more-10.png]]
+[[file:sprained_ankle-2/figure/time_action_more-11.png]]
+[[file:sprained_ankle-2/figure/time_action_more-13.png]]
+
 **** tickets
-#+begin_src sh
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: tickets
+:END:
+
+#+begin_src sh :async
 out_dir="tickets/"
+cd $out_dir
+cd figure
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
+convert -density 300 time_action_more.pdf time_action_more-%d.png
+convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
+
+#+RESULTS:
+: 04dca4c6663e5b40dc7d0d58cbf2eaa3
+
+[[file:tickets/figure/theta_tau_res.png]]
+[[file:tickets/figure/time_action-3.png]]
+[[file:tickets/figure/time_action_more-2.png]]
+[[file:tickets/figure/time_action_more-5.png]]
+[[file:tickets/figure/time_action_more-7.png]]
+[[file:tickets/figure/time_action_more-8.png]]
+[[file:tickets/figure/time_action_more-9.png]]
+[[file:tickets/figure/time_action_more-10.png]]
+[[file:tickets/figure/time_action_more-11.png]]
+[[file:tickets/figure/time_action_more-13.png]]
+
 **** class_attendance
-#+begin_src sh
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: class_attendance
+:END:
+
+#+begin_src sh :async
 out_dir="class_attendance/"
+cd $out_dir
+cd figure
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
+convert -density 300 time_action_more.pdf time_action_more-%d.png
+convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
+
+#+RESULTS:
+
+[[file:class_attendance/figure/theta_tau_res.png]]
+[[file:class_attendance/figure/time_action-3.png]]
+[[file:class_attendance/figure/time_action_more-2.png]]
+[[file:class_attendance/figure/time_action_more-5.png]]
+[[file:class_attendance/figure/time_action_more-7.png]]
+[[file:class_attendance/figure/time_action_more-8.png]]
+[[file:class_attendance/figure/time_action_more-9.png]]
+[[file:class_attendance/figure/time_action_more-10.png]]
+[[file:class_attendance/figure/time_action_more-11.png]]
+[[file:class_attendance/figure/time_action_more-13.png]]
+
 **** club_membership-1
-#+begin_src sh
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: club_membership-1
+:END:
+
+#+begin_src sh :async
 out_dir="club_membership-1/"
+cd $out_dir
+cd figure
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
+convert -density 300 time_action_more.pdf time_action_more-%d.png
+convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
-**** club_membership-2
+
+#+RESULTS:
+
+[[file:club_membership-1/figure/theta_tau_res.png]]
+[[file:club_membership-1/figure/time_action-3.png]]
+[[file:club_membership-1/figure/time_action_more-2.png]]
+[[file:club_membership-1/figure/time_action_more-5.png]]
+[[file:club_membership-1/figure/time_action_more-7.png]]
+[[file:club_membership-1/figure/time_action_more-8.png]]
+[[file:club_membership-1/figure/time_action_more-9.png]]
+[[file:club_membership-1/figure/time_action_more-10.png]]
+[[file:club_membership-1/figure/time_action_more-11.png]]
+[[file:club_membership-1/figure/time_action_more-13.png]]
+
+**** club_membership-2 :noexport:
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: club_membership-2
+:END:
+
 #+begin_src sh
 out_dir="club_membership-2/"
+cd $out_dir
+cd figure
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
+convert -density 300 time_action_more.pdf time_action_more-%d.png
+convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
+
+[[file:club_membership-2/figure/theta_tau_res.png]]
+[[file:club_membership-2/figure/time_action-3.png]]
+[[file:club_membership-2/figure/time_action_more-2.png]]
+[[file:club_membership-2/figure/time_action_more-5.png]]
+[[file:club_membership-2/figure/time_action_more-7.png]]
+[[file:club_membership-2/figure/time_action_more-8.png]]
+[[file:club_membership-2/figure/time_action_more-9.png]]
+[[file:club_membership-2/figure/time_action_more-10.png]]
+[[file:club_membership-2/figure/time_action_more-11.png]]
+[[file:club_membership-2/figure/time_action_more-13.png]]
+
 **** book_order
-#+begin_src sh
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: book_order
+:END:
+
+#+begin_src sh :async
 out_dir="book_order/"
+cd $out_dir
+cd figure
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
+convert -density 300 time_action_more.pdf time_action_more-%d.png
+convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
+
+#+RESULTS:
+
+[[file:book_order/figure/theta_tau_res.png]]
+[[file:book_order/figure/time_action-3.png]]
+[[file:book_order/figure/time_action_more-2.png]]
+[[file:book_order/figure/time_action_more-5.png]]
+[[file:book_order/figure/time_action_more-7.png]]
+[[file:book_order/figure/time_action_more-8.png]]
+[[file:book_order/figure/time_action_more-9.png]]
+[[file:book_order/figure/time_action_more-10.png]]
+[[file:book_order/figure/time_action_more-11.png]]
+[[file:book_order/figure/time_action_more-13.png]]
+
 **** meeting_room
-#+begin_src sh
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: meeting_room
+:END:
+
+#+begin_src sh :async
 out_dir="meeting_room/"
+cd $out_dir
+cd figure
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
+convert -density 300 time_action_more.pdf time_action_more-%d.png
+convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
-**** reply_all
-#+begin_src sh
+
+#+RESULTS:
+
+[[file:meeting_room/figure/theta_tau_res.png]]
+[[file:meeting_room/figure/time_action-3.png]]
+[[file:meeting_room/figure/time_action_more-2.png]]
+[[file:meeting_room/figure/time_action_more-5.png]]
+[[file:meeting_room/figure/time_action_more-7.png]]
+[[file:meeting_room/figure/time_action_more-8.png]]
+[[file:meeting_room/figure/time_action_more-9.png]]
+[[file:meeting_room/figure/time_action_more-10.png]]
+[[file:meeting_room/figure/time_action_more-11.png]]
+[[file:meeting_room/figure/time_action_more-13.png]]
+
+**** reply_all :noexport:
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: reply_all
+:END:
+
+#+begin_src sh :async
 out_dir="reply_all/"
+cd $out_dir
+cd figure
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
+convert -density 300 time_action_more.pdf time_action_more-%d.png
+convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
+
+[[file:reply_all/figure/theta_tau_res.png]]
+[[file:reply_all/figure/time_action-3.png]]
+[[file:reply_all/figure/time_action_more-2.png]]
+[[file:reply_all/figure/time_action_more-5.png]]
+[[file:reply_all/figure/time_action_more-7.png]]
+[[file:reply_all/figure/time_action_more-8.png]]
+[[file:reply_all/figure/time_action_more-9.png]]
+[[file:reply_all/figure/time_action_more-10.png]]
+[[file:reply_all/figure/time_action_more-11.png]]
+[[file:reply_all/figure/time_action_more-13.png]]
+
 **** locate_email
-#+begin_src sh
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: locate_email
+:END:
+#+begin_src sh :async
 out_dir="locate_email/"
+cd $out_dir
+cd figure
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
+convert -density 300 time_action_more.pdf time_action_more-%d.png
+convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
+
+#+RESULTS:
+
+[[file:locate_email/figure/theta_tau_res.png]]
+[[file:locate_email/figure/time_action-3.png]]
+[[file:locate_email/figure/time_action_more-2.png]]
+[[file:locate_email/figure/time_action_more-5.png]]
+[[file:locate_email/figure/time_action_more-7.png]]
+[[file:locate_email/figure/time_action_more-8.png]]
+[[file:locate_email/figure/time_action_more-9.png]]
+[[file:locate_email/figure/time_action_more-10.png]]
+[[file:locate_email/figure/time_action_more-11.png]]
+[[file:locate_email/figure/time_action_more-13.png]]
+
 **** lamp_return
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: lamp_return
+:END:
+
 #+begin_src sh
 out_dir="lamp_return/"
+cd $out_dir
+cd figure
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
+convert -density 300 time_action_more.pdf time_action_more-%d.png
+convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
+
+[[file:lamp_return/figure/theta_tau_res.png]]
+[[file:lamp_return/figure/time_action-3.png]]
+[[file:lamp_return/figure/time_action_more-2.png]]
+[[file:lamp_return/figure/time_action_more-5.png]]
+[[file:lamp_return/figure/time_action_more-7.png]]
+[[file:lamp_return/figure/time_action_more-8.png]]
+[[file:lamp_return/figure/time_action_more-9.png]]
+[[file:lamp_return/figure/time_action_more-10.png]]
+[[file:lamp_return/figure/time_action_more-11.png]]
+[[file:lamp_return/figure/time_action_more-13.png]]
+
 
 ** Model
 :PROPERTIES:
