@@ -92,3 +92,6 @@ for \\(j = 1,\ldots,J\\). \\(\lambda\_{j}\\) could be a function of the similari
 \end{align\*}
 
 where \\(\boldsymbol{\alpha}\\) is a vector of intercepts, and \\(\boldsymbol{\beta}\\) is coefficients associated with \\(\mathbf{z}(t)\\), \\(\lambda\_{k,m\rightarrow l}(t)\\) is a baseline intensity function. For each state \\(l\\), there are competing transitions \\(m\_1, \ldots, m\_{n\_l}\\). This mean there are \\(n\_{l}\\) corresponding survival models for state \\(l\\), and overall \\(K=\sum\_l n\_l\\) models. Models with no shared parameters can be estimated separately.
+
+
+testing
