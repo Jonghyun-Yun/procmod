@@ -1547,6 +1547,7 @@ source("R/analysis.R")
 
 system(paste0("mkdir -p ", out_dir, "figure/"))
 system(paste0("rsync -rv figure/*.pdf ", out_dir,"figure/"))
+system(paste0("rsync -rv figure/*.png ", out_dir,"figure/"))
 }
 #+end_src
 
