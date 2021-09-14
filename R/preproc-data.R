@@ -12,6 +12,9 @@ setwd('~/workspace/procmod-code/')
 piacc_orig_path = "./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_cleaned_1110.rdata"
 piacc_path = "./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_no_missing.rdata"
 ## piacc_na.omit()
+piacc_background_path = "./data/PIAAC_cleaned_data_1110/Prgusap1_2017.csv"
+piacc_background_spss = "./data/PIAAC_cleaned_data_1110/Prgusap1_2017.sav"
+## xxx = foreign::read.spss("./data/PIAAC_cleaned_data_1110/Prgusap1_2017.sav")
 
 item = read_piacc(piacc_path, item_code, sub_str, ignore_str)
 item2sen(item)
