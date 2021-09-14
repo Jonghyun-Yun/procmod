@@ -24,6 +24,6 @@ gg <- item %>%
 binfo = readr::read_csv("./data/PIAAC_cleaned_data_1110/PUFs_noN.csv")
 
 pdf("figure/tau_action.png")
-pp <- cl_plot(cbind(log(mtau), log(gg$naction), rr, c("log(tau)", "log(#action)"))
+pp <- cl_plot(cbind(log(mtau), log(gg$naction)), rr, c("log(tau)", "log(#action)"))
 print(pp)
 dev.off(which = dev.cur())
