@@ -1689,7 +1689,7 @@ pid = unique(item$SEQID)
 
 #+begin_src R :results silent :tangle R/summary.R
 pdf("figure/tau_action.png")
-pp <- cl_plot(cbind(log(mtau), log(gg$naction), rr, c("log(tau)", "log(#action)"))
+pp <- cl_plot(cbind(log(mtau), log(gg$naction)), rr, c("log(tau)", "log(#action)"))
 print(pp)
 dev.off(which = dev.cur())
 #+end_src
