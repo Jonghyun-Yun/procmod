@@ -1,7 +1,7 @@
 +++
 title = "item results"
 author = ["Jonghyun Yun"]
-lastmod = 2021-09-14T15:50:45-05:00
+lastmod = 2021-09-14T16:59:34-05:00
 draft = false
 +++
 
@@ -23,6 +23,14 @@ draft = false
 
 </div>
 <!--endtoc-->
+
+variables
+
+-   `ftime`: time until the first action taken
+-   `time`: total time of a person's process
+-   `naction` or `#action`: the number of actions of a person's process
+
+summaries
 
 -   Total or first action time has weak association with &theta;.
 -   \# of actions and first action time have weak or no assciation.
