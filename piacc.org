@@ -2947,6 +2947,7 @@ ignore_desc = c(
 - \tau and first action time has negative correaltion.
 - \tau and # of actions have weak or no association
 - # of actions and \theta time have positive correlation.
+
 **** party_invitations-1
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
