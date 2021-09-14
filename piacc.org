@@ -1680,6 +1680,7 @@ gg <- item %>%
 binfo = readr::read_csv("./data/PIAAC_cleaned_data_1110/PUFs_noN.csv")
 #+end_src
 
+WIP: stopped here
 #+begin_src R
 pid = unique(item$SEQID)
 #+end_src
