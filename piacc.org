@@ -271,7 +271,7 @@ q_{ml}\left(t ; \mathcal{F}_{t}\right) = q_{ml}(dt) = \kappa_{m} \tau_{k} e^{\th
     - 적은 액션으로 맞은 사람 vs 많은 액션으로 틀린 사람.
   - 무조건 빨리 푼다고 잘하는게 아니고, 느리거나 혹은 상이한 액션 개수로 정답에 이르는 프로세스 발견에 초점.
 **** party_invitations-1
-#+begin_src sh
+#+begin_src sh :async
 out_dir="party_invitations-1/"
 cd $out_dir
 cd figure
