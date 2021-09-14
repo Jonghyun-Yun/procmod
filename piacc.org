@@ -2940,16 +2940,34 @@ ignore_desc = c(
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_BUNDLE: piacc/item_results
 :END:
+
+- Total or first action time has weak association with \theta.
+- # of actions and first action time have weak or no assciation.
+- # of actions has some association with the response.
+- \tau and first action time has negative correaltion.
+- \tau and # of actions have weak or no association
+- # of actions and \theta time have positive correlation.
 **** party_invitations-1
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: piacc/item_results/party_invitations-1
+:END:
 #+begin_src sh :async
 out_dir="party_invitations-1/"
 cd $out_dir
 cd figure
 # convert -density 300 theta_tau_res.pdf theta_tau_res-%d.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
+convert -density 300 time_action.pdf time_action-%d.png
 #+end_src
 
 #+RESULTS:
+
+[[file:party_invitations-1/figure/theta_tau_res.pdf]]
+[[file:party_invitations-1/figure/time_action-3.png]]
+[[file:party_invitations-1/figure/time_action_more-2.png]]
+[[file:party_invitations-1/figure/time_action_more-5.png]]
+[[file:party_invitations-1/figure/time_action_more-7.png]]
 
 **** party_invitations-2
 #+begin_src sh
