@@ -39,7 +39,7 @@
 #+end_src
 
 #+begin_src emacs-lisp :results silent
-(setq org-image-actual-width nil)
+(setq org-image-actual-width 500)
 #+end_src
 
 #+RESULTS:
