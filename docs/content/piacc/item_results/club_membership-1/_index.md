@@ -1,7 +1,7 @@
 +++
 title = "club_membership-1"
 author = ["Jonghyun Yun"]
-lastmod = 2021-09-14T15:18:23-05:00
+lastmod = 2021-09-14T15:41:11-05:00
 draft = false
 +++
 
