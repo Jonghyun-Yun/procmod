@@ -1694,7 +1694,6 @@ print(pp)
 dev.off(which = dev.cur())
 #+end_src
 
-
 #+begin_src R :results silent :tangle R/summary.R
 pdf("figure/theta_res.pdf")
 dd <- data.frame(theta = mtheta, res = rr)
