@@ -8,7 +8,7 @@
 #+options: H:10 num:nil toc:t \n:nil @:t ::t |:t ^:nil ^:{} -:t f:t *:t <:t ':nil -:nil pri:t
 #+options: TeX:t LaTeX:t skip:nil d:nil todo:nil pri:nil tags:nil
 
-#+startup: overview inlineimages logdone indent
+#+startup: overview noinlineimages logdone indent
 
 #+latex_class: article
 #+latex_class_options: [letterpaper,11pt]
@@ -19,7 +19,6 @@
 # #+setupfile: ~/setup/my-theme-readtheorg.setup
 #+setupfile: ~/org/latex_header.setup
 #+setupfile: ~/org/orgmode_header.setup
-# https://orgmode.org/manual/Export-Settings.html#Export-Settings
 
 #+property: header-args :eval never-export
 #+property: header-args:ein :session localhost
@@ -36,10 +35,6 @@
   (setq jyun/org-latex-preview-scale 2.5)
   ;; set default org-latex-preview size
   (jyun/org-latex-set-options)
-#+end_src
-
-#+begin_src emacs-lisp :results silent
-(setq org-image-actual-width 500)
 #+end_src
 
 #+RESULTS:
