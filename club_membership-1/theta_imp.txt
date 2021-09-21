@@ -1,0 +1,29 @@
+|Name             |Label                                                                                                  |        imp|      pval|
+|:----------------|:------------------------------------------------------------------------------------------------------|----------:|---------:|
+|G_Q07            |Skill use work - ICT - Computer - Got the skills needed                                                |  0.0086191| 0.0396040|
+|EARNFLAG         |Earnings including bonuses reporting method (derived)                                                  |  0.0075101| 0.0396040|
+|ICTWORK_WLE_CA   |Index of use of ICT skills at work, categorised WLE (derived)                                          |  0.0123213| 0.0495050|
+|ISCO2C           |Occupational classification of respondent's job at 2-digit level (ISCO 2008), current job (derived)    |  0.0198953| 0.0594059|
+|G_Q08            |Skill use work - ICT - Computer - Lack of skills affect career                                         |  0.0042630| 0.0693069|
+|AGEG5LFS         |Age groups in 5-year intervals based on LFS groupings (derived)                                        |  0.0099424| 0.1089109|
+|ISCO1C           |Occupational classification of respondent's job at 1-digit level (ISCO 2008), current job (derived)    |  0.0091321| 0.1881188|
+|WRITHOME         |Index of use of writing skills at home (derived)                                                       |  0.0090213| 0.2178218|
+|EDCAT6           |Highest level of formal education obtained (6 categories - derived)                                    |  0.0040663| 0.3069307|
+|E_Q09            |Last job - Hours/week                                                                                  |  0.0025210| 0.3267327|
+|READWORK_WLE_CA  |Index of use of reading skills at work (prose and document texts), categorised WLE (derived)           |  0.0058231| 0.4257426|
+|D_Q04_T1         |Status at this job or business - four levels (Trend-IALS/ALL)                                          |  0.0038598| 0.4554455|
+|READHOME         |Index of use of reading skills at home (prose and document texts - derived)                            |  0.0030265| 0.5544554|
+|YRSQUAL_T        |Derived variable on total years of schooling during lifetime - top coded at 24 (Trend-IALS/ALL)        |  0.0016241| 0.5841584|
+|PLANNING         |Index of use of planning skills at work (derived)                                                      |  0.0052826| 0.6237624|
+|NUMWORK          |Index of use of numeracy skills at work (basic and advanced - derived)                                 |  0.0066305| 0.6534653|
+|NUMWORK_WLE_CA   |Index of use of numeracy skills at work (basic and advanced), categorised WLE (derived)                |  0.0041318| 0.6633663|
+|D_Q04_T          |Status at this job or business - six levels (Trend-IALS/ALL)                                           |  0.0037368| 0.6831683|
+|ISIC2C           |Industry classification of respondent's job at 2-digit level (ISIC rev 4), current job (derived)       |  0.0049443| 0.7425743|
+|D_Q10_C          |Current work - Hours/week (top-coded at 60)                                                            |  0.0054921| 0.7623762|
+|EDCAT7           |Highest level of formal education obtained (7 categories - derived)                                    |  0.0016754| 0.7722772|
+|INFLUENCE_WLE_CA |Index of use of influencing skills at work, categorised WLE (derived)                                  |  0.0021573| 0.8316832|
+|WRITWORK         |Index of use of writing skills at work (derived)                                                       |  0.0054889| 0.8415842|
+|ICTWORK          |Index of use of ICT skills at work (derived)                                                           |  0.0055861| 0.8613861|
+|TASKDISC_WLE_CA  |Index of use of task discretion at work, categorised WLE (derived)                                     |  0.0017446| 0.8613861|
+|EARNMTHALLDCL    |Monthly earnings including bonuses for wage and salary earners and self-employed, in deciles (derived) |  0.0023484| 0.9405941|
+|NFEHRSJR         |Number of hours of participation in non-formal education for job-related reasons (derived)             | -0.0044239| 0.9900990|

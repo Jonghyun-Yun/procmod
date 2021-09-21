@@ -1,0 +1,8 @@
+|Name       |Label                                                                                      |       imp|      pval|
+|:----------|:------------------------------------------------------------------------------------------|---------:|---------:|
+|AGEG5LFS   |Age groups in 5-year intervals based on LFS groupings (derived)                            | 13.225172| 0.0198020|
+|LEAVER1624 |Youth aged 16 to 24 who have left education without completing ISCED 3 or higher (derived) |  3.181545| 0.0198020|
+|INFLUENCE  |Index of use of influencing skills at work (derived)                                       |  6.290272| 0.0198020|
+|ICTWORK    |Index of use of ICT skills at work (derived)                                               |  4.230648| 0.0891089|
+|WRITWORK   |Index of use of writing skills at work (derived)                                           |  4.635795| 0.2079208|
+|C_Q09_C    |Current status/work history - Years of paid work during lifetime (top-coded at 47)         |  4.174670| 0.5445545|

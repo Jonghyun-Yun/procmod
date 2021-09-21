@@ -1,0 +1,11 @@
+|Name            |Label                                                                                               |       imp|      pval|
+|:---------------|:---------------------------------------------------------------------------------------------------|---------:|---------:|
+|J_Q08           |Background - Number of books at home                                                                | 0.0438188| 0.0099010|
+|AGEG5LFS        |Age groups in 5-year intervals based on LFS groupings (derived)                                     | 0.1470972| 0.0099010|
+|ICTHOME         |Index of use of ICT skills at home (derived)                                                        | 0.1615933| 0.0099010|
+|ISCO2C          |Occupational classification of respondent's job at 2-digit level (ISCO 2008), current job (derived) | 0.0602383| 0.0693069|
+|WRITHOME        |Index of use of writing skills at home (derived)                                                    | 0.0473309| 0.0792079|
+|ICTHOME_WLE_CA  |Index of use of ICT skills at home, categorised WLE (derived)                                       | 0.0193539| 0.2574257|
+|WRITHOME_WLE_CA |Index of use of writing skills at home, categorised WLE (derived)                                   | 0.0193950| 0.2871287|
+|INFLUENCE       |Index of use of influencing skills at work (derived)                                                | 0.0231479| 0.4554455|
+|C_Q09_C         |Current status/work history - Years of paid work during lifetime (top-coded at 47)                  | 0.0511671| 0.5346535|

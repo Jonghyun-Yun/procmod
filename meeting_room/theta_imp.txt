@@ -1,0 +1,9 @@
+|Name           |Label                                                                              |       imp|      pval|
+|:--------------|:----------------------------------------------------------------------------------|---------:|---------:|
+|ICTHOME        |Index of use of ICT skills at home (derived)                                       | 0.2770673| 0.0099010|
+|G_Q07          |Skill use work - ICT - Computer - Got the skills needed                            | 0.1497847| 0.0198020|
+|ICTHOME_WLE_CA |Index of use of ICT skills at home, categorised WLE (derived)                      | 0.0935616| 0.0198020|
+|ICTWORK        |Index of use of ICT skills at work (derived)                                       | 0.1938268| 0.0198020|
+|AGEG5LFS       |Age groups in 5-year intervals based on LFS groupings (derived)                    | 0.2759343| 0.0297030|
+|C_Q09_C        |Current status/work history - Years of paid work during lifetime (top-coded at 47) | 0.2060004| 0.1188119|
+|READYTOLEARN   |Index of readiness to learn (derived)                                              | 0.0308734| 0.3861386|

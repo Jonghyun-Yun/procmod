@@ -1,0 +1,14 @@
+|Name           |Label                                                                                               |       imp|      pval|
+|:--------------|:---------------------------------------------------------------------------------------------------|---------:|---------:|
+|J_Q08          |Background - Number of books at home                                                                | 0.0271501| 0.0099010|
+|ICTHOME        |Index of use of ICT skills at home (derived)                                                        | 0.0709937| 0.0099010|
+|C_Q09_C        |Current status/work history - Years of paid work during lifetime (top-coded at 47)                  | 0.0289934| 0.0891089|
+|READHOME       |Index of use of reading skills at home (prose and document texts - derived)                         | 0.0475137| 0.1386139|
+|ISCO2C         |Occupational classification of respondent's job at 2-digit level (ISCO 2008), current job (derived) | 0.0389882| 0.2376238|
+|NUMHOME        |Index of use of numeracy skills at home (basic and advanced - derived)                              | 0.0327606| 0.2475248|
+|ICTHOME_WLE_CA |Index of use of ICT skills at home, categorised WLE (derived)                                       | 0.0096426| 0.3663366|
+|NFEHRS         |Number of hours of participation in non-formal education (derived)                                  | 0.0207122| 0.4653465|
+|TASKDISC       |Index of use of task discretion at work (derived)                                                   | 0.0150106| 0.5742574|
+|READWORK       |Index of use of reading skills at work (prose and document texts - derived)                         | 0.0304869| 0.5841584|
+|INFLUENCE      |Index of use of influencing skills at work (derived)                                                | 0.0229463| 0.5940594|
+|NFEHRSJR       |Number of hours of participation in non-formal education for job-related reasons (derived)          | 0.0019651| 0.9207921|

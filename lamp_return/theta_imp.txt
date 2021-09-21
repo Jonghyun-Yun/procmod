@@ -1,0 +1,23 @@
+|Name            |Label                                                                                                  |       imp|      pval|
+|:---------------|:------------------------------------------------------------------------------------------------------|---------:|---------:|
+|J_Q08           |Background - Number of books at home                                                                   | 0.0135860| 0.0198020|
+|C_Q09_C         |Current status/work history - Years of paid work during lifetime (top-coded at 47)                     | 0.0309081| 0.0495050|
+|B_Q11           |Education - Formal qualification - Grant from employer                                                 | 0.0081927| 0.0891089|
+|EARNMTHALLDCL   |Monthly earnings including bonuses for wage and salary earners and self-employed, in deciles (derived) | 0.0272210| 0.0990099|
+|ISCOSKIL4       |Occupational classification of respondent's job (4 skill based categories), last or current (derived)  | 0.0092023| 0.1287129|
+|INFLUENCE       |Index of use of influencing skills at work (derived)                                                   | 0.0316348| 0.1386139|
+|NFEHRS          |Number of hours of participation in non-formal education (derived)                                     | 0.0180541| 0.1485149|
+|PLANNING        |Index of use of planning skills at work (derived)                                                      | 0.0172973| 0.1683168|
+|G_Q07           |Skill use work - ICT - Computer - Got the skills needed                                                | 0.0063477| 0.2475248|
+|PLANNING_WLE_CA |Index of use of planning skills at work, categorised WLE (derived)                                     | 0.0135498| 0.2475248|
+|D_Q04_T1        |Status at this job or business - four levels (Trend-IALS/ALL)                                          | 0.0102142| 0.2871287|
+|B_Q16           |Activities - Last year - Grant from employer                                                           | 0.0101070| 0.2970297|
+|WRITWORK        |Index of use of writing skills at work (derived)                                                       | 0.0168268| 0.3267327|
+|ISCO1C          |Occupational classification of respondent's job at 1-digit level (ISCO 2008), current job (derived)    | 0.0116369| 0.3564356|
+|EARNHRDCL       |Hourly earnings excluding bonuses for wage and salary earners, in deciles (derived)                    | 0.0133331| 0.3564356|
+|NFEHRSNJR       |Number of hours of participation in non-formal education for non-job-related reasons (derived)         | 0.0106176| 0.3762376|
+|TASKDISC        |Index of use of task discretion at work (derived)                                                      | 0.0165097| 0.3861386|
+|READYTOLEARN    |Index of readiness to learn (derived)                                                                  | 0.0042571| 0.4950495|
+|ICTHOME         |Index of use of ICT skills at home (derived)                                                           | 0.0033957| 0.4950495|
+|D_Q10           |Current work - Hours/week                                                                              | 0.0133820| 0.6039604|
+|D_Q10_T         |Hours per week at this job or business - number of hours (top coded at 97, Trend-IALS/ALL)             | 0.0105554| 0.8019802|

@@ -1,0 +1,12 @@
+|Name           |Label                                                                                                                   |       imp|      pval|
+|:--------------|:-----------------------------------------------------------------------------------------------------------------------|---------:|---------:|
+|AGEG5LFS       |Age groups in 5-year intervals based on LFS groupings (derived)                                                         | 14.373833| 0.0099010|
+|AETPOP         |Adult education/training population (AET) - excludes youths 16-24 in initial cycle of studies (derived)                 |  4.640859| 0.0099010|
+|ICTHOME        |Index of use of ICT skills at home (derived)                                                                            | 13.353906| 0.0099010|
+|ICTHOME_WLE_CA |Index of use of ICT skills at home, categorised WLE (derived)                                                           |  5.592832| 0.0198020|
+|FAET12NJR      |Participated in formal AET for non job-related reasons in 12 months preceding survey (see AETPOP - derived)             |  3.717283| 0.0297030|
+|FNFAET12NJR    |Participated in formal or non-formal AET for non job-related reasons in 12 mon. preceding survey (see AETPOP - derived) |  2.997349| 0.0297030|
+|INFLUENCE      |Index of use of influencing skills at work (derived)                                                                    |  6.754744| 0.0495050|
+|ICTWORK        |Index of use of ICT skills at work (derived)                                                                            |  6.200792| 0.1089109|
+|NFEHRS         |Number of hours of participation in non-formal education (derived)                                                      |  4.888798| 0.3168317|
+|NFEHRSJR       |Number of hours of participation in non-formal education for job-related reasons (derived)                              |  4.400971| 0.3663366|
