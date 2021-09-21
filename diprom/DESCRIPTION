@@ -8,7 +8,7 @@ Maintainer: Maintainer: Jonghyun Yun <jonghyun.yun@gmail.com>
 Description: More about what it does
     (maybe more than one line)
 License: GPL (>= 2)
-Depends: dplyr, stringr, ggplot2, magrittr, coda, foreach, doParallel
-Imports: Rcpp (>= 1.0.6), RcppEigen (>= 0.3.3.5.0), RcppNumerical, RcppParallel (>= 5.0.2), StanHeaders (>= 2.21.0), msm, bayesplot, plyr
+Depends: dplyr, stringr, ggplot2, magrittr, coda, foreach, doParallel, caret, ranger
+Imports: Rcpp (>= 1.0.6), RcppEigen (>= 0.3.3.5.0), RcppNumerical, RcppParallel (>= 5.0.2), StanHeaders (>= 2.21.0), msm, bayesplot, plyr, knitr
 LinkingTo: Rcpp, RcppArmadillo, RcppEigen, RcppNumerical, RcppParallel, StanHeaders
 SystemRequirements: GNU make
