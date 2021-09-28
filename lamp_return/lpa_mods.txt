@@ -1,0 +1,57 @@
+
+--------------------------------------------------------------
+tau and theta
+--------------------------------------------------------------
+Compare tidyLPA solutions:
+
+ Model Classes AIC      AWE      BIC      CLC      KIC     
+ 6     1       2984.923 3051.238 3006.580 2976.923 2992.923
+ 6     2       2843.422 2992.713 2891.068 2822.424 2857.422
+ 6     3       2834.686 3066.037 2908.321 2801.606 2854.686
+ 6     4       2837.236 3150.652 2936.861 2792.070 2863.236
+
+Best model according to AIC is Model 6 with 3 classes.
+Best model according to AWE is Model 6 with 2 classes.
+Best model according to BIC is Model 6 with 2 classes.
+Best model according to CLC is Model 6 with 4 classes.
+Best model according to KIC is Model 6 with 3 classes.
+
+An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and KIC (Akogul & Erisoglu, 2017), suggests the best solution is Model 6 with 2 classes.
+
+--------------------------------------------------------------
+tau and theta + naction, spd
+--------------------------------------------------------------
+Compare tidyLPA solutions:
+
+ Model Classes AIC      AWE      BIC      CLC      KIC     
+ 6     1       5305.384 5494.666 5366.025 5279.384 5322.384
+ 6     2       4687.024 5081.824 4812.637 4630.451 4719.024
+ 6     3       4486.831 5086.505 4677.417 4400.329 4533.831
+ 6     4       4382.983 5187.603 4638.541 4266.480 4444.983
+
+Best model according to AIC is Model 6 with 4 classes.
+Best model according to AWE is Model 6 with 2 classes.
+Best model according to BIC is Model 6 with 4 classes.
+Best model according to CLC is Model 6 with 4 classes.
+Best model according to KIC is Model 6 with 4 classes.
+
+An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and KIC (Akogul & Erisoglu, 2017), suggests the best solution is Model 6 with 4 classes.
+
+--------------------------------------------------------------
+naction, spd
+--------------------------------------------------------------
+Compare tidyLPA solutions:
+
+ Model Classes AIC      AWE      BIC      CLC      KIC     
+ 6     1       3081.781 3148.096 3103.438 3073.781 3089.781
+ 6     2       2727.342 2876.222 2774.988 2706.754 2741.342
+ 6     3       2656.305 2887.444 2729.940 2623.437 2676.305
+ 6     4       2632.494 2945.687 2732.119 2587.550 2658.494
+
+Best model according to AIC is Model 6 with 4 classes.
+Best model according to AWE is Model 6 with 2 classes.
+Best model according to BIC is Model 6 with 3 classes.
+Best model according to CLC is Model 6 with 4 classes.
+Best model according to KIC is Model 6 with 4 classes.
+
+An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and KIC (Akogul & Erisoglu, 2017), suggests the best solution is Model 6 with 4 classes.
