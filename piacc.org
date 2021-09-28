@@ -2790,15 +2790,14 @@ pre = "<b>1. </b>"
 
 Programme for the International Assessment of Adult Competencies (PIAAC)
 
-** item home
+*** item home
 :PROPERTIES:
 :header-args:R: :tangle R/itemcode.R :exports none
 :EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: piacc/item_home
+:EXPORT_HUGO_BUNDLE: item_home
 :END:
 
 See the codebook for details....... [[file:data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv][PS_BOOKLET_ITEM.csv]]
-
 
 #+begin_src R
 booklet = readr::read_csv("~/Dropbox/research/procmod/procmod-code/data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv")
@@ -3144,10 +3143,10 @@ ignore_desc = c(
 #+attr_org: :width 700
 [[attachment:_20210904_172248lr-home.png]]
 
-** item codebook
+*** item codebook
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: piacc/item_codebook
+:EXPORT_HUGO_BUNDLE: item_codebook
 :END:
 
 | ITEM  | NAME                  | CODEBOOK | RESPONSE                                                                 |
@@ -3166,11 +3165,11 @@ ignore_desc = c(
 | PS2_5 | Reply All             | U16x000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
 | PS2_6 | Locate Email          | U11b000S | POLYTOMOUS (0 to 3), No response (R ), Not reached / not attempted (N)   |
 | PS2_7 | Lamp Return           | U23x000S | POLYTOMOUS (0 to 3), No response (R ), Not reached / not attempted (N)   |
-** item results
+*** item results
 :PROPERTIES:
 :header-args: :exports none
 :EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: piacc/item_results
+:EXPORT_HUGO_BUNDLE: item_results
 :END:
 
 variables
