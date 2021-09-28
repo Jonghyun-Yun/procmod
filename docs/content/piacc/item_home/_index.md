@@ -1,8 +1,10 @@
 +++
 title = "item home"
 author = ["Jonghyun Yun"]
-lastmod = 2021-09-07T15:34:08-05:00
+lastmod = 2021-09-28T16:34:12-05:00
 draft = false
+weight = 1
+chapter = true
 +++
 
 <div class="ox-hugo-toc toc">
@@ -10,8 +12,8 @@ draft = false
 
 <div class="heading">Table of Contents</div>
 
-- [party\_invitation-1](#party-invitation-1)
-- [party\_invitation-2](#party-invitation-2)
+- [party\_invitations-1](#party-invitations-1)
+- [party\_invitations-2](#party-invitations-2)
 - [cd\_tally](#cd-tally)
 - [sprained\_ankle-1](#sprained-ankle-1)
 - [sprained\_ankle-2](#sprained-ankle-2)
@@ -31,12 +33,12 @@ draft = false
 See the codebook for details....... [PS\_BOOKLET\_ITEM.csv](data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv)
 
 
-# party\_invitation-1 {#party-invitation-1}
+# party\_invitations-1 {#party-invitations-1}
 
 {{< figure src="_20210904_171956pi-start.png" >}}
 
 
-# party\_invitation-2 {#party-invitation-2}
+# party\_invitations-2 {#party-invitations-2}
 
 {{< figure src="_20210904_172034pi-home.png" >}}
 
