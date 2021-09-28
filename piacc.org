@@ -158,314 +158,37 @@ where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ 
 - https://www.mrc-bsu.cam.ac.uk/wp-content/uploads/2017/10/multistate_enar_webinar.pdf
 - https://cran.r-project.org/web/packages/msm/msm.pdf
 - [[id:57b08111-9c48-4fa9-b289-10f01fc7a0d6][cite:hill_relaxing_2021]]
-* Model V1
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: model/V1
-:END:
-
-See cite:jackson_flexsurv_2016 for available baseline functions.
-Proportional baseline:
-\[
-  \lambda_{ml}(dt_{k,n}) = \lambda_{m0}(t) \lambda_{l} \tau_{k} \text{ for } l \in S_{m} \text{and} \lambda_{s_{m,1}}=1.
-\]
-\(dt_{k,n}\) denotes t_{k,n}^{stop} - t_{k,n}^{start}
-
-Proportional hazard term:
-\[
-  e^{(\theta_{k} + \beta) D_{ml} }
-\]
-- add covariate later.
-out-of-state, item, person parameters.
-- no incercept term in prop. hazard if baseline contains constant in the same level.
-- action m leads to more/less coherent action
-- \(D_{ml}\) is bi-directional similarity mapping.
-- including \(\beta_m\) doesn't make it directional.
-- is \(\beta_k\) meaningful for item-specific action space? certainly not! this opens up the question about how actions should be defined. loosely defined without event_desciption or not.
-** option1: similar items share the same action space
-no event description should be used.
-** option2: each item has its own action space (item-specific action space)
-
-- use multi-state modeling framework to explain?
-- target journal:
-- grant application (check deadline)
-- meeting at 4pm (CST)
-- online learning platform: interaction with online resources, with instructors, with other people (communication length, contents) - team collaboration.
-  - data will be available on Aug.
-  + team science program (NIH)
-
-
-The intensity function $q_{ml}(\cdot)$ represents the instantaneous risk of moving from action $m$ to $l$.
-
-\begin{align*}
-  q_{ml} (t ; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{ml}(t)  e^{\beta_j + (\beta_m +  \theta_{\beta}) D_{ml}},
-\end{align*}
-where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ is coefficients associated with $\mathbf{z}(t)$, $\lambda_{k,m\rightarrow l}(t)$ is a baseline intensity function. For each state $l$, there are competing transitions $m_1, \ldots, m_{n_l}$. This mean there are $n_{l}$ corresponding survival models for state $l$, and overall $K=\sum_l n_l$ models. Models with no shared parameters can be estimated
-Common out of state transition: \(\beta_{ml}=\beta_{m}\).
-
-Baseline hazard:
-\[
-  \lambda_{ml}(t) = \alpha_{m1}(t) \alpha_{l} + \theta_{\lambda} \text{ for } l \neq 1.
-\]
-Proportional hazard term:
-\[
-  e^{\beta_j + (\beta_m +  \theta_{\beta}) D_{ml}}
-\]
-- \(D_{ml}\) is bi-directional similarity embedding between actions $m$ and $l$.
-
-The piecewise-constant baseline hazard is used:
-\begin{equation}
-\label{eq:1}
-\lambda(t) = \lambda_j \text{ if } s_{j-1} \le t < s_{j},
-\end{equation}
-for $j = 1,\ldots,J$. $\lambda_{j}$ could be a function of the similarity. This would be similar to have a piecewise constant transition matrix (time-inhomogeneous Markov chain), but much simpler as you have a parametric model for constants. The cosine similiarity should be normalized before used.
-\begin{align*}
-  q_{ml} (t ; \boldsymbol{\alpha}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{ml}(t) \exp( \boldsymbol{\beta}_{m,l}' \mathbf{z}_{i,m,l}(t) ),
-\end{align*}
-\begin{align*}
-  q_{ml} (t ; \boldsymbol{\alpha}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{k,m \rightarrow l}(t) \exp( \alpha_m + \alpha_l + \boldsymbol{\beta} d_{i,m,l} ),
-\end{align*}
-where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ is coefficients associated with $\mathbf{z}(t)$, $\lambda_{k,m\rightarrow l}(t)$ is a baseline intensity function. For each state $l$, there are competing transitions $m_1, \ldots, m_{n_l}$. This mean there are $n_{l}$ corresponding survival models for state $l$, and overall $K=\sum_l n_l$ models. Models with no shared parameters can be estimated separately.
-* Model V2
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: model/V2
-:END:
-Let $S$ denotes a set of all possible action. For each state $m \in S$, $A_{m}$ denotes a set of competing transitions $\{l_1, \ldots, l_{n_m}\}$ that can be taken directly after $m$.
-Let \(Y_k(t)\) denote an action of k-th respondent at time $t$. All respondents assmed to begin problem solving processes at time $t=0$.
-
-The intensity function $q_{ml}(\cdot)$ represents the instantaneous risk of moving from action $m$ to $l$:
-\begin{align*}
-q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}_{t}\right)}{\delta t}, m \neq l, m, l \in S,
-\end{align*}
-where $\mathcal{F}_t$ denotes the process up to time $t$.
-
-Action transition is assumed to follow Semi-Markovian, which means the intensity depends on the sojourn time (\(t - t_{m}\) ; time spent on the current action). This is often called "clock reset" approach as opposed to "clock forward" approach. Let $dt_{m}$ denote the sojourn time.
-
-Cox model
-\begin{align}
-q_{ml}\left(t ; \mathcal{F}_{t}\right) = & q_{ml} (t - t_{m}; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t))\\
-= & \lambda_{ml}(dt_{m})  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}},
-\end{align}
-
-for person $k = 1,\ldots,N$, where $\mathbf{z}(t)$ is time-varying covariates, $\lambda_{kml}(t)$ is a baseline intensity function, \(D_{ml} \in [-1,1]\) denotes the cosine similarity between actions $m$ and $l$. The cosine similarity is obtained using ~word2vec~ on action sequences of an item. The closer the cosine value to 1, the greater the similarity between actions. The closer the cosine value to -1, the greater the dis-similarity between actions. This mean there are $n_{m}$ corresponding intensity functions for state $m$, and overall $\sum_{m in S} n_m$ intensity functions.
-
-We use the constant baseline hazard based on out-of-state transition speed and person's transition speed:
-\[
-  \lambda_{ml}(dt) = \kappa_{m} \tau_{k} \text{ for } l \in A_{m}.
-\]
-
-A running model has no coviarate terms:
-\[
-q_{ml}\left(t ; \mathcal{F}_{t}\right) = q_{ml}(dt) = \kappa_{m} \tau_{k} e^{\theta_{k} D_{ml} }.
-\]
-
-- larger $\kappa_{m}$ shorter time staying on action $m$ (faster out-of-state transition)
-- larger $\tau_{k}$, faster transition speed
-- larger $\theta_{k}$, larger trasition rate towards a similar action. A person with large $\theta_{k}$ tends to choose more coherent actions
-
-*** TODO pattern discovery
-  - divide tau by 1) number of actions
-  - use 2) total time for visualization
-  - 1) divided by 2)
-  - find persons (small # of actions, large # of actions: right vs wrong)
-    - 시간이 많이 걸리고 맞은사람 vs 적게 걸리고 맞은 사람. 
-    - 적은 액션으로 맞은 사람 vs 많은 액션으로 틀린 사람.
-  - 무조건 빨리 푼다고 잘하는게 아니고, 느리거나 혹은 상이한 액션 개수로 정답에 이르는 프로세스 발견에 초점.
-
-** likelihood
-
-\begin{align*}
-    q_{ml} (t ; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{ml}(t)  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}}\\
-q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}_{t}\right)}{\delta t}, m \neq l, m, l \in S
-\end{align*}
-
-
-The survival function is 
-\[
-  S_{ml}(dt) = e^{-\int_{0}^{dt_{m}} q_{ml}(x) \dd x}. 
-\]
-Let $\nu_{mlk}(t) = 1$ if person $k$ jump from actions $m$ to $l$ at time $t$; 0 otherwise.
-\[
-  f_{ml}(t) = q_{ml}(t) S_{ml}(t)
-\]
-\[
-  likelihood =\prod_{k} f_{ml}(dt) \prod_{g \in A_{m}} S_{mg}(t),
-\]
-\[
-  f_{ml} = q_{ml}(t) S_{ml}(t),
-  S_{ml}(t) = e^{-\int_{0}^{t^{stop} - t^{start}} q_{ml}(t)\dd t}
-\]
-
-\[
-  S_{ml}(dt) =  e^{-dt \kappa_{m} \omega_{l} \tau_{k} e^{(\theta_{k} + \beta) D_{ml} }}
-\]
-
-\(n = 1,\ldots,M_{k}\): n-th action of k-th person, $M_k$: sequence length
-
-\(  \delta_{k,n,m} = 1 \) if person k's n-th action is m.
-
-\( \delta_{k,n,m}  \delta_{k,n+1,l} = 1 \) for $n < M_{k}$ if person k's n-th transition is m to l.
-
-time at starting state (one after START) is set to the first action (n=1), and the corresponding time is set to 0.
-** prior
-The proposed method use a fully Bayesian approach for estimating the proposed latent space model, using MCMC methods. Our prior specification is as follows:
-
-\begin{align*}
-\pi\left(\kappa_{m}\right) & \sim \operatorname{Gamma}\left(a_{\kappa}, b_{\kappa})\right); \\
-\pi\left(\tau_{k}\right) & \sim \operatorname{Gamma}\left(a_{\kappa}, b_{\kappa})\right); \\
-\pi\left(\theta_{k} | \sigma^{2}\right) & \sim \mathrm{N}\left(0, \sigma^{2}\right); \\
-\pi\left(\sigma^{2}\right) & \sim \operatorname{lnv}-\operatorname{Gamma}\left(a_{\sigma}, b_{\sigma}\right); \\
-\end{align*}
-
-# \pi\left(\beta_{k} |\mu_{\beta}, \sigma_{\beta}^{2}\right) & \sim \mathrm{N}\left(\mu_{\beta}, \sigma_{\beta}^{2}\right); \\
-# \pi\left(\mu_{\beta}|\sigma_{\beta}) & \sim \mathrm{N}\left(0, \sigma^{2}_{\mu_{\beta}}\right);\\
-# \pi\left(\sigma_{\beta}^{2}\right) & \sim \operatorname{lnv}-\operatorname{Gamma}\left(a_{\sigma_{\beta}}, b_{\sigma_{\beta}}\right),\\
-
-# \begin{align*}
-# \pi\left(\sigma^{2}\right) & \propto \sigma^{-2}\\
-# \pi\left(\mu_{\beta}, \sigma_{\beta}^{2}\right) & \propto \sigma_{\beta}^{-2},
-# \end{align*}
-
-inv-Gamma(\theta|\alpha,\beta)
-\[
-p(\theta)=\frac{\beta^{\alpha}}{\Gamma(\alpha)} \theta^{-(\alpha+1)} e^{-\beta / \theta}, \quad \theta>0
-\]
-
-where hyperparameters are chosen as
-\[a_{\sigma}=0.0001, b_{\sigma}=0.0001, \mu_{\theta}=0, \text { and } ....\]
-
-Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive to its variance $\sigma^2$. Also, the configuration of latent embeddings highly depends on the scale parameter $\gamma$ of the latent space. Rather than choosing sub-optimal tuning parameters, we use a layer of hyper-priors to learn optimal values of these parameters from data. We choose hyperparameters such that priors are minimally informative to facilitate the flexible Bayesian learning.
-** pseudo code
-:PROPERTIES:
-:ID:       5c29e214-f86d-41d5-89a0-e164602bf6b8
-:END:
-- [[skim:///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::79;;1][3.2 Normal data with a noninformative prior distribution org-id:{ce3939d9-fb55-4b01-8747-0f486c98c9e7}:org-id]]
-- [[skim:///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::591;;1][Continuous distributions org-id:{5c29e214-f86d-41d5-89a0-e164602bf6b8}:org-id]]
-*** update \(\kappa_{m}\)
-- all $k$ person's having action m, all l \in A_m (all possible actions that can jump from m)
-- transition start and stop time $dt_{k,n}$ for all $\delta_{k,n,m} = 1$
-- For each $k,c$, a symmetric MH jumping $J(\kappa_{m}^{(l-1)} \rightarrow \kappa_{m}^{* })$ is used to propose a new sample.
-- We accept $\kappa_{m}^{(l)} = \kappa_{m}^{* }$ with probability $\min(1, r_{{\kappa_{m}}^{* }})$ where
-\begin{align*}
-\log r_{{\kappa_{m}}^{* }} =&
-\sum \delta_{k,n,m} (\log \kappa_{m}^{* } - \log \kappa_{m}^{(l-1)})\\
-&-\sum dt (\kappa_{m}^{* } - \kappa_{m}^{(l-1)}) \tau_{k} e^{(\theta_{k} + \beta) D_{ml} }
-+ \log \frac{\pi(\kappa_{m}^{* })}{\pi(\kappa_{m}^{t})}.
-\end{align*}
-
-*** update \(\tau_{k}\)
-- all $k$ person's m and l \in A_m
-- all kth person's transition start and stop time
-\begin{align*}
-\log r_{{\tau_{k}}^*} =&
-\sum \delta_{k,n,m} (\log \tau_{k}^* - \log \tau_{k}^{(l-1)})\\
-&-\sum dt \kappa_{m}e^{(\theta_{k} + \beta) D_{ml}} ( \tau_{k}^* -  \tau_{k}^{(l-1)} )
-+ \log \frac{\pi(\tau_{k}^*)}{\pi(\theta_{k}^{t})}.
-\end{align*}
-*** update \(\theta_{k}\)
-- all $k$ person's m and l \in A_m
-- all kth person's transition start and stop time
-- For each $k$, a symmetric MH jumping $J(\theta_{k}^{(l-1)} \rightarrow \theta_{k}^{* }$ is used to propose a new sample.
-- We accept $\theta_{k}^{(l)} = \theta_{k}^{* }$ with probability $\min(1, r_{{\theta_{k}}^{* )}})$ where
-
-\begin{align*}
-\log r_{{\theta_{k}}^{* }} =& \sum \delta_{k,n,m} (\theta_{k}^{* } - \theta_{k}^{(l-1)})D_{ml}\\
-&-\sum dt \kappa_{m} \tau_{k} e^{ \beta D_{ml} }(e^{\theta_{k}^{* }D_{ml}} -  e^{\theta_{k}^{(l-1)} D_{ml} })
-+ \log \frac{\pi(\theta_{k}^{* })}{\pi(\theta_{k}^{(l-1)})}.\\
-\end{align*}
-
-*** update \(\sigma\)
-\[
- p( \sigma^2|e.e.) \propto invGamma(\sigma^{2}|a,b) \prod N(\theta_{k} | \mu, \sigma^2)
-\]
-\(\sigma^{2} \sim inv-gamma(a + 0.5 * N, b + 0.5 + \sum \theta_{k}^2)\)
-with flat prior:
-\(\sigma^{2} \sim inv-gamma(0.5 * N, 0.5 + \sum \theta_{k}^2)\)
-*** update \(\omega_{l}\) :noexport:ARCHIVE:
-- all $k$ person's having action l, all m \in B_l (all possible actions that can jump to l)
-- transition start and stop time $dt_{k,n-1}$ for all $\delta_{k,n,l} = 1$
-*** update \(\beta\) :noexport:ARCHIVE:
-- a symmetric MH jumping $J(\beta_{k}^{(l-1)} \rightarrow \beta_{k}^{* })$ is used to propose a new sample.
-- We accept $\beta_{k}^{(l)} = \beta_{k}^{* }$ with probability $\min(1, r_{{\beta_{k}}^{* )}})$ where
-\begin{align*}
-\log r_{{\beta_{k}}^{* }} =&
-\sum \delta_{k,n,m} (\beta_{k}^{* } - \beta_{k}^{(l-1)})D_{ml}\\
-&-\sum dt \kappa_{m} \tau_{k} e^{ \theta_k D_{ml} }(e^{\beta^{* }D_{ml}} -  e^{\beta^{(l-1)} D_{ml} })
-+ \log \frac{\pi(\beta_{k}^{* })}{\pi(\beta_{k}^{(l-1)})}.
-\end{align*}
-*** update \(\mu_{\beta}, \sigma_{\beta}\) :noexport:ARCHIVE:
-\begin{align*}
-  \rho &= 1/\sigma_{\beta}^{2} + 1/\sigma_{\mu_{\beta}}^2 \\
-  p(\mu_{\beta}|..)&= N(\frac{1/\sigma_{\beta}^2 \times \beta}{\rho}, 1/\rho )
-\end{align*}
-\[
-  p(\sigma_{\beta}^{2}|ee) = inv-Gamma(a + 0.5, b + 0.5 (\beta - \mu_{\beta})^2)
-\]
-
-** data structure
-*** mstate R package :noexport:
-- how to format data to follow the below?
-| person | entry time | exit time | from | to | observed | covariate1 | covariate2 | covariate3    | time dependent covaraite |
-|      1 |          0 |        10 |    1 |  2 |        1 | D_{12}        | \theta D_{12}      | total actions | none                     |
-|      1 |          0 |        10 |    1 |  3 |        0 | D_{12}        | \theta D_{12}      | total actions | none                     |
-|        |            |           |      |    |          |            |            |               |                          |
-|        |            |           |      |    |          |            |            |               |                          |
-- mstate: cannot handle recurrent states
-#+begin_src R
-library(mstate)
-# Transition matrix for illness-death model
-tmat <- trans.illdeath()
-# Data in wide format, for transition 1 this is dataset E1 of
-# Therneau & Grambsch (T&G)
-tg <- data.frame(id=1:6,illt=c(1,1,6,6,8,9),ills=c(1,0,1,1,0,1),
-                 dt=c(5,1,9,7,8,12),ds=c(1,1,1,1,1,1),
-                 x1=c(1,1,1,0,0,0),x2=c(6:1))
-# Data in long format using msprep
-tglong <- msprep(time=c(NA,"illt","dt"),status=c(NA,"ills","ds"),
-                 data=tg,keep=c("x1","x2"),trans=tmat, id="id")
-#+end_src
-
-#+RESULTS:
-: Loading required package: survival
-
-#+begin_src R
-# Same thing in etm format
-tra <- trans2tra(tmat)
-tgetm <- msdata2etm(tglong, id="id")
-tgetm <- msdata2etm(tglong, id="id", covs=c("x1", "x2")) # with covariates
-# And back
-etm2msdata(tgetm, id="id", tra=tra)
-etm2msdata(tgetm, id="id", tra=tra, covs=c("x1", "x2")) # with covariates
-#+end_src
-
-*** msm R package
-https://www.rdocumentation.org/packages/msm/versions/1.6.8/topics/msm2Surv
-#+begin_src R
-library(msm)
-msmdat <- data.frame(
- subj = c(1, 1, 1, 1, 1, 2, 2, 2),
- days = c(0, 27, 75, 97, 1106, 0, 90, 1037),
- status = c(1, 2, 3, 4, 4, 1, 2, 2),
- age = c(66, 66, 66, 66, 69, 49, 49, 51),
- treat = c(1, 1, 1, 1, 1, 0, 0, 0)
-)
-# transitions only allowed to next state up or state 4
-Q <- rbind(c(1, 1, 0, 1),
-           c(0, 1, 1, 1),
-           c(0, 0, 1, 1),
-           c(0, 0, 0, 0))
-dat <- msm2Surv(data=msmdat, subject="subj", time="days", state="status",
-         Q=Q)
-dat
-attr(dat, "trans")
-#+end_src
-
 * piacc preproc
 #+begin_src emacs-lisp
 (delete-directory "input" t)
 (make-directory "input")
 #+end_src
+** background info join? :ARCHIVE:
+#+begin_src R
+piacc_orig_path = "./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_cleaned_1110.rdata"
+load(piacc_orig_path)
+item = PS
+b2012 = readr::read_csv("./data/PIAAC_cleaned_data_1110/Prgusap1_2012.csv")
+b2017 = readr::read_csv("./data/PIAAC_cleaned_data_1110/Prgusap1_2017.csv")
+## b2012 = foreign::read.spss("./data/PIAAC_cleaned_data_1110/Prgusap1_2012.sav", to.data.frame = T)
+## b2017 = foreign::read.spss("./data/PIAAC_cleaned_data_1110/Prgusap1_2017.sav", to.data.frame = T)
+iid = unique(item$SEQID)
+b7id = unique(b2017$SEQID)
+b2id = unique(b2012$SEQID)
+
+kk = 0
+for (id in iid) {
+  if (any(id == b2id) && any(id == b7id)) error("duplicated id")
+  kk = kk + sum(id == b2id)
+  kk = kk + sum(id == b7id)
+    }
+
+jj = 0
+for (ii in names(b2017)) {
+  if (any(ii == names(b2012))) jj = jj +1
+    }
+#+end_src
+
 ** all-in-one R script
 :PROPERTIES:
 :header-args:R: :tangle R/preproc-data.R
@@ -1458,7 +1181,7 @@ validation. Since we aim to train a super learner instead of simple blend of
 base models, predctions collected from CV should be passed to the super learner.
 The CV-folds should be consistent for all models.
 
-#+begin_src R :async :results output replace
+#+begin_src R :async
 library(diprom)
 
 ldir = c(
@@ -1476,7 +1199,9 @@ ldir = c(
 ## "reply_all/", ## failed
 "locate_email/",
 "lamp_return/")
+#+end_src
 
+#+begin_src R :async :results output replace
 ## out_dir="party_invitations-1/"
 ## out_dir="party_invitations-2/"
 ## out_dir="cd_tally/"
@@ -1524,94 +1249,135 @@ close(fcon)
 }
 #+end_src
 
-#+RESULTS:
-#+begin_example
+#+begin_src R :tangle R/lpa.R
+library(diprom)
+library(tidyLPA)
 
-[36m──[39m [1m[1mColumn specification[1m[22m [36m──────────────────────────────────────────────────────────────────[39m
-cols(
-  vname = [31mcol_character()[39m,
-  mean = [32mcol_double()[39m
-)
+ldir = c(
+## "party_invitations-1/",
+## "party_invitations-2/",
+## "cd_tally/",
+## "sprained_ankle-1/",
+## ## "sprained_ankle-2/", ## didn't run
+## "tickets/",
+## ## "class_attendance/", ## didn't run
+## "club_membership-1/",
+## ## "club_membership-2/", ## didn't run
+## "book_order/",
+## "meeting_room/",
+## "reply_all/", ## failed
+## "locate_email/", ## LPA not working
+"lamp_return/")
 
+## out_dir="party_invitations-1/"
+## out_dir="party_invitations-2/"
+## out_dir="cd_tally/"
+## out_dir="sprained_ankle-1/"
+## out_dir="sprained_ankle-2/"
+## out_dir="tickets/"
+## out_dir="class_attendance/"
+## out_dir="club_membership-1/"
+## out_dir="club_membership-2/"
+## out_dir="book_order/"
+## out_dir="meeting_room/"
+## out_dir="reply_all/"
+## out_dir="locate_email/"
+## out_dir="lamp_return/"
 
-[36m──[39m [1m[1mColumn specification[1m[22m [36m──────────────────────────────────────────────────────────────────[39m
-cols(
-  CNTRYID = [31mcol_character()[39m,
-  SEQID = [32mcol_double()[39m,
-  booklet_id = [31mcol_character()[39m,
-  item_id = [32mcol_double()[39m,
-  event_name = [31mcol_character()[39m,
-  event_type = [31mcol_character()[39m,
-  timestamp = [32mcol_double()[39m,
-  event_description = [31mcol_character()[39m,
-  NAME = [31mcol_character()[39m,
-  CODEBOOK = [31mcol_character()[39m,
-  response = [32mcol_double()[39m,
-  event_num = [32mcol_double()[39m,
-  diff = [32mcol_double()[39m,
-  event_concat = [31mcol_character()[39m,
-  word = [31mcol_character()[39m,
-  state = [32mcol_double()[39m,
-  pid = [32mcol_double()[39m
-)
+for (out_dir in ldir) {
+flpa_path = paste0(out_dir, "lpa_mods.txt")
+  if (file.exists(flpa_path)) {
+    ##Delete file if it exists
+    file.remove(flpa_path)
+  }
 
-[36m──[39m [1m[1mColumn specification[1m[22m [36m──────────────────────────────────────────────────────────────────[39m
-cols(
-  `Sequence in Dataset` = [32mcol_double()[39m,
-  Name = [31mcol_character()[39m,
-  Label = [31mcol_character()[39m,
-  Type = [31mcol_character()[39m,
-  Level = [31mcol_character()[39m,
-  Width = [32mcol_double()[39m,
-  Decimals = [32mcol_double()[39m,
-  Domain = [31mcol_character()[39m,
-  `Value scheme` = [31mcol_character()[39m,
-  `Missing Scheme` = [31mcol_character()[39m,
-  `Link to values` = [31mcol_character()[39m,
-  X12 = [33mcol_logical()[39m
-)
+num_chain = 2
+stopImplicitCluster()
+## doParallel::registerDoParallel(2)
+registerDoParallel(cores = detectCores() - 1)
 
+source("R/pmean.R")
+source("R/pinfo_preproc.R")
 
-[36m──[39m [1m[1mColumn specification[1m[22m [36m──────────────────────────────────────────────────────────────────[39m
-cols(
-  .default = col_double()
-)
-[36mℹ[39m Use [90m[40m[90m[40m`spec()`[40m[90m[49m[39m for the full column specifications.
+gg <- item %>%
+  group_by(SEQID) %>%
+  summarize(ftime = timestamp[1] / 1000, naction = n(), time = timestamp[n()] / 1000, spd = naction / (ftime - time))
 
-Warning message:
-Missing column names filled in: 'X12' [12]
-Joining by: Name
-Error in ranger(y ~ ., data = mydd, num.trees = 500, mtry = min(4, ncol(mydd) -  : 
-  Error: No covariates found.
-         Name
-1     C_Q09_C
-2    AGEG5LFS
-3   AGEG10LFS
-4 AGEG10LFS_T
-5      AETPOP
-6    FAET12JR
-7   FAET12NJR
-8      EDWORK
-                                                                                                        Label
-1                          Current status/work history - Years of paid work during lifetime (top-coded at 47)
-2                                             Age groups in 5-year intervals based on LFS groupings (derived)
-3                                                                              Age in 10 year bands (derived)
-4                                                                       Age in 10 year bands (Trend-IALS/ALL)
-5     Adult education/training population (AET) - excludes youths 16-24 in initial cycle of studies (derived)
-6     Participated in formal AET for job-related reasons in 12 months preceding survey (see AETPOP - derived)
-7 Participated in formal AET for non job-related reasons in 12 months preceding survey (see AETPOP - derived)
-8                                             Interaction between adults' work and education status (derived)
-  ranger_imp
-1   98.69663
-2  100.00000
-3   68.39765
-4   61.46656
-5   31.29342
-6   30.01088
-7   40.82260
-8   26.32134
-#+end_example
+ainfo = plyr::join(minfo, gg)
+ainfo = ainfo %>% mutate(ltau = log(tau), laction = log(naction))
 
+mod1 = ainfo %>%
+  select(tau, theta) %>%
+  single_imputation() %>%
+  scale() %>%
+  estimate_profiles(1:4,
+                    variances = c( "varying"),
+                    covariances = c( "varying")) %>%
+  compare_solutions(statistics = c("AIC","AWE", "BIC", "CLC", "KIC"))
+
+mod2 = ainfo %>%
+  select(tau, theta, naction, spd) %>%
+  single_imputation() %>%
+  scale() %>%
+  estimate_profiles(1:4,
+                    variances = c( "varying"),
+                    covariances = c( "varying")) %>%
+  compare_solutions(statistics = c("AIC","AWE", "BIC", "CLC", "KIC"))
+
+mod3 = ainfo %>%
+  select(naction, spd) %>%
+  single_imputation() %>%
+  scale() %>%
+  estimate_profiles(1:4,
+                    variances = c( "varying"),
+                    covariances = c( "varying")) %>%
+  compare_solutions(statistics = c("AIC","AWE", "BIC", "CLC", "KIC"))
+
+sink(flpa_path)
+cat("\n--------------------------------------------------------------\n")
+cat("tau and theta")
+cat("\n--------------------------------------------------------------\n")
+print(mod1)
+cat("\n--------------------------------------------------------------\n")
+cat("tau and theta + naction, spd")
+cat("\n--------------------------------------------------------------\n")
+print(mod2)
+cat("\n--------------------------------------------------------------\n")
+cat("naction, spd")
+cat("\n--------------------------------------------------------------\n")
+print(mod3)
+sink()
+}
+## mod1 = ainfo %>%
+##   select(ltau, theta) %>%
+##   single_imputation() %>%
+##   estimate_profiles(3, variances = "varying", covariances = "varying")
+
+## mod2 = ainfo %>%
+##   select(ltau, theta, laction, spd) %>%
+##   single_imputation() %>%
+##   estimate_profiles(2, variances = c("varying"), covariances = c("zero"))
+
+## mod3 = ainfo %>%
+##   select(laction, spd) %>%
+##   single_imputation() %>%
+##   estimate_profiles(2, variances = "varying", covariances = "varying")
+
+#+end_src
+
+#+begin_src R
+pdf("figure/param_age.pdf")
+dat <- readr::read_csv(paste0(out_dir, "input/dat.csv"), col_names = FALSE)
+rr <- dat[, c(1, 8)] %>% as.data.frame()
+rr <- rr[!duplicated(rr), 2]
+gg = cl_plot(cbind(minfo$AGEG5LFS, minfo$tau), rr, c("age","tau"), xlim=c(0,max(minfo$AGEG5LFS)), ylim = c(0, max( minfo$tau) ))
+print(gg)
+gg = cl_plot(cbind(minfo$AGEG5LFS, minfo$theta), rr, c("age","theta"), xlim=c(0,max(minfo$AGEG5LFS)), ylim = c(0, max( minfo$theta) ))
+print(gg)
+dev.off()
+#+end_src
+
+#+name: PUF_filter
 #+begin_src R :tangle R/pinfo_preproc.R
 var = readr::read_csv("./data/PIAAC_cleaned_data_1110/PUF_Variables.csv")
 var = var %>% filter(Domain %in% c("Sampling / weighting", "Not assigned" ,"Sampling / weighting (derived)", "Background questionnaire (trend)"  ,"Background questionnaire", "Background questionnaire (derived)")
@@ -2758,861 +2524,6 @@ trans = paste(df$word[1:(n-1)], "->", df$word[2:n])
 trans = trans[trans != "END -> START"]
 length(unique(trans))
 #+end_src
-* Documentations
-** Home
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_TITLE: Process data modeling
-:END:
-#+begin_export html
-# WIP: Process data modeling
-To be shared during meetings.
-#+end_export
-
-** PIACC
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_SECTION: piacc
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :chapter true
-:EXPORT_HUGO_WEIGHT: 1
-:EXPORT_TITLE: PIACC
-:END:
-
-#+begin_src toml :front_matter_extra t :exports none
-pre = "<b>1. </b>"
-#+end_src
-
-#+begin_export html
-### Chapter 1
-
-# PIACC
-#+end_export
-
-Programme for the International Assessment of Adult Competencies (PIAAC)
-
-*** item home
-:PROPERTIES:
-:header-args:R: :tangle R/itemcode.R :exports none
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: item_home
-:END:
-
-See the codebook for details....... [[file:data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv][PS_BOOKLET_ITEM.csv]]
-
-#+begin_src R
-booklet = readr::read_csv("~/Dropbox/research/procmod/procmod-code/data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv")
-booklet$NAME = stringr::str_replace_all(booklet$NAME, " ", "_")
-booklet$NAME = stringr::str_replace_all(booklet$NAME, "_-", "-")
-booklet$NAME = stringr::str_replace_all(booklet$NAME, "-_", "-")
-booklet$NAME = tolower(booklet$NAME)
-#+end_src
-
-**** party_invitations-1 :ATTACH:
-:PROPERTIES:
-:ID:       67fea2ad-8240-45dc-a4eb-da07f34a9e45
-:END:
-#+begin_src R :results value list drawer silent
-if (item_code == "U01a000S") {
-sub_str = rbind(c("(.*)\\*\\$target=u01a_(.*)","\\1\\2"), c("id=u01a_",  ""), c("\\*\\$target=",  ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_171956pi-start.png]]
-
-**** party_invitations-2 :ATTACH:
-:PROPERTIES:
-:ID:       da5e5603-defc-43fb-a01c-16bfb293c5d8
-:END:
-#+begin_src R :results value list drawer silent
-## instruction is not clear. too many actions
-## respondents got confused (create or not create a folder to organize??)
-
-if (item_code == "U01b000S") {
-sub_str = rbind(c("(.*)\\*\\$target=u01b_(.*)","\\1\\2"), c("id=u01b_",  ""), c("\\*\\$target=",  ""), c("\\*\\$value=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172034pi-home.png]]
-
-**** cd_tally :ATTACH:
-:PROPERTIES:
-:ID:       0cfd0f21-14b5-4993-a006-d6c13f9027ef
-:END:
-#+begin_src R :results value list drawer silent
-## instruction is not clear. too many actions
-## respondents got confused (create or not create a folder to organize??)
-if (item_code == "U03a000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172043cd-start.png]]
-
-**** sprained_ankle-1 :ATTACH:
-:PROPERTIES:
-:ID:       9c54e9eb-4153-4770-8b4c-0616c15bcebe
-:END:
-#+begin_src R :results value list drawer silent
-if (item_code == "U06a000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-[[attachment:_20210904_172056sa-start.png]]
-
-**** sprained_ankle-2 :ATTACH:
-:PROPERTIES:
-:ID:       c9b8890f-d9d6-4aa1-9505-48ed98d4f657
-:END:
-#+begin_src R :results value list drawer silent
-if (item_code == "U06b000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172105sa-start2.png]]
-
-**** tickets :ATTACH:
-:PROPERTIES:
-:ID:       47fa0d97-e0ab-44e8-87c7-dc6f6946f786
-:END:
-#+begin_src R :results value list drawer silent
-if (item_code == "U21x000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172128ft-home.png]]
-
-**** class_attendance :ATTACH:
-:PROPERTIES:
-:ID:       994a4a41-2040-4276-bc5f-f67966d69bde
-:END:
-#+begin_src R :results value list drawer silent
-if (item_code == "U04a000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172140ca-email-home.png]]
-
-**** club_membership-1 :ATTACH:
-:PROPERTIES:
-:ID:       50a5f4a2-d333-4bb2-8639-9a0dbf3d7a09
-:END:
-#+begin_src R :results value list drawer silent
-if (item_code == "U19a000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172148cm-start.png]]
-
-**** club_membership-2 :ATTACH:
-:PROPERTIES:
-:ID:       549f8614-8703-4373-b745-b44e3a7b84e3
-:END:
-#+begin_src R
-if (item_code == "U19b000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172157cm-home.png]]
-
-**** book_order :ATTACH:
-:PROPERTIES:
-:ID:       fcf87b1e-7433-422d-9ce4-3770e71cbb6a
-:END:
-#+begin_src R
-if (item_code == "U07x000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172208bo-start.png]]
-
-**** meeting_room :ATTACH:
-:PROPERTIES:
-:ID:       d9736569-11b6-4084-94a8-9782473453e1
-:END:
-#+begin_src R
-if (item_code == "U16x000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172218mr-email-home.png]]
-
-**** reply_all :ATTACH:
-:PROPERTIES:
-:ID:       265dfcf6-ec9b-483e-b82b-8745a606ad0d
-:END:
-#+begin_src R
-if (item_code == "U02x000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172228ra-home.png]]
-
-**** locate_email :ATTACH:
-:PROPERTIES:
-:ID:       ccbb321c-a463-47ba-bcf7-ac40fe1e8ff6
-:END:
-#+begin_src R
-if (item_code == "U11b000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172236le-home.png]]
-
-**** lamp_return :ATTACH:
-:PROPERTIES:
-:ID:       e0aef17d-55dd-4641-a529-f63b2acd9d92
-:END:
-#+begin_src R
-if (item_code == "U23x000S") {
-sub_str = rbind(
-  c("(.*)\\*\\$target=u03a_(.*)","\\1\\2"),
-  c("id=u03a_",  ""),
-  c("id=u04a_",  ""),
-  c("id=u06a_",  ""),
-  c("\\*\\$target=", ""),
-  c("\\*\\$value=", ""),
-  c("\\*\\$index=", ""),
-  c("\\*\\$href=", ""))
-ignore_desc = c(
-"START",
-"END",
-"KEYPRESS")
-}
-#+end_src
-
-#+attr_org: :width 700
-[[attachment:_20210904_172248lr-home.png]]
-
-*** item codebook
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: item_codebook
-:END:
-
-| ITEM  | NAME                  | CODEBOOK | RESPONSE                                                                 |
-|-------+-----------------------+----------+--------------------------------------------------------------------------|
-| PS1_1 | Party Invitations - 1 | U01a000S | POLYTOMOUS (0 to 3), No response (R ), Not reached / not attempted (N)   |
-| PS1_2 | Party Invitations - 2 | U01b000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
-| PS1_3 | CD Tally              | U03a000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
-| PS1_4 | Sprained Ankle - 1    | U06a000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
-| PS1_5 | Sprained Ankle - 2    | U06b000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
-| PS1_6 | Tickets               | U21x000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
-| PS1_7 | Class Attendance      | U04a000S | POLYTOMOUS (0 to 2), No response (R ), Not reached / not attempted (N)   |
-| PS2_1 | Club Membership - 1   | U19a000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
-| PS2_2 | Club Membership - 2   | U19b000S | POLYTOMOUS (0 to 3), No response (R ), Not reached / not attempted (N)   |
-| PS2_3 | Book Order            | U07x000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
-| PS2_4 | Meeting Room          | U02x000S | POLYTOMOUS (0 to 3), No response (R ), Not reached / not attempted (N)   |
-| PS2_5 | Reply All             | U16x000S | MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N) |
-| PS2_6 | Locate Email          | U11b000S | POLYTOMOUS (0 to 3), No response (R ), Not reached / not attempted (N)   |
-| PS2_7 | Lamp Return           | U23x000S | POLYTOMOUS (0 to 3), No response (R ), Not reached / not attempted (N)   |
-*** item results
-:PROPERTIES:
-:header-args: :exports none
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: item_results
-:END:
-
-variables
-- ~ftime~: time until the first action taken
-- ~time~: total time of a person's process
-- ~naction~ or ~#action~: the number of actions of a person's process
-
-summaries
-- Total or first action time has weak association with \theta.
-- # of actions and first action time have weak or no assciation.
-- # of actions has some association with the response.
-- \tau and first action time has negative correaltion.
-- \tau and # of actions have weak or no association
-- # of actions and \theta time have positive correlation.
-
-**** party_invitations-1
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: party_invitations-1
-:END:
-#+begin_src sh :async
-out_dir="party_invitations-1/"
-cd $out_dir
-cd figure
-convert -density 300 tau_action.pdf tau_action.png
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-convert -density 300 time_action.pdf time_action-%d.png
-#+end_src
-
-#+RESULTS:
-
-[[file:party_invitations-1/figure/theta_tau_res.png]]
-[[file:party_invitations-1/figure/tau_action.png]]
-[[file:party_invitations-1/figure/time_action-3.png]]
-[[file:party_invitations-1/figure/time_action_more-2.png]]
-[[file:party_invitations-1/figure/time_action_more-5.png]]
-[[file:party_invitations-1/figure/time_action_more-7.png]]
-[[file:party_invitations-1/figure/time_action_more-8.png]]
-[[file:party_invitations-1/figure/time_action_more-9.png]]
-[[file:party_invitations-1/figure/time_action_more-10.png]]
-[[file:party_invitations-1/figure/time_action_more-11.png]]
-[[file:party_invitations-1/figure/time_action_more-13.png]]
-
-**** party_invitations-2
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: party_invitations-2
-:END:
-
-#+begin_src sh :async
-out_dir="party_invitations-2/"
-cd $out_dir
-cd figure
-convert -density 300 tau_action.pdf tau_action.png
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-convert -density 300 time_action.pdf time_action-%d.png
-#+end_src
-
-#+RESULTS:
-
-[[file:party_invitations-2/figure/theta_tau_res.png]]
-[[file:party_invitations-2/figure/tau_action.png]]
-[[file:party_invitations-2/figure/time_action-3.png]]
-[[file:party_invitations-2/figure/time_action_more-2.png]]
-[[file:party_invitations-2/figure/time_action_more-5.png]]
-[[file:party_invitations-2/figure/time_action_more-7.png]]
-[[file:party_invitations-2/figure/time_action_more-8.png]]
-[[file:party_invitations-2/figure/time_action_more-9.png]]
-[[file:party_invitations-2/figure/time_action_more-10.png]]
-[[file:party_invitations-2/figure/time_action_more-11.png]]
-[[file:party_invitations-2/figure/time_action_more-13.png]]
-
-**** cd_tally
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: cd_tally
-:END:
-
-#+begin_src sh :async
-out_dir="cd_tally/"
-cd $out_dir
-cd figure
-convert -density 300 tau_action.pdf tau_action.png
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-convert -density 300 time_action.pdf time_action-%d.png
-#+end_src
-
-#+RESULTS:
-
-[[file:cd_tally/figure/theta_tau_res.png]]
-[[file:cd_tally/figure/tau_action.png]]
-[[file:cd_tally/figure/time_action-3.png]]
-[[file:cd_tally/figure/time_action_more-2.png]]
-[[file:cd_tally/figure/time_action_more-5.png]]
-[[file:cd_tally/figure/time_action_more-7.png]]
-[[file:cd_tally/figure/time_action_more-8.png]]
-[[file:cd_tally/figure/time_action_more-9.png]]
-[[file:cd_tally/figure/time_action_more-10.png]]
-[[file:cd_tally/figure/time_action_more-11.png]]
-[[file:cd_tally/figure/time_action_more-13.png]]
-
-**** sprained_ankle-1
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: sprained_ankle-1
-:END:
-
-#+begin_src sh :async
-out_dir="sprained_ankle-1/"
-cd $out_dir
-cd figure
-convert -density 300 tau_action.pdf tau_action.png
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-convert -density 300 time_action.pdf time_action-%d.png
-#+end_src
-
-#+RESULTS:
-
-[[file:sprained_ankle-1/figure/theta_tau_res.png]]
-[[file:sprained_ankle-1/figure/tau_action.png]]
-[[file:sprained_ankle-1/figure/time_action-3.png]]
-[[file:sprained_ankle-1/figure/time_action_more-2.png]]
-[[file:sprained_ankle-1/figure/time_action_more-5.png]]
-[[file:sprained_ankle-1/figure/time_action_more-7.png]]
-[[file:sprained_ankle-1/figure/time_action_more-8.png]]
-[[file:sprained_ankle-1/figure/time_action_more-9.png]]
-[[file:sprained_ankle-1/figure/time_action_more-10.png]]
-[[file:sprained_ankle-1/figure/time_action_more-11.png]]
-[[file:sprained_ankle-1/figure/time_action_more-13.png]]
-
-**** sprained_ankle-2 :noexport:ARCHIVE:
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: sprained_ankle-2
-:END:
-
-#+begin_src sh :async
-out_dir="sprained_ankle-2/"
-cd $out_dir
-cd figure
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-convert -density 300 time_action.pdf time_action-%d.png
-#+end_src
-
-[[file:sprained_ankle-2/figure/theta_tau_res.png]]
-[[file:sprained_ankle-2/figure/tau_action.png]]
-[[file:sprained_ankle-2/figure/time_action-3.png]]
-[[file:sprained_ankle-2/figure/time_action_more-2.png]]
-[[file:sprained_ankle-2/figure/time_action_more-5.png]]
-[[file:sprained_ankle-2/figure/time_action_more-7.png]]
-[[file:sprained_ankle-2/figure/time_action_more-8.png]]
-[[file:sprained_ankle-2/figure/time_action_more-9.png]]
-[[file:sprained_ankle-2/figure/time_action_more-10.png]]
-[[file:sprained_ankle-2/figure/time_action_more-11.png]]
-[[file:sprained_ankle-2/figure/time_action_more-13.png]]
-
-**** tickets
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: tickets
-:END:
-
-#+begin_src sh :async
-out_dir="tickets/"
-cd $out_dir
-cd figure
-convert -density 300 tau_action.pdf tau_action.png
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-convert -density 300 time_action.pdf time_action-%d.png
-#+end_src
-
-#+RESULTS:
-
-[[file:tickets/figure/theta_tau_res.png]]
-[[file:tickets/figure/tau_action.png]]
-[[file:tickets/figure/time_action-3.png]]
-[[file:tickets/figure/time_action_more-2.png]]
-[[file:tickets/figure/time_action_more-5.png]]
-[[file:tickets/figure/time_action_more-7.png]]
-[[file:tickets/figure/time_action_more-8.png]]
-[[file:tickets/figure/time_action_more-9.png]]
-[[file:tickets/figure/time_action_more-10.png]]
-[[file:tickets/figure/time_action_more-11.png]]
-[[file:tickets/figure/time_action_more-13.png]]
-
-**** class_attendance :noexport:ARCHIVE:
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: class_attendance
-:END:
-
-#+begin_src sh :async
-out_dir="class_attendance/"
-cd $out_dir
-cd figure
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-convert -density 300 time_action.pdf time_action-%d.png
-#+end_src
-
-#+RESULTS:
-
-[[file:class_attendance/figure/theta_tau_res.png]]
-[[file:class_attendance/figure/tau_action.png]]
-[[file:class_attendance/figure/time_action-3.png]]
-[[file:class_attendance/figure/time_action_more-2.png]]
-[[file:class_attendance/figure/time_action_more-5.png]]
-[[file:class_attendance/figure/time_action_more-7.png]]
-[[file:class_attendance/figure/time_action_more-8.png]]
-[[file:class_attendance/figure/time_action_more-9.png]]
-[[file:class_attendance/figure/time_action_more-10.png]]
-[[file:class_attendance/figure/time_action_more-11.png]]
-[[file:class_attendance/figure/time_action_more-13.png]]
-
-**** club_membership-1
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: club_membership-1
-:END:
-
-#+begin_src sh :async
-out_dir="club_membership-1/"
-cd $out_dir
-cd figure
-convert -density 300 tau_action.pdf tau_action.png
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-convert -density 300 time_action.pdf time_action-%d.png
-#+end_src
-
-#+RESULTS:
-
-[[file:club_membership-1/figure/theta_tau_res.png]]
-[[file:club_membership-1/figure/tau_action.png]]
-[[file:club_membership-1/figure/time_action-3.png]]
-[[file:club_membership-1/figure/time_action_more-2.png]]
-[[file:club_membership-1/figure/time_action_more-5.png]]
-[[file:club_membership-1/figure/time_action_more-7.png]]
-[[file:club_membership-1/figure/time_action_more-8.png]]
-[[file:club_membership-1/figure/time_action_more-9.png]]
-[[file:club_membership-1/figure/time_action_more-10.png]]
-[[file:club_membership-1/figure/time_action_more-11.png]]
-[[file:club_membership-1/figure/time_action_more-13.png]]
-
-**** club_membership-2 :noexport:ARCHIVE:
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: club_membership-2
-:END:
-
-#+begin_src sh
-out_dir="club_membership-2/"
-cd $out_dir
-cd figure
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-convert -density 300 time_action.pdf time_action-%d.png
-#+end_src
-
-[[file:club_membership-2/figure/theta_tau_res.png]]
-[[file:club_membership-2/figure/tau_action.png]]
-[[file:club_membership-2/figure/time_action-3.png]]
-[[file:club_membership-2/figure/time_action_more-2.png]]
-[[file:club_membership-2/figure/time_action_more-5.png]]
-[[file:club_membership-2/figure/time_action_more-7.png]]
-[[file:club_membership-2/figure/time_action_more-8.png]]
-[[file:club_membership-2/figure/time_action_more-9.png]]
-[[file:club_membership-2/figure/time_action_more-10.png]]
-[[file:club_membership-2/figure/time_action_more-11.png]]
-[[file:club_membership-2/figure/time_action_more-13.png]]
-
-**** book_order
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: book_order
-:END:
-
-#+begin_src sh :async
-out_dir="book_order/"
-cd $out_dir
-cd figure
-convert -density 300 tau_action.pdf tau_action.png
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-convert -density 300 time_action.pdf time_action-%d.png
-#+end_src
-
-#+RESULTS:
-
-[[file:book_order/figure/theta_tau_res.png]]
-[[file:book_order/figure/tau_action.png]]
-[[file:book_order/figure/time_action-3.png]]
-[[file:book_order/figure/time_action_more-2.png]]
-[[file:book_order/figure/time_action_more-5.png]]
-[[file:book_order/figure/time_action_more-7.png]]
-[[file:book_order/figure/time_action_more-8.png]]
-[[file:book_order/figure/time_action_more-9.png]]
-[[file:book_order/figure/time_action_more-10.png]]
-[[file:book_order/figure/time_action_more-11.png]]
-[[file:book_order/figure/time_action_more-13.png]]
-
-**** meeting_room
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: meeting_room
-:END:
-
-#+begin_src sh :async
-out_dir="meeting_room/"
-cd $out_dir
-cd figure
-convert -density 300 tau_action.pdf tau_action.png
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-convert -density 300 time_action.pdf time_action-%d.png
-#+end_src
-
-#+RESULTS:
-
-[[file:meeting_room/figure/theta_tau_res.png]]
-[[file:meeting_room/figure/tau_action.png]]
-[[file:meeting_room/figure/time_action-3.png]]
-[[file:meeting_room/figure/time_action_more-2.png]]
-[[file:meeting_room/figure/time_action_more-5.png]]
-[[file:meeting_room/figure/time_action_more-7.png]]
-[[file:meeting_room/figure/time_action_more-8.png]]
-[[file:meeting_room/figure/time_action_more-9.png]]
-[[file:meeting_room/figure/time_action_more-10.png]]
-[[file:meeting_room/figure/time_action_more-11.png]]
-[[file:meeting_room/figure/time_action_more-13.png]]
-
-**** reply_all :noexport:ARCHIVE:
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: reply_all
-:END:
-
-#+begin_src sh :async
-out_dir="reply_all/"
-cd $out_dir
-cd figure
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-convert -density 300 time_action.pdf time_action-%d.png
-#+end_src
-
-[[file:reply_all/figure/theta_tau_res.png]]
-[[file:reply_all/figure/tau_action.png]]
-[[file:reply_all/figure/time_action-3.png]]
-[[file:reply_all/figure/time_action_more-2.png]]
-[[file:reply_all/figure/time_action_more-5.png]]
-[[file:reply_all/figure/time_action_more-7.png]]
-[[file:reply_all/figure/time_action_more-8.png]]
-[[file:reply_all/figure/time_action_more-9.png]]
-[[file:reply_all/figure/time_action_more-10.png]]
-[[file:reply_all/figure/time_action_more-11.png]]
-[[file:reply_all/figure/time_action_more-13.png]]
-
-**** locate_email
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: locate_email
-:END:
-#+begin_src sh :async
-out_dir="locate_email/"
-cd $out_dir
-cd figure
-convert -density 300 tau_action.pdf tau_action.png
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-convert -density 300 time_action.pdf time_action-%d.png
-#+end_src
-
-#+RESULTS:
-
-[[file:locate_email/figure/theta_tau_res.png]]
-[[file:locate_email/figure/tau_action.png]]
-[[file:locate_email/figure/time_action-3.png]]
-[[file:locate_email/figure/time_action_more-2.png]]
-[[file:locate_email/figure/time_action_more-5.png]]
-[[file:locate_email/figure/time_action_more-7.png]]
-[[file:locate_email/figure/time_action_more-8.png]]
-[[file:locate_email/figure/time_action_more-9.png]]
-[[file:locate_email/figure/time_action_more-10.png]]
-[[file:locate_email/figure/time_action_more-11.png]]
-[[file:locate_email/figure/time_action_more-13.png]]
-
-***** lamp_return
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: lamp_return
-:END:
-
-#+begin_src sh :async
-out_dir="lamp_return/"
-cd $out_dir
-cd figure
-convert -density 300 tau_action.pdf tau_action.png
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-convert -density 300 time_action.pdf time_action-%d.png
-#+end_src
-
-\tau's covaritates:
-#+begin_src emacs-lisp :exports results :results html
-(with-temp-buffer
-(insert-file-contents "lamp_return/tau_imp.txt")
-    (buffer-string))
-#+end_src
-
-\theta's covaritates:
-#+begin_src emacs-lisp :exports results :results html
-(with-temp-buffer
-(insert-file-contents "lamp_return/theta_imp.txt")
-    (buffer-string))
-#+end_src
-
-
-[[file:lamp_return/figure/theta_tau_res.png]]
-[[file:lamp_return/figure/tau_action.png]]
-[[file:lamp_return/figure/time_action-3.png]]
-[[file:lamp_return/figure/time_action_more-2.png]]
-[[file:lamp_return/figure/time_action_more-5.png]]
-[[file:lamp_return/figure/time_action_more-7.png]]
-[[file:lamp_return/figure/time_action_more-8.png]]
-[[file:lamp_return/figure/time_action_more-9.png]]
-[[file:lamp_return/figure/time_action_more-10.png]]
-[[file:lamp_return/figure/time_action_more-11.png]]
-[[file:lamp_return/figure/time_action_more-13.png]]
-
-** Model
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_SECTION: model
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :chapter true
-:EXPORT_HUGO_WEIGHT: 2
-:END:
 * COMMENT Local Variables
 # Local Variables:
 # org-babel-default-header-args:R: ((:session . "*R-PIACC*") (:export . "both") (:results . "output replace"))
