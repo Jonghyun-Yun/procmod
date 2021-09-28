@@ -1,7 +1,7 @@
 +++
 title = "item codebook"
 author = ["Jonghyun Yun"]
-lastmod = 2021-09-28T16:34:13-05:00
+lastmod = 2021-09-28T17:16:07-05:00
 draft = false
 weight = 1
 chapter = true
