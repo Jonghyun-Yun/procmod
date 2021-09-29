@@ -1265,7 +1265,6 @@ q_{ml}\left(t ; \mathcal{F}_{t}\right) = q_{ml}(dt) = \kappa_{m} \tau_{k} e^{\th
     - 시간이 많이 걸리고 맞은사람 vs 적게 걸리고 맞은 사람. 
     - 적은 액션으로 맞은 사람 vs 많은 액션으로 틀린 사람.
   - 무조건 빨리 푼다고 잘하는게 아니고, 느리거나 혹은 상이한 액션 개수로 정답에 이르는 프로세스 발견에 초점.
-
 **** TODO justification + what item to use
 select a few items fulfilling the justification sheme!
 
@@ -1275,10 +1274,16 @@ https://cran.r-project.org/web/packages/tidyLPA/vignettes/Introduction_to_tidyLP
 observed covaritates + response group classification
 observed covaritates + tau and theta + response group classification
 
+***** TODO no gender effect
+no gender variable was significant RF for tau and theta.
+This could be because of effect of other covariates
+Plot gender against tau or theta, and see if there was diff.
 age control gender no significant
 was gender diff in EDA, after age control no difference.
 
 https://data-edu.github.io/tidyLPA/reference/AHP.html
+**** TODO model validation
+see if we can use model validation tech for mutil-state survival model.
 *** likelihood
 
 \begin{align*}
@@ -1359,7 +1364,6 @@ Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive 
 &-\sum dt (\kappa_{m}^{* } - \kappa_{m}^{(l-1)}) \tau_{k} e^{(\theta_{k} + \beta) D_{ml} }
 + \log \frac{\pi(\kappa_{m}^{* })}{\pi(\kappa_{m}^{t})}.
 \end{align*}
-
 **** update \(\tau_{k}\)
 - all $k$ person's m and l \in A_m
 - all kth person's transition start and stop time
@@ -1380,7 +1384,6 @@ Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive 
 &-\sum dt \kappa_{m} \tau_{k} e^{ \beta D_{ml} }(e^{\theta_{k}^{* }D_{ml}} -  e^{\theta_{k}^{(l-1)} D_{ml} })
 + \log \frac{\pi(\theta_{k}^{* })}{\pi(\theta_{k}^{(l-1)})}.\\
 \end{align*}
-
 **** update \(\sigma\)
 \[
  p( \sigma^2|e.e.) \propto invGamma(\sigma^{2}|a,b) \prod N(\theta_{k} | \mu, \sigma^2)
@@ -1408,7 +1411,6 @@ with flat prior:
 \[
   p(\sigma_{\beta}^{2}|ee) = inv-Gamma(a + 0.5, b + 0.5 (\beta - \mu_{\beta})^2)
 \]
-
 *** data structure
 **** mstate R package :noexport:
 - how to format data to follow the below?
@@ -1445,6 +1447,17 @@ etm2msdata(tgetm, id="id", tra=tra)
 etm2msdata(tgetm, id="id", tra=tra, covs=c("x1", "x2")) # with covariates
 #+end_src
 
+#+RESULTS:
+: Error in trans2tra(tmat) : could not find function "trans2tra"
+: Error in msdata2etm(tglong, id = "id") :
+:   could not find function "msdata2etm"
+: Error in msdata2etm(tglong, id = "id", covs = c("x1", "x2")) :
+:   could not find function "msdata2etm"
+: Error in etm2msdata(tgetm, id = "id", tra = tra) :
+:   could not find function "etm2msdata"
+: Error in etm2msdata(tgetm, id = "id", tra = tra, covs = c("x1", "x2")) :
+:   could not find function "etm2msdata"
+
 **** msm R package
 https://www.rdocumentation.org/packages/msm/versions/1.6.8/topics/msm2Surv
 #+begin_src R
@@ -1466,8 +1479,6 @@ dat <- msm2Surv(data=msmdat, subject="subj", time="days", state="status",
 dat
 attr(dat, "trans")
 #+end_src
-
-
 * COMMENT Local Variables
 # Local Variables:
 # org-babel-default-header-args:R: ((:session . "*R-PIACC*") (:export . "both") (:results . "output replace"))
