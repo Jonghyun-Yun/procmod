@@ -1,0 +1,89 @@
+.privacy-statement .omb p{
+  color: #000000;
+  text-align: center;
+}
+
+span.error {
+   color: #DD0000
+}
+
+/* for helper text question mark */
+.helper-text-btn
+{
+  border: none;
+  padding-left: 2px;
+	padding-bottom: 15px;
+}
+
+/* for portfolio sorting button */
+.sort-portfolio-btn
+{
+  border: none;
+  border-radius: 3px;
+  padding: 1px 1px 1px 1px;
+}
+
+/* -- Section 508 label hiding --*/
+.s508 span {
+  position: absolute;
+  left: -2000px;
+  top: -1000px;
+  }
+ 
+span.requiredMarker {
+  color: red;
+  }
+  
+.linkLeft {
+  float: left;
+}
+
+.linkRight {
+  float: right;
+}
+
+#user-alert-box{
+  background-color: #c33;
+  color: #fff;
+  display: inline-block;
+  text-align: center;
+  padding-top: 4.5px;
+  padding-bottom: 6px;
+  width: 100%;
+  font-family: source_sans_pro_regular,"Source Sans Pro",Arial,sans-serif;
+}
+
+.exclamation-pt{
+  float: left;
+  width: 8.33333%;
+  margin-left: 0%;
+  margin-right: -8.33333%;
+  font-size: 5rem;
+  margin-top: 2.375rem;
+  font-family: source_sans_pro_semibold,"Source Sans Pro Semibold",Arial,sans-serif;
+}
+
+.alert-txt{
+  margin: 0px;
+  width: 100%;
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  font-family: source_sans_pro_regular,"Source Sans Pro",Arial,sans-serif;
+}
+
+.alert-txt:visited{
+  margin: 0px;
+  width: 100%;
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  font-family: source_sans_pro_regular,"Source Sans Pro",Arial,sans-serif;
+}
+
+.use-tool{
+  margin-top: 32px;
+  margin-bottom: 8px;
+  font-size: 1.25rem;
+  font-family: source_sans_pro_regular,"Source Sans Pro",Arial,sans-serif;
+}
