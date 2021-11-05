@@ -1,7 +1,7 @@
 +++
 title = "clustering"
 author = ["Jonghyun Yun"]
-lastmod = 2021-11-04T13:56:10-05:00
+lastmod = 2021-11-05T06:31:06-05:00
 draft = false
 weight = 1
 chapter = true
@@ -22,8 +22,8 @@ chapter = true
 
 # party\_invitations-1 {#party-invitations-1}
 
-![](figure/lpa_plot-0.png)
-![](figure/lpa_plot-1.png)
+![](party_invitations-1/figure/lpa_plot-0.png)
+![](party_invitations-1/figure/lpa_plot-1.png)
 
 
 # tickets {#tickets}
