@@ -752,14 +752,14 @@ In Discussion, we decided to use time-scale: in-homogeneous and number of termin
 #+begin_src R :tangle diprom/R/misc.R :results silent
 cl_box = function(y, cl, myname = NULL) {
   ## side by side box plot
-dd <- data.frame(y = y, cl = cl)
-boxp <- ggplot(dd, aes(x = factor(cl), y = y, fill = factor(cl))) +
-  geom_boxplot() +
-  theme(legend.position = "none")
-if (!is.null(myname)) {
-boxp = boxp + labs(y = myname[1], x = myname[2])}
-print(boxp)
-    }
+  dd <- data.frame(y = y, cl = cl)
+  boxp <- ggplot(dd, aes(x = factor(cl), y = y, fill = factor(cl))) +
+    geom_boxplot() +
+    theme(legend.position = "none")
+  if (!is.null(myname)) {
+    boxp = boxp + labs(y = myname[1], x = myname[2])}
+  print(boxp)
+}
 
 cl_plot <- function(x, cl, myname = NULL, size_ = 1, xlim = NA, ylim = NA) {
   ## plot 2d array x
@@ -1201,6 +1201,38 @@ ldir = c(
 "lamp_return/")
 #+end_src
 
+#+begin_src R :tangle R/gender_wilcoxon.R
+for (out_dir in ldir) {
+fwil_path = paste0(out_dir, "wilcoxon.txt")
+  if (file.exists(fwil_path)) {
+    ##Delete file if it exists
+    file.remove(fwil_path)
+  }
+source("R/pmean.R")
+source("R/pinfo_preproc.R")
+
+sink(fwil_path)
+x = minfo$tau[minfo$GENDER_R == 1]
+y = minfo$tau[minfo$GENDER_R == 2]
+cat(wilcox.test(x, y, alternative = "two.sided")$p.value)
+cat("\n")
+x = minfo$theta[minfo$GENDER_R == 1]
+y = minfo$theta[minfo$GENDER_R == 2]
+cat(wilcox.test(x, y, alternative = "two.sided")$p.value)
+sink()
+  }
+#+end_src
+
+#+begin_src R
+for (out_dir in ldir) {
+cat(out_dir,"\n")
+pp = read.table(paste0(out_dir, "wilcoxon.txt"))
+cat(unlist(pp),"\n")
+cat("#############\n")
+}
+#+end_src
+
+
 #+begin_src R :async :results output replace
 ## out_dir="party_invitations-1/"
 ## out_dir="party_invitations-2/"
@@ -1283,7 +1315,9 @@ ldir = c(
 ## out_dir="reply_all/"
 ## out_dir="locate_email/"
 ## out_dir="lamp_return/"
+#+end_src
 
+#+begin_src R :tangle R/lpa.R
 for (out_dir in ldir) {
 flpa_path = paste0(out_dir, "lpa_mods.txt")
   if (file.exists(flpa_path)) {
@@ -1769,6 +1803,99 @@ mean(ranger_tune$resample[, 1]) # incorrect. not using weight
 
 #+RESULTS:
 : [1] 0.3166399
+* cluster analysis bakcground
+:PROPERTIES:
+:header-args:R: :results silent
+:END:
+
+#+name: lpa-prep
+#+begin_src R :tangle no
+library(diprom)
+library(tidyLPA)
+
+ldir = c(
+"party_invitations-1/",
+## "party_invitations-2/",
+## "cd_tally/",
+## "sprained_ankle-1/",
+## "sprained_ankle-2/", ## didn't run
+"tickets/",
+## "class_attendance/", ## didn't run
+## "club_membership-1/",
+## "club_membership-2/", ## didn't run
+"book_order/"
+## "meeting_room/",
+## "reply_all/", ## failed
+## "locate_email/",
+## "lamp_return/"
+)
+
+## out_dir="party_invitations-1/"
+## out_dir="party_invitations-2/"
+## out_dir="cd_tally/"
+## out_dir="sprained_ankle-1/"
+## out_dir="sprained_ankle-2/"
+## out_dir="tickets/"
+## out_dir="class_attendance/"
+## out_dir="club_membership-1/"
+## out_dir="club_membership-2/"
+## out_dir="book_order/"
+## out_dir="meeting_room/"
+## out_dir="reply_all/"
+## out_dir="locate_email/"
+## out_dir="lamp_return/"
+
+num_chain = 2
+stopImplicitCluster()
+## doParallel::registerDoParallel(2)
+registerDoParallel(cores = detectCores() - 1)
+#+end_src
+
+#+begin_src R :noweb yes :tangle R/lpa_fig.R
+<<lpa-prep>>
+
+nc2 = c(4,4,3)
+nc3 = c(2,3,2)
+kk = 0
+for (out_dir in ldir) {
+  kk = kk + 1
+lname = list(paste0(out_dir,"tau_imp.txt"), paste0(out_dir,"theta_imp.txt"))
+
+source("R/pmean.R")
+source("R/pinfo_preproc.R")
+
+res = list(tau = minfo$tau, theta = minfo$theta)
+
+gg <- item %>%
+  group_by(SEQID) %>%
+  summarize(ftime = timestamp[1] / 1000, naction = n(), time = timestamp[n()] / 1000, spd = naction / (ftime - time))
+
+ainfo = plyr::join(minfo, gg)
+ainfo = ainfo %>% mutate(ltau = log(tau), laction = log(naction))
+
+mod2 = ainfo %>%
+  select(tau, theta, naction, spd) %>%
+  single_imputation() %>%
+  scale() %>%
+  estimate_profiles(nc2[kk],
+                    variances = c( "varying"),
+                    covariances = c( "varying"))
+
+mod3 = ainfo %>%
+  select(naction, spd) %>%
+  single_imputation() %>%
+  scale() %>%
+  estimate_profiles(nc3[kk],
+                    variances = c( "varying"),
+                    covariances = c( "varying"))
+
+pdf(paste0(out_dir,"figure/lpa_plot.pdf"))
+mod2 %>% plot_profiles()
+mod3 %>% plot_profiles()
+dev.off()
+}
+#+end_src
+
 * MCMC trace plots
 #+begin_src R :tangle diprom/R/post.R
 plot_intervals = function(param, trans_ = "log", save_plot = TRUE){
