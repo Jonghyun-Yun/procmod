@@ -1851,6 +1851,7 @@ stopImplicitCluster()
 registerDoParallel(cores = detectCores() - 1)
 #+end_src
 
+The below is code to perform LPA using optimal number of clusters (determined from prior procedure based on AIC, BIC, etc.)
 #+begin_src R :noweb yes :tangle R/lpa_fig.R
 <<lpa-prep>>
 
