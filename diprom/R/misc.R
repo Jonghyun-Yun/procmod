@@ -1,3 +1,14 @@
+kable2file = function(toprint, fname){
+  ## write kable to file
+if (file.exists(fname)) {
+  ##Delete file if it exists
+  file.remove(fname)
+}
+fcon = file(fname)
+fstr = print(toprint)
+writeLines(knitr::kable(fstr), fcon)
+}
+
 cl_box = function(y, cl, myname = NULL) {
   ## side by side box plot
 dd <- data.frame(y = y, cl = cl)
