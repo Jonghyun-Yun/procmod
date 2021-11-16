@@ -1214,40 +1214,75 @@ Wilcoxon p-values for gender difference in \tau and \theta
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_BUNDLE: clustering
 :END:
+=ftime = timestamp[1] / 1000, naction = n(), time = timestamp[n()] / 1000, spd = naction / (ftime - time)=
+\tau: person's baseline hazard for action transition
+\theta: person's xxx to jump to a similar action for the next one
+#+begin_export html
+|Name        |Label                                                                               |Value scheme                                          |
+|:-----------|:-----------------------------------------------------------------------------------|:-----------------------------------------------------|
+|AGEG5LFS    |Age groups in 5-year intervals based on LFS groupings (derived)                     |Derived - Age groups in equal 5 year intervals (1-10) |
+|NFEHRS      |Number of hours of participation in non-formal education (derived)                  |NA                                                    |
+|EARNHRDCL   |Hourly earnings excluding bonuses for wage and salary earners, in deciles (derived) |Derived - Decile                                      |
+|LEARNATWORK |Index of learning at work (derived)                                                 |NA                                                    |
+|ICTHOME     |Index of use of ICT skills at home (derived)                                        |NA                                                    |
+|ICTWORK     |Index of use of ICT skills at work (derived)                                        |NA                                                    |
+|INFLUENCE   |Index of use of influencing skills at work (derived)                                |NA                                                    |
+|NUMHOME     |Index of use of numeracy skills at home (basic and advanced - derived)              |NA                                                    |
+|NUMWORK     |Index of use of numeracy skills at work (basic and advanced - derived)              |NA                                                    |
+|READHOME    |Index of use of reading skills at home (prose and document texts - derived)         |NA                                                    |
+|READWORK    |Index of use of reading skills at work (prose and document texts - derived)         |NA                                                    |
+|TASKDISC    |Index of use of task discretion at work (derived)                                   |NA                                                    |
+|WRITHOME    |Index of use of writing skills at home (derived)                                    |NA                                                    |
+|WRITWORK    |Index of use of writing skills at work (derived)                                    |NA                                                    |
+#+end_export
 *** party_invitations-1
 #+begin_src sh :exports results :var out_dir=(jyun/get-heading)
 cd $out_dir
 cd figure
 convert -density 300 lpa_plot.pdf lpa_plot-%d.png
+convert -density 300 lpa_back.pdf lpa_back.png
+convert -density 300 lpa_back_line.pdf lpa_back_line.png
 #+end_src
+
+#+RESULTS:
 
 [[file:party_invitations-1/figure/lpa_plot-0.png]]
 [[file:party_invitations-1/figure/lpa_plot-1.png]]
+[[file:party_invitations-1/figure/lpa_back.png]]
+[[file:party_invitations-1/figure/lpa_back_line.png]]
 
 *** tickets
 
-#+begin_src sh :exports results :var out_dir=(jyun/get-heading)
+#+begin_src sh :async :exports results :var out_dir=(jyun/get-heading)
 cd $out_dir
 cd figure
 convert -density 300 lpa_plot.pdf lpa_plot-%d.png
+convert -density 300 lpa_back.pdf lpa_back.png
+convert -density 300 lpa_back_line.pdf lpa_back_line.png
 #+end_src
 
 #+RESULTS:
 
 [[file:tickets/figure/lpa_plot-0.png]]
 [[file:tickets/figure/lpa_plot-1.png]]
+[[file:tickets/figure/lpa_back.png]]
+[[file:tickets/figure/lpa_back_line.png]]
 *** book_order
 
-#+begin_src sh :exports results :var out_dir=(jyun/get-heading)
+#+begin_src sh :async :exports results :var out_dir=(jyun/get-heading)
 cd $out_dir
 cd figure
 convert -density 300 lpa_plot.pdf lpa_plot-%d.png
+convert -density 300 lpa_back.pdf lpa_back.png
+convert -density 300 lpa_back_line.pdf lpa_back_line.png
 #+end_src
 
 #+RESULTS:
 
 [[file:book_order/figure/lpa_plot-0.png]]
 [[file:book_order/figure/lpa_plot-1.png]]
+[[file:book_order/figure/lpa_back.png]]
+[[file:book_order/figure/lpa_back_line.png]]
 * Model
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index

@@ -77,4 +77,8 @@ pdf(paste0(out_dir,"figure/lpa_plot.pdf"))
 mod2 %>% plot_profiles()
 mod3 %>% plot_profiles()
 dev.off()
+
+source("R/lpa_back.R")
+print(classplot + ylim(-5, 5))
+ggsave(file=paste0(out_dir,"figure/lpa_back_line.pdf"),width=16,height=9)
 }
