@@ -1,0 +1,34 @@
+/* Data Tables */
+table.dataTable {
+  margin: 1em auto 1em auto;
+  border-width: 1px;
+  border-spacing: 0px;
+  border-style: inset;
+  border-color: #aaaaaa;
+  border-collapse: collapse;
+}
+
+caption,
+table.dataTable caption {
+  margin-top: 1em;
+  font-weight: bold;
+  background: #e8e8e8;
+}
+
+table.dataTable th nobr {
+  /* NOBR is added by sorting header tag. must disable it for csso. */
+  white-space: normal;
+  }
+table.dataTable th,
+table.dataTable td {
+  border-width: 1px;
+  padding: 3px;
+  border-style: solid;
+  border-color: #aaa;
+  border-collapse: separate;
+  -moz-border-radius: 0px;
+}
+
+table.dataTable td.longText {
+  white-space: normal;
+}

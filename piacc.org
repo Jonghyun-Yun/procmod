@@ -1901,15 +1901,6 @@ ggsave(file=paste0(out_dir,"figure/lpa_back_line.pdf"),width=16,height=9)
 }
 #+end_src
 
-> head(df_raw)
-      Model Classes Class Probability Variable       Value
-1.tau     6       3     1  0.99969682      tau -1.70660463
-2.tau     6       3     1  0.99989627      tau -1.45791923
-3.tau     6       3     1  0.99847260      tau  0.04203663
-4.tau     6       3     1  0.02740497      tau  1.05376687
-5.tau     6       3     1  0.01351313      tau -0.19619140
-6.tau     6       3     1  0.99999701      tau  0.44796177
-
 #+begin_src R :noweb yes :tangle R/lpa_back.R
 bf = ainfo %>% select(AGEG5LFS, ICTHOME, READHOME, WRITHOME, NUMHOME, NFEHRS, ICTWORK, READWORK, WRITWORK, NUMWORK, INFLUENCE, EARNHRDCL, TASKDISC, LEARNATWORK)
 bname = names(bf)
@@ -1936,7 +1927,7 @@ sd = aggregate(tt, list(tt$Class), FUN=sd)
 n = aggregate(tt, list(tt$Class), FUN=length)
 se = sd / sqrt(n)
 
-df_raw = .get_long_data(df)
+df_raw = get_long_data(df)
 #+end_src
 
 #+begin_src R :tangle R/lpa_back.R
@@ -1999,7 +1990,7 @@ if(any(c("Class_prob", "id", "new_id") %in% names(df_raw))){
 #+end_src
 
 #+begin_src R :tangle R/lpa_back.R
-plot_profiles.default(x =  list(df_plot = df_plot, df_raw = df_raw))
+classplot = plot_profiles.default(x =  list(df_plot = df_plot, df_raw = df_raw))
 #+end_src
 
 #+begin_src R
