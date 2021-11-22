@@ -2015,6 +2015,7 @@ out_dir = ldir[2]
 <<lpa_prep>>
 <<draw_lpa_fig>>
 
+<<get_traits>>
 df = mod2[[1]]
 before = df[["dff"]][,1:6]
 after = df[["dff"]][,-c(1:6)]
