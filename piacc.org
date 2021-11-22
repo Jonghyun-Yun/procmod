@@ -738,6 +738,16 @@ In Discussion, we decided to use time-scale: in-homogeneous and number of termin
 #+RESULTS:
 
 #+begin_src R :tangle diprom/R/misc.R :results silent
+kable2file <- function(fstr,fname) {
+if (file.exists(fname)) {
+  ##Delete file if it exists
+  file.remove(fname)
+}
+fcon = file(fname)
+writeLines(knitr::kable(fstr), fcon)
+close(fcon)
+}
+
 cl_box = function(y, cl, myname = NULL) {
   ## side by side box plot
   dd <- data.frame(y = y, cl = cl)
@@ -2016,8 +2026,9 @@ sd = aggregate(tt, list(tt$Class), FUN=sd)
 n = aggregate(tt, list(tt$Class), FUN=length)
 se = sd / sqrt(n)
 
-dr = diprom:::.get_long_data(df)
-dr %>% group_by(Class) %>% summarize_at(res)
+mm %>% select(4:8) %>% knitr::kable()
+sd %>% select(4:8) %>% knitr::kable()
+n %>% select(4:8) %>% knitr::kable()
 #+end_src
 * MCMC trace plots
 #+begin_src R :tangle diprom/R/post.R
