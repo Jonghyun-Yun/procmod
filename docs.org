@@ -1236,7 +1236,7 @@ Wilcoxon p-values for gender difference in \tau and \theta
 |WRITWORK    |Index of use of writing skills at work (derived)                                    |NA                                                    |
 #+end_export
 *** party_invitations-1
-#+begin_src sh :exports results :var out_dir=(jyun/get-heading)
+#+begin_src sh :exports none :var out_dir=(jyun/get-heading)
 cd $out_dir
 cd figure
 convert -density 300 lpa_plot.pdf lpa_plot-%d.png
@@ -1253,7 +1253,7 @@ convert -density 300 lpa_back_line.pdf lpa_back_line.png
 
 *** tickets
 
-#+begin_src sh :async :exports results :var out_dir=(jyun/get-heading)
+#+begin_src sh :async :exports none :var out_dir=(jyun/get-heading)
 cd $out_dir
 cd figure
 convert -density 300 lpa_plot.pdf lpa_plot-%d.png
@@ -1269,7 +1269,7 @@ convert -density 300 lpa_back_line.pdf lpa_back_line.png
 [[file:tickets/figure/lpa_back_line.png]]
 *** book_order
 
-#+begin_src sh :async :exports results :var out_dir=(jyun/get-heading)
+#+begin_src sh :async :exports none :var out_dir=(jyun/get-heading)
 cd $out_dir
 cd figure
 convert -density 300 lpa_plot.pdf lpa_plot-%d.png
@@ -1594,7 +1594,7 @@ attr(dat, "trans")
 #+end_src
 * COMMENT Local Variables
 # Local Variables:
-# org-babel-default-header-args:R: ((:session . "*R-PIACC*") (:export . "both") (:results . "output replace"))
+# eval: (jyun/set-org-babel-default-header-args:R:)
 # eval: (flyspell-mode -1)
 # eval: (spell-fu-mode -1)
 # End:
