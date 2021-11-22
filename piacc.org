@@ -1924,7 +1924,6 @@ print(classplot + ylim(-5, 5))
 ggsave(file=paste0(out_dir,"figure/lpa_back_line.pdf"),width=16,height=9)
 #+end_src
 
-
 ** background variables in clustsers
 #+begin_src R :noweb yes :tangle R/lpa_back.R
 bf = ainfo %>% select(AGEG5LFS, ICTHOME, READHOME, WRITHOME, NUMHOME, NFEHRS, ICTWORK, READWORK, WRITWORK, NUMWORK, INFLUENCE, EARNHRDCL, TASKDISC, LEARNATWORK)
@@ -2022,11 +2021,19 @@ classplot = plot_profiles.default(x =  list(df_plot = df_plot, df_raw = df_raw))
 #+begin_src R :noweb yes :tangle R/lpa-res.R
 <<lpa_prep>>
 
-out_dir = ldir[2]
-<<lpa_prep>>
+out_dir = ldir[3]
+
 <<draw_lpa_fig>>
 
 <<get_traits>>
+
+## book_order =minfo= has a fewer SEQID than =item=
+gres <- item %>%
+  group_by(SEQID) %>%
+  summarize(res = response[n()])
+ginfo = plyr::join(minfo, gres)
+rr = ginfo$res
+
 df = mod2[[1]]
 before = df[["dff"]][,1:6]
 after = df[["dff"]][,-c(1:6)]
@@ -2038,10 +2045,43 @@ sd = aggregate(tt, list(tt$Class), FUN=sd)
 n = aggregate(tt, list(tt$Class), FUN=length)
 se = sd / sqrt(n)
 
+save(mm,sd,n, file = paste0(out_dir, "summaryw_res.RData"))
+#+end_src
+
+#+begin_src R :results output replace html
 mm %>% select(4:8) %>% knitr::kable()
 sd %>% select(4:8) %>% knitr::kable()
 n %>% select(4:8) %>% knitr::kable()
 #+end_src
+
+#+RESULTS:
+#+begin_export html
+
+
+|        tau|      theta|    naction|        spd|       res|
+|----------:|----------:|----------:|----------:|---------:|
+|  2.0563546| -1.4942981|  0.0841316| -4.4287605| 0.4285714|
+|  0.0216743|  0.6296890| -0.2115868|  0.0312633| 2.7697517|
+| -0.6472588| -0.5780634| -0.2753689|  0.0345127| 1.1844660|
+|  0.8341553| -0.4259267|  0.8447064|  0.0307452| 1.8957346|
+
+
+|       tau|     theta|   naction|        spd|      res|
+|---------:|---------:|---------:|----------:|--------:|
+| 1.0991249| 0.9644910| 3.7204805| 11.7664714| 1.133893|
+| 0.6498181| 0.4327975| 0.3830087|  0.0016937| 0.563832|
+| 0.5699341| 1.1143492| 0.6979747|  0.0011854| 1.322244|
+| 1.3255476| 0.8873260| 1.5074309|  0.0024590| 1.237713|
+
+
+| tau| theta| naction| spd| res|
+|---:|-----:|-------:|---:|---:|
+|   7|     7|       7|   7|   7|
+| 443|   443|     443| 443| 443|
+| 309|   309|     309| 309| 309|
+| 211|   211|     211| 211| 211|
+#+end_export
+
 * MCMC trace plots
 #+begin_src R :tangle diprom/R/post.R
 plot_intervals = function(param, trans_ = "log", save_plot = TRUE){
