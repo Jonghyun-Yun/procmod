@@ -1594,7 +1594,7 @@ attr(dat, "trans")
 #+end_src
 * COMMENT Local Variables
 # Local Variables:
-# eval: (jyun/set-org-babel-default-header-args:R:)
+# eval: (jyun/set-org-babel-default-header-args:R)
 # eval: (flyspell-mode -1)
 # eval: (spell-fu-mode -1)
 # End:

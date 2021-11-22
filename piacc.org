@@ -25,20 +25,8 @@
 #+property: header-args:jupyter-python :session *jupyter-piacc* :kernel tf
 
 #+begin_src emacs-lisp :results silent
-  ;; fast, no unicode-math
-  (setq org-preview-latex-default-process 'dvipng)
-  ;; slow, supprts unicode-math
-  (setq org-preview-latex-default-process 'dvisvgm)
+  (jyun/org-latex-set-options 2.5)
 #+end_src
-
-#+begin_src emacs-lisp :results silent
-  (setq jyun/org-latex-preview-scale 2.5)
-  ;; set default org-latex-preview size
-  (jyun/org-latex-set-options)
-#+end_src
-
-#+RESULTS:
-: 300
 
 * discussion
 - [2021-05-09 Sun] note
