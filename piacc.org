@@ -1056,6 +1056,8 @@ item <- readr::read_csv(paste0(out_dir, "input/item.csv"), col_names = TRUE)
 [[file:figure/tau_res.pdf]]
 [[file:figure/time_action.pdf]]
 [[file:figure/time_action_more.pdf]]
+
+#+name: get_traits
 #+begin_src R :results silent :tangle R/summary.R
 source("R/pmean.R")
 dat <- readr::read_csv(paste0(out_dir, "input/dat.csv"), col_names = FALSE)
@@ -1808,8 +1810,8 @@ mean(ranger_tune$resample[, 1]) # incorrect. not using weight
 :header-args:R: :results silent
 :END:
 
-#+name: lpa-prep
-#+begin_src R :tangle no
+#+name: lpa_prep
+#+begin_src R
 library(diprom)
 library(tidyLPA)
 
@@ -1852,14 +1854,24 @@ registerDoParallel(cores = detectCores() - 1)
 #+end_src
 
 The below is code to perform LPA using optimal number of clusters (determined from prior procedure based on AIC, BIC, etc.)
-#+begin_src R :noweb yes :tangle R/lpa_fig.R
-<<lpa-prep>>
 
+#+begin_src R :noweb yes :tangle R/lpa_fig.R
+<<lpa_prep>>
+
+for (out_dir in ldir) {
+  <<draw_lpa_fig>>
+
+  <<draw_lpa_back>>
+}
+#+end_src
+
+#+name: draw_lpa_fig
+#+begin_src R
 nc2 = c(4,4,3)
 nc3 = c(2,3,2)
-kk = 0
-for (out_dir in ldir) {
-  kk = kk + 1
+
+kk = which(out_dir == ldir)
+
 lname = list(paste0(out_dir,"tau_imp.txt"), paste0(out_dir,"theta_imp.txt"))
 
 source("R/pmean.R")
@@ -1894,13 +1906,17 @@ pdf(paste0(out_dir,"figure/lpa_plot.pdf"))
 mod2 %>% plot_profiles()
 mod3 %>% plot_profiles()
 dev.off()
+#+end_src
 
+#+name: draw_lpa_back
+#+begin_src R
 source("R/lpa_back.R")
 print(classplot + ylim(-5, 5))
 ggsave(file=paste0(out_dir,"figure/lpa_back_line.pdf"),width=16,height=9)
-}
 #+end_src
 
+
+** background variables in clustsers
 #+begin_src R :noweb yes :tangle R/lpa_back.R
 bf = ainfo %>% select(AGEG5LFS, ICTHOME, READHOME, WRITHOME, NUMHOME, NFEHRS, ICTWORK, READWORK, WRITWORK, NUMWORK, INFLUENCE, EARNHRDCL, TASKDISC, LEARNATWORK)
 bname = names(bf)
@@ -1927,7 +1943,7 @@ sd = aggregate(tt, list(tt$Class), FUN=sd)
 n = aggregate(tt, list(tt$Class), FUN=length)
 se = sd / sqrt(n)
 
-df_raw = get_long_data(df)
+df_raw = diprom:::.get_long_data(df)
 #+end_src
 
 #+begin_src R :tangle R/lpa_back.R
@@ -1993,109 +2009,28 @@ if(any(c("Class_prob", "id", "new_id") %in% names(df_raw))){
 classplot = plot_profiles.default(x =  list(df_plot = df_plot, df_raw = df_raw))
 #+end_src
 
-#+begin_src R
-df_raw$Variable <- as.numeric(df_raw$Variable)
-level_labels <- levels(df_plot$Variable)
-df_plot$Variable <- as.numeric(df_plot$Variable)
+** responses in clusters
+#+begin_src R :noweb yes :tangle R/lpa-res.R
+<<lpa_prep>>
 
-classplot <-
-  ggplot(
-    NULL,
-    aes_string(
-      x = "Variable",
-      y = "Value",
-      group = "Class",
-      linetype = "Class",
-      shape = "Class",
-      colour = "Class"
-    )
-  ) + scale_colour_manual(values = get_palette(max(df_plot$Classes)))
-classplot <- classplot +
-  geom_jitter(
-    data = df_raw,
-    width = .2,
-    aes_string(
-      x = "Variable",
-      y = "Value",
-      shape = "Class",
-      alpha = "Probability"
-    )
-  ) +
-  scale_alpha_continuous(range = alpha_range, guide = FALSE)
+out_dir = ldir[2]
+<<lpa_prep>>
+<<draw_lpa_fig>>
 
-classplot <- classplot + geom_point(data = df_plot) +
-  scale_x_continuous(breaks = 1:length(level_labels),
-                     labels = level_labels) +
-  theme_bw() +
-  theme(panel.grid.minor.x = element_blank())
+df = mod2[[1]]
+before = df[["dff"]][,1:6]
+after = df[["dff"]][,-c(1:6)]
+df[["dff"]] = before %>% mutate(res = rr) %>% cbind(after)
 
-if(add_line) classplot <- classplot + geom_line(data = df_plot)
+tt = df[["dff"]]
+mm = aggregate(tt, list(tt$Class), FUN=mean)
+sd = aggregate(tt, list(tt$Class), FUN=sd)
+n = aggregate(tt, list(tt$Class), FUN=length)
+se = sd / sqrt(n)
 
-                                        # Add errorbars
-if (!is.null(ci)) {
-  ci <- qnorm(.5 * (1 - ci))
-  df_plot$error_min <- df_plot$Value + ci*df_plot$se
-  df_plot$error_max <- df_plot$Value - ci*df_plot$se
-
-  classplot <-
-    classplot + geom_errorbar(data = df_plot,
-                              aes_string(ymin = "error_min",
-                                         ymax = "error_max"),
-                              width = .4)
-}
-if(sd){
-
-  df_plot$sd_xmin <- df_plot$Variable-.2
-  df_plot$sd_xmax <- df_plot$Variable+.2
-  df_plot$sd_ymin <- df_plot$Value - sqrt(df_plot$Value.Variances)
-  df_plot$sd_ymax <- df_plot$Value + sqrt(df_plot$Value.Variances)
-
-  if(bw){
-    classplot <-
-      classplot + geom_rect(
-                    data = df_plot,
-                    aes_string(
-                      xmin = "sd_xmin",
-                      xmax = "sd_xmax",
-                      ymin = "sd_ymin",
-                      ymax = "sd_ymax",
-                      linetype = "Class"
-                    ),
-                    colour = "black",
-                    fill=ggplot2::alpha("grey", 0),
-                    inherit.aes=FALSE
-                  )
-  } else {
-    classplot <-
-      classplot + geom_rect(
-                    data = df_plot,
-                    aes_string(
-                      xmin = "sd_xmin",
-                      xmax = "sd_xmax",
-                      ymin = "sd_ymin",
-                      ymax = "sd_ymax",
-                      colour = "Class"
-                    ),
-                    fill=ggplot2::alpha("grey", 0),
-                    inherit.aes=FALSE
-                  )
-  }
-
-}
-
-if (length(unique(df_plot$Classes)) > 1) {
-  if(length(unique(df_plot$Model)) > 1){
-    classplot <- classplot + facet_grid(Model ~ Classes, labeller = label_both)
-  } else {
-    classplot <- classplot + facet_wrap(~ Classes, labeller = label_both)
-  }
-} else {
-  if(length(unique(df_plot$Model)) > 1){
-    classplot <- classplot + facet_wrap(~ Model, labeller = label_both)
-  }
-}
+dr = diprom:::.get_long_data(df)
+dr %>% group_by(Class) %>% summarize_at(res)
 #+end_src
-
 * MCMC trace plots
 #+begin_src R :tangle diprom/R/post.R
 plot_intervals = function(param, trans_ = "log", save_plot = TRUE){
@@ -2851,7 +2786,7 @@ length(unique(trans))
 #+end_src
 * COMMENT Local Variables
 # Local Variables:
-# org-babel-default-header-args:R: ((:session . "*R-PIACC*") (:export . "both") (:results . "output replace"))
+# eval: (jyun/set-org-babel-default-header-args:R)
 # eval: (flyspell-mode -1)
 # eval: (spell-fu-mode -1)
 # End:
