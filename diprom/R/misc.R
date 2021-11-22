@@ -1,3 +1,24 @@
+kable2file <- function(fstr,fname) {
+if (file.exists(fname)) {
+  ##Delete file if it exists
+  file.remove(fname)
+}
+fcon = file(fname)
+writeLines(knitr::kable(fstr), fcon)
+close(fcon)
+}
+
+list2file <- function(fstr,fname) {
+  if (!is.list(fstr)) error("fstr must be a list object ")
+  if (file.exists(fname)) {
+    ##Delete file if it exists
+    file.remove(fname)
+  }
+  fcon = file(fname)
+  for (kk in 1:length(fstr)) writeLines(fstr[[kk]], fcon)
+  close(fcon)
+}
+
 cl_box = function(y, cl, myname = NULL) {
   ## side by side box plot
   dd <- data.frame(y = y, cl = cl)
