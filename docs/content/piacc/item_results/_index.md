@@ -1,7 +1,7 @@
 +++
 title = "item results"
 author = ["Jonghyun Yun"]
-lastmod = 2021-09-28T17:16:11-05:00
+lastmod = 2021-11-22T11:04:14-06:00
 draft = false
 weight = 1
 chapter = true
@@ -68,6 +68,8 @@ c("Sampling / weighting", "Not assigned" ,"Sampling / weighting (derived)", "Bac
 
 Latent profile analysis is done by `tidyLAP`. This R package uses multivariate Gaussian mixture models and reports many model selection criteria. See <https://cran.r-project.org/web/packages/tidyLPA/vignettes/Introduction%5Fto%5FtidyLPA.html>
 The clustering is perfomed based on person characteristics. We compare models based on our estimated parameters, observed covariates and both.
+
+party\_invitations-1, tickets, book\_order: these items give more clusters using hidden traits + observed traits than using observed traits alone.
 
 
 # party\_invitations-1 {#party-invitations-1}
@@ -310,11 +312,6 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 
 # cd\_tally {#cd-tally}
 
-PROPERTIES:
-EXPORT\_FILE\_NAME: \_index
-EXPORT\_HUGO\_BUNDLE: cd\_tally
-END:
-
 ```text
 
 --------------------------------------------------------------
@@ -426,10 +423,15 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 
 # sprained\_ankle-1 {#sprained-ankle-1}
 
-PROPERTIES:
-EXPORT\_FILE\_NAME: \_index
-EXPORT\_HUGO\_BUNDLE: sprained\_ankle-1
-END:
+:#+begin\_src sh :async
+out\_dir="sprained\_ankle-1/"
+cd $out\_dir
+cd figure
+convert -density 300 tau\_action.pdf tau\_action.png
+convert -density 300 theta\_tau\_res.pdf theta\_tau\_res.png
+convert -density 300 time\_action\_more.pdf time\_action\_more-%d.png
+convert -density 300 time\_action.pdf time\_action-%d.png
+\#+end\_src
 
 ```text
 
@@ -553,11 +555,6 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 
 
 # tickets {#tickets}
-
-PROPERTIES:
-EXPORT\_FILE\_NAME: \_index
-EXPORT\_HUGO\_BUNDLE: tickets
-END:
 
 ```text
 
@@ -695,11 +692,6 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 
 # club\_membership-1 {#club-membership-1}
 
-PROPERTIES:
-EXPORT\_FILE\_NAME: \_index
-EXPORT\_HUGO\_BUNDLE: club\_membership-1
-END:
-
 ```text
 
 --------------------------------------------------------------
@@ -825,11 +817,6 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 
 # book\_order {#book-order}
 
-PROPERTIES:
-EXPORT\_FILE\_NAME: \_index
-EXPORT\_HUGO\_BUNDLE: book\_order
-END:
-
 ```text
 
 --------------------------------------------------------------
@@ -937,11 +924,6 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 
 
 # meeting\_room {#meeting-room}
-
-PROPERTIES:
-EXPORT\_FILE\_NAME: \_index
-EXPORT\_HUGO\_BUNDLE: meeting\_room
-END:
 
 ```text
 
@@ -1067,10 +1049,15 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 
 # locate\_email {#locate-email}
 
-PROPERTIES:
-EXPORT\_FILE\_NAME: \_index
-EXPORT\_HUGO\_BUNDLE: locate\_email
-END:
+:#+begin\_src sh :async
+out\_dir="locate\_email/"
+cd $out\_dir
+cd figure
+convert -density 300 tau\_action.pdf tau\_action.png
+convert -density 300 theta\_tau\_res.pdf theta\_tau\_res.png
+convert -density 300 time\_action\_more.pdf time\_action\_more-%d.png
+convert -density 300 time\_action.pdf time\_action-%d.png
+\#+end\_src
 
 
 ## Covariates {#covariates}
