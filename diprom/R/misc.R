@@ -1,24 +1,13 @@
-kable2file = function(toprint, fname){
-  ## write kable to file
-if (file.exists(fname)) {
-  ##Delete file if it exists
-  file.remove(fname)
-}
-fcon = file(fname)
-fstr = print(toprint)
-writeLines(knitr::kable(fstr), fcon)
-}
-
 cl_box = function(y, cl, myname = NULL) {
   ## side by side box plot
-dd <- data.frame(y = y, cl = cl)
-boxp <- ggplot(dd, aes(x = factor(cl), y = y, fill = factor(cl))) +
-  geom_boxplot() +
-  theme(legend.position = "none")
-if (!is.null(myname)) {
-boxp = boxp + labs(y = myname[1], x = myname[2])}
-print(boxp)
-    }
+  dd <- data.frame(y = y, cl = cl)
+  boxp <- ggplot(dd, aes(x = factor(cl), y = y, fill = factor(cl))) +
+    geom_boxplot() +
+    theme(legend.position = "none")
+  if (!is.null(myname)) {
+    boxp = boxp + labs(y = myname[1], x = myname[2])}
+  print(boxp)
+}
 
 cl_plot <- function(x, cl, myname = NULL, size_ = 1, xlim = NA, ylim = NA) {
   ## plot 2d array x

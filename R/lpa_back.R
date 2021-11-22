@@ -28,7 +28,7 @@ sd = aggregate(tt, list(tt$Class), FUN=sd)
 n = aggregate(tt, list(tt$Class), FUN=length)
 se = sd / sqrt(n)
 
-df_raw = get_long_data(df)
+df_raw = diprom:::.get_long_data(df)
 
 x = mod2; ci = .95; sd = TRUE; add_line = FALSE; rawdata = TRUE; bw = FALSE; alpha_range = c(0, .1)
 

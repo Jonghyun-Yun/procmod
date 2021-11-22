@@ -150,7 +150,7 @@ get_palette <- function(x){
     }
 }
 
-get_long_data <- function(x, ...) {
+.get_long_data <- function(x, ...) {
     if(inherits(x, "tidyProfile")){
         x <- list(x)
     }

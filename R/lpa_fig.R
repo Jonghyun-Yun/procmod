@@ -18,6 +18,9 @@ ldir = c(
 ## "lamp_return/"
 )
 
+nc2 = c(4,4,3)
+nc3 = c(2,3,2)
+
 ## out_dir="party_invitations-1/"
 ## out_dir="party_invitations-2/"
 ## out_dir="cd_tally/"
@@ -38,47 +41,47 @@ stopImplicitCluster()
 ## doParallel::registerDoParallel(2)
 registerDoParallel(cores = detectCores() - 1)
 
-nc2 = c(4,4,3)
-nc3 = c(2,3,2)
 kk = 0
 for (out_dir in ldir) {
+
   kk = kk + 1
-lname = list(paste0(out_dir,"tau_imp.txt"), paste0(out_dir,"theta_imp.txt"))
 
-source("R/pmean.R")
-source("R/pinfo_preproc.R")
+  lname = list(paste0(out_dir,"tau_imp.txt"), paste0(out_dir,"theta_imp.txt"))
+  
+  source("R/pmean.R")
+  source("R/pinfo_preproc.R")
+  
+  res = list(tau = minfo$tau, theta = minfo$theta)
+  
+  gg <- item %>%
+    group_by(SEQID) %>%
+    summarize(ftime = timestamp[1] / 1000, naction = n(), time = timestamp[n()] / 1000, spd = naction / (ftime - time))
+  
+  ainfo = plyr::join(minfo, gg)
+  ainfo = ainfo %>% mutate(ltau = log(tau), laction = log(naction))
+  
+  mod2 = ainfo %>%
+    select(tau, theta, naction, spd) %>%
+    single_imputation() %>%
+    scale() %>%
+    estimate_profiles(nc2[kk],
+                      variances = c( "varying"),
+                      covariances = c( "varying"))
+  
+  mod3 = ainfo %>%
+    select(naction, spd) %>%
+    single_imputation() %>%
+    scale() %>%
+    estimate_profiles(nc3[kk],
+                      variances = c( "varying"),
+                      covariances = c( "varying"))
+  
+  pdf(paste0(out_dir,"figure/lpa_plot.pdf"))
+  mod2 %>% plot_profiles()
+  mod3 %>% plot_profiles()
+  dev.off()
 
-res = list(tau = minfo$tau, theta = minfo$theta)
-
-gg <- item %>%
-  group_by(SEQID) %>%
-  summarize(ftime = timestamp[1] / 1000, naction = n(), time = timestamp[n()] / 1000, spd = naction / (ftime - time))
-
-ainfo = plyr::join(minfo, gg)
-ainfo = ainfo %>% mutate(ltau = log(tau), laction = log(naction))
-
-mod2 = ainfo %>%
-  select(tau, theta, naction, spd) %>%
-  single_imputation() %>%
-  scale() %>%
-  estimate_profiles(nc2[kk],
-                    variances = c( "varying"),
-                    covariances = c( "varying"))
-
-mod3 = ainfo %>%
-  select(naction, spd) %>%
-  single_imputation() %>%
-  scale() %>%
-  estimate_profiles(nc3[kk],
-                    variances = c( "varying"),
-                    covariances = c( "varying"))
-
-pdf(paste0(out_dir,"figure/lpa_plot.pdf"))
-mod2 %>% plot_profiles()
-mod3 %>% plot_profiles()
-dev.off()
-
-source("R/lpa_back.R")
-print(classplot + ylim(-5, 5))
-ggsave(file=paste0(out_dir,"figure/lpa_back_line.pdf"),width=16,height=9)
+  source("R/lpa_back.R")
+  print(classplot + ylim(-5, 5))
+  ggsave(file=paste0(out_dir,"figure/lpa_back_line.pdf"),width=16,height=9)
 }
