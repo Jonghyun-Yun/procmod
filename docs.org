@@ -1251,6 +1251,51 @@ convert -density 300 lpa_back_line.pdf lpa_back_line.png
 [[file:party_invitations-1/figure/lpa_back.png]]
 [[file:party_invitations-1/figure/lpa_back_line.png]]
 
+Response: the larger, the better
+#+begin_src R :exports results :var ob_out_dir=(jyun/get-heading) :results output html
+load(paste0(ob_out_dir, "/summaryw_res.RData"))
+cat("\n### mean\n")
+mm %>% select(4:8) %>% knitr::kable()
+cat("\n### sd\n")
+sd %>% select(4:8) %>% knitr::kable()
+cat("\n### n\n")
+n %>% select(4:8) %>% knitr::kable()
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+
+## mean
+
+
+|        tau|      theta|    naction|        spd|       res|
+|----------:|----------:|----------:|----------:|---------:|
+|  2.0563546| -1.4942981|  0.0841316| -4.4287605| 0.4285714|
+|  0.0216743|  0.6296890| -0.2115868|  0.0312633| 2.7697517|
+| -0.6472588| -0.5780634| -0.2753689|  0.0345127| 1.1844660|
+|  0.8341553| -0.4259267|  0.8447064|  0.0307452| 1.8957346|
+
+## sd
+
+
+|       tau|     theta|   naction|        spd|      res|
+|---------:|---------:|---------:|----------:|--------:|
+| 1.0991249| 0.9644910| 3.7204805| 11.7664714| 1.133893|
+| 0.6498181| 0.4327975| 0.3830087|  0.0016937| 0.563832|
+| 0.5699341| 1.1143492| 0.6979747|  0.0011854| 1.322244|
+| 1.3255476| 0.8873260| 1.5074309|  0.0024590| 1.237713|
+
+## n
+
+
+| tau| theta| naction| spd| res|
+|---:|-----:|-------:|---:|---:|
+|   7|     7|       7|   7|   7|
+| 443|   443|     443| 443| 443|
+| 309|   309|     309| 309| 309|
+| 211|   211|     211| 211| 211|
+#+end_export
+
 *** tickets
 
 #+begin_src sh :async :exports none :var out_dir=(jyun/get-heading)
@@ -1267,6 +1312,51 @@ convert -density 300 lpa_back_line.pdf lpa_back_line.png
 [[file:tickets/figure/lpa_plot-1.png]]
 [[file:tickets/figure/lpa_back.png]]
 [[file:tickets/figure/lpa_back_line.png]]
+
+Response: the smaller, the better
+#+begin_src R :exports results :var ob_out_dir=(jyun/get-heading) :results output html
+load(paste0(ob_out_dir, "/summaryw_res.RData"))
+cat("\n### mean\n")
+mm %>% select(4:8) %>% knitr::kable()
+cat("\n### sd\n")
+sd %>% select(4:8) %>% knitr::kable()
+cat("\n### n\n")
+n %>% select(4:8) %>% knitr::kable()
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+## mean
+
+
+|        tau|      theta|    naction|        spd|      res|
+|----------:|----------:|----------:|----------:|--------:|
+| -0.4123013|  0.1939430|  0.0105633|  0.2949513| 3.710588|
+|  0.9344900| -0.6655596|  0.3971435|  0.1263112| 5.219081|
+|  1.1296467| -1.7866636| -1.9230219| -1.9932064| 7.000000|
+| -0.9718218|  1.3403763|  0.1527688| -0.0648598| 3.145251|
+
+## sd
+
+
+|       tau|    theta|   naction|       spd|      res|
+|---------:|--------:|---------:|---------:|--------:|
+| 0.4111353| 0.384638| 0.6375695| 0.2628682| 2.989527|
+| 0.9065238| 0.553052| 1.2095532| 0.3520752| 2.745995|
+| 0.9047816| 1.085768| 0.1671354| 2.6734464| 0.000000|
+| 0.2688267| 0.354953| 0.5181867| 0.3940398| 2.883724|
+
+## n
+
+
+| tau| theta| naction| spd| res|
+|---:|-----:|-------:|---:|---:|
+| 425|   425|     425| 425| 425|
+| 283|   283|     283| 283| 283|
+|  75|    75|      75|  75|  75|
+| 179|   179|     179| 179| 179|
+#+end_export
+
 *** book_order
 
 #+begin_src sh :async :exports none :var out_dir=(jyun/get-heading)
@@ -1283,6 +1373,49 @@ convert -density 300 lpa_back_line.pdf lpa_back_line.png
 [[file:book_order/figure/lpa_plot-1.png]]
 [[file:book_order/figure/lpa_back.png]]
 [[file:book_order/figure/lpa_back_line.png]]
+
+Response: the larger, the better
+#+begin_src R :exports results :var ob_out_dir=(jyun/get-heading) :results output html
+load(paste0(ob_out_dir, "/summaryw_res.RData"))
+cat("\n### mean\n")
+mm %>% select(4:8) %>% knitr::kable()
+cat("\n### sd\n")
+sd %>% select(4:8) %>% knitr::kable()
+cat("\n### n\n")
+n %>% select(4:8) %>% knitr::kable()
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+
+## mean
+
+
+|        tau|      theta|    naction|        spd|      res|
+|----------:|----------:|----------:|----------:|--------:|
+| -0.1796185|  0.3713422|  0.2076782|  0.1051426| 2.266667|
+|  0.8268249| -1.6669104| -1.3426361| -0.2532945| 6.318182|
+|  0.3102977| -0.7852254|  0.9498770| -0.9624705| 4.230769|
+
+## sd
+
+
+|       tau|     theta|   naction|       spd|      res|
+|---------:|---------:|---------:|---------:|--------:|
+| 0.8760688| 0.4854905| 0.6785404| 0.4186236| 2.451307|
+| 1.0592788| 0.8313262| 0.1204197| 0.7950367| 1.915127|
+| 1.3204838| 1.7256246| 2.4779712| 3.9729973| 3.050347|
+
+## n
+
+
+| tau| theta| naction| spd| res|
+|---:|-----:|-------:|---:|---:|
+| 450|   450|     450| 450| 450|
+|  88|    88|      88|  88|  88|
+|  26|    26|      26|  26|  26|
+#+end_export
+
 * Model
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
