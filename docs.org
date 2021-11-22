@@ -614,10 +614,10 @@ convert -density 300 time_action.pdf time_action-%d.png
 [[file:party_inviations-2/figure/time_action_more-13.png]]
 
 *** cd_tally
-PROPERTIES:
-EXPORT_FILE_NAME: _index
-EXPORT_HUGO_BUNDLE: cd_tally
-END:
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: cd_tally
+:END:
 
 #+begin_src sh :async
 out_dir="cd_tally/"
@@ -663,11 +663,11 @@ convert -density 300 time_action.pdf time_action-%d.png
 [[file:cd_tally/figure/time_action_more-13.png]]
 
 *** sprained_ankle-1
-PROPERTIES:
-EXPORT_FILE_NAME: _index
-EXPORT_HUGO_BUNDLE: sprained_ankle-1
-END:
-#+begin_src sh :async
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: sprained_ankle-1
+:END:
+:#+begin_src sh :async
 out_dir="sprained_ankle-1/"
 cd $out_dir
 cd figure
@@ -751,10 +751,10 @@ insert-file-contents "sprained_ankle-2/theta_imp.txt")
 [file:sprained_ankle-2/figure/time_action_more-13.png]]
 
 *** tickets
-PROPERTIES:
-EXPORT_FILE_NAME: _index
-EXPORT_HUGO_BUNDLE: tickets
-END:
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: tickets
+:END:
 
 #+begin_src sh :async
 out_dir="tickets/"
@@ -848,10 +848,10 @@ insert-file-contents "class_attendance/theta_imp.txt")
 [file:class_attendance/figure/time_action_more-13.png]]
 
 *** club_membership-1
-PROPERTIES:
-EXPORT_FILE_NAME: _index
-EXPORT_HUGO_BUNDLE: club_membership-1
-END:
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: club_membership-1
+:END:
 
 #+begin_src sh :async
 out_dir="club_membership-1/"
@@ -944,10 +944,10 @@ insert-file-contents "club_membership-2/theta_imp.txt")
 [file:club_membership-2/figure/time_action_more-13.png]]
 
 *** book_order
-PROPERTIES:
-EXPORT_FILE_NAME: _index
-EXPORT_HUGO_BUNDLE: book_order
-END:
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: book_order
+:END:
 
 #+begin_src sh :async
 out_dir="book_order/"
@@ -993,10 +993,10 @@ convert -density 300 time_action.pdf time_action-%d.png
 [[file:book_order/figure/time_action_more-13.png]]
 
 *** meeting_room
-PROPERTIES:
-EXPORT_FILE_NAME: _index
-EXPORT_HUGO_BUNDLE: meeting_room
-END:
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: meeting_room
+:END:
 
 #+begin_src sh :async
 out_dir="meeting_room/"
@@ -1090,11 +1090,11 @@ insert-file-contents "reply_all/theta_imp.txt")
 [file:reply_all/figure/time_action_more-13.png]]
 
 *** locate_email
-PROPERTIES:
-EXPORT_FILE_NAME: _index
-EXPORT_HUGO_BUNDLE: locate_email
-END:
-#+begin_src sh :async
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: locate_email
+:END:
+:#+begin_src sh :async
 out_dir="locate_email/"
 cd $out_dir
 cd figure
