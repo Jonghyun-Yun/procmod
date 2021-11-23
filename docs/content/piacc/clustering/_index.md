@@ -1,7 +1,7 @@
 +++
 title = "clustering"
 author = ["Jonghyun Yun"]
-lastmod = 2021-11-23T13:45:01-06:00
+lastmod = 2021-11-23T13:51:36-06:00
 draft = false
 weight = 1
 chapter = true
@@ -18,6 +18,10 @@ chapter = true
 
 </div>
 <!--endtoc-->
+
+```R
+ftime = timestamp[1] / 1000, naction = n(), time = timestamp[n()] / 1000, spd = naction / (ftime - time)
+```
 
 -   &tau;: person's baseline hazard for action transition
 -   &theta;: person's xxx to jump to a similar action for the next one
