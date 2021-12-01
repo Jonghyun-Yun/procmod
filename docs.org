@@ -1214,9 +1214,11 @@ Wilcoxon p-values for gender difference in \tau and \theta
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_BUNDLE: clustering
 :END:
-=ftime = timestamp[1] / 1000, naction = n(), time = timestamp[n()] / 1000, spd = naction / (ftime - time)=
-\tau: person's baseline hazard for action transition
-\theta: person's xxx to jump to a similar action for the next one
+#+begin_src R :exports code
+ftime = timestamp[1] / 1000, naction = n(), time = timestamp[n()] / 1000, spd = naction / (ftime - time)
+#+end_src
+- \tau: person's baseline hazard for action transition
+- \theta: person's xxx to jump to a similar action for the next one
 #+begin_export html
 |Name        |Label                                                                               |Value scheme                                          |
 |:-----------|:-----------------------------------------------------------------------------------|:-----------------------------------------------------|
@@ -1240,7 +1242,7 @@ Wilcoxon p-values for gender difference in \tau and \theta
 cd $out_dir
 cd figure
 convert -density 300 lpa_plot.pdf lpa_plot-%d.png
-convert -density 300 lpa_back.pdf lpa_back.png
+# convert -density 300 lpa_back.pdf lpa_back.png
 convert -density 300 lpa_back_line.pdf lpa_back_line.png
 #+end_src
 
@@ -1248,52 +1250,41 @@ convert -density 300 lpa_back_line.pdf lpa_back_line.png
 
 [[file:party_invitations-1/figure/lpa_plot-0.png]]
 [[file:party_invitations-1/figure/lpa_plot-1.png]]
-[[file:party_invitations-1/figure/lpa_back.png]]
+# [[file:party_invitations-1/figure/lpa_back.png]]
 [[file:party_invitations-1/figure/lpa_back_line.png]]
 
 Response: the larger, the better
+
 #+begin_src R :exports results :var ob_out_dir=(jyun/get-heading) :results output html
+library(diprom)
 load(paste0(ob_out_dir, "/summaryw_res.RData"))
-cat("\n### mean\n")
-mm %>% select(4:8) %>% knitr::kable()
-cat("\n### sd\n")
-sd %>% select(4:8) %>% knitr::kable()
-cat("\n### n\n")
-n %>% select(4:8) %>% knitr::kable()
+cat("\n### w/ tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+load(paste0(ob_out_dir, "/mod3_summaryw_res.RData"))
+cat("\n### w/o tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
 #+end_src
 
 #+RESULTS:
 #+begin_export html
 
-## mean
+### clustering w/ tau and theta
 
 
-|        tau|      theta|    naction|        spd|       res|
-|----------:|----------:|----------:|----------:|---------:|
-|  2.0563546| -1.4942981|  0.0841316| -4.4287605| 0.4285714|
-|  0.0216743|  0.6296890| -0.2115868|  0.0312633| 2.7697517|
-| -0.6472588| -0.5780634| -0.2753689|  0.0345127| 1.1844660|
-|  0.8341553| -0.4259267|  0.8447064|  0.0307452| 1.8957346|
+|          tau|        theta|      naction|           spd|         res|             n|
+|------------:|------------:|------------:|-------------:|-----------:|-------------:|
+|  2.06 (1.10)| -1.49 (0.96)|  0.08 (3.72)| -4.43 (11.77)| 0.43 (1.13)|   7.00 (0.00)|
+|  0.02 (0.65)|  0.63 (0.43)| -0.21 (0.38)|   0.03 (0.00)| 2.77 (0.56)| 443.00 (0.00)|
+| -0.65 (0.57)| -0.58 (1.11)| -0.28 (0.70)|   0.03 (0.00)| 1.18 (1.32)| 309.00 (0.00)|
+|  0.83 (1.33)| -0.43 (0.89)|  0.84 (1.51)|   0.03 (0.00)| 1.90 (1.24)| 211.00 (0.00)|
 
-## sd
-
-
-|       tau|     theta|   naction|        spd|      res|
-|---------:|---------:|---------:|----------:|--------:|
-| 1.0991249| 0.9644910| 3.7204805| 11.7664714| 1.133893|
-| 0.6498181| 0.4327975| 0.3830087|  0.0016937| 0.563832|
-| 0.5699341| 1.1143492| 0.6979747|  0.0011854| 1.322244|
-| 1.3255476| 0.8873260| 1.5074309|  0.0024590| 1.237713|
-
-## n
+### clustering w/o tau and theta
 
 
-| tau| theta| naction| spd| res|
-|---:|-----:|-------:|---:|---:|
-|   7|     7|       7|   7|   7|
-| 443|   443|     443| 443| 443|
-| 309|   309|     309| 309| 309|
-| 211|   211|     211| 211| 211|
+|      naction|          spd|      CPROB1|      CPROB2|         res|             n|
+|------------:|------------:|-----------:|-----------:|-----------:|-------------:|
+|  1.82 (4.16)| -3.09 (9.85)| 0.98 (0.05)| 0.02 (0.05)| 0.70 (1.25)|  10.00 (0.00)|
+| -0.02 (0.90)|  0.03 (0.00)| 0.00 (0.01)| 1.00 (0.01)| 2.07 (1.23)| 960.00 (0.00)|
 #+end_export
 
 *** tickets
@@ -1302,7 +1293,7 @@ n %>% select(4:8) %>% knitr::kable()
 cd $out_dir
 cd figure
 convert -density 300 lpa_plot.pdf lpa_plot-%d.png
-convert -density 300 lpa_back.pdf lpa_back.png
+# convert -density 300 lpa_back.pdf lpa_back.png
 convert -density 300 lpa_back_line.pdf lpa_back_line.png
 #+end_src
 
@@ -1310,18 +1301,18 @@ convert -density 300 lpa_back_line.pdf lpa_back_line.png
 
 [[file:tickets/figure/lpa_plot-0.png]]
 [[file:tickets/figure/lpa_plot-1.png]]
-[[file:tickets/figure/lpa_back.png]]
+# [[file:tickets/figure/lpa_back.png]]
 [[file:tickets/figure/lpa_back_line.png]]
 
 Response: the smaller, the better
 #+begin_src R :exports results :var ob_out_dir=(jyun/get-heading) :results output html
+library(diprom)
 load(paste0(ob_out_dir, "/summaryw_res.RData"))
-cat("\n### mean\n")
-mm %>% select(4:8) %>% knitr::kable()
-cat("\n### sd\n")
-sd %>% select(4:8) %>% knitr::kable()
-cat("\n### n\n")
-n %>% select(4:8) %>% knitr::kable()
+cat("\n### w/ tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+load(paste0(ob_out_dir, "/mod3_summaryw_res.RData"))
+cat("\n### w/o tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
 #+end_src
 
 #+RESULTS:
@@ -1363,7 +1354,7 @@ n %>% select(4:8) %>% knitr::kable()
 cd $out_dir
 cd figure
 convert -density 300 lpa_plot.pdf lpa_plot-%d.png
-convert -density 300 lpa_back.pdf lpa_back.png
+# convert -density 300 lpa_back.pdf lpa_back.png
 convert -density 300 lpa_back_line.pdf lpa_back_line.png
 #+end_src
 
@@ -1371,49 +1362,39 @@ convert -density 300 lpa_back_line.pdf lpa_back_line.png
 
 [[file:book_order/figure/lpa_plot-0.png]]
 [[file:book_order/figure/lpa_plot-1.png]]
-[[file:book_order/figure/lpa_back.png]]
+# [[file:book_order/figure/lpa_back.png]]
 [[file:book_order/figure/lpa_back_line.png]]
 
 Response: the larger, the better
 #+begin_src R :exports results :var ob_out_dir=(jyun/get-heading) :results output html
+library(diprom)
 load(paste0(ob_out_dir, "/summaryw_res.RData"))
-cat("\n### mean\n")
-mm %>% select(4:8) %>% knitr::kable()
-cat("\n### sd\n")
-sd %>% select(4:8) %>% knitr::kable()
-cat("\n### n\n")
-n %>% select(4:8) %>% knitr::kable()
+cat("\n### w/ tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+load(paste0(ob_out_dir, "/mod3_summaryw_res.RData"))
+cat("\n### w/o tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
 #+end_src
 
 #+RESULTS:
 #+begin_export html
 
-## mean
+### w/ tau and theta
 
 
-|        tau|      theta|    naction|        spd|      res|
-|----------:|----------:|----------:|----------:|--------:|
-| -0.1796185|  0.3713422|  0.2076782|  0.1051426| 2.266667|
-|  0.8268249| -1.6669104| -1.3426361| -0.2532945| 6.318182|
-|  0.3102977| -0.7852254|  0.9498770| -0.9624705| 4.230769|
+|          tau|        theta|      naction|          spd|         res|             n|
+|------------:|------------:|------------:|------------:|-----------:|-------------:|
+| -0.18 (0.88)|  0.37 (0.49)|  0.21 (0.68)|  0.11 (0.42)| 2.27 (2.45)| 450.00 (0.00)|
+|  0.83 (1.06)| -1.67 (0.83)| -1.34 (0.12)| -0.25 (0.80)| 6.32 (1.92)|  88.00 (0.00)|
+|  0.31 (1.32)| -0.79 (1.73)|  0.95 (2.48)| -0.96 (3.97)| 4.23 (3.05)|  26.00 (0.00)|
 
-## sd
-
-
-|       tau|     theta|   naction|       spd|      res|
-|---------:|---------:|---------:|---------:|--------:|
-| 0.8760688| 0.4854905| 0.6785404| 0.4186236| 2.451307|
-| 1.0592788| 0.8313262| 0.1204197| 0.7950367| 1.915127|
-| 1.3204838| 1.7256246| 2.4779712| 3.9729973| 3.050347|
-
-## n
+### w/o tau and theta
 
 
-| tau| theta| naction| spd| res|
-|---:|-----:|-------:|---:|---:|
-| 450|   450|     450| 450| 450|
-|  88|    88|      88|  88|  88|
-|  26|    26|      26|  26|  26|
+|      naction|          spd|      CPROB1|      CPROB2|         res|             n|
+|------------:|------------:|-----------:|-----------:|-----------:|-------------:|
+| -0.04 (0.83)|  0.08 (0.45)| 0.99 (0.03)| 0.01 (0.03)| 2.91 (2.80)| 535.00 (0.00)|
+|  0.73 (2.54)| -1.45 (3.73)| 0.11 (0.16)| 0.89 (0.16)| 4.52 (3.01)|  29.00 (0.00)|
 #+end_export
 
 * Model

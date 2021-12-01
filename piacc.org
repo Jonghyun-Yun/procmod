@@ -101,7 +101,7 @@ seqs[4]
 
 #+RESULTS:
 : [1] "MAIL_DRAG-item101 MAIL_MOVED-item101|CanComeFolder MAIL_VIEWED-item102 MAIL_DRAG-item102 MAIL_MOVED-item102|CannotComeFolder MAIL_VIEWED-item104 MAIL_DRAG-item104 MAIL_MOVED-item104|CanComeFolder MAIL_VIEWED-item105 MAIL_VIEWED-item103 FOLDER_VIEWED-CanComeFolder MAIL_VIEWED-item101 NEXT_INQUIRY"
-** [[id:02fc4776-ea2d-4770-91ed-92d35c08a81d][word2vec embedding]] :noexport:
+** [[id:1b2724b9-324b-463b-967a-3b064a0f115e][Word2Vec]] :noexport:
 https://www.tensorflow.org/tutorials/text/word2vec
 - Words that tend to “behave similarly” end up close to one another in the embedding space. Instead of using the word symbol as a feature in the model, we can use its vector, which exploits such similarities.
 
@@ -2025,6 +2025,8 @@ out_dir = ldir[3]
 
 <<draw_lpa_fig>>
 
+## source("R/lpa_back.R")
+
 <<get_traits>>
 
 ## book_order =minfo= has a fewer SEQID than =item=
@@ -2033,7 +2035,9 @@ gres <- item %>%
   summarize(res = response[n()])
 ginfo = plyr::join(minfo, gres)
 rr = ginfo$res
+#+end_src
 
+#+begin_src R :noweb yes :tangle R/lpa-res.R
 df = mod2[[1]]
 before = df[["dff"]][,1:6]
 after = df[["dff"]][,-c(1:6)]
@@ -2045,42 +2049,68 @@ sd = aggregate(tt, list(tt$Class), FUN=sd)
 n = aggregate(tt, list(tt$Class), FUN=length)
 se = sd / sqrt(n)
 
+n = n[,4]
+mm = mm %>% select(4:8)
+sd = sd %>% select(4:8)
+mm$n = n;
+sd$n = 0*n;
+
 save(mm,sd,n, file = paste0(out_dir, "summaryw_res.RData"))
 #+end_src
 
-#+begin_src R :results output replace html
-mm %>% select(4:8) %>% knitr::kable()
-sd %>% select(4:8) %>% knitr::kable()
-n %>% select(4:8) %>% knitr::kable()
+#+begin_src R
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
 #+end_src
 
-#+RESULTS:
-#+begin_export html
+#+begin_src R :tangle diprom/R/utils.R
+## stolen from https://github.com/dewittpe/qwraps2/
+frmt <- function(x, digits = 2) {
+  sapply(x,
+         function(xx) {
+           if (is.integer(xx)) {
+             formatC(xx, format = "d", big.mark = ",")
+           } else {
+             formatC(xx, digits = digits, format = "f", big.mark = ",")
+           }
+         })
+}
 
+mat2mean_sd <- function(mm, sd,
+                    digits = 2,
+                    na_rm = FALSE,
+                    show_n = "ifNA",
+                    denote_sd = "pm",
+                    markup = "latex") {
+  n <- sum(!is.na(s))
+  m = unlist(mm)
+  s = unlist(sd)
 
-|        tau|      theta|    naction|        spd|       res|
-|----------:|----------:|----------:|----------:|---------:|
-|  2.0563546| -1.4942981|  0.0841316| -4.4287605| 0.4285714|
-|  0.0216743|  0.6296890| -0.2115868|  0.0312633| 2.7697517|
-| -0.6472588| -0.5780634| -0.2753689|  0.0345127| 1.1844660|
-|  0.8341553| -0.4259267|  0.8447064|  0.0307452| 1.8957346|
+  if (all(!(show_n %in% c("ifNA", "always", "never")))) {
+    warning("'show_n' should be in c('ifNA', 'always', 'never').  Setting to 'ifNA'.")
+    show_n <- "ifNA"
+  }
 
+  if (show_n == "always" | (show_n == "ifNA" & any(is.na(s)))) {
+    rtn <- paste0(frmt(as.integer(n), digits), "; ", frmt(m, digits), " $\\pm$ ", frmt(s, digits))
+  } else {
+    rtn <- paste0(frmt(m, digits), " $\\pm$ ", frmt(s, digits))
+  }
 
-|       tau|     theta|   naction|        spd|      res|
-|---------:|---------:|---------:|----------:|--------:|
-| 1.0991249| 0.9644910| 3.7204805| 11.7664714| 1.133893|
-| 0.6498181| 0.4327975| 0.3830087|  0.0016937| 0.563832|
-| 0.5699341| 1.1143492| 0.6979747|  0.0011854| 1.322244|
-| 1.3255476| 0.8873260| 1.5074309|  0.0024590| 1.237713|
+  if (denote_sd == "paren") {
+    rtn <- gsub("\\$\\\\pm\\$\\s(.*)", "\\(\\1\\)", rtn)
+  }
 
+  if (markup == "markdown") {
+    rtn <- gsub("\\$\\\\pm\\$", "&plusmn;", rtn)
+  }
 
-| tau| theta| naction| spd| res|
-|---:|-----:|-------:|---:|---:|
-|   7|     7|       7|   7|   7|
-| 443|   443|     443| 443| 443|
-| 309|   309|     309| 309| 309|
-| 211|   211|     211| 211| 211|
-#+end_export
+  rtn = as.data.frame(array(rtn,dim=dim(mm)))
+  names(rtn) = names(mm)
+  return(rtn)
+}
+
+#+end_src
+
 
 * MCMC trace plots
 #+begin_src R :tangle diprom/R/post.R
