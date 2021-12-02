@@ -102,6 +102,9 @@ seqs[4]
 #+RESULTS:
 : [1] "MAIL_DRAG-item101 MAIL_MOVED-item101|CanComeFolder MAIL_VIEWED-item102 MAIL_DRAG-item102 MAIL_MOVED-item102|CannotComeFolder MAIL_VIEWED-item104 MAIL_DRAG-item104 MAIL_MOVED-item104|CanComeFolder MAIL_VIEWED-item105 MAIL_VIEWED-item103 FOLDER_VIEWED-CanComeFolder MAIL_VIEWED-item101 NEXT_INQUIRY"
 ** [[id:1b2724b9-324b-463b-967a-3b064a0f115e][Word2Vec]] :noexport:
+:PROPERTIES:
+:ID:       9aad4ce5-7a81-436c-9f59-155d4cd47279
+:END:
 https://www.tensorflow.org/tutorials/text/word2vec
 - Words that tend to “behave similarly” end up close to one another in the embedding space. Instead of using the word symbol as a feature in the model, we can use its vector, which exploits such similarities.
 

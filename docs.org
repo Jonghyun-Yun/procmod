@@ -25,16 +25,7 @@
 #+property: header-args:jupyter-python :session *jupyter-piacc* :kernel tf
 
 #+begin_src emacs-lisp :results silent
-  ;; fast, no unicode-math
-  (setq org-preview-latex-default-process 'dvipng)
-  ;; slow, supprts unicode-math
-  (setq org-preview-latex-default-process 'dvisvgm)
-#+end_src
-
-#+begin_src emacs-lisp :results silent
-  (setq jyun/org-latex-preview-scale 2.5)
-  ;; set default org-latex-preview size
-  (jyun/org-latex-set-options)
+  (jyun/org-latex-set-options 2.5)
 #+end_src
 
 #+RESULTS:
@@ -1405,7 +1396,7 @@ mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(ali
 :EXPORT_HUGO_WEIGHT: 2
 :END:
 
-** Model V1
+** Model V1 :ARCHIVE:
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_BUNDLE: V1
@@ -1473,14 +1464,17 @@ for $j = 1,\ldots,J$. $\lambda_{j}$ could be a function of the similarity. This 
   q_{ml} (t ; \boldsymbol{\alpha}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{k,m \rightarrow l}(t) \exp( \alpha_m + \alpha_l + \boldsymbol{\beta} d_{i,m,l} ),
 \end{align*}
 where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ is coefficients associated with $\mathbf{z}(t)$, $\lambda_{k,m\rightarrow l}(t)$ is a baseline intensity function. For each state $l$, there are competing transitions $m_1, \ldots, m_{n_l}$. This mean there are $n_{l}$ corresponding survival models for state $l$, and overall $K=\sum_l n_l$ models. Models with no shared parameters can be estimated separately.
-** Model V2
+** Model V2 :ARCHIVE:
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_BUNDLE: V2
 :END:
+
 Let $S$ denotes a set of all possible action. For each state $m \in S$, $A_{m}$ denotes a set of competing transitions $\{l_1, \ldots, l_{n_m}\}$ that can be taken directly after $m$.
 Let \(Y_k(t)\) denote an action of k-th respondent at time $t$. All respondents assmed to begin problem solving processes at time $t=0$.
+*** Action embedding
 
+*** Multistate model
 The intensity function $q_{ml}(\cdot)$ represents the instantaneous risk of moving from action $m$ to $l$:
 \begin{align*}
 q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}_{t}\right)}{\delta t}, m \neq l, m, l \in S,
@@ -1519,9 +1513,9 @@ q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P
 \end{align*}
 
 
-The survival function is 
+The survival function is
 \[
-  S_{ml}(dt) = e^{-\int_{0}^{dt_{m}} q_{ml}(x) \dd x}. 
+  S_{ml}(dt) = e^{-\int_{0}^{dt_{m}} q_{ml}(x) \dd x}.
 \]
 Let $\nu_{mlk}(t) = 1$ if person $k$ jump from actions $m$ to $l$ at time $t$; 0 otherwise.
 \[
@@ -1580,10 +1574,10 @@ Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive 
 :END:
 - [[skim:///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::79;;1][3.2 Normal data with a noninformative prior distribution org-id:{ce3939d9-fb55-4b01-8747-0f486c98c9e7}:org-id]]
 - [[skim:///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::591;;1][Continuous distributions org-id:{5c29e214-f86d-41d5-89a0-e164602bf6b8}:org-id]]
-**** update \(\kappa_{m}\)
+**** update \(\kappa_{m}\):
+- For each $k,c$, a symmetric MH jumping $J(\kappa_{m}^{(l-1)} \rightarrow \kappa_{m}^{* })$ is used to propose a new sample.
 - all $k$ person's having action m, all l \in A_m (all possible actions that can jump from m)
 - transition start and stop time $dt_{k,n}$ for all $\delta_{k,n,m} = 1$
-- For each $k,c$, a symmetric MH jumping $J(\kappa_{m}^{(l-1)} \rightarrow \kappa_{m}^{* })$ is used to propose a new sample.
 - We accept $\kappa_{m}^{(l)} = \kappa_{m}^{* }$ with probability $\min(1, r_{{\kappa_{m}}^{* }})$ where
 \begin{align*}
 \log r_{{\kappa_{m}}^{* }} =&
@@ -1706,6 +1700,212 @@ dat <- msm2Surv(data=msmdat, subject="subj", time="days", state="status",
 dat
 attr(dat, "trans")
 #+end_src
+* Draft
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_SECTION: draft
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :chapter true
+:EXPORT_HUGO_WEIGHT: 3
+:END:
+
+** Introduction
+** Motivating example
+*** PIACC
+
+OECD Survey of Adult Skills (PIAAC) Log Data
+Downloaded from https://piaac-logdata.tba-hosting.de/
+Problem Solving Items:
+
+The OECD Survey of Adult Skills (PIAAC) assesses the proficiency of adults in information processing skills. During the PIAAC assessement, user interactions were logged automatically. This means that most of the users’ actions within the assessment tool were recorded and stored with time stamps in separate files called log files.
+
+#+begin_quote
+The availability of these log files offers new opportunities to researchers, for instance to reproduce test-taking behavior of individuals and to better understand test-taking behavior.
+#+end_quote
+
+[[id:32a1c1a4-f67b-428e-8458-16f4691b77a3][Questions we like to answer (from Dr. Jeon's proposal)]]
+
+Illustrate a ticket example:
+[[file:tickets_demo.png]]
+A test-taker were asked to book tickets for a football game. S/he needs to gather information from calendars to pick an optimal date.
+xx unique actions,
+On average, a repondent has a action sequence of length xxx actions, and spend xxx seconds overall.
+
+** Model
+Let $S$ denotes a set of all possible action. For each state $m \in S$, $A_{m}$ denotes a set of competing transitions $\{l_1, \ldots, l_{n_m}\}$ that can be taken directly after $m$.
+Let \(Y_k(t)\) denote an action of k-th respondent at time $t$. The $k$-th respondent takes a sequence of $M_{k}$ actions. We define \(  \delta_{k,n,m} = 1 \) if person k's n-th action is m; 0 otherwise. Thus, \( \delta_{k,n,m}  \delta_{k,n+1,l} = 1 \) menas person k's n-th transition ($n < M_{k}$) is m to l.
+Respondents assumed to begin problem solving processes at time $t=0$.
+** Action embedding
+How to convert an action sequence to a sequence
+skip-gram
+negative sampling
+cosine similarity
+[[id:9aad4ce5-7a81-436c-9f59-155d4cd47279][Word2Vec]]
+** Multistate model
+The intensity function $q_{ml}(\cdot)$ represents the instantaneous risk of moving from action $m$ to $l$:
+\begin{align*}
+q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}_{t}\right)}{\delta t}, m \neq l, m, l \in S,
+\end{align*}
+where $\mathcal{F}_t$ denotes the process up to time $t$.
+
+Action transition is assumed to follow Semi-Markovian, which means the intensity depends on the sojourn time (\(t - t_{m}\) ; time spent on the current action). This is often called "clock reset" approach as opposed to "clock forward" approach. Let $dt_{m}$ denote the sojourn time.
+
+Cox model
+\begin{align}
+q_{ml}\left(t ; \mathcal{F}_{t}\right) = & q_{ml} (t - t_{m}; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t))\\
+= & \lambda_{ml}(dt_{m})  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}},
+\end{align}
+
+for person $k = 1,\ldots,N$, where $\mathbf{z}(t)$ is time-varying covariates, $\lambda_{kml}(t)$ is a baseline intensity function, \(D_{ml} \in [-1,1]\) denotes the cosine similarity between actions $m$ and $l$. The cosine similarity is obtained using ~word2vec~ on action sequences of an item. The closer the cosine value to 1, the greater the similarity between actions. The closer the cosine value to -1, the greater the dis-similarity between actions. This mean there are $n_{m}$ corresponding intensity functions for state $m$, and overall $\sum_{m in S} n_m$ intensity functions.
+
+We use the constant baseline hazard based on out-of-state transition speed and person's transition speed:
+\[
+  \lambda_{ml}(dt) = \kappa_{m} \tau_{k} \text{ for } l \in A_{m}.
+\]
+
+A running model has no coviarate terms:
+\[
+q_{ml}\left(t ; \mathcal{F}_{t}\right) = q_{ml}(dt) = \kappa_{m} \tau_{k} e^{\theta_{k} D_{ml} }.
+\]
+
+- larger $\kappa_{m}$ shorter time staying on action $m$ (faster out-of-state transition)
+- larger $\tau_{k}$, faster transition speed
+- larger $\theta_{k}$, larger trasition rate towards a similar action. A person with large $\theta_{k}$ tends to choose more coherent actions
+
+** data structure
+https://www.rdocumentation.org/packages/msm/versions/1.6.8/topics/msm2Surv
+Given a configured transition matrix, \texttt{msm} package transform data to a desired "long" format:
+| person | entry | exit | from | to | observed | cov1   | cov2     | time cov |
+|      1 |     0 |   10 |    1 |  2 |        1 | D_{12} | \theta D_{12} |          |
+|      1 |     0 |   10 |    1 |  3 |        0 | D_{12} | \theta D_{12} |          |
+** likelihood
+
+\begin{align*}
+    q_{ml} (t ; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{ml}(t)  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}}\\
+q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}_{t}\right)}{\delta t}, m \neq l, m, l \in S
+\end{align*}
+
+
+The survival function is
+\[
+  S_{ml}(dt) = e^{-\int_{0}^{dt_{m}} q_{ml}(x) \dd x}.
+\]
+Let $\nu_{mlk}(t) = 1$ if person $k$ jump from actions $m$ to $l$ at time $t$; 0 otherwise.
+\[
+  f_{ml}(t) = q_{ml}(t) S_{ml}(t)
+\]
+\[
+  likelihood =\prod_{k} f_{ml}(dt) \prod_{g \in A_{m}} S_{mg}(t),
+\]
+\[
+  f_{ml} = q_{ml}(t) S_{ml}(t),
+  S_{ml}(t) = e^{-\int_{0}^{t^{stop} - t^{start}} q_{ml}(t)\dd t}
+\]
+
+\[
+  S_{ml}(dt) =  e^{-dt \kappa_{m} \omega_{l} \tau_{k} e^{(\theta_{k} + \beta) D_{ml} }}
+\]
+
+\(n = 1,\ldots,M_{k}\): n-th action of k-th person, $M_k$: sequence length
+
+\(  \delta_{k,n,m} = 1 \) if person k's n-th action is m.
+
+\( \delta_{k,n,m}  \delta_{k,n+1,l} = 1 \) for $n < M_{k}$ if person k's n-th transition is m to l.
+
+time at starting state (one after START) is set to the first action (n=1), and the corresponding time is set to 0.
+** prior
+The proposed method use a fully Bayesian approach for estimating the proposed latent space model, using MCMC methods. Our prior specification is as follows:
+
+\begin{align*}
+\pi\left(\kappa_{m}\right) & \sim \operatorname{Gamma}\left(a_{\kappa}, b_{\kappa})\right); \\
+\pi\left(\tau_{k}\right) & \sim \operatorname{Gamma}\left(a_{\kappa}, b_{\kappa})\right); \\
+\pi\left(\theta_{k} | \sigma^{2}\right) & \sim \mathrm{N}\left(0, \sigma^{2}\right); \\
+\pi\left(\sigma^{2}\right) & \sim \operatorname{lnv}-\operatorname{Gamma}\left(a_{\sigma}, b_{\sigma}\right); \\
+\end{align*}
+
+# \pi\left(\beta_{k} |\mu_{\beta}, \sigma_{\beta}^{2}\right) & \sim \mathrm{N}\left(\mu_{\beta}, \sigma_{\beta}^{2}\right); \\
+# \pi\left(\mu_{\beta}|\sigma_{\beta}) & \sim \mathrm{N}\left(0, \sigma^{2}_{\mu_{\beta}}\right);\\
+# \pi\left(\sigma_{\beta}^{2}\right) & \sim \operatorname{lnv}-\operatorname{Gamma}\left(a_{\sigma_{\beta}}, b_{\sigma_{\beta}}\right),\\
+
+# \begin{align*}
+# \pi\left(\sigma^{2}\right) & \propto \sigma^{-2}\\
+# \pi\left(\mu_{\beta}, \sigma_{\beta}^{2}\right) & \propto \sigma_{\beta}^{-2},
+# \end{align*}
+
+inv-Gamma(\theta|\alpha,\beta)
+\[
+p(\theta)=\frac{\beta^{\alpha}}{\Gamma(\alpha)} \theta^{-(\alpha+1)} e^{-\beta / \theta}, \quad \theta>0
+\]
+
+where hyperparameters are chosen as
+\[a_{\sigma}=0.0001, b_{\sigma}=0.0001, \mu_{\theta}=0, \text { and } ....\]
+
+Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive to its variance $\sigma^2$. Also, the configuration of latent embeddings highly depends on the scale parameter $\gamma$ of the latent space. Rather than choosing sub-optimal tuning parameters, we use a layer of hyper-priors to learn optimal values of these parameters from data. We choose hyperparameters such that priors are minimally informative to facilitate the flexible Bayesian learning.
+** Estimation
+:PROPERTIES:
+:ID:       5c29e214-f86d-41d5-89a0-e164602bf6b8
+:END:
+- [[skim:///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::79;;1][3.2 Normal data with a noninformative prior distribution org-id:{ce3939d9-fb55-4b01-8747-0f486c98c9e7}:org-id]]
+- [[skim:///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::591;;1][Continuous distributions org-id:{5c29e214-f86d-41d5-89a0-e164602bf6b8}:org-id]]
+*** update \(\kappa_{m}\):
+For each $k$, we draw \(\kappa_{m}^{* }\)$ from a symmetric MH jumping distribution, and accept $\kappa_{m}^{(l)} = \kappa_{m}^{* }$ with probability $\min(1, r_{{\kappa_{m}}^{* }})$ where
+
+- all $k$ person's having action m, all l \in A_m (all possible actions that can jump from m)
+\[
+  \begin{align*}
+\log r_{{\kappa_{m}}^{* }} =&
+\sum \delta_{k,n,m} (\log \kappa_{m}^{* } - \log \kappa_{m}^{(l-1)})\\
+&-\sum dt (\kappa_{m}^{* } - \kappa_{m}^{(l-1)}) \tau_{k} e^{(\theta_{k} + \beta) D_{ml} }
++ \log \frac{\pi(\kappa_{m}^{* })}{\pi(\kappa_{m}^{t})}.
+\end{align*}
+\]
+*** update \(\tau_{k}\)
+- all $k$ person's m and l \in A_m
+- all kth person's transition start and stop time
+\begin{align*}
+\log r_{{\tau_{k}}^*} =&
+\sum \delta_{k,n,m} (\log \tau_{k}^* - \log \tau_{k}^{(l-1)})\\
+&-\sum dt \kappa_{m}e^{(\theta_{k} + \beta) D_{ml}} ( \tau_{k}^* -  \tau_{k}^{(l-1)} )
++ \log \frac{\pi(\tau_{k}^*)}{\pi(\theta_{k}^{t})}.
+\end{align*}
+*** update \(\theta_{k}\)
+- all $k$ person's m and l \in A_m
+- all kth person's transition start and stop time
+- For each $k$, a symmetric MH jumping $J(\theta_{k}^{(l-1)} \rightarrow \theta_{k}^{* }$ is used to propose a new sample.
+- We accept $\theta_{k}^{(l)} = \theta_{k}^{* }$ with probability $\min(1, r_{{\theta_{k}}^{* )}})$ where
+
+\begin{align*}
+\log r_{{\theta_{k}}^{* }} =& \sum \delta_{k,n,m} (\theta_{k}^{* } - \theta_{k}^{(l-1)})D_{ml}\\
+&-\sum dt \kappa_{m} \tau_{k} e^{ \beta D_{ml} }(e^{\theta_{k}^{* }D_{ml}} -  e^{\theta_{k}^{(l-1)} D_{ml} })
++ \log \frac{\pi(\theta_{k}^{* })}{\pi(\theta_{k}^{(l-1)})}.\\
+\end{align*}
+*** update \(\sigma\)
+\[
+ p( \sigma^2|e.e.) \propto invGamma(\sigma^{2}|a,b) \prod N(\theta_{k} | \mu, \sigma^2)
+\]
+\(\sigma^{2} \sim inv-gamma(a + 0.5 * N, b + 0.5 + \sum \theta_{k}^2)\)
+with flat prior:
+\(\sigma^{2} \sim inv-gamma(0.5 * N, 0.5 + \sum \theta_{k}^2)\)
+*** update \(\omega_{l}\) :noexport:ARCHIVE:
+- all $k$ person's having action l, all m \in B_l (all possible actions that can jump to l)
+- transition start and stop time $dt_{k,n-1}$ for all $\delta_{k,n,l} = 1$
+*** update \(\beta\) :noexport:ARCHIVE:
+- a symmetric MH jumping $J(\beta_{k}^{(l-1)} \rightarrow \beta_{k}^{* })$ is used to propose a new sample.
+- We accept $\beta_{k}^{(l)} = \beta_{k}^{* }$ with probability $\min(1, r_{{\beta_{k}}^{* )}})$ where
+\begin{align*}
+\log r_{{\beta_{k}}^{* }} =&
+\sum \delta_{k,n,m} (\beta_{k}^{* } - \beta_{k}^{(l-1)})D_{ml}\\
+&-\sum dt \kappa_{m} \tau_{k} e^{ \theta_k D_{ml} }(e^{\beta^{* }D_{ml}} -  e^{\beta^{(l-1)} D_{ml} })
++ \log \frac{\pi(\beta_{k}^{* })}{\pi(\beta_{k}^{(l-1)})}.
+\end{align*}
+*** update \(\mu_{\beta}, \sigma_{\beta}\) :noexport:ARCHIVE:
+\begin{align*}
+  \rho &= 1/\sigma_{\beta}^{2} + 1/\sigma_{\mu_{\beta}}^2 \\
+  p(\mu_{\beta}|..)&= N(\frac{1/\sigma_{\beta}^2 \times \beta}{\rho}, 1/\rho )
+\end{align*}
+\[
+  p(\sigma_{\beta}^{2}|ee) = inv-Gamma(a + 0.5, b + 0.5 (\beta - \mu_{\beta})^2)
+\]
+** Application
 * COMMENT Local Variables
 # Local Variables:
 # eval: (jyun/set-org-babel-default-header-args:R)
