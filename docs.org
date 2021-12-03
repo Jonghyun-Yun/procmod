@@ -1702,6 +1702,7 @@ attr(dat, "trans")
 #+end_src
 * Draft
 :PROPERTIES:
+:header-args:R: :exports none :eval never-export
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_SECTION: draft
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :chapter true
@@ -1710,7 +1711,7 @@ attr(dat, "trans")
 
 ** Introduction
 ** Motivating example
-*** PIACC
+*** Problem Solving in Technology-Rich Environments
 
 OECD Survey of Adult Skills (PIAAC) Log Data
 Downloaded from https://piaac-logdata.tba-hosting.de/
@@ -1718,29 +1719,165 @@ Problem Solving Items:
 
 The OECD Survey of Adult Skills (PIAAC) assesses the proficiency of adults in information processing skills. During the PIAAC assessement, user interactions were logged automatically. This means that most of the users’ actions within the assessment tool were recorded and stored with time stamps in separate files called log files.
 
+
 #+begin_quote
 The availability of these log files offers new opportunities to researchers, for instance to reproduce test-taking behavior of individuals and to better understand test-taking behavior.
+#+end_quote
+
+Probem Solving in Technology-Rich Environments (PS-TRE)
+#+begin_quote
+This refers to the ability to use technology to solve problems and accomplish complex tasks. It is not a measurement of “computer literacy”, but rather of the cognitive skills required in the information age – an age in which the accessibility of boundless information has made it essential for people to be able to decide what information they need, to evaluate it critically, and to use it to solve problems. In this survey, higher-order skills are identified along with basic proficiency.
 #+end_quote
 
 [[id:32a1c1a4-f67b-428e-8458-16f4691b77a3][Questions we like to answer (from Dr. Jeon's proposal)]]
 
 Illustrate a ticket example:
+
+#+attr_latex: :placement [ht] :width 0.5\textwidth
+#+label: fig:tickets_home
+#+caption: An example of PS-TRE items. In this simulated web environment, respondents can access information required for ticket reservation.
 [[file:tickets_demo.png]]
-A test-taker were asked to book tickets for a football game. S/he needs to gather information from calendars to pick an optimal date.
-xx unique actions,
-On average, a repondent has a action sequence of length xxx actions, and spend xxx seconds overall.
+
+This  item  involves  a  scenario  in  which  the respondent  is asked to reserve all fooball game tickets that an entire group can attend. A group of friend provides thier availabilities via an online calendar. Respondents  access  and  evaluate  information from ticket-reservation web pages and online calendars in simulated web environment. Respondents are able to:
+- Click on tabs for ticket reservation web pages and online calendar;
+- Click on checkboxes to choose game dates;
+- Manipulate drop-down menus for events, locations, and number of tikcets; and
+- Click on menu items or navigation icons.
+
+#+begin_src R :results silent
+sub_str = rbind(
+  ## c("(.*)\\*\\$target=u021_(.*)","\\1\\2"),
+  c("TEST_TIME=(.+)",""),
+  c("id=u021_", ""),
+  c("id=",""),
+  c("\\*\\$target=_", ""),
+  c("\\*\\$value=", ""),
+  c("\\*\\$index=", "index="),
+  c("\\*\\$href=", "href="),
+  c("\\|","\\.")
+  )
+ignore_desc = c(
+"START",
+"END",
+"KEYPRESS")
+piacc_path = "./data/PIAAC_cleaned_data_1110/Problem_solving/Problem-solving_no_missing.rdata"
+
+item_code = "U21x000S"
+
+item = read_piacc(piacc_path, item_code, sub_str, ignore_str)
+unique(item$event_description)
+length(unique(item$word))
+#+end_src
+
+#+begin_src R
+library(kableExtra)
+dd = item %>% filter(response == 1) %>% select(SEQID, word, timestamp)
+aa = dd %>% filter(SEQID == 4016) %>% mutate(timestamp = round(timestamp / 1000,1))
+aa %>% kbl(booktab = T, format = "latex")
+#+end_src
+
+#+attr_latex: :placement [H] :center t
+#+label: tab:df_action
+#+caption: An example action sequence of one respondent. A sequence of actions (2nd column) taken is recorded with timestamp (3rd column).
+|   ID | Action                         | Time (sec) |
+|------+--------------------------------+------------|
+| 4016 | START                          |        0.0 |
+| 4016 | COMBOBOX-default_menu1.index=7 |       47.3 |
+| 4016 | COMBOBOX-default_menu2.index=2 |       51.8 |
+| 4016 | BUTTON_search-default_txt23    |       65.0 |
+| 4016 | CHECKBOX-check2                |       93.2 |
+| 4016 | BUTTON_available-pg1_txt47     |       96.0 |
+| 4016 | BUTTON_available-pg7_txt47     |      108.2 |
+| 4016 | COMBOBOX-pg2_menu1.index=19    |      136.7 |
+| 4016 | COMBOBOX-pg2_menu6.index=19    |      144.5 |
+| 4016 | BUTTON_submit-pg2_txt33        |      146.1 |
+| 4016 | BUTTON_submit_ok-u21p2pu5_txt2 |      148.9 |
+| 4016 | NEXT_INQUIRY-REQUEST           |      155.8 |
+| 4016 | END                            |      157.3 |
+
+
+#+begin_src R
+item %>% group_by(SEQID) %>% summarise(mnum = max(event_num), time = max(timestamp)/1000) %>% summary %>%
+#+end_src
+
+#+RESULTS:
+: `summarise()` ungrouping output (override with `.groups` argument)
+:      SEQID           mnum         time
+:  Min.   :   2   Min.   : 3   Min.   :  5.579
+:  1st Qu.:1186   1st Qu.:18   1st Qu.:134.172
+:  Median :2511   Median :23   Median :182.487
+:  Mean   :2490   Mean   :23   Mean   :192.281
+:  3rd Qu.:3778   3rd Qu.:28   3rd Qu.:241.393
+:  Max.   :5010   Max.   :80   Max.   :833.395
+
+There are 172 unique observed actions.
+On average, repondents spend 182 (IQR: 107) seconds on this time, and take 23 (IQR: 10) actions.
+
+The process data consists of pairs of actions and time stamps of each respondents.
+Major challenges to establish a statistcal model taking the process data as an input are 1) unequal length of respondents' actions sequences; 2) large number of distinct actions transitions; and 3) ...
+
+Thanks to the recent development of natual language processing
+
 
 ** Model
 Let $S$ denotes a set of all possible action. For each state $m \in S$, $A_{m}$ denotes a set of competing transitions $\{l_1, \ldots, l_{n_m}\}$ that can be taken directly after $m$.
-Let \(Y_k(t)\) denote an action of k-th respondent at time $t$. The $k$-th respondent takes a sequence of $M_{k}$ actions. We define \(  \delta_{k,n,m} = 1 \) if person k's n-th action is m; 0 otherwise. Thus, \( \delta_{k,n,m}  \delta_{k,n+1,l} = 1 \) menas person k's n-th transition ($n < M_{k}$) is m to l.
+Let \(Y_k(t)\) denote an action of k-th respondent at time $t$.The $k$-th respondent takes a sequence of $M_{k}$ actions. We use \(S_{k} = \{y_{k}(t_{k,1}),y_{k}(t_{k,2}),\ldots, y_{k}(t_{k,M_{k}})\}\) to denote the $k$-th respondent's action sequence.
+
+We define \(  \delta_{k,n,m} = 1 \) if person k's n-th action is m; 0 otherwise. Thus, \( \delta_{k,n,m}  \delta_{k,n+1,l} = 1 \) menas person k's n-th transition ($n < M_{k}$) is m to l.
 Respondents assumed to begin problem solving processes at time $t=0$.
+
+Let \(t_{k,n}\) denote entry time that the \(k\)-th respondent start the $n$-th action. The sojourn time is denoted by $dt_{k,n} = t_{k,n+1} - t_{k,n}$ for $n < M_{k} - 1$.
+
+
 ** Action embedding
+
+word embedding: to substitute a symbolic representation with a vectoric representation of words
+Each action sequence has different
+
+- Words that tend to “behave similarly” end up close to one another in the embedding space. Instead of using the word symbol as a feature in the model, we can use its vector, which exploits such similarities.
+
+\[
+  p\left(w_{j} \mid w_{0}, u, v\right)=\frac{\exp \left(u\left(w_{0}\right)^{\top} v\left(w_{j}\right)\right)}{\sum_{w \in V} \exp \left(u\left(w_{0}\right)^{\top} v(w)\right)}
+\]
+where \(u: V \rightarrow \mathbb{R}^{k} \) and \(v: V \rightarrow \mathbb{R}^{k}\) are functions which map words to a word embedding—one for the pivot words, and the other for context.
+
+
+Word2Vec citep:mikolov_distributed_2013 .
+
+- word2vec: skip-gram models coupled with negative sampling
+- negative sampling: to reduce computational cost of the cosine similarity (the denominator is summation of all words in vocabulary).
+- skip-gram: to maximize the probability of predicting context words given a target word. The probability is defined by the cosine similarity (softmax function) based on word embeddings. Words close in the Euclidean space are words 1) with similar meanings, 2) associated with the same part of a sentence, 3) with semantic association. The similarity can be learned from a large corpus. Unseen words in the training sample are embedded, so one can exploit the similarity information.
+- a bag-of-words (CBOW): to predict a target word given context words (neighbor of a target word)
+
+Continuous Skip-gram Model which predict words within a certain range before and after the current word in the same sentence. While a bag-of-words model predicts a word given the neighboring context, a skip-gram model predicts the context (or neighbors) of a word, given the word itself. The model is trained on skip-grams, which are n-grams that allow tokens to be skipped (n-gram is a contiguous sequence of n items from a given sample of text or speech). The context of a word can be represented through a set of skip-gram pairs of ~(target_word, context_word)~ where ~context_word~ appears in the neighboring context of ~target_word~.
+
+The context words for each of the 8 words of this sentence are defined by a window size. The window size determines the span of words on either side of a ~target_word~ that can be considered context word. Take a look at this table of skip-grams for ~target_words~ based on different window sizes.
+
+
+The training objective of the skip-gram model is to maximize the probability of predicting context words given the target word. For a sequence of words, the objective can be written as the average log probability
+\[
+\frac{1}{T} \sum_{t=1}^{T} \sum_{-c \leq j \leq c, j \neq 0} \log p\left(w_{t+j} \mid w_{t}\right)
+\]
+where ~c~ is the size of the training context. The basic skip-gram formulation defines this probability using the softmax function.
+\[
+p\left(w_{O} \mid w_{I}\right)=\frac{\exp \left(v_{w_{O}}^{\prime}{ }^{\top} v_{w_{I}}\right)}{\sum_{w=1}^{W} \exp \left(v_{w}^{\prime}{ }^{\top} v_{w_{I}}\right)}
+\]
+where \(u: V \rightarrow \mathbb{R}^{k} \) and \(v: V \rightarrow \mathbb{R}^{k}\) are functions which map words to a word embedding.
+
+Word embeddings tend to cluster together when the words they denote behave similarly. The notion of “behavior” in this case usually remains underspecified, but could refer to syntactic categorization (i.e., words most often associated with the same part of speech will cluster together) or semantic association (words that are semantically related cluster together). The similarity between word embedding vectors is often measured through such measures as the dot product or cosine similarity.
+Most prominently, word embeddings assist with the treatment of words which do not appear in the training data of a given problem (such as parsing or part-of-speech tagging). The word embedding function can be learned by exploiting co-occurence data on a large corpus (without any annotation), and thus the vocabulary over which the word embedding function is constructed is larger than the one that the training data consists of, and covers a significant amount of the words in the test data, including “unseen words.” The reliance on co-occurrence statistics is based on the distributional hypothesis (Harris, 1954) which states that co-occurrence of words in similar contexts implies that they have similar meanings.
+This model learns parameters that lead to a high-valued dot product for embeddings of frequently co-occuring pivot and context words (as the probability is pushed to the maximum in such cases). Therefore, through the contexts, words that are similar to each other in their co-occurrence patterns map to vectors that are close to each other in the Euclidean space.
+Skip-gram modeling of the above form coupled with negative sampling is often referred to as one of the word2vec models cite:mikolov_distributed_2013. A second proposed model of word2vec is the continuous bag-of-words model (CBOW), which predicts a word from the context—in reverse from the skip-gram model.
+
+
+[[id:1b2724b9-324b-463b-967a-3b064a0f115e][Word2Vec | Skip-grams | TensorFlow Core]]
+
 How to convert an action sequence to a sequence
 skip-gram
 negative sampling
 cosine similarity
-[[id:9aad4ce5-7a81-436c-9f59-155d4cd47279][Word2Vec]]
 ** Multistate model
+
 The intensity function $q_{ml}(\cdot)$ represents the instantaneous risk of moving from action $m$ to $l$:
 \begin{align*}
 q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}_{t}\right)}{\delta t}, m \neq l, m, l \in S,
@@ -1773,7 +1910,9 @@ q_{ml}\left(t ; \mathcal{F}_{t}\right) = q_{ml}(dt) = \kappa_{m} \tau_{k} e^{\th
 
 ** data structure
 https://www.rdocumentation.org/packages/msm/versions/1.6.8/topics/msm2Surv
-Given a configured transition matrix, \texttt{msm} package transform data to a desired "long" format:
+Given a configured transition matrix, \texttt{msm} [[citep:&jackson_multi-state_2011]]
+
+ transform data to a desired "long" format:
 | person | entry | exit | from | to | observed | cov1   | cov2     | time cov |
 |      1 |     0 |   10 |    1 |  2 |        1 | D_{12} | \theta D_{12} |          |
 |      1 |     0 |   10 |    1 |  3 |        0 | D_{12} | \theta D_{12} |          |
@@ -1847,47 +1986,77 @@ Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive 
 - [[skim:///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::79;;1][3.2 Normal data with a noninformative prior distribution org-id:{ce3939d9-fb55-4b01-8747-0f486c98c9e7}:org-id]]
 - [[skim:///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::591;;1][Continuous distributions org-id:{5c29e214-f86d-41d5-89a0-e164602bf6b8}:org-id]]
 *** update \(\kappa_{m}\):
-For each $k$, we draw \(\kappa_{m}^{* }\)$ from a symmetric MH jumping distribution, and accept $\kappa_{m}^{(l)} = \kappa_{m}^{* }$ with probability $\min(1, r_{{\kappa_{m}}^{* }})$ where
+:PROPERTIES:
+:ID:       bffeec1d-053a-4e74-8d30-40278b23d60c
+:END:
+For each $m$, we draw \(\kappa_{m}^{* }\)$ from a symmetric MH jumping distribution, and accept $\kappa_{m}^{(l)} = \kappa_{m}^{* }$ with probability $\min(1, r_{{\kappa_{m}}^{* }})$ where
 
-- all $k$ person's having action m, all l \in A_m (all possible actions that can jump from m)
 \[
   \begin{align*}
-\log r_{{\kappa_{m}}^{* }} =&
-\sum \delta_{k,n,m} (\log \kappa_{m}^{* } - \log \kappa_{m}^{(l-1)})\\
-&-\sum dt (\kappa_{m}^{* } - \kappa_{m}^{(l-1)}) \tau_{k} e^{(\theta_{k} + \beta) D_{ml} }
-+ \log \frac{\pi(\kappa_{m}^{* })}{\pi(\kappa_{m}^{t})}.
+\log r_{{\kappa_{m}}^{* }} =& \sum_{k=1}^K \sum_{n = 1} ^{M_{k}} \left[  \delta_{k,n,m} (\log \kappa_{m}^{* } - \log \kappa_{m}^{(l-1)})-\sum_{l \in A_{m}} dt_{k,n} (\kappa_{m}^{* } - \kappa_{m}^{(l-1)}) \tau_{k} e^{(\theta_{k} + \beta) D_{ml} } + \log \frac{\pi(\kappa_{m}^{* })}{\pi(\kappa_{m}^{t})} \right].
 \end{align*}
 \]
+
+
+For each $m$, we draw \(\kappa_m^{(t)}\)$ from
+$\mbox{Gamma}\left(  a_{\tau} + \sum_{n=1}^{M_{k}} \sum_{k=1}^N \mbox{I}(\delta_{k,n,m} = 1) ,b_{\tau} + \sum_{n=1}^{M_{k}-1}\sum_{k=1}^{N} \sum_{ l \in A_m } dt_{k,n} \tau_{k}e^{(\theta_{k} + \beta) D_{ml}}\right)$
+
+[[file:src/update_kappa.cpp::// std::cout << "tau: " <<tau(sid.at(ii)) << "\n";][code: \kappa update]]
+
+#+begin_src cpp
+  double post_a = a_kappa + 1.0;
+  double post_b = b_kappa;
+  for (auto &ii : oos_m) {
+    if (status.at(ii)==1) post_a += 1.0;
+    post_b += tdiff(ii) * tau(sid.at(ii)) * std::exp((theta(sid.at(ii)) + beta) * dist(ii));
+  }
+  kappa = stan::math::gamma_rng(post_a, post_b, rng);
+#+end_src
 *** update \(\tau_{k}\)
-- all $k$ person's m and l \in A_m
-- all kth person's transition start and stop time
-\begin{align*}
-\log r_{{\tau_{k}}^*} =&
-\sum \delta_{k,n,m} (\log \tau_{k}^* - \log \tau_{k}^{(l-1)})\\
-&-\sum dt \kappa_{m}e^{(\theta_{k} + \beta) D_{ml}} ( \tau_{k}^* -  \tau_{k}^{(l-1)} )
-+ \log \frac{\pi(\tau_{k}^*)}{\pi(\theta_{k}^{t})}.
-\end{align*}
-*** update \(\theta_{k}\)
-- all $k$ person's m and l \in A_m
-- all kth person's transition start and stop time
-- For each $k$, a symmetric MH jumping $J(\theta_{k}^{(l-1)} \rightarrow \theta_{k}^{* }$ is used to propose a new sample.
-- We accept $\theta_{k}^{(l)} = \theta_{k}^{* }$ with probability $\min(1, r_{{\theta_{k}}^{* )}})$ where
+For each $m$, we draw \(\tau_k^{* }\)$ from a symmetric MH jumping distribution, and accept $\tau_{m}^{(l)} = \tau_{m}^{* }$ with probability $\min(1, r_{{\tau_{m}}^{* }})$ where
 
 \begin{align*}
-\log r_{{\theta_{k}}^{* }} =& \sum \delta_{k,n,m} (\theta_{k}^{* } - \theta_{k}^{(l-1)})D_{ml}\\
-&-\sum dt \kappa_{m} \tau_{k} e^{ \beta D_{ml} }(e^{\theta_{k}^{* }D_{ml}} -  e^{\theta_{k}^{(l-1)} D_{ml} })
-+ \log \frac{\pi(\theta_{k}^{* })}{\pi(\theta_{k}^{(l-1)})}.\\
+\log r_{{\tau_{k}}^*} = \sum_{m \in S} \sum_{n=1}^{M_{k}} \left[  \delta_{k,n,m} (\log \tau_{k}^* - \log \tau_{k}^{(l-1)})- \sum_{l \in A_m} dt_{k,n} \kappa_{m}e^{(\theta_{k} + \beta) D_{ml}} ( \tau_{k}^* -  \tau_{k}^{(l-1)} )
++ \log \frac{\pi(\tau_{k}^*)}{\pi(\theta_{k}^{t})}\right].
 \end{align*}
+
+
+For each $k$, we draw \(\tau_k^{(t)}\)$ from
+$\mbox{Gamma}\left(  a_{\tau} + M_k, b_{\tau} + \sum_{n=1}^{M_{k}} \sum_{m \in S, l \in A_m } dt_{k,n} \kappa_{m}e^{(\theta_{k} + \beta) D_{ml}}\right)$
+
+[[file:src/update_tau.cpp::post_b +=][code: \tau update]]
+
+#+begin_src cpp
+double post_a = a_tau + 1.0;
+double post_b = b_tau;
+for (auto &ii : person_k) {
+    if (status.at(ii) == 1)
+        post_a += 1.0;
+    post_b +=
+        tdiff(ii) * kappa(acfrom.at(ii)) * std::exp((theta_k + beta) * dist(ii));
+}
+tau = stan::math::gamma_rng(post_a, post_b, rng);
+#+end_src
+*** update \(\theta_{k}\)
+For each $k$, we draw \(\theta_k^{* }\)$ from a symmetric MH jumping distribution, and accept $\theta_{m}^{(l)} = \theta_{m}^{* }$ with probability $\min(1, r_{{\theta_{m}}^{* }})$ where
+\begin{align*}
+\log r_{{\theta_{k}}^{* }} =& \sum_{m \in S} \sum_{n=1}^{M_{k}} \left[ \delta_{k,n,m} (\theta_{k}^{* } - \theta_{k}^{(l-1)})D_{ml} -\sum_{l \in A_m} dt_{k,n} \kappa_{m} \tau_{k} e^{ \beta D_{ml} }(e^{\theta_{k}^{* }D_{ml}} -  e^{\theta_{k}^{(l-1)} D_{ml} })
++ \log \frac{\pi(\theta_{k}^{* })}{\pi(\theta_{k}^{(l-1)})} \right].\\
+\end{align*}
+
 *** update \(\sigma\)
 \[
- p( \sigma^2|e.e.) \propto invGamma(\sigma^{2}|a,b) \prod N(\theta_{k} | \mu, \sigma^2)
+ p( \sigma^2|e.e.) \propto \mbox{Inv-Gamma}(\sigma^{2}|a,b) \prod N(\theta_{k} | \mu, \sigma^2)
 \]
-\(\sigma^{2} \sim inv-gamma(a + 0.5 * N, b + 0.5 + \sum \theta_{k}^2)\)
-with flat prior:
+\(\sigma^{2} \sim \mbox{Inv-Gamma}(a + 0.5 * N, b + 0.5 + \sum \theta_{k}^2)\)
+c.f) with flat prior:
 \(\sigma^{2} \sim inv-gamma(0.5 * N, 0.5 + \sum \theta_{k}^2)\)
-*** update \(\omega_{l}\) :noexport:ARCHIVE:
-- all $k$ person's having action l, all m \in B_l (all possible actions that can jump to l)
-- transition start and stop time $dt_{k,n-1}$ for all $\delta_{k,n,l} = 1$
+
+$\mbox{Inv-Gamma}(\alpha,\beta)$ denotes the inverse gamma distribution with a density
+\[
+\mbox{Inv-Gamma}(y|\alpha,\beta) = \frac{\beta^{\alpha}}{\Gamma(\alpha)} y^{-(\alpha+1)} \exp \left(-\beta \frac{1}{y}\right).
+\]
+
 *** update \(\beta\) :noexport:ARCHIVE:
 - a symmetric MH jumping $J(\beta_{k}^{(l-1)} \rightarrow \beta_{k}^{* })$ is used to propose a new sample.
 - We accept $\beta_{k}^{(l)} = \beta_{k}^{* }$ with probability $\min(1, r_{{\beta_{k}}^{* )}})$ where
