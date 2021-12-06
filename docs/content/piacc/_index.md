@@ -1,7 +1,7 @@
 +++
 title = "PIACC"
 author = ["Jonghyun Yun"]
-lastmod = 2021-09-28T17:16:06-05:00
+lastmod = 2021-12-05T17:41:36-06:00
 draft = false
 weight = 1
 chapter = true
@@ -53,6 +53,11 @@ chapter = true
         - [Covariates](#covariates)
     - [lamp\_return](#lamp-return)
         - [Covariates](#covariates)
+- [gender difference](#gender-difference)
+- [clustering](#clustering)
+    - [party\_invitations-1](#party-invitations-1)
+    - [tickets](#tickets)
+    - [book\_order](#book-order)
 
 </div>
 <!--endtoc-->
@@ -189,6 +194,8 @@ c("Sampling / weighting", "Not assigned" ,"Sampling / weighting (derived)", "Bac
 
 Latent profile analysis is done by `tidyLAP`. This R package uses multivariate Gaussian mixture models and reports many model selection criteria. See <https://cran.r-project.org/web/packages/tidyLPA/vignettes/Introduction%5Fto%5FtidyLPA.html>
 The clustering is perfomed based on person characteristics. We compare models based on our estimated parameters, observed covariates and both.
+
+party\_invitations-1, tickets, book\_order: these items give more clusters using hidden traits + observed traits than using observed traits alone.
 
 
 ## party\_invitations-1 {#party-invitations-1}
@@ -431,11 +438,6 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 
 ## cd\_tally {#cd-tally}
 
-PROPERTIES:
-EXPORT\_FILE\_NAME: \_index
-EXPORT\_HUGO\_BUNDLE: cd\_tally
-END:
-
 ```text
 
 --------------------------------------------------------------
@@ -547,10 +549,15 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 
 ## sprained\_ankle-1 {#sprained-ankle-1}
 
-PROPERTIES:
-EXPORT\_FILE\_NAME: \_index
-EXPORT\_HUGO\_BUNDLE: sprained\_ankle-1
-END:
+:#+begin\_src sh :async
+out\_dir="sprained\_ankle-1/"
+cd $out\_dir
+cd figure
+convert -density 300 tau\_action.pdf tau\_action.png
+convert -density 300 theta\_tau\_res.pdf theta\_tau\_res.png
+convert -density 300 time\_action\_more.pdf time\_action\_more-%d.png
+convert -density 300 time\_action.pdf time\_action-%d.png
+\#+end\_src
 
 ```text
 
@@ -674,11 +681,6 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 
 
 ## tickets {#tickets}
-
-PROPERTIES:
-EXPORT\_FILE\_NAME: \_index
-EXPORT\_HUGO\_BUNDLE: tickets
-END:
 
 ```text
 
@@ -816,11 +818,6 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 
 ## club\_membership-1 {#club-membership-1}
 
-PROPERTIES:
-EXPORT\_FILE\_NAME: \_index
-EXPORT\_HUGO\_BUNDLE: club\_membership-1
-END:
-
 ```text
 
 --------------------------------------------------------------
@@ -946,11 +943,6 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 
 ## book\_order {#book-order}
 
-PROPERTIES:
-EXPORT\_FILE\_NAME: \_index
-EXPORT\_HUGO\_BUNDLE: book\_order
-END:
-
 ```text
 
 --------------------------------------------------------------
@@ -1058,11 +1050,6 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 
 
 ## meeting\_room {#meeting-room}
-
-PROPERTIES:
-EXPORT\_FILE\_NAME: \_index
-EXPORT\_HUGO\_BUNDLE: meeting\_room
-END:
 
 ```text
 
@@ -1188,10 +1175,15 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 
 ## locate\_email {#locate-email}
 
-PROPERTIES:
-EXPORT\_FILE\_NAME: \_index
-EXPORT\_HUGO\_BUNDLE: locate\_email
-END:
+:#+begin\_src sh :async
+out\_dir="locate\_email/"
+cd $out\_dir
+cd figure
+convert -density 300 tau\_action.pdf tau\_action.png
+convert -density 300 theta\_tau\_res.pdf theta\_tau\_res.png
+convert -density 300 time\_action\_more.pdf time\_action\_more-%d.png
+convert -density 300 time\_action.pdf time\_action-%d.png
+\#+end\_src
 
 
 ### Covariates {#covariates}
@@ -1355,3 +1347,147 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 ![](/ox-hugo/time_action_more-10.png)
 ![](/ox-hugo/time_action_more-11.png)
 ![](/ox-hugo/time_action_more-13.png)
+
+
+# gender difference {#gender-difference}
+
+Wilcoxon p-values for gender difference in &tau; and &theta;
+
+| output                   | &tau;      | &theta;    |
+|--------------------------|------------|------------|
+| party\_invitations-1/ \* | 0.1755171  | 0.3172373  |
+| party\_invitations-2/    | 0.4404884  | 0.6082382  |
+| cd\_tally/               | 0.07097494 | 0.09468705 |
+| sprained\_ankle-1/       | 0.01260001 | 0.6150152  |
+| tickets/ \*              | 0.08539706 | 0.730782   |
+| club\_membership-1/      | 0.3772467  | 0.1507705  |
+| book\_order/ \*          | 0.9709181  | 0.3778057  |
+| meeting\_room/           | 0.4096292  | 0.04091108 |
+| locate\_email/           | 0.991704   | 0.7721417  |
+| lamp\_return/            | 0.03020509 | 0.86869    |
+
+`*` is used to denote items justified by LPA.
+
+
+# clustering {#clustering}
+
+```R
+ftime = timestamp[1] / 1000, naction = n(), time = timestamp[n()] / 1000, spd = naction / (ftime - time)
+```
+
+-   &tau;: person's baseline hazard for action transition
+-   &theta;: person's xxx to jump to a similar action for the next one
+
+|Name        |Label                                                                               |Value scheme                                          |
+|:-----------|:-----------------------------------------------------------------------------------|:-----------------------------------------------------|
+|AGEG5LFS    |Age groups in 5-year intervals based on LFS groupings (derived)                     |Derived - Age groups in equal 5 year intervals (1-10) |
+|NFEHRS      |Number of hours of participation in non-formal education (derived)                  |NA                                                    |
+|EARNHRDCL   |Hourly earnings excluding bonuses for wage and salary earners, in deciles (derived) |Derived - Decile                                      |
+|LEARNATWORK |Index of learning at work (derived)                                                 |NA                                                    |
+|ICTHOME     |Index of use of ICT skills at home (derived)                                        |NA                                                    |
+|ICTWORK     |Index of use of ICT skills at work (derived)                                        |NA                                                    |
+|INFLUENCE   |Index of use of influencing skills at work (derived)                                |NA                                                    |
+|NUMHOME     |Index of use of numeracy skills at home (basic and advanced - derived)              |NA                                                    |
+|NUMWORK     |Index of use of numeracy skills at work (basic and advanced - derived)              |NA                                                    |
+|READHOME    |Index of use of reading skills at home (prose and document texts - derived)         |NA                                                    |
+|READWORK    |Index of use of reading skills at work (prose and document texts - derived)         |NA                                                    |
+|TASKDISC    |Index of use of task discretion at work (derived)                                   |NA                                                    |
+|WRITHOME    |Index of use of writing skills at home (derived)                                    |NA                                                    |
+|WRITWORK    |Index of use of writing skills at work (derived)                                    |NA                                                    |
+
+
+## party\_invitations-1 {#party-invitations-1}
+
+![](/ox-hugo/lpa_plot-0.png)
+![](/ox-hugo/lpa_plot-1.png)
+
+{{< figure src="/ox-hugo/lpa_back_line.png" >}}
+
+Response: the larger, the better
+
+
+### clustering w/ tau and theta
+
+
+|          tau|        theta|      naction|           spd|         res|             n|
+|------------:|------------:|------------:|-------------:|-----------:|-------------:|
+|  2.06 (1.10)| -1.49 (0.96)|  0.08 (3.72)| -4.43 (11.77)| 0.43 (1.13)|   7.00 (0.00)|
+|  0.02 (0.65)|  0.63 (0.43)| -0.21 (0.38)|   0.03 (0.00)| 2.77 (0.56)| 443.00 (0.00)|
+| -0.65 (0.57)| -0.58 (1.11)| -0.28 (0.70)|   0.03 (0.00)| 1.18 (1.32)| 309.00 (0.00)|
+|  0.83 (1.33)| -0.43 (0.89)|  0.84 (1.51)|   0.03 (0.00)| 1.90 (1.24)| 211.00 (0.00)|
+
+### clustering w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|         res|             n|
+|------------:|------------:|-----------:|-----------:|-----------:|-------------:|
+|  1.82 (4.16)| -3.09 (9.85)| 0.98 (0.05)| 0.02 (0.05)| 0.70 (1.25)|  10.00 (0.00)|
+| -0.02 (0.90)|  0.03 (0.00)| 0.00 (0.01)| 1.00 (0.01)| 2.07 (1.23)| 960.00 (0.00)|
+
+
+## tickets {#tickets}
+
+![](/ox-hugo/lpa_plot-0.png)
+![](/ox-hugo/lpa_plot-1.png)
+
+{{< figure src="/ox-hugo/lpa_back_line.png" >}}
+
+Response: the smaller, the better
+
+## mean
+
+
+|        tau|      theta|    naction|        spd|      res|
+|----------:|----------:|----------:|----------:|--------:|
+| -0.4123013|  0.1939430|  0.0105633|  0.2949513| 3.710588|
+|  0.9344900| -0.6655596|  0.3971435|  0.1263112| 5.219081|
+|  1.1296467| -1.7866636| -1.9230219| -1.9932064| 7.000000|
+| -0.9718218|  1.3403763|  0.1527688| -0.0648598| 3.145251|
+
+## sd
+
+
+|       tau|    theta|   naction|       spd|      res|
+|---------:|--------:|---------:|---------:|--------:|
+| 0.4111353| 0.384638| 0.6375695| 0.2628682| 2.989527|
+| 0.9065238| 0.553052| 1.2095532| 0.3520752| 2.745995|
+| 0.9047816| 1.085768| 0.1671354| 2.6734464| 0.000000|
+| 0.2688267| 0.354953| 0.5181867| 0.3940398| 2.883724|
+
+## n
+
+
+| tau| theta| naction| spd| res|
+|---:|-----:|-------:|---:|---:|
+| 425|   425|     425| 425| 425|
+| 283|   283|     283| 283| 283|
+|  75|    75|      75|  75|  75|
+| 179|   179|     179| 179| 179|
+
+
+## book\_order {#book-order}
+
+![](/ox-hugo/lpa_plot-0.png)
+![](/ox-hugo/lpa_plot-1.png)
+
+{{< figure src="/ox-hugo/lpa_back_line.png" >}}
+
+Response: the larger, the better
+
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|         res|             n|
+|------------:|------------:|------------:|------------:|-----------:|-------------:|
+| -0.18 (0.88)|  0.37 (0.49)|  0.21 (0.68)|  0.11 (0.42)| 2.27 (2.45)| 450.00 (0.00)|
+|  0.83 (1.06)| -1.67 (0.83)| -1.34 (0.12)| -0.25 (0.80)| 6.32 (1.92)|  88.00 (0.00)|
+|  0.31 (1.32)| -0.79 (1.73)|  0.95 (2.48)| -0.96 (3.97)| 4.23 (3.05)|  26.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|         res|             n|
+|------------:|------------:|-----------:|-----------:|-----------:|-------------:|
+| -0.04 (0.83)|  0.08 (0.45)| 0.99 (0.03)| 0.01 (0.03)| 2.91 (2.80)| 535.00 (0.00)|
+|  0.73 (2.54)| -1.45 (3.73)| 0.11 (0.16)| 0.89 (0.16)| 4.52 (3.01)|  29.00 (0.00)|
