@@ -1706,8 +1706,47 @@ attr(dat, "trans")
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :chapter true
 :EXPORT_HUGO_WEIGHT: 3
 :END:
+[[file:~/Dropbox/research/procmod/ies_naep/main.tex::\section{Significance}][NEAP proposal]]
 
 ** Introduction
+%%% stolen from the neap proposal
+We propose to develop a new, network modeling framework for analyzing time-stamped sequences of actions taken by NAEP test takers. The innovative aspect of our proposal is that we view test takers’ sequences of actions collected in the computer-assisted NAEP assessment system as directed paths between actions in a network of possible actions.  With our framework, researchers and policymakers can quantify and better understand how learners with disabilities process mathematics test items.
+
+We have successfully collaborated to develop novel network-based modeling approaches for analyzing conventional assessment data on two papers (Jin \& Jeon, 2018; Jeon, Jin, Schweinberger, \& Baugh, 2020), with more papers in the pipeline. We will extend this model-based framework for analyzing NAEP process data. Since the number of possible actions is large and many test takers will choose a small subset of the possible actions, the data is sparse. To deal with the sparsity of the data, we use machine learning techniques. These machine learning techniques penalize models that are more complex than warranted by the data.
+
+Advantage I. An important advantage of our network-based approach is the introduction of a virtual, two-dimensional Euclidean map of the interplay between actions for different test takers. This interactive map could offer substantially enhanced insights into how and why learners with and without disabilities are different in their response behavior on the current NAEP mathematics assessment.
+
+Advantage II. A second advantage of our network-based approach is that we can easily link the network of actions with test takers’ mathematics performance outcomes, their background information, as well as any technical accommodations they utilized during the test, which allows educators to identify which accommodations might be more effective than others in helping learners with disabilities to display their full ability within the digitalized NAEP assessment environment.
+
+%Advances in technology have expanded opportunities for educational measurement through changes to item design, item delivery and data collection. Some examples include simulation-, scenario-, and game-based assessment and learning environments.
+
+The NAEP computerized testing format provides an interactive environment for students.
+Students can choose among a set of available actions and take one or more steps to finish a task. All student actions are automatically recorded in system log (Kerr, Chung, \& Iseli, 2011), which can be used %immediately for providing instant feedback to students
+for diagnostic and scoring purposes (DiCerbo \& Behrens, 2014).
+
+% Benefits of process data
+
+
+
+% Challenges
+While the availability of rich response process data during problem solving comes the great challenge of building appropriate psychometric models to analyze these data.
+The raw process data are usually formatted as lines of coded and time-stamped strings.
+The vast amount of data on students' potential trial-and-error process makes it less than straightforward to detect patterns in problem solving.
+
+
+% Exisitng methods and limitations
+Several data analysis techniques and models have been explored to uncover problem-solving patterns. For example, researchers used methods such as cluster analysis (Bergner, Shu, \& von Davier, 2014) and editing distance (Hao, Shu, Bergner, Zhu, \& von Davier, 2014).
+Other researchers explored the method of combining Markov movesl and item response theory (IRT) framework. Process mining techniques such as Petri net were also used to study behavioral patterns (Howard, Johnson, \& Neitzel, 2010).
+In addition, researchers used digraphs to visualize and analyze sequential process data collected from assessment.
+Zhu, Shu, and von Davier (2016) used network visualization and analysis for understanding process data.
+
+
+% Motivation and our Aim
+Students' response outcomes are a result of a sequence of actions that they take.
+The quality as well as quantity of actions vary across individuals as well as across items.
+Understanding the action sequence and its relation to response outcomes will help us better understand the nature of response process and individual differences in the process.
+Models that relate process data to process outcomes are rare in the current literature.
+
 ** Motivating example
 *** Problem Solving in Technology-Rich Environments
 
@@ -1912,6 +1951,47 @@ q_{ml}\left(t ; \mathcal{F}_{t}\right) = q_{ml}(dt) = \kappa_{m} \tau_{k} e^{\th
 - larger $\kappa_{m}$ shorter time staying on action $m$ (faster out-of-state transition)
 - larger $\tau_{k}$, faster transition speed
 - larger $\theta_{k}$, larger trasition rate towards a similar action. A person with large $\theta_{k}$ tends to choose more coherent actions
+
+  %% stolen from the neap proposal
+  [multi-state survival model]
+%We take one-partite network view.
+We take a network view on action sequences, where nodes are a set of predefined action and links represent action transitions.
+Given that item $k$ is chosen,
+the action network of student $i$ is represented by $L \times L$ adjacency matrix.
+Suppose student $i$ at item $k$ has chosen action $A_{i,k,l}$. The transition probability of moving from $A_{i,k,l}$ to some other action $A_{i,k,m}$ among $L$ actions is modeled with a multinomial logistic model
+\begin{equation}\label{eq:action}
+     \mathbb{P} ( A_{i,k,m}  |  A_{i,k,l} )
+= \frac{ \exp( \alpha^{(A)}_m + \alpha^{(A)}_l + \alpha^{(A)}_{m,l} + \beta_{m,l}^{(A)} z_{i,k,l,m} ) }{ \exp( \alpha^{(A)}_m + \alpha^{(A)}_l + \alpha^{(A)}_{m,l}+ \beta_{m,l}^{(A)} z_{i,k,l,1} ) + \cdots + \exp( \alpha^{(A)}_m + \alpha^{(A)}_l + \alpha^{(A)}_{m,l}+ \beta_{m,l}^{(A)} z_{i,k,l,L} )},
+\end{equation}
+\noindent
+where $ \alpha^{(A)}_m$ and $\alpha^{(A)}_l$  are the main effects of the current and previous actions $m$ and $l$, and  $\alpha^{(A)}_{m,l}$ is the interaction effect of the two actions.
+$\beta_{m,l}^{(A)}$ represents the effect of moving from action $A_{i,k,l}$ to $A_{i,k,m}$, while
+$ z_{i,k,l,m}$ indicate observed or unobserved covariates that capture the movement.
+For example, $z_{i,k,l,m}$ can represent a distance between the two actions as in a latent space modeling approach (reference).
+Figure \ref{fg:sequence} illustrates the direct paths for the sequences of actions taken by
+two students, one represented with dashed paths  and the other with solid paths.
+
+\textcolor{red}{MJ: can we handle directions? choosing the same actions? }
+
+\textcolor{cyan}{JY: incorporating action times in the transition probability...} \\
+We assume symmetric transition probabilities between actions.
+We define a function describing transition intensity (hazard) between actions $m$ and $l$ ($m \neq l$):
+\begin{align*}
+  h (t ;  A_{i,k,l} \rightarrow  A_{i,k,m}  ) = & \lim_{\delta t \to 0}  \frac{P(A_{i,k}(t + \delta t) = m | A_{i,k}(t) = l)}{\delta t} \\
+  = & \lambda_{k,l\rightarrow m}(t) \exp( \alpha^{(A)}_m + \alpha^{(A)}_l + \alpha^{(A)}_{m,l} + \beta_{m,l}^{(A)} z_{i,k,l,m} ),
+\end{align*}
+where $\lambda_{k,l\rightarrow m}(t)$ is a baseline intensity function and $A_{i,k}(t)$ is an action taken by person $i$ at $t$ for item $k$.
+The non-transition intensity of action $m$ is
+\[
+  h (t ;  A_{i,k,m} \rightarrow  A_{i,k,m}  ) =   \lambda_{k,m\rightarrow m}(t) \exp( \alpha^{(A)}_m).
+\]
+
+Then, the corresponding transition probability can be defined as
+\begin{align*}
+  \mathbb{P} (t ;  A_{i,k,l} \rightarrow  A_{i,k,m} ) = & \frac{h(t; A_{i,k,l} \rightarrow A_{i,k,m})}{\sum_{l=1}^{L}  h(t; A_{i,k,l} \rightarrow A_{i,k,m})}
+\end{align*}
+
+It is possible to include the outcome in this multi-state survival modeling framework. In such case, however, identifying meaningful ``subsequence of actions'' would not be straightforward as appeared in \eqref{eq:no-response1}. Perhaps, we can use this model for parsing action sequence, and use the subsequence for \eqref{eq:no-response1}?
 
 *** likelihood
 
