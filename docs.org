@@ -1913,15 +1913,7 @@ q_{ml}\left(t ; \mathcal{F}_{t}\right) = q_{ml}(dt) = \kappa_{m} \tau_{k} e^{\th
 - larger $\tau_{k}$, faster transition speed
 - larger $\theta_{k}$, larger trasition rate towards a similar action. A person with large $\theta_{k}$ tends to choose more coherent actions
 
-** data structure
-https://www.rdocumentation.org/packages/msm/versions/1.6.8/topics/msm2Surv
-Given a configured transition matrix, \texttt{msm} [[citep:&jackson_multi-state_2011]]
-
- transform data to a desired "long" format:
-| person | entry | exit | from | to | observed | cov1   | cov2     | time cov |
-|      1 |     0 |   10 |    1 |  2 |        1 | D_{12} | \theta D_{12} |          |
-|      1 |     0 |   10 |    1 |  3 |        0 | D_{12} | \theta D_{12} |          |
-** likelihood
+*** likelihood
 
 \begin{align*}
     q_{ml} (t ; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{ml}(t)  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}}\\
@@ -1956,7 +1948,7 @@ Let $\nu_{mlk}(t) = 1$ if person $k$ jump from actions $m$ to $l$ at time $t$; 0
 \( \delta_{k,n,m}  \delta_{k,n+1,l} = 1 \) for $n < M_{k}$ if person k's n-th transition is m to l.
 
 time at starting state (one after START) is set to the first action (n=1), and the corresponding time is set to 0.
-*** prior
+**** prior
 The proposed method use a fully Bayesian approach for estimating the proposed latent space model, using MCMC methods. Our prior specification is as follows:
 
 \begin{align*}
