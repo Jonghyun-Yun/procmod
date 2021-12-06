@@ -21,16 +21,14 @@
 #+setupfile: ~/org/orgmode_header.setup
 
 #+property: header-args :eval never-export
+#+property: header-args:R :eval never-export
 #+property: header-args:ein :session localhost
 #+property: header-args:jupyter-python :session *jupyter-piacc* :kernel tf
 
-#+begin_src emacs-lisp :results silent
+#+BEGIN_SRC emacs-lisp
   (jyun/org-latex-set-options 2.5)
-#+end_src
-
-#+RESULTS:
-: 300
-* Home
+#+END_SRC
+* Home :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_SECTION: ./
@@ -40,7 +38,7 @@
 # WIP: Process data modeling
 To be shared during meetings.
 #+end_export
-* TODOs
+* TODOs :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_SECTION: todo
@@ -84,7 +82,7 @@ what these groups can tell you about???
 see if we can use model validation tech for mutil-state survival model.
 See [[id:1237b9e6-288a-413a-a484-e535d817a3c1][multi-state survival model validation]]: posterior predictive checking
 
-* PIACC
+* PIACC :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_SECTION: piacc
@@ -1388,7 +1386,7 @@ mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(ali
 |  0.73 (2.54)| -1.45 (3.73)| 0.11 (0.16)| 0.89 (0.16)| 4.52 (3.01)|  29.00 (0.00)|
 #+end_export
 
-* Model
+* Model :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_SECTION: model
@@ -1396,7 +1394,7 @@ mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(ali
 :EXPORT_HUGO_WEIGHT: 2
 :END:
 
-** Model V1 :ARCHIVE:
+** Model V1
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_BUNDLE: V1
@@ -1464,7 +1462,7 @@ for $j = 1,\ldots,J$. $\lambda_{j}$ could be a function of the similarity. This 
   q_{ml} (t ; \boldsymbol{\alpha}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{k,m \rightarrow l}(t) \exp( \alpha_m + \alpha_l + \boldsymbol{\beta} d_{i,m,l} ),
 \end{align*}
 where $\boldsymbol{\alpha}$ is a vector of intercepts, and $\boldsymbol{\beta}$ is coefficients associated with $\mathbf{z}(t)$, $\lambda_{k,m\rightarrow l}(t)$ is a baseline intensity function. For each state $l$, there are competing transitions $m_1, \ldots, m_{n_l}$. This mean there are $n_{l}$ corresponding survival models for state $l$, and overall $K=\sum_l n_l$ models. Models with no shared parameters can be estimated separately.
-** Model V2 :ARCHIVE:
+** Model V2
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_BUNDLE: V2
@@ -1818,8 +1816,9 @@ Major challenges to establish a statistcal model taking the process data as an i
 
 Thanks to the recent development of natual language processing
 
+** Methods
+We propose to develop a new modeling framework for analyzing time-stamped sequences of actions taken by PS-TRE test takers. The innovative aspect of our proposal is that we view test takers’ sequences of actions collected in the computer-assisted PS-TRE assessment system as ????? of possible actions.  With our framework, researchers and policymakers can quantify and better understand how learners with disabilities (??) process mathematics test items.
 
-** Model
 Let $S$ denotes a set of all possible action. For each state $m \in S$, $A_{m}$ denotes a set of competing transitions $\{l_1, \ldots, l_{n_m}\}$ that can be taken directly after $m$.
 Let \(Y_k(t)\) denote an action of k-th respondent at time $t$.The $k$-th respondent takes a sequence of $M_{k}$ actions. We use \(S_{k} = \{y_{k}(t_{k,1}),y_{k}(t_{k,2}),\ldots, y_{k}(t_{k,M_{k}})\}\) to denote the $k$-th respondent's action sequence.
 
@@ -1828,13 +1827,11 @@ Respondents assumed to begin problem solving processes at time $t=0$.
 
 Let \(t_{k,n}\) denote entry time that the \(k\)-th respondent start the $n$-th action. The sojourn time is denoted by $dt_{k,n} = t_{k,n+1} - t_{k,n}$ for $n < M_{k} - 1$.
 
+*** Action embedding
 
-** Action embedding
+A goal for action embedding is to substitute a symbolic representation with a vectoric representation of actions. Similar tasks are taken for natual language processing is called word embedding.
 
-word embedding: to substitute a symbolic representation with a vectoric representation of words
-Each action sequence has different
-
-- Words that tend to “behave similarly” end up close to one another in the embedding space. Instead of using the word symbol as a feature in the model, we can use its vector, which exploits such similarities.
+Actions that tend to “behave similarly (/need better term/)” end up close to one another in the embedding space. Instead of using the action symbol as a feature in the model, we can use its vector to exploit such similarities.
 
 \[
   p\left(w_{j} \mid w_{0}, u, v\right)=\frac{\exp \left(u\left(w_{0}\right)^{\top} v\left(w_{j}\right)\right)}{\sum_{w \in V} \exp \left(u\left(w_{0}\right)^{\top} v(w)\right)}
@@ -1867,7 +1864,7 @@ where \(u: V \rightarrow \mathbb{R}^{k} \) and \(v: V \rightarrow \mathbb{R}^{k}
 Word embeddings tend to cluster together when the words they denote behave similarly. The notion of “behavior” in this case usually remains underspecified, but could refer to syntactic categorization (i.e., words most often associated with the same part of speech will cluster together) or semantic association (words that are semantically related cluster together). The similarity between word embedding vectors is often measured through such measures as the dot product or cosine similarity.
 Most prominently, word embeddings assist with the treatment of words which do not appear in the training data of a given problem (such as parsing or part-of-speech tagging). The word embedding function can be learned by exploiting co-occurence data on a large corpus (without any annotation), and thus the vocabulary over which the word embedding function is constructed is larger than the one that the training data consists of, and covers a significant amount of the words in the test data, including “unseen words.” The reliance on co-occurrence statistics is based on the distributional hypothesis (Harris, 1954) which states that co-occurrence of words in similar contexts implies that they have similar meanings.
 This model learns parameters that lead to a high-valued dot product for embeddings of frequently co-occuring pivot and context words (as the probability is pushed to the maximum in such cases). Therefore, through the contexts, words that are similar to each other in their co-occurrence patterns map to vectors that are close to each other in the Euclidean space.
-Skip-gram modeling of the above form coupled with negative sampling is often referred to as one of the word2vec models cite:mikolov_distributed_2013. A second proposed model of word2vec is the continuous bag-of-words model (CBOW), which predicts a word from the context—in reverse from the skip-gram model.
+Skip-gram modeling of the above form coupled with negative sampling is often referred to as one of the =word2vec= models citep:mikolov_distributed_2013. A second proposed model of word2vec is the continuous bag-of-words model (CBOW), which predicts a word from the context—in reverse from the skip-gram model.
 
 
 [[id:1b2724b9-324b-463b-967a-3b064a0f115e][Word2Vec | Skip-grams | TensorFlow Core]]
@@ -1876,7 +1873,15 @@ How to convert an action sequence to a sequence
 skip-gram
 negative sampling
 cosine similarity
-** Multistate model
+*** data structure
+https://www.rdocumentation.org/packages/msm/versions/1.6.8/topics/msm2Surv
+Given a configured transition matrix, \texttt{msm} [[citep:&jackson_multi-state_2011]]
+
+ transform data to a desired "long" format:
+| person | entry | exit | from | to | observed | cov1   | cov2     | time cov |
+|      1 |     0 |   10 |    1 |  2 |        1 | D_{12} | \theta D_{12} |          |
+|      1 |     0 |   10 |    1 |  3 |        0 | D_{12} | \theta D_{12} |          |
+*** Multistate model
 
 The intensity function $q_{ml}(\cdot)$ represents the instantaneous risk of moving from action $m$ to $l$:
 \begin{align*}
@@ -1951,7 +1956,7 @@ Let $\nu_{mlk}(t) = 1$ if person $k$ jump from actions $m$ to $l$ at time $t$; 0
 \( \delta_{k,n,m}  \delta_{k,n+1,l} = 1 \) for $n < M_{k}$ if person k's n-th transition is m to l.
 
 time at starting state (one after START) is set to the first action (n=1), and the corresponding time is set to 0.
-** prior
+*** prior
 The proposed method use a fully Bayesian approach for estimating the proposed latent space model, using MCMC methods. Our prior specification is as follows:
 
 \begin{align*}
@@ -1989,21 +1994,10 @@ Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive 
 :PROPERTIES:
 :ID:       bffeec1d-053a-4e74-8d30-40278b23d60c
 :END:
-For each $m$, we draw \(\kappa_{m}^{* }\)$ from a symmetric MH jumping distribution, and accept $\kappa_{m}^{(l)} = \kappa_{m}^{* }$ with probability $\min(1, r_{{\kappa_{m}}^{* }})$ where
-
-\[
-  \begin{align*}
-\log r_{{\kappa_{m}}^{* }} =& \sum_{k=1}^K \sum_{n = 1} ^{M_{k}} \left[  \delta_{k,n,m} (\log \kappa_{m}^{* } - \log \kappa_{m}^{(l-1)})-\sum_{l \in A_{m}} dt_{k,n} (\kappa_{m}^{* } - \kappa_{m}^{(l-1)}) \tau_{k} e^{(\theta_{k} + \beta) D_{ml} } + \log \frac{\pi(\kappa_{m}^{* })}{\pi(\kappa_{m}^{t})} \right].
-\end{align*}
-\]
-
-
-For each $m$, we draw \(\kappa_m^{(t)}\)$ from
+For each $m$, we draw \(\kappa_m^{(t)}\) from
 $\mbox{Gamma}\left(  a_{\tau} + \sum_{n=1}^{M_{k}} \sum_{k=1}^N \mbox{I}(\delta_{k,n,m} = 1) ,b_{\tau} + \sum_{n=1}^{M_{k}-1}\sum_{k=1}^{N} \sum_{ l \in A_m } dt_{k,n} \tau_{k}e^{(\theta_{k} + \beta) D_{ml}}\right)$
 
-[[file:src/update_kappa.cpp::// std::cout << "tau: " <<tau(sid.at(ii)) << "\n";][code: \kappa update]]
-
-#+begin_src cpp
+#+BEGIN_SRC cpp
   double post_a = a_kappa + 1.0;
   double post_b = b_kappa;
   for (auto &ii : oos_m) {
@@ -2011,22 +2005,12 @@ $\mbox{Gamma}\left(  a_{\tau} + \sum_{n=1}^{M_{k}} \sum_{k=1}^N \mbox{I}(\delta_
     post_b += tdiff(ii) * tau(sid.at(ii)) * std::exp((theta(sid.at(ii)) + beta) * dist(ii));
   }
   kappa = stan::math::gamma_rng(post_a, post_b, rng);
-#+end_src
+#+END_SRC
 *** update \(\tau_{k}\)
-For each $m$, we draw \(\tau_k^{* }\)$ from a symmetric MH jumping distribution, and accept $\tau_{m}^{(l)} = \tau_{m}^{* }$ with probability $\min(1, r_{{\tau_{m}}^{* }})$ where
-
-\begin{align*}
-\log r_{{\tau_{k}}^*} = \sum_{m \in S} \sum_{n=1}^{M_{k}} \left[  \delta_{k,n,m} (\log \tau_{k}^* - \log \tau_{k}^{(l-1)})- \sum_{l \in A_m} dt_{k,n} \kappa_{m}e^{(\theta_{k} + \beta) D_{ml}} ( \tau_{k}^* -  \tau_{k}^{(l-1)} )
-+ \log \frac{\pi(\tau_{k}^*)}{\pi(\theta_{k}^{t})}\right].
-\end{align*}
-
-
-For each $k$, we draw \(\tau_k^{(t)}\)$ from
+For each $k$, we draw \(\tau_k^{(t)}\) from
 $\mbox{Gamma}\left(  a_{\tau} + M_k, b_{\tau} + \sum_{n=1}^{M_{k}} \sum_{m \in S, l \in A_m } dt_{k,n} \kappa_{m}e^{(\theta_{k} + \beta) D_{ml}}\right)$
 
-[[file:src/update_tau.cpp::post_b +=][code: \tau update]]
-
-#+begin_src cpp
+#+BEGIN_SRC cpp
 double post_a = a_tau + 1.0;
 double post_b = b_tau;
 for (auto &ii : person_k) {
@@ -2036,15 +2020,15 @@ for (auto &ii : person_k) {
         tdiff(ii) * kappa(acfrom.at(ii)) * std::exp((theta_k + beta) * dist(ii));
 }
 tau = stan::math::gamma_rng(post_a, post_b, rng);
-#+end_src
+#+END_SRC
 *** update \(\theta_{k}\)
 For each $k$, we draw \(\theta_k^{* }\)$ from a symmetric MH jumping distribution, and accept $\theta_{m}^{(l)} = \theta_{m}^{* }$ with probability $\min(1, r_{{\theta_{m}}^{* }})$ where
 \begin{align*}
-\log r_{{\theta_{k}}^{* }} =& \sum_{m \in S} \sum_{n=1}^{M_{k}} \left[ \delta_{k,n,m} (\theta_{k}^{* } - \theta_{k}^{(l-1)})D_{ml} -\sum_{l \in A_m} dt_{k,n} \kappa_{m} \tau_{k} e^{ \beta D_{ml} }(e^{\theta_{k}^{* }D_{ml}} -  e^{\theta_{k}^{(l-1)} D_{ml} })
-+ \log \frac{\pi(\theta_{k}^{* })}{\pi(\theta_{k}^{(l-1)})} \right].\\
+\log r_{{\theta_{k}}^{* }} =& \sum_{m \in S} \sum_{n=1}^{M_{k}} \left[ \delta_{k,n,m} (\theta_{k}^{* } - \theta_{k}^{(l-1)})D_{ml} -\sum_{l \in A_m} dt_{k,n} \kappa_{m} \tau_{k} e^{ \beta D_{ml} }(e^{\theta_{k}^{* }D_{ml}} -  e^{\theta_{k}^{(l-1)} D_{ml} }) + \log \frac{\pi(\theta_{k}^{* })}{\pi(\theta_{k}^{(l-1)})} \right].\\
 \end{align*}
 
-*** update \(\sigma\)
+*** update \(\sigma^{2}\)
+We draw \((\sigma^{2})^{(t)}\) from
 \[
  p( \sigma^2|e.e.) \propto \mbox{Inv-Gamma}(\sigma^{2}|a,b) \prod N(\theta_{k} | \mu, \sigma^2)
 \]
@@ -2075,6 +2059,170 @@ $\mbox{Inv-Gamma}(\alpha,\beta)$ denotes the inverse gamma distribution with a d
   p(\sigma_{\beta}^{2}|ee) = inv-Gamma(a + 0.5, b + 0.5 (\beta - \mu_{\beta})^2)
 \]
 ** Application
+*** tickets
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_BUNDLE: tickets
+:END:
+
+#+BEGIN_SRC sh
+out_dir="tickets/"
+cd $out_dir
+cd figure
+convert -density 300 tau_action.pdf tau_action.png
+convert -density 300 theta_tau_res.pdf theta_tau_res.png
+convert -density 300 time_action_more.pdf time_action_more-%d.png
+convert -density 300 time_action.pdf time_action-%d.png
+#+END_SRC
+
+#+BEGIN_SRC R
+ftime = timestamp[1] / 1000, naction = n(), time = timestamp[n()] / 1000, spd = naction / (ftime - time)
+#+END_SRC
+- \tau: person's baseline hazard for action transition
+- \theta: person's xxx to jump to a similar action for the next one
+#+begin_export html
+|Name        |Label                                                                               |Value scheme                                          |
+|:-----------|:-----------------------------------------------------------------------------------|:-----------------------------------------------------|
+|AGEG5LFS    |Age groups in 5-year intervals based on LFS groupings (derived)                     |Derived - Age groups in equal 5 year intervals (1-10) |
+|NFEHRS      |Number of hours of participation in non-formal education (derived)                  |NA                                                    |
+|EARNHRDCL   |Hourly earnings excluding bonuses for wage and salary earners, in deciles (derived) |Derived - Decile                                      |
+|LEARNATWORK |Index of learning at work (derived)                                                 |NA                                                    |
+|ICTHOME     |Index of use of ICT skills at home (derived)                                        |NA                                                    |
+|ICTWORK     |Index of use of ICT skills at work (derived)                                        |NA                                                    |
+|INFLUENCE   |Index of use of influencing skills at work (derived)                                |NA                                                    |
+|NUMHOME     |Index of use of numeracy skills at home (basic and advanced - derived)              |NA                                                    |
+|NUMWORK     |Index of use of numeracy skills at work (basic and advanced - derived)              |NA                                                    |
+|READHOME    |Index of use of reading skills at home (prose and document texts - derived)         |NA                                                    |
+|READWORK    |Index of use of reading skills at work (prose and document texts - derived)         |NA                                                    |
+|TASKDISC    |Index of use of task discretion at work (derived)                                   |NA                                                    |
+|WRITHOME    |Index of use of writing skills at home (derived)                                    |NA                                                    |
+|WRITWORK    |Index of use of writing skills at work (derived)                                    |NA                                                    |
+#+end_export
+
+[[file:tickets/figure/lpa_plot-0.png]]
+[[file:tickets/figure/lpa_plot-1.png]]
+# [[file:tickets/figure/lpa_back.png]]
+[[file:tickets/figure/lpa_back_line.png]]
+
+Response: the smaller, the better
+#+RESULTS:
+#+begin_export html
+## mean
+
+
+|        tau|      theta|    naction|        spd|      res|
+|----------:|----------:|----------:|----------:|--------:|
+| -0.4123013|  0.1939430|  0.0105633|  0.2949513| 3.710588|
+|  0.9344900| -0.6655596|  0.3971435|  0.1263112| 5.219081|
+|  1.1296467| -1.7866636| -1.9230219| -1.9932064| 7.000000|
+| -0.9718218|  1.3403763|  0.1527688| -0.0648598| 3.145251|
+
+## sd
+
+
+|       tau|    theta|   naction|       spd|      res|
+|---------:|--------:|---------:|---------:|--------:|
+| 0.4111353| 0.384638| 0.6375695| 0.2628682| 2.989527|
+| 0.9065238| 0.553052| 1.2095532| 0.3520752| 2.745995|
+| 0.9047816| 1.085768| 0.1671354| 2.6734464| 0.000000|
+| 0.2688267| 0.354953| 0.5181867| 0.3940398| 2.883724|
+
+## n
+
+
+| tau| theta| naction| spd| res|
+|---:|-----:|-------:|---:|---:|
+| 425|   425|     425| 425| 425|
+| 283|   283|     283| 283| 283|
+|  75|    75|      75|  75|  75|
+| 179|   179|     179| 179| 179|
+#+end_export
+
+
+\tau's covaritates:
+\theta's covaritates:
+[[file:tickets/figure/theta_tau_res.png]]
+[[file:tickets/figure/tau_action.png]]
+[[file:tickets/figure/time_action-3.png]]
+[[file:tickets/figure/time_action_more-2.png]]
+[[file:tickets/figure/time_action_more-5.png]]
+[[file:tickets/figure/time_action_more-7.png]]
+[[file:tickets/figure/time_action_more-8.png]]
+[[file:tickets/figure/time_action_more-9.png]]
+[[file:tickets/figure/time_action_more-10.png]]
+[[file:tickets/figure/time_action_more-11.png]]
+[[file:tickets/figure/time_action_more-13.png]]
+
+*** party_invitations-1
+[[file:party_invitations-1/figure/lpa_plot-0.png]]
+[[file:party_invitations-1/figure/lpa_plot-1.png]]
+# [[file:party_invitations-1/figure/lpa_back.png]]
+[[file:party_invitations-1/figure/lpa_back_line.png]]
+
+Response: the larger, the better
+
+#+RESULTS:
+#+begin_export html
+
+### clustering w/ tau and theta
+
+
+|          tau|        theta|      naction|           spd|         res|             n|
+|------------:|------------:|------------:|-------------:|-----------:|-------------:|
+|  2.06 (1.10)| -1.49 (0.96)|  0.08 (3.72)| -4.43 (11.77)| 0.43 (1.13)|   7.00 (0.00)|
+|  0.02 (0.65)|  0.63 (0.43)| -0.21 (0.38)|   0.03 (0.00)| 2.77 (0.56)| 443.00 (0.00)|
+| -0.65 (0.57)| -0.58 (1.11)| -0.28 (0.70)|   0.03 (0.00)| 1.18 (1.32)| 309.00 (0.00)|
+|  0.83 (1.33)| -0.43 (0.89)|  0.84 (1.51)|   0.03 (0.00)| 1.90 (1.24)| 211.00 (0.00)|
+
+### clustering w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|         res|             n|
+|------------:|------------:|-----------:|-----------:|-----------:|-------------:|
+|  1.82 (4.16)| -3.09 (9.85)| 0.98 (0.05)| 0.02 (0.05)| 0.70 (1.25)|  10.00 (0.00)|
+| -0.02 (0.90)|  0.03 (0.00)| 0.00 (0.01)| 1.00 (0.01)| 2.07 (1.23)| 960.00 (0.00)|
+#+end_export
+
+*** book_order
+
+[[file:book_order/figure/lpa_plot-0.png]]
+[[file:book_order/figure/lpa_plot-1.png]]
+# [[file:book_order/figure/lpa_back.png]]
+[[file:book_order/figure/lpa_back_line.png]]
+
+Response: the larger, the better
+#+RESULTS:
+#+begin_export html
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|         res|             n|
+|------------:|------------:|------------:|------------:|-----------:|-------------:|
+| -0.18 (0.88)|  0.37 (0.49)|  0.21 (0.68)|  0.11 (0.42)| 2.27 (2.45)| 450.00 (0.00)|
+|  0.83 (1.06)| -1.67 (0.83)| -1.34 (0.12)| -0.25 (0.80)| 6.32 (1.92)|  88.00 (0.00)|
+|  0.31 (1.32)| -0.79 (1.73)|  0.95 (2.48)| -0.96 (3.97)| 4.23 (3.05)|  26.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|         res|             n|
+|------------:|------------:|-----------:|-----------:|-----------:|-------------:|
+| -0.04 (0.83)|  0.08 (0.45)| 0.99 (0.03)| 0.01 (0.03)| 2.91 (2.80)| 535.00 (0.00)|
+|  0.73 (2.54)| -1.45 (3.73)| 0.11 (0.16)| 0.89 (0.16)| 4.52 (3.01)|  29.00 (0.00)|
+#+end_export
+
+** References
+#+csl_style: ~/Zotero/styles/chicago-author-date.csl
+#+latex: \printbibliography
+# for html export with bib
+
+#+bibliography: ~/Zotero/myref.bib
+#+bibliography: here
+
+bibliographystyle:unsrt
+bibliography:~/Zotero/myref.bib
+
 * COMMENT Local Variables
 # Local Variables:
 # eval: (jyun/set-org-babel-default-header-args:R)
