@@ -1710,42 +1710,53 @@ attr(dat, "trans")
 
 ** Introduction
 %%% stolen from the neap proposal
-We propose to develop a new, network modeling framework for analyzing time-stamped sequences of actions taken by NAEP test takers. The innovative aspect of our proposal is that we view test takers’ sequences of actions collected in the computer-assisted NAEP assessment system as directed paths between actions in a network of possible actions.  With our framework, researchers and policymakers can quantify and better understand how learners with disabilities process mathematics test items.
 
-We have successfully collaborated to develop novel network-based modeling approaches for analyzing conventional assessment data on two papers (Jin \& Jeon, 2018; Jeon, Jin, Schweinberger, \& Baugh, 2020), with more papers in the pipeline. We will extend this model-based framework for analyzing NAEP process data. Since the number of possible actions is large and many test takers will choose a small subset of the possible actions, the data is sparse. To deal with the sparsity of the data, we use machine learning techniques. These machine learning techniques penalize models that are more complex than warranted by the data.
-
-Advantage I. An important advantage of our network-based approach is the introduction of a virtual, two-dimensional Euclidean map of the interplay between actions for different test takers. This interactive map could offer substantially enhanced insights into how and why learners with and without disabilities are different in their response behavior on the current NAEP mathematics assessment.
-
-Advantage II. A second advantage of our network-based approach is that we can easily link the network of actions with test takers’ mathematics performance outcomes, their background information, as well as any technical accommodations they utilized during the test, which allows educators to identify which accommodations might be more effective than others in helping learners with disabilities to display their full ability within the digitalized NAEP assessment environment.
-
+*** what's process data
 %Advances in technology have expanded opportunities for educational measurement through changes to item design, item delivery and data collection. Some examples include simulation-, scenario-, and game-based assessment and learning environments.
 
 The NAEP computerized testing format provides an interactive environment for students.
 Students can choose among a set of available actions and take one or more steps to finish a task. All student actions are automatically recorded in system log (Kerr, Chung, \& Iseli, 2011), which can be used %immediately for providing instant feedback to students
 for diagnostic and scoring purposes (DiCerbo \& Behrens, 2014).
 
-% Benefits of process data
+*** Benefits of process data
+The availability of process data open new research opportunities including to better understand test-takers' behavior patterns, ..., and ....
 
 
-
-% Challenges
+*** Challenges
 While the availability of rich response process data during problem solving comes the great challenge of building appropriate psychometric models to analyze these data.
 The raw process data are usually formatted as lines of coded and time-stamped strings.
 The vast amount of data on students' potential trial-and-error process makes it less than straightforward to detect patterns in problem solving.
 
 
-% Exisitng methods and limitations
+*** Exisitng methods and limitations
 Several data analysis techniques and models have been explored to uncover problem-solving patterns. For example, researchers used methods such as cluster analysis (Bergner, Shu, \& von Davier, 2014) and editing distance (Hao, Shu, Bergner, Zhu, \& von Davier, 2014).
 Other researchers explored the method of combining Markov movesl and item response theory (IRT) framework. Process mining techniques such as Petri net were also used to study behavioral patterns (Howard, Johnson, \& Neitzel, 2010).
 In addition, researchers used digraphs to visualize and analyze sequential process data collected from assessment.
 Zhu, Shu, and von Davier (2016) used network visualization and analysis for understanding process data.
 
 
-% Motivation and our Aim
+*** Motivation and our Aim
 Students' response outcomes are a result of a sequence of actions that they take.
 The quality as well as quantity of actions vary across individuals as well as across items.
 Understanding the action sequence and its relation to response outcomes will help us better understand the nature of response process and individual differences in the process.
 Models that relate process data to process outcomes are rare in the current literature.
+
+We propose to develop a new, network modeling framework for analyzing time-stamped sequences of actions taken by NAEP test takers. The innovative aspect of our proposal is that we view test takers’ sequences of actions collected in the computer-assisted NAEP assessment system as directed paths between actions in a network of possible actions.  With our framework, researchers and policymakers can quantify and better understand how learners with disabilities process mathematics test items.
+
+We have successfully collaborated to develop novel network-based modeling approaches for analyzing conventional assessment data on two papers (Jin \& Jeon, 2018; Jeon, Jin, Schweinberger, \& Baugh, 2020), with more papers in the pipeline. We will extend this model-based framework for analyzing NAEP process data. Since the number of possible actions is large and many test takers will choose a small subset of the possible actions, the data is sparse. To deal with the sparsity of the data, we use machine learning techniques. These machine learning techniques penalize models that are more complex than warranted by the data.
+
+
+*** Advantages of the proposed method
+Advantage I. An important advantage of our network-based approach is the introduction of a virtual, two-dimensional Euclidean map of the interplay between actions for different test takers. This interactive map could offer substantially enhanced insights into how and why learners with and without disabilities are different in their response behavior on the current NAEP mathematics assessment.
+
+Advantage II. A second advantage of our network-based approach is that we can easily link the network of actions with test takers’ mathematics performance outcomes, their background information, as well as any technical accommodations they utilized during the test, which allows educators to identify which accommodations might be more effective than others in helping learners with disabilities to display their full ability within the digitalized NAEP assessment environment.
+
+*** paper org.
+We first develop xxx. We further develop xxx. The
+remainder of this article is organized as follows.
+In Section, we introduce . In Section , we present. Applications are given in
+Section, followed by conclusions given in
+Section.
 
 ** Motivating example
 *** Problem Solving in Technology-Rich Environments
@@ -1754,21 +1765,28 @@ OECD Survey of Adult Skills (PIAAC) Log Data
 Downloaded from https://piaac-logdata.tba-hosting.de/
 Problem Solving Items:
 
+The Programme for the International Assessment of Adult Competencies (PIAAC) is a programme of assessment and analysis of adult skills. The major survey conducted as part of PIAAC is the Survey of Adult Skills. The Survey measures adults’ proficiency in key information-processing skills - literacy, numeracy and problem solving - and gathers information and data on how adults use their skills at home, at work and in the wider community.
+
+This international survey is conducted in over 40 countries/economies and measures the key cognitive and workplace skills needed for individuals to participate in society and for economies to prosper.
+
 The OECD Survey of Adult Skills (PIAAC) assesses the proficiency of adults in information processing skills. During the PIAAC assessement, user interactions were logged automatically. This means that most of the users’ actions within the assessment tool were recorded and stored with time stamps in separate files called log files.
 
-
-#+begin_quote
-The availability of these log files offers new opportunities to researchers, for instance to reproduce test-taking behavior of individuals and to better understand test-taking behavior.
-#+end_quote
-
-Probem Solving in Technology-Rich Environments (PS-TRE)
 #+begin_quote
 This refers to the ability to use technology to solve problems and accomplish complex tasks. It is not a measurement of “computer literacy”, but rather of the cognitive skills required in the information age – an age in which the accessibility of boundless information has made it essential for people to be able to decide what information they need, to evaluate it critically, and to use it to solve problems. In this survey, higher-order skills are identified along with basic proficiency.
 #+end_quote
 
-[[id:32a1c1a4-f67b-428e-8458-16f4691b77a3][Questions we like to answer (from Dr. Jeon's proposal)]]
+**** [[id:32a1c1a4-f67b-428e-8458-16f4691b77a3][Questions we like to answer (from Dr. Jeon's proposal)]]
+- which sequences or actions are effective? given the person's ability and item difficulty
+- is the same sequence (strategy) effective for all items or not?
+- is the same sequence effective for all people?
+- if effective sequences are not the same across all items, can we extract some common features of effective sequences ?
+- which sequences or actions are more or less effective for students with disability?
+- any other person covariates? ability? that is, does the effectiveness of sequences depend on person abilities? (interaction between sequence and ability)
+- does the effect of the sequence change depending on how long it took? for instance,  when it was taken in a shorter time, a sequence might have a positive effect, while it might have a negative effect when it was taken in a longer time.
+- instead of using the log time (continuous), it may be better or useful to use a categorical variable?
+- the effect of sequences on the success probability may be a function of item difficulty or other item features, for instance, item position, item types (e.g., multiple-choice vs. open-ended), item contents (algebra, geometry) ?
 
-Illustrate a ticket example:
+**** Illustrate a ticket example:
 
 #+attr_latex: :placement [ht] :width 0.5\textwidth
 #+label: fig:tickets_home
@@ -1813,7 +1831,7 @@ aa = dd %>% filter(SEQID == 4016) %>% mutate(timestamp = round(timestamp / 1000,
 aa %>% kbl(booktab = T, format = "latex")
 #+end_src
 
-#+attr_latex: :placement [H] :center t
+#+attr_latex: :placement [H] :center t :font \sffamily
 #+label: tab:df_action
 #+caption: An example action sequence of one respondent. A sequence of actions (2nd column) taken is recorded with timestamp (3rd column).
 |   ID | Action                         | Time (sec) |
@@ -1850,6 +1868,7 @@ item %>% group_by(SEQID) %>% summarise(mnum = max(event_num), time = max(timesta
 There are 172 unique observed actions.
 On average, repondents spend 182 (IQR: 107) seconds on this time, and take 23 (IQR: 10) actions.
 
+**** address challenges in details
 The process data consists of pairs of actions and time stamps of each respondents.
 Major challenges to establish a statistcal model taking the process data as an input are 1) unequal length of respondents' actions sequences; 2) large number of distinct actions transitions; and 3) ...
 
@@ -1877,8 +1896,7 @@ Actions that tend to “behave similarly (/need better term/)” end up close to
 \]
 where \(u: V \rightarrow \mathbb{R}^{k} \) and \(v: V \rightarrow \mathbb{R}^{k}\) are functions which map words to a word embedding—one for the pivot words, and the other for context.
 
-
-Word2Vec citep:mikolov_distributed_2013 .
+Word2Vec citep:mikolov_distributed_2013.
 
 - word2vec: skip-gram models coupled with negative sampling
 - negative sampling: to reduce computational cost of the cosine similarity (the denominator is summation of all words in vocabulary).
