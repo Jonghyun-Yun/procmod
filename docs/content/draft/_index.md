@@ -1,10 +1,10 @@
 +++
 title = "Draft"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-06T13:02:12-06:00
+lastmod = 2021-12-07T16:27:41-06:00
 draft = false
 weight = 3
-chapter = false
+chapter = true
 +++
 
 <div class="ox-hugo-toc toc">
@@ -13,20 +13,31 @@ chapter = false
 <div class="heading">Table of Contents</div>
 
 - [Introduction](#introduction)
+    - [what's process data?](#what-s-process-data)
+    - [Benefits of process data](#benefits-of-process-data)
+    - [Challenges](#challenges)
+    - [Exisitng methods and limitations](#exisitng-methods-and-limitations)
+    - [Motivation and our Aim](#motivation-and-our-aim)
+    - [Advantages of the proposed method](#advantages-of-the-proposed-method)
+    - [paper org.](#paper-org-dot)
 - [Motivating example](#motivating-example)
     - [Problem Solving in Technology-Rich Environments](#problem-solving-in-technology-rich-environments)
+        - [Questions we like to answer (from Dr. Jeon's proposal)](#questions-we-like-to-answer--from-dr-dot-jeon-s-proposal----posts-dot-org)
+        - [Illustrate a ticket example:](#illustrate-a-ticket-example)
+        - [address challenges in details](#address-challenges-in-details)
 - [Methods](#methods)
+    - [notation](#notation)
     - [Action embedding](#action-embedding)
     - [data structure](#data-structure)
     - [Multistate model](#multistate-model)
+- [Estimation](#estimation)
     - [likelihood](#likelihood)
     - [prior](#prior)
-- [Estimation](#estimation)
     - [update \\(\kappa\_{m}\\):](#update-kappa-m)
     - [update \\(\tau\_{k}\\)](#update-tau-k)
     - [update \\(\theta\_{k}\\)](#update-theta-k)
     - [update \\(\sigma^{2}\\)](#update-sigma-2)
-- [Application](#application)
+- [Applications](#applications)
     - [tickets](#tickets)
     - [party\_invitations-1](#party-invitations-1)
     - [book\_order](#book-order)
@@ -35,23 +46,71 @@ chapter = false
 </div>
 <!--endtoc-->
 
+[NEAP proposal](~/Dropbox/research/procmod/ies_naep/main.tex)
+
 
 # Introduction {#introduction}
 
-% Challenges
+%%% stolen from the neap proposal
+
+
+## what's process data? {#what-s-process-data}
+
+%Advances in technology have expanded opportunities for educational measurement through changes to item design, item delivery and data collection. Some examples include simulation-, scenario-, and game-based assessment and learning environments.
+
+The NAEP computerized testing format provides an interactive environment for students.
+Students can choose among a set of available actions and take one or more steps to finish a task. All student actions are automatically recorded in system log (Kerr, Chung, \\& Iseli, 2011), which can be used %immediately for providing instant feedback to students
+for diagnostic and scoring purposes (DiCerbo \\& Behrens, 2014).
+
+
+## Benefits of process data {#benefits-of-process-data}
+
+The availability of process data open new research opportunities including to better understand test-takers' behavior patterns, ..., and ....
+
+
+## Challenges {#challenges}
+
 While the availability of rich response process data during problem solving comes the great challenge of building appropriate psychometric models to analyze these data.
 The raw process data are usually formatted as lines of coded and time-stamped strings.
 The vast amount of data on students' potential trial-and-error process makes it less than straightforward to detect patterns in problem solving.
 
-% Exisitng methods and limitations
+
+## Exisitng methods and limitations {#exisitng-methods-and-limitations}
+
 Several data analysis techniques and models have been explored to uncover problem-solving patterns. For example, researchers used methods such as cluster analysis (Bergner, Shu, \\& von Davier, 2014) and editing distance (Hao, Shu, Bergner, Zhu, \\& von Davier, 2014).
 Other researchers explored the method of combining Markov movesl and item response theory (IRT) framework. Process mining techniques such as Petri net were also used to study behavioral patterns (Howard, Johnson, \\& Neitzel, 2010).
 In addition, researchers used digraphs to visualize and analyze sequential process data collected from assessment.
 Zhu, Shu, and von Davier (2016) used network visualization and analysis for understanding process data.
 
-An important advantage of our approach is the introduction of a virtual Euclidean map of the interplay between actions. This interactive map could offer substantially enhanced insights into how and why learners are different in their response behavior on the current PS-TRE assessment.
+<&chen_continuous-time_2020>
 
-A second advantage of our approach is that we can easily link with test takers’ performance outcomes, their background information, as well as any technical accommodations they utilized during the test, which allows educators to identify which accommodations might be more effective than others in helping learners to display their full ability within the digitalized assessment environment.
+
+## Motivation and our Aim {#motivation-and-our-aim}
+
+Students' response outcomes are a result of a sequence of actions that they take.
+The quality as well as quantity of actions vary across individuals as well as across items.
+Understanding the action sequence and its relation to response outcomes will help us better understand the nature of response process and individual differences in the process.
+Models that relate process data to process outcomes are rare in the current literature.
+
+We propose to develop a new, network modeling framework for analyzing time-stamped sequences of actions taken by NAEP test takers. The innovative aspect of our proposal is that we view test takers’ sequences of actions collected in the computer-assisted NAEP assessment system as directed paths between actions in a network of possible actions.  With our framework, researchers and policymakers can quantify and better understand how learners with disabilities process mathematics test items.
+
+We have successfully collaborated to develop novel network-based modeling approaches for analyzing conventional assessment data on two papers (Jin \\& Jeon, 2018; Jeon, Jin, Schweinberger, \\& Baugh, 2020), with more papers in the pipeline. We will extend this model-based framework for analyzing NAEP process data. Since the number of possible actions is large and many test takers will choose a small subset of the possible actions, the data is sparse. To deal with the sparsity of the data, we use machine learning techniques. These machine learning techniques penalize models that are more complex than warranted by the data.
+
+
+## Advantages of the proposed method {#advantages-of-the-proposed-method}
+
+Advantage I. An important advantage of our network-based approach is the introduction of a virtual, two-dimensional Euclidean map of the interplay between actions for different test takers. This interactive map could offer substantially enhanced insights into how and why learners with and without disabilities are different in their response behavior on the current NAEP mathematics assessment.
+
+Advantage II. A second advantage of our network-based approach is that we can easily link the network of actions with test takers’ mathematics performance outcomes, their background information, as well as any technical accommodations they utilized during the test, which allows educators to identify which accommodations might be more effective than others in helping learners with disabilities to display their full ability within the digitalized NAEP assessment environment.
+
+
+## paper org. {#paper-org-dot}
+
+We first develop xxx. We further develop xxx. The
+remainder of this article is organized as follows.
+In Section, we introduce . In Section , we present. Applications are given in
+Section, followed by conclusions given in
+Section.
 
 
 # Motivating example {#motivating-example}
@@ -59,19 +118,36 @@ A second advantage of our approach is that we can easily link with test takers�
 
 ## Problem Solving in Technology-Rich Environments {#problem-solving-in-technology-rich-environments}
 
+<&oecd_technical_2019>
+
+Interactive tasks as implemented in the problem solving in a technology-rich
+environment (PSTRE) domain in the Programme for the International Assessment of
+Adult Competencies (PIAAC, OECD, 2013) and the problem solving domain in the
+Programme for International Student Assessment (PISA, OECD, 2014) aim at mirroring
+real-life problem-solving behavior (Goldhammer, Naumann, & Keßel, 2013). While correct
+responses to such tasks can be assumed to stem from examinees having the skill set and
+the motivation required to solve the task, incorrect responses can occur for a variety of
+different reasons, ranging from lack of different subskills and/or metacompetencies required
+to solve the task through misinterpreting instructions to examinees not exerting their best
+Fo
+effort and interacting quickly and superficially with the task at hand.
+
+As a motivating example, we introduce problem solving in technology-rich environments (PSTRE) We introduce an example of pro
+
 OECD Survey of Adult Skills (PIAAC) Log Data
+Downloaded from <https://piaac-logdata.tba-hosting.de/>
+Problem Solving Items:
+
+The Programme for the International Assessment of Adult Competencies (PIAAC) is a programme of assessment and analysis of adult skills. The major survey conducted as part of PIAAC is the Survey of Adult Skills. The Survey measures adults’ proficiency in key information-processing skills - literacy, numeracy and problem solving - and gathers information and data on how adults use their skills at home, at work and in the wider community.
+
+This international survey is conducted in over 40 countries/economies and measures the key cognitive and workplace skills needed for individuals to participate in society and for economies to prosper.
 
 The OECD Survey of Adult Skills (PIAAC) assesses the proficiency of adults in information processing skills. During the PIAAC assessement, user interactions were logged automatically. This means that most of the users’ actions within the assessment tool were recorded and stored with time stamps in separate files called log files.
 
 > This refers to the ability to use technology to solve problems and accomplish complex tasks. It is not a measurement of “computer literacy”, but rather of the cognitive skills required in the information age – an age in which the accessibility of boundless information has made it essential for people to be able to decide what information they need, to evaluate it critically, and to use it to solve problems. In this survey, higher-order skills are identified along with basic proficiency.
 
-<!--quoteend-->
 
-> The availability of these log files offers new opportunities to researchers, for instance to reproduce test-taking behavior of individuals and to better understand test-taking behavior.
-
-These data opens new research opportunities to researchers, for instance to better understand test-taking behavior.
-
-[Questions we like to answer (from Dr. Jeon's proposal)](posts/.org)
+### [Questions we like to answer (from Dr. Jeon's proposal)](posts/.org) {#questions-we-like-to-answer--from-dr-dot-jeon-s-proposal----posts-dot-org}
 
 -   which sequences or actions are effective? given the person's ability and item difficulty
 -   is the same sequence (strategy) effective for all items or not?
@@ -83,22 +159,19 @@ These data opens new research opportunities to researchers, for instance to bett
 -   instead of using the log time (continuous), it may be better or useful to use a categorical variable?
 -   the effect of sequences on the success probability may be a function of item difficulty or other item features, for instance, item position, item types (e.g., multiple-choice vs. open-ended), item contents (algebra, geometry) ?
 
-Ticket data is a task included in PIACC's probem solving in technology-rich environments (PS-TRE) items. The PS-TRE aims to measure cognitive skills such as the ability to decide what information they need, to evaluate it critically, and to use it to solve problems. The ticket data is download from <https://piaac-logdata.tba-hosting.de/>.
 
-The data  involves  a  scenario  in  which  the respondent  is asked to reserve all fooball game tickets that an entire group can attend. A group of friend provides thier availabilities via an online calendar. Respondents  access  and  evaluate  information from ticket-reservation web pages and online calendars in simulated web environment as shown in Figure~[1](#orga8e6bc4). Respondents are able to:
+### Illustrate a ticket example: {#illustrate-a-ticket-example}
+
+<a id="orgc6b645e"></a>
+
+{{< figure src="/ox-hugo/tickets_demo.png" caption="Figure 1: An example of PS-TRE items. In this simulated web environment, respondents can access information required for ticket reservation." >}}
+
+This  item  involves  a  scenario  in  which  the respondent  is asked to reserve all fooball game tickets that an entire group can attend. A group of friend provides thier availabilities via an online calendar. Respondents  access  and  evaluate  information from ticket-reservation web pages and online calendars in simulated web environment. Respondents are able to:
 
 -   Click on tabs for ticket reservation web pages and online calendar;
 -   Click on checkboxes to choose game dates;
 -   Manipulate drop-down menus for events, locations, and number of tikcets; and
--   Click on menu items or navigation buttons.
-
-<a id="orga8e6bc4"></a>
-
-{{< figure src="/ox-hugo/tickets_demo.png" caption="Figure 1: Ticket data: an example of PS-TRE items. In this simulated web environment, respondents can access information required for ticket reservation." >}}
-
-A action sequence is concatenated into a long string while each action is separted by a white space.
-How to call this long string?
-This is similar that to form a single sentence
+-   Click on menu items or navigation icons.
 
 <a id="table--tab:df-action"></a>
 <div class="table-caption">
@@ -125,6 +198,9 @@ This is similar that to form a single sentence
 There are 172 unique observed actions.
 On average, repondents spend 182 (IQR: 107) seconds on this time, and take 23 (IQR: 10) actions.
 
+
+### address challenges in details {#address-challenges-in-details}
+
 The process data consists of pairs of actions and time stamps of each respondents.
 Major challenges to establish a statistcal model taking the process data as an input are 1) unequal length of respondents' actions sequences; 2) large number of distinct actions transitions; and 3) ...
 
@@ -133,15 +209,20 @@ Thanks to the recent development of natual language processing
 
 # Methods {#methods}
 
-We propose to develop a new modeling framework for analyzing time-stamped sequences of actions taken by PS-TRE test takers. The innovative aspect of our proposal is that we view test takers’ sequences of actions collected in the computer-assisted PS-TRE assessment system as ????? of possible actions.  With our framework, researchers and policymakers can quantify and better understand how learners with disabilities (??) process mathematics test items.
+%% stolen from neap proposal
+We propose to develop a new modeling framework for analyzing time-stamped sequences of actions.
+The innovative aspect of our proposed model is that we view users' sequences of actions collected as ????? of possible actions.
+With our framework, researchers and policymakers can quantify and better understand how learners with disabilities (??) process mathematics test items.
 
-Let \\(S\\) denotes a set of all possible action. For each state \\(m \in S\\), \\(A\_{m}\\) denotes a set of competing transitions \\(\\{l\_1, \ldots, l\_{n\_m}\\}\\) that can be taken directly after \\(m\\).
-Let \\(Y\_k(t)\\) denote an action of k-th respondent at time \\(t\\).The $k$-th respondent takes a sequence of \\(M\_{k}\\) actions. We use \\(S\_{k} = \\{y\_{k}(t\_{k,1}),y\_{k}(t\_{k,2}),\ldots, y\_{k}(t\_{k,M\_{k}})\\}\\) to denote the $k$-th respondent's action sequence.
 
-We define \\(  \delta\_{k,n,m} = 1 \\) if person k's n-th action is m; 0 otherwise. Thus, \\( \delta\_{k,n,m}  \delta\_{k,n+1,l} = 1 \\) menas person k's n-th transition (\\(n < M\_{k}\\)) is m to l.
-Respondents assumed to begin problem solving processes at time \\(t=0\\).
+## notation {#notation}
 
-Let \\(t\_{k,n}\\) denote entry time that the \\(k\\)-th respondent start the $n$-th action. The sojourn time is denoted by \\(dt\_{k,n} = t\_{k,n+1} - t\_{k,n}\\) for \\(n < M\_{k} - 1\\).
+Let \\(S\\) denotes a set of all possible actions. For each action \\(m \in S\\), \\(A\_{m}\\) denotes a set of competing actions \\(\\{l\_1, \ldots, l\_{n\_m}\\}\\) that can be taken directly after \\(m\\).
+Let \\(Y\_k(t)\\) denote an action being taken by the $k$-th respondent at time \\(t\\). Then, a sequence of the $k$-th respondent's actions is \\(S\_{k} = \\{y\_{k}(t\_{k,1}),y\_{k}(t\_{k,2}),\ldots, y\_{k}(t\_{k,M\_{k}})\\}\\) whose length is \\(M\_{k}\\).
+
+We defion \\(  \delta\_{k,n,m} = 1 \\) if respondent \\(k\\)'s $n$-th action is \\(m\\); \\(0\\) otherwise. Thus, \\( \delta\_{k,n,m}  \delta\_{k,n+1,l} = 1 \\) means respondent \\(k\\)'s $n$-th transition (\\(n < M\_{k}\\)) is from action \\(m\\) to action \\(l\\). Respondents are assumed to begin problem solving processes at time \\(t=0\\).
+
+Let \\(t\_{k,n}\\) denote entry time that the \\(k\\)-th respondent start the $n$-th action. So, his/her sojourn time of the $n$-th action is denoted by \\(dt\_{k,n} = t\_{k,n+1} - t\_{k,n}\\) for \\(n < M\_{k} - 1\\).
 
 
 ## Action embedding {#action-embedding}
@@ -155,7 +236,7 @@ Actions that tend to “behave similarly (_need better term_)” end up close to
 \\]
 where \\(u: V \rightarrow \mathbb{R}^{k} \\) and \\(v: V \rightarrow \mathbb{R}^{k}\\) are functions which map words to a word embedding—one for the pivot words, and the other for context.
 
-Word2Vec <mikolov_distributed_2013> .
+Word2Vec <mikolov_distributed_2013>.
 
 -   word2vec: skip-gram models coupled with negative sampling
 -   negative sampling: to reduce computational cost of the cosine similarity (the denominator is summation of all words in vocabulary).
@@ -204,21 +285,21 @@ transform data to a desired "long" format:
 
 ## Multistate model {#multistate-model}
 
-The intensity function \\(q\_{ml}(\cdot)\\) represents the instantaneous risk of moving from action \\(m\\) to \\(l\\):
+The intensity function \\(q\_{ml}(\cdot)\\) represents the instantaneous rate of jumping from action \\(m\\) to \\(l\\):
 
 \begin{align\*}
-q\_{ml}\left(t ; \mathcal{F}\_{t}\right)= & \lim \_{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}\_{t}\right)}{\delta t}, m \neq l, m, l \in S,
+q\_{ml}\left(t ; \mathcal{F}\_{t}\right)= & \lim \_{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}\_{t}\right)}{\delta t},
 \end{align\*}
 
-where \\(\mathcal{F}\_t\\) denotes the process up to time \\(t\\).
+where \\(m \neq l\\), \\(m, l \in S\\), and \\(\mathcal{F}\_t\\) denotes the process up to time \\(t\\).
 
 Action transition is assumed to follow Semi-Markovian, which means the intensity depends on the sojourn time (\\(t - t\_{m}\\) ; time spent on the current action). This is often called "clock reset" approach as opposed to "clock forward" approach. Let \\(dt\_{m}\\) denote the sojourn time.
 
 Cox model
 
 \begin{align}
-q\_{ml}\left(t ; \mathcal{F}\_{t}\right) = & q\_{ml} (t - t\_{m}; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t))\\\\
-= & \lambda\_{ml}(dt\_{m})  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta\_{k}) D\_{ml}},
+q\_{ml}\left(t ; \mathcal{F}\_{t}\right) = & q\_{ml} (t - t\_{m}; \bm{\lambda}, \bm{\beta}, \mathbf{z}(t))\\\\
+= & \lambda\_{ml}(dt\_{m})  e^{(\bm{\beta}' \mathbf{z}(t) +  \theta\_{k}) D\_{ml}},
 \end{align}
 
 for person \\(k = 1,\ldots,N\\), where \\(\mathbf{z}(t)\\) is time-varying covariates, \\(\lambda\_{kml}(t)\\) is a baseline intensity function, \\(D\_{ml} \in [-1,1]\\) denotes the cosine similarity between actions \\(m\\) and \\(l\\). The cosine similarity is obtained using `word2vec` on action sequences of an item. The closer the cosine value to 1, the greater the similarity between actions. The closer the cosine value to -1, the greater the dis-similarity between actions. This mean there are \\(n\_{m}\\) corresponding intensity functions for state \\(m\\), and overall \\(\sum\_{m in S} n\_m\\) intensity functions.
@@ -237,11 +318,68 @@ q\_{ml}\left(t ; \mathcal{F}\_{t}\right) = q\_{ml}(dt) = \kappa\_{m} \tau\_{k} e
 -   larger \\(\tau\_{k}\\), faster transition speed
 -   larger \\(\theta\_{k}\\), larger trasition rate towards a similar action. A person with large \\(\theta\_{k}\\) tends to choose more coherent actions
 
+    %% stolen from the neap proposal
+    [multi-state survival model]
+
+%We take one-partite network view.
+We take a network view on action sequences, where nodes are a set of predefined action and links represent action transitions.
+Given that item \\(k\\) is chosen,
+the action network of student \\(i\\) is represented by \\(L \times L\\) adjacency matrix.
+Suppose student \\(i\\) at item \\(k\\) has chosen action \\(A\_{i,k,l}\\). The transition probability of moving from \\(A\_{i,k,l}\\) to some other action \\(A\_{i,k,m}\\) among \\(L\\) actions is modeled with a multinomial logistic model
+
+\begin{equation}\label{eq:action}
+     \mathbb{P} ( A\_{i,k,m}  |  A\_{i,k,l} )
+= \frac{ \exp( \alpha^{(A)}\_m + \alpha^{(A)}\_l + \alpha^{(A)}\_{m,l} + \beta\_{m,l}^{(A)} z\_{i,k,l,m} ) }{ \exp( \alpha^{(A)}\_m + \alpha^{(A)}\_l + \alpha^{(A)}\_{m,l}+ \beta\_{m,l}^{(A)} z\_{i,k,l,1} ) + \cdots + \exp( \alpha^{(A)}\_m + \alpha^{(A)}\_l + \alpha^{(A)}\_{m,l}+ \beta\_{m,l}^{(A)} z\_{i,k,l,L} )},
+\end{equation}
+
+\noindent
+where $ &alpha;<sup>(A)</sup>\_m$ and \\(\alpha^{(A)}\_l\\)  are the main effects of the current and previous actions \\(m\\) and \\(l\\), and  \\(\alpha^{(A)}\_{m,l}\\) is the interaction effect of the two actions.
+\\(\beta\_{m,l}^{(A)}\\) represents the effect of moving from action \\(A\_{i,k,l}\\) to \\(A\_{i,k,m}\\), while
+$ z<sub>i,k,l,m</sub>$ indicate observed or unobserved covariates that capture the movement.
+For example, \\(z\_{i,k,l,m}\\) can represent a distance between the two actions as in a latent space modeling approach (reference).
+Figure \ref{fg:sequence} illustrates the direct paths for the sequences of actions taken by
+two students, one represented with dashed paths  and the other with solid paths.
+
+\textcolor{red}{MJ: can we handle directions? choosing the same actions? }
+
+\textcolor{cyan}{JY: incorporating action times in the transition probability...} <br />
+We assume symmetric transition probabilities between actions.
+We define a function describing transition intensity (hazard) between actions \\(m\\) and \\(l\\) (\\(m \neq l\\)):
+
+\begin{align\*}
+  h (t ;  A\_{i,k,l} \rightarrow  A\_{i,k,m}  ) = & \lim\_{\delta t \to 0}  \frac{P(A\_{i,k}(t + \delta t) = m | A\_{i,k}(t) = l)}{\delta t} \\\\
+  = & \lambda\_{k,l\rightarrow m}(t) \exp( \alpha^{(A)}\_m + \alpha^{(A)}\_l + \alpha^{(A)}\_{m,l} + \beta\_{m,l}^{(A)} z\_{i,k,l,m} ),
+\end{align\*}
+
+where \\(\lambda\_{k,l\rightarrow m}(t)\\) is a baseline intensity function and \\(A\_{i,k}(t)\\) is an action taken by person \\(i\\) at \\(t\\) for item \\(k\\).
+The non-transition intensity of action \\(m\\) is
+\\[
+  h (t ;  A\_{i,k,m} \rightarrow  A\_{i,k,m}  ) =   \lambda\_{k,m\rightarrow m}(t) \exp( \alpha^{(A)}\_m).
+\\]
+
+Then, the corresponding transition probability can be defined as
+
+\begin{align\*}
+  \mathbb{P} (t ;  A\_{i,k,l} \rightarrow  A\_{i,k,m} ) = & \frac{h(t; A\_{i,k,l} \rightarrow A\_{i,k,m})}{\sum\_{l=1}^{L}  h(t; A\_{i,k,l} \rightarrow A\_{i,k,m})}
+\end{align\*}
+
+It is possible to include the outcome in this multi-state survival modeling framework. In such case, however, identifying meaningful \`\`subsequence of actions'' would not be straightforward as appeared in \eqref{eq:no-response1}. Perhaps, we can use this model for parsing action sequence, and use the subsequence for \eqref{eq:no-response1}?
+
+
+# Estimation {#estimation}
+
+-   [3.2 Normal data with a noninformative prior distribution org-id:{ce3939d9-fb55-4b01-8747-0f486c98c9e7}:org-id](///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::79;;1)
+-   [Continuous distributions org-id:{5c29e214-f86d-41d5-89a0-e164602bf6b8}:org-id](///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::591;;1)
+
 
 ## likelihood {#likelihood}
 
+\\(\bm{\tau} = (\tau\_{1},\ldots,\tau\_{N})'\\)
+\\(\bm{\theta} = (\theta\_{1},\ldots,\theta\_{N})'\\)
+\\(\bm{\kappa} = (\kappa\_{1},\ldots,\kappa\_{M})'\\)
+
 \begin{align\*}
-    q\_{ml} (t ; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda\_{ml}(t)  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta\_{k}) D\_{ml}}\\\\
+    q\_{ml} (t ; \bm{\kappa, \theta, \tau}, \bm{\beta}, \mathbf{z}(t)) = & \lambda\_{ml}(t)  e^{(\bm{\beta}' \mathbf{z}(t) +  \theta\_{k}) D\_{ml}}\\\\
 q\_{ml}\left(t ; \mathcal{F}\_{t}\right)= & \lim \_{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}\_{t}\right)}{\delta t}, m \neq l, m, l \in S
 \end{align\*}
 
@@ -272,34 +410,30 @@ Let \\(\nu\_{mlk}(t) = 1\\) if person \\(k\\) jump from actions \\(m\\) to \\(l\
 \\( \delta\_{k,n,m}  \delta\_{k,n+1,l} = 1 \\) for \\(n < M\_{k}\\) if person k's n-th transition is m to l.
 
 time at starting state (one after START) is set to the first action (n=1), and the corresponding time is set to 0.
+We present a fully Bayesian approach for estimating the proposed model.
 
 
 ## prior {#prior}
 
-The proposed method use a fully Bayesian approach for estimating the proposed latent space model, using MCMC methods. Our prior specification is as follows:
+For each \\(m\\), \\(k\\), we specify independent priors as follows:
 
 \begin{align\*}
-\pi\left(\kappa\_{m}\right) & \sim \operatorname{Gamma}\left(a\_{\kappa}, b\_{\kappa})\right); \\\\
-\pi\left(\tau\_{k}\right) & \sim \operatorname{Gamma}\left(a\_{\kappa}, b\_{\kappa})\right); \\\\
-\pi\left(\theta\_{k} | \sigma^{2}\right) & \sim \mathrm{N}\left(0, \sigma^{2}\right); \\\\
-\pi\left(\sigma^{2}\right) & \sim \operatorname{lnv}-\operatorname{Gamma}\left(a\_{\sigma}, b\_{\sigma}\right); \\\\
+\pi\left(\kappa\_{m}\right) & \sim \operatorname{Gamma}(a\_{\kappa}, b\_{\kappa}); \\\\
+\pi\left(\tau\_{k}\right) & \sim \operatorname{Gamma}(a\_{\kappa}, b\_{\kappa}); \\\\
+\pi\left(\theta\_{k} | \sigma^{2}\right) & \sim \operatorname{N}(0, \sigma^{2}); \\\\
+\pi\left(\sigma^{2}\right) & \sim \operatorname{Inv-Gamma}(a\_{\sigma}, b\_{\sigma}),\\\\
 \end{align\*}
 
-inv-Gamma(&theta;|&alpha;,&beta;)
+\\(\mbox{Inv-Gamma}(\alpha,\beta)\\) denotes the inverse gamma distribution with shape \\(\alpha >0\\) and scale \\(\beta >0\\) whose density is
+
 \\[
-p(\theta)=\frac{\beta^{\alpha}}{\Gamma(\alpha)} \theta^{-(\alpha+1)} e^{-\beta / \theta}, \quad \theta>0
+\operatorname{Inv-Gamma}(y|\alpha,\beta) = \frac{\beta^{\alpha}}{\Gamma(\alpha)} y^{-(\alpha+1)} \exp( -\beta \frac{1}{y} ).
 \\]
 
 where hyperparameters are chosen as
 \\[a\_{\sigma}=0.0001, b\_{\sigma}=0.0001, \mu\_{\theta}=0, \text { and } ....\\]
 
 Based on our experience, the inference of \\(\mathbf{\Theta}\\) is highly sensitive to its variance \\(\sigma^2\\). Also, the configuration of latent embeddings highly depends on the scale parameter \\(\gamma\\) of the latent space. Rather than choosing sub-optimal tuning parameters, we use a layer of hyper-priors to learn optimal values of these parameters from data. We choose hyperparameters such that priors are minimally informative to facilitate the flexible Bayesian learning.
-
-
-# Estimation {#estimation}
-
--   [3.2 Normal data with a noninformative prior distribution org-id:{ce3939d9-fb55-4b01-8747-0f486c98c9e7}:org-id](///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::79;;1)
--   [Continuous distributions org-id:{5c29e214-f86d-41d5-89a0-e164602bf6b8}:org-id](///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::591;;1)
 
 
 ## update \\(\kappa\_{m}\\): {#update-kappa-m}
@@ -361,7 +495,7 @@ c.f) with flat prior:
 \\]
 
 
-# Application {#application}
+# Applications {#applications}
 
 
 ## tickets {#tickets}
@@ -374,10 +508,6 @@ convert -density 300 tau_action.pdf tau_action.png
 convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
-```
-
-```R
-ftime = timestamp[1] / 1000, naction = n(), time = timestamp[n()] / 1000, spd = naction / (ftime - time)
 ```
 
 -   &tau;: person's baseline hazard for action transition
