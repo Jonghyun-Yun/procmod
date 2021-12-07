@@ -2024,7 +2024,7 @@ classplot = plot_profiles.default(x =  list(df_plot = df_plot, df_raw = df_raw))
 #+begin_src R :noweb yes :tangle R/lpa-res.R
 <<lpa_prep>>
 
-out_dir = ldir[3]
+out_dir = ldir[2]
 
 <<draw_lpa_fig>>
 
