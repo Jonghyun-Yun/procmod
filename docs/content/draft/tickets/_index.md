@@ -1,10 +1,10 @@
 +++
 title = "tickets"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-07T16:27:41-06:00
+lastmod = 2021-12-07T16:48:17-06:00
 draft = false
 weight = 3
-chapter = true
+chapter = false
 +++
 
 ```sh

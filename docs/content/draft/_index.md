@@ -1,10 +1,10 @@
 +++
 title = "Draft"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-07T16:27:41-06:00
+lastmod = 2021-12-07T16:48:16-06:00
 draft = false
 weight = 3
-chapter = true
+chapter = false
 +++
 
 <div class="ox-hugo-toc toc">
@@ -162,7 +162,7 @@ The OECD Survey of Adult Skills (PIAAC) assesses the proficiency of adults in in
 
 ### Illustrate a ticket example: {#illustrate-a-ticket-example}
 
-<a id="orgc6b645e"></a>
+<a id="orgf3a9ea2"></a>
 
 {{< figure src="/ox-hugo/tickets_demo.png" caption="Figure 1: An example of PS-TRE items. In this simulated web environment, respondents can access information required for ticket reservation." >}}
 
