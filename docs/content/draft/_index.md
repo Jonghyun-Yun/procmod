@@ -1,7 +1,7 @@
 +++
 title = "Draft"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-07T16:48:16-06:00
+lastmod = 2021-12-14T15:55:59-06:00
 draft = false
 weight = 3
 chapter = false
@@ -31,6 +31,7 @@ chapter = false
     - [data structure](#data-structure)
     - [Multistate model](#multistate-model)
 - [Estimation](#estimation)
+    - [software](#software)
     - [likelihood](#likelihood)
     - [prior](#prior)
     - [update \\(\kappa\_{m}\\):](#update-kappa-m)
@@ -82,7 +83,19 @@ Other researchers explored the method of combining Markov movesl and item respon
 In addition, researchers used digraphs to visualize and analyze sequential process data collected from assessment.
 Zhu, Shu, and von Davier (2016) used network visualization and analysis for understanding process data.
 
+<&chen_statistical_2019>
 <&chen_continuous-time_2020>
+<&tang_latent_2019>
+<&he_identifying_2015>
+<&ulitzsch_combining_2021>
+<&qiao_data_2018>
+<&wang_subtask_2020>
+
+RNN
+<&tang_exploratory_2019>
+
+n-gram
+<&van_der_ark_identifying_2015>
 
 
 ## Motivation and our Aim {#motivation-and-our-aim}
@@ -111,6 +124,7 @@ remainder of this article is organized as follows.
 In Section, we introduce . In Section , we present. Applications are given in
 Section, followed by conclusions given in
 Section.
+x
 
 
 # Motivating example {#motivating-example}
@@ -118,11 +132,12 @@ Section.
 
 ## Problem Solving in Technology-Rich Environments {#problem-solving-in-technology-rich-environments}
 
-<&oecd_technical_2019>
+% stolen from <&chen_statistical_2019>
+We introduce a specific item, CLIMATE CONTROL (CC), to demonstrate the data structure and to motivate our research questions. It is part of a CPS unit in PISA 2012 that was designed under the “MicroDYN” framework (Greiff et al., 2012; Wüstenberg et al., 2012), a framework for the development of small dynamic systems of causal relationships for assessing CPS.
 
 Interactive tasks as implemented in the problem solving in a technology-rich
 environment (PSTRE) domain in the Programme for the International Assessment of
-Adult Competencies (PIAAC, OECD, 2013) and the problem solving domain in the
+Adult Competencies (PIAAC, <&oecd_technical_2019>) and the problem solving domain in the
 Programme for International Student Assessment (PISA, OECD, 2014) aim at mirroring
 real-life problem-solving behavior (Goldhammer, Naumann, & Keßel, 2013). While correct
 responses to such tasks can be assumed to stem from examinees having the skill set and
@@ -162,7 +177,7 @@ The OECD Survey of Adult Skills (PIAAC) assesses the proficiency of adults in in
 
 ### Illustrate a ticket example: {#illustrate-a-ticket-example}
 
-<a id="orgf3a9ea2"></a>
+<a id="org8b3d301"></a>
 
 {{< figure src="/ox-hugo/tickets_demo.png" caption="Figure 1: An example of PS-TRE items. In this simulated web environment, respondents can access information required for ticket reservation." >}}
 
@@ -210,72 +225,63 @@ Thanks to the recent development of natual language processing
 # Methods {#methods}
 
 %% stolen from neap proposal
-We propose to develop a new modeling framework for analyzing time-stamped sequences of actions.
-The innovative aspect of our proposed model is that we view users' sequences of actions collected as ????? of possible actions.
-With our framework, researchers and policymakers can quantify and better understand how learners with disabilities (??) process mathematics test items.
+We propose to develop a new modeling framework for analyzing time-stamped sequences of actions. The innovative aspect of our proposed model is that we view users' sequences of actions as Markov processes of possible actions mapped to Euclidean space.
+
+With our framework, researchers and policymakers can quantify and better understand learners' problem solving processes.
 
 
 ## notation {#notation}
 
-Let \\(S\\) denotes a set of all possible actions. For each action \\(m \in S\\), \\(A\_{m}\\) denotes a set of competing actions \\(\\{l\_1, \ldots, l\_{n\_m}\\}\\) that can be taken directly after \\(m\\).
-Let \\(Y\_k(t)\\) denote an action being taken by the $k$-th respondent at time \\(t\\). Then, a sequence of the $k$-th respondent's actions is \\(S\_{k} = \\{y\_{k}(t\_{k,1}),y\_{k}(t\_{k,2}),\ldots, y\_{k}(t\_{k,M\_{k}})\\}\\) whose length is \\(M\_{k}\\).
-
-We defion \\(  \delta\_{k,n,m} = 1 \\) if respondent \\(k\\)'s $n$-th action is \\(m\\); \\(0\\) otherwise. Thus, \\( \delta\_{k,n,m}  \delta\_{k,n+1,l} = 1 \\) means respondent \\(k\\)'s $n$-th transition (\\(n < M\_{k}\\)) is from action \\(m\\) to action \\(l\\). Respondents are assumed to begin problem solving processes at time \\(t=0\\).
-
-Let \\(t\_{k,n}\\) denote entry time that the \\(k\\)-th respondent start the $n$-th action. So, his/her sojourn time of the $n$-th action is denoted by \\(dt\_{k,n} = t\_{k,n+1} - t\_{k,n}\\) for \\(n < M\_{k} - 1\\).
+Let \\(S\\) denotes a set of all possible actions. For each action \\(m \in S\\), \\(A\_{m}\\)
+denotes a set of competing actions \\(\\{l\_1, \ldots, l\_{n\_m}\\}\\) that can be taken
+directly after \\(m\\). Let \\(t\_{k,n}\\) denote entry time that the \\(k\\)-th
+respondent starts his/her $n$-th action. So, his/her sojourn time in the $n$-th
+action is denoted by \\(\dd t\_{k,n} = t\_{k,n+1} - t\_{k,n}\\) for \\(n < M\_{k} - 1\\).
+Respondents are assumed to begin problem solving processes at time \\(t=0\\). Let
+\\(Y\_k(t)\\) denote an action being taken by the $k$-th respondent at time \\(t\\).
+Then, a sequence of the $k$-th respondent's actions is \\(S\_{k} =
+\\{y\_{k}(t\_{k,1}), y\_{k}(t\_{k,1}),y\_{k}(t\_{k,2}),\ldots, y\_{k}(t\_{k,M\_{k}})\\}\\) whose
+length is \\(M\_{k}\\). We define \\( \delta\_{k,n,m} = 1 \\) if respondent \\(k\\)'s $n$-th
+action is \\(m\\); \\(0\\) otherwise. Thus, \\( \delta\_{k,n,m} \delta\_{k,n+1,l} = 1 \\) means
+respondent \\(k\\)'s \\(n\\)-th transition (\\(n < M\_{k}\\)) is from action \\(m\\) to action
+\\(l\\).
 
 
 ## Action embedding {#action-embedding}
 
-A goal for action embedding is to substitute a symbolic representation with a vectoric representation of actions. Similar tasks are taken for natual language processing is called word embedding.
+Instead of using the action symbol as an input in the model, ...
 
-Actions that tend to “behave similarly (_need better term_)” end up close to one another in the embedding space. Instead of using the action symbol as a feature in the model, we can use its vector to exploit such similarities.
+A goal for action embedding is to substitute a symbolic representation with a vectoric representation of actions. Similar procedures in natual language processing context is well established, and we will adapot a skip-gram model for the action embedding purpose.
 
+A skip-gram model which predict actions within a certain range before and after the current action in the same sentence. This model learns parameters that lead to a high-valued cosine similarity for embeddings of frequently co-occuring actions, where the cosine similarity between two vectors \\(u\_{i}, v\_i \in \mathbb{R}^{d}\\) is calculated as
 \\[
-  p\left(w\_{j} \mid w\_{0}, u, v\right)=\frac{\exp \left(u\left(w\_{0}\right)^{\top} v\left(w\_{j}\right)\right)}{\sum\_{w \in V} \exp \left(u\left(w\_{0}\right)^{\top} v(w)\right)}
+  \frac{\sum\_{i=1}^{d} u\_{i} v\_{i}}{\sqrt{\sum\_{i=1}^{d} u\_{i}^{2}} \cdot \sqrt{\sum\_{i=1}^{d} v\_{i}^{2}}}.
 \\]
-where \\(u: V \rightarrow \mathbb{R}^{k} \\) and \\(v: V \rightarrow \mathbb{R}^{k}\\) are functions which map words to a word embedding—one for the pivot words, and the other for context.
+Actions that tend to “behave similarly” end up close to one another in the embedding space. The notion of "behavior" could refer to syntactic categorization or semantic association.
 
-Word2Vec <mikolov_distributed_2013>.
-
--   word2vec: skip-gram models coupled with negative sampling
--   negative sampling: to reduce computational cost of the cosine similarity (the denominator is summation of all words in vocabulary).
--   skip-gram: to maximize the probability of predicting context words given a target word. The probability is defined by the cosine similarity (softmax function) based on word embeddings. Words close in the Euclidean space are words 1) with similar meanings, 2) associated with the same part of a sentence, 3) with semantic association. The similarity can be learned from a large corpus. Unseen words in the training sample are embedded, so one can exploit the similarity information.
--   a bag-of-words (CBOW): to predict a target word given context words (neighbor of a target word)
-
-Continuous Skip-gram Model which predict words within a certain range before and after the current word in the same sentence. While a bag-of-words model predicts a word given the neighboring context, a skip-gram model predicts the context (or neighbors) of a word, given the word itself. The model is trained on skip-grams, which are n-grams that allow tokens to be skipped (n-gram is a contiguous sequence of n items from a given sample of text or speech). The context of a word can be represented through a set of skip-gram pairs of `(target_word, context_word)` where `context_word` appears in the neighboring context of `target_word`.
-
-The context words for each of the 8 words of this sentence are defined by a window size. The window size determines the span of words on either side of a `target_word` that can be considered context word. Take a look at this table of skip-grams for `target_words` based on different window sizes.
-
-The training objective of the skip-gram model is to maximize the probability of predicting context words given the target word. For a sequence of words, the objective can be written as the average log probability
+The training objective of the skip-gram model is to maximize the probability of predicting neighboring actions given the target action. The objective can be written as the average log probability
 \\[
-\frac{1}{T} \sum\_{t=1}^{T} \sum\_{-c \leq j \leq c, j \neq 0} \log p\left(w\_{t+j} \mid w\_{t}\right)
+\frac{1}{T} \sum\_{t=1}^{T} \sum\_{-c \leq j \leq c, j \neq 0} \log p\left(m\_{t+j} \mid m\_{t}\right)
 \\]
-where `c` is the size of the training context. The basic skip-gram formulation defines this probability using the softmax function.
-\\[
-p\left(w\_{O} \mid w\_{I}\right)=\frac{\exp \left(v\_{w\_{O}}^{\prime}{ }^{\top} v\_{w\_{I}}\right)}{\sum\_{w=1}^{W} \exp \left(v\_{w}^{\prime}{ }^{\top} v\_{w\_{I}}\right)}
-\\]
-where \\(u: V \rightarrow \mathbb{R}^{k} \\) and \\(v: V \rightarrow \mathbb{R}^{k}\\) are functions which map words to a word embedding.
+where `c` is the window size of neighboring actions. The skip-gram formulation defines this probability using the softmax function.
 
-Word embeddings tend to cluster together when the words they denote behave similarly. The notion of “behavior” in this case usually remains underspecified, but could refer to syntactic categorization (i.e., words most often associated with the same part of speech will cluster together) or semantic association (words that are semantically related cluster together). The similarity between word embedding vectors is often measured through such measures as the dot product or cosine similarity.
-Most prominently, word embeddings assist with the treatment of words which do not appear in the training data of a given problem (such as parsing or part-of-speech tagging). The word embedding function can be learned by exploiting co-occurence data on a large corpus (without any annotation), and thus the vocabulary over which the word embedding function is constructed is larger than the one that the training data consists of, and covers a significant amount of the words in the test data, including “unseen words.” The reliance on co-occurrence statistics is based on the distributional hypothesis (Harris, 1954) which states that co-occurrence of words in similar contexts implies that they have similar meanings.
-This model learns parameters that lead to a high-valued dot product for embeddings of frequently co-occuring pivot and context words (as the probability is pushed to the maximum in such cases). Therefore, through the contexts, words that are similar to each other in their co-occurrence patterns map to vectors that are close to each other in the Euclidean space.
-Skip-gram modeling of the above form coupled with negative sampling is often referred to as one of the `word2vec` models <mikolov_distributed_2013>. A second proposed model of word2vec is the continuous bag-of-words model (CBOW), which predicts a word from the context—in reverse from the skip-gram model.
+\begin{equation}
+\label{eq:skip-gram}
+  p\left(m\_{j} \mid m\_{0}, u, v\right)=\frac{\exp(u\left(m\_{0}\right)' v\left(m\_{j}\right))}{\sum\_{m \in S} \exp(u\left(m\_{0}\right)' v(m))}
+\end{equation}
 
-[Word2Vec | Skip-grams | TensorFlow Core](posts/.org)
+where \\(u: S \rightarrow \mathbb{R}^{d} \\) and \\(v: S \rightarrow \mathbb{R}^{d}\\) are functions which map actions to a action embedding.
 
-How to convert an action sequence to a sequence
-skip-gram
-negative sampling
-cosine similarity
+The negative sampling <&mikolov_context_2012> is a computational technique proposed by to resolve the intractable denominator in <eq:skip-gram>.
+Skip-gram modeling of the above form coupled with negative sampling is often referred to as a `word2vec` model <&mikolov_distributed_2013>.
+
+How to convert an action sequence to a sequence??
 
 
 ## data structure {#data-structure}
 
 <https://www.rdocumentation.org/packages/msm/versions/1.6.8/topics/msm2Surv>
-Given a configured transition matrix, \texttt{msm} <&jackson_multi-state_2011>
-
-transform data to a desired "long" format:
+Given a configured transition matrix, we use \texttt{msm} <&jackson_multi-state_2011> to transform data to a desired "long" format:
 
 | person | entry | exit | from | to | observed | cov1           | cov2                   | time cov |
 |--------|-------|------|------|----|----------|----------------|------------------------|----------|
@@ -285,13 +291,13 @@ transform data to a desired "long" format:
 
 ## Multistate model {#multistate-model}
 
-The intensity function \\(q\_{ml}(\cdot)\\) represents the instantaneous rate of jumping from action \\(m\\) to \\(l\\):
+The intensity function \\(q\_{ml}(t)\\) represents the instantaneous rate of jumping from action \\(m\\) to \\(l\\) at time \\(t\\):
 
 \begin{align\*}
-q\_{ml}\left(t ; \mathcal{F}\_{t}\right)= & \lim \_{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}\_{t}\right)}{\delta t},
+q\_{ml}\left(t ; Y\_{t}\right)= & \lim \_{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}\_{t}\right)}{\delta t},
 \end{align\*}
 
-where \\(m \neq l\\), \\(m, l \in S\\), and \\(\mathcal{F}\_t\\) denotes the process up to time \\(t\\).
+where \\(m \neq l\\), \\(m, l \in S\\), and \\(\mathcal{Y}\_t\\) denotes the process up to time \\(t\\).
 
 Action transition is assumed to follow Semi-Markovian, which means the intensity depends on the sojourn time (\\(t - t\_{m}\\) ; time spent on the current action). This is often called "clock reset" approach as opposed to "clock forward" approach. Let \\(dt\_{m}\\) denote the sojourn time.
 
@@ -337,7 +343,7 @@ where $ &alpha;<sup>(A)</sup>\_m$ and \\(\alpha^{(A)}\_l\\)  are the main effect
 \\(\beta\_{m,l}^{(A)}\\) represents the effect of moving from action \\(A\_{i,k,l}\\) to \\(A\_{i,k,m}\\), while
 $ z<sub>i,k,l,m</sub>$ indicate observed or unobserved covariates that capture the movement.
 For example, \\(z\_{i,k,l,m}\\) can represent a distance between the two actions as in a latent space modeling approach (reference).
-Figure \ref{fg:sequence} illustrates the direct paths for the sequences of actions taken by
+Figure xxx illustrates the direct paths for the sequences of actions taken by
 two students, one represented with dashed paths  and the other with solid paths.
 
 \textcolor{red}{MJ: can we handle directions? choosing the same actions? }
@@ -370,6 +376,20 @@ It is possible to include the outcome in this multi-state survival modeling fram
 
 -   [3.2 Normal data with a noninformative prior distribution org-id:{ce3939d9-fb55-4b01-8747-0f486c98c9e7}:org-id](///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::79;;1)
 -   [Continuous distributions org-id:{5c29e214-f86d-41d5-89a0-e164602bf6b8}:org-id](///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::591;;1)
+
+
+## software {#software}
+
+-   word2vec
+
+<tensorflow2015-whitepaper>
+<10.5555/1593511>
+
+-   multistate model + visualization
+
+<ISO:2014:IIIb>
+<carpenter_stan_2015>
+<r_core_team_r_2020>
 
 
 ## likelihood {#likelihood}
