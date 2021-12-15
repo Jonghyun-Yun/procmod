@@ -1,7 +1,7 @@
 +++
 title = "Draft"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-14T15:55:59-06:00
+lastmod = 2021-12-15T13:19:03-06:00
 draft = false
 weight = 3
 chapter = false
@@ -29,7 +29,8 @@ chapter = false
     - [notation](#notation)
     - [Action embedding](#action-embedding)
     - [data structure](#data-structure)
-    - [Multistate model](#multistate-model)
+    - [Multistate model (general)](#multistate-model--general)
+    - [Multistate model (intercept only)](#multistate-model--intercept-only)
 - [Estimation](#estimation)
     - [software](#software)
     - [likelihood](#likelihood)
@@ -177,7 +178,7 @@ The OECD Survey of Adult Skills (PIAAC) assesses the proficiency of adults in in
 
 ### Illustrate a ticket example: {#illustrate-a-ticket-example}
 
-<a id="org8b3d301"></a>
+<a id="org6d3d922"></a>
 
 {{< figure src="/ox-hugo/tickets_demo.png" caption="Figure 1: An example of PS-TRE items. In this simulated web environment, respondents can access information required for ticket reservation." >}}
 
@@ -240,7 +241,7 @@ action is denoted by \\(\dd t\_{k,n} = t\_{k,n+1} - t\_{k,n}\\) for \\(n < M\_{k
 Respondents are assumed to begin problem solving processes at time \\(t=0\\). Let
 \\(Y\_k(t)\\) denote an action being taken by the $k$-th respondent at time \\(t\\).
 Then, a sequence of the $k$-th respondent's actions is \\(S\_{k} =
-\\{y\_{k}(t\_{k,1}), y\_{k}(t\_{k,1}),y\_{k}(t\_{k,2}),\ldots, y\_{k}(t\_{k,M\_{k}})\\}\\) whose
+\\{y\_{k}(t\_{k,1}), y\_{k}(t\_{k,1}),y\_{k}(t\_{k,2}), \ldots, y\_{k}(t\_{k,M\_{k}})\\}\\) whose
 length is \\(M\_{k}\\). We define \\( \delta\_{k,n,m} = 1 \\) if respondent \\(k\\)'s $n$-th
 action is \\(m\\); \\(0\\) otherwise. Thus, \\( \delta\_{k,n,m} \delta\_{k,n+1,l} = 1 \\) means
 respondent \\(k\\)'s \\(n\\)-th transition (\\(n < M\_{k}\\)) is from action \\(m\\) to action
@@ -275,6 +276,13 @@ where \\(u: S \rightarrow \mathbb{R}^{d} \\) and \\(v: S \rightarrow \mathbb{R}^
 The negative sampling <&mikolov_context_2012> is a computational technique proposed by to resolve the intractable denominator in <eq:skip-gram>.
 Skip-gram modeling of the above form coupled with negative sampling is often referred to as a `word2vec` model <&mikolov_distributed_2013>.
 
+The closer the cosine value to 1, the greater the similarity between actions. The closer the cosine value to -1, the greater the dis-similarity between actions.
+
+Online visualization tool
+Embedding projector
+RegExp (regular expression) for metadata
+<https://projector.tensorflow.org/>
+
 How to convert an action sequence to a sequence??
 
 
@@ -289,7 +297,7 @@ Given a configured transition matrix, we use \texttt{msm} <&jackson_multi-state_
 | 1      | 0     | 10   | 1    | 3  | 0        | D<sub>12</sub> | &theta; D<sub>12</sub> |          |
 
 
-## Multistate model {#multistate-model}
+## Multistate model (general) {#multistate-model--general}
 
 The intensity function \\(q\_{ml}(t)\\) represents the instantaneous rate of jumping from action \\(m\\) to \\(l\\) at time \\(t\\):
 
@@ -303,10 +311,10 @@ Action transition is assumed to follow Semi-Markovian, which means the intensity
 
 Cox model
 
-\begin{align}
+\begin{align\*}
 q\_{ml}\left(t ; \mathcal{F}\_{t}\right) = & q\_{ml} (t - t\_{m}; \bm{\lambda}, \bm{\beta}, \mathbf{z}(t))\\\\
 = & \lambda\_{ml}(dt\_{m})  e^{(\bm{\beta}' \mathbf{z}(t) +  \theta\_{k}) D\_{ml}},
-\end{align}
+\end{align\*}
 
 for person \\(k = 1,\ldots,N\\), where \\(\mathbf{z}(t)\\) is time-varying covariates, \\(\lambda\_{kml}(t)\\) is a baseline intensity function, \\(D\_{ml} \in [-1,1]\\) denotes the cosine similarity between actions \\(m\\) and \\(l\\). The cosine similarity is obtained using `word2vec` on action sequences of an item. The closer the cosine value to 1, the greater the similarity between actions. The closer the cosine value to -1, the greater the dis-similarity between actions. This mean there are \\(n\_{m}\\) corresponding intensity functions for state \\(m\\), and overall \\(\sum\_{m in S} n\_m\\) intensity functions.
 
@@ -372,6 +380,37 @@ Then, the corresponding transition probability can be defined as
 It is possible to include the outcome in this multi-state survival modeling framework. In such case, however, identifying meaningful \`\`subsequence of actions'' would not be straightforward as appeared in \eqref{eq:no-response1}. Perhaps, we can use this model for parsing action sequence, and use the subsequence for \eqref{eq:no-response1}?
 
 
+## Multistate model (intercept only) {#multistate-model--intercept-only}
+
+The intensity function \\(q\_{ml}(t)\\) represents the instantaneous rate of transition from action \\(m\\) to \\(l\\) at time \\(t\\):
+
+\begin{align\*}
+q\_{ml}\left(t ; \mathcal{F}\_{t}\right)= & \lim \_{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}\_{t}\right)}{\delta t},
+\end{align\*}
+
+where \\(m \neq l\\), \\(m, l \in S\\), and \\(\mathcal{F}\_t\\) denotes the process up to time \\(t\\).
+Action transition is assumed to follow Semi-Markovian, which means the intensity depends olny on \\(\mathcal{F}\_{t}\\) through time since the current action
+is started. The intensity is assumed to follow a Cox model. We assume the exponential baseline hazard function of a product of out-of-state and respondent's transition speed. The intensity can be written for all possible transitions as
+
+\begin{equation}
+\label{eq:intensity}
+\begin{split}
+q\_{ml}\left(t ; \mathcal{F}\_{t}\right)
+= & q\_{ml} (t - t\_{Y\_{(t)}})\\\\
+= & \kappa\_{m} \tau\_{k} \exp(\theta\_{k} D\_{ml}),
+\end{split}
+\end{equation}
+
+for all \\(m \in S\\), \\(l \in A\_{m}\\), respondents \\(k = 1,\ldots,N\\), and \\(D\_{ml} \in [-1,1]\\) denotes the cosine similarity between actions \\(m\\) and \\(l\\). There are \\(N\_m = #\\{A\_{m}\\}\\) intensity functions for each action \\(m\\), which leads to \\(\sum\_{m in S} N\_m\\) intensity functions.
+
+-   out-of-action speed \\(\kappa\_{m}\\) measures speed of action \\(m\\). The parameter is related to the time to finish action \\(m\\) and move forward to another action.
+    -   The larger \\(\kappa\_{m}\\), The shorter time to finish the action \\(m \in S\\).(faster out-of-state transition)
+-   action transition speed \\(\tau\_{k}\\) measures respondents' speed of problem solving after considering average durations of action s/he took.
+    -   With large \\(\tau\_{k}\\), the respondent is likely to quickly finish each action.
+-   \\(\theta\_{k}\\) measures respondents' tendency to choose actions "behaving similarly".
+    -   With large \\(\theta\_{k}\\), the respondent is likely to choose the next action coherently.
+
+
 # Estimation {#estimation}
 
 -   [3.2 Normal data with a noninformative prior distribution org-id:{ce3939d9-fb55-4b01-8747-0f486c98c9e7}:org-id](///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::79;;1)
@@ -381,15 +420,13 @@ It is possible to include the outcome in this multi-state survival modeling fram
 ## software {#software}
 
 -   word2vec
-
-<tensorflow2015-whitepaper>
-<10.5555/1593511>
-
 -   multistate model + visualization
 
-<ISO:2014:IIIb>
-<carpenter_stan_2015>
-<r_core_team_r_2020>
+The action embedding algorithm is written using `TensorFlow` <tensorflow2015-whitepaper> library in `Python` <10.5555/1593511>.
+The MCMC algorithm was written in `R` <r_core_team_r_2020> and `C++` <&ISO:2014:IIIb> with `Stan` math library  <carpenter_stan_2015>. The code and documentations, along with example data sets, are found
+in \url{https://jonghyun-yun.github.io/procmod/}.
+
+`tidyLPA` <rosenberg_tidylpa_2018>
 
 
 ## likelihood {#likelihood}
@@ -439,20 +476,15 @@ For each \\(m\\), \\(k\\), we specify independent priors as follows:
 
 \begin{align\*}
 \pi\left(\kappa\_{m}\right) & \sim \operatorname{Gamma}(a\_{\kappa}, b\_{\kappa}); \\\\
-\pi\left(\tau\_{k}\right) & \sim \operatorname{Gamma}(a\_{\kappa}, b\_{\kappa}); \\\\
-\pi\left(\theta\_{k} | \sigma^{2}\right) & \sim \operatorname{N}(0, \sigma^{2}); \\\\
+\pi\left(\tau\_{k}\right) & \sim \operatorname{Gamma}(a\_{\tau}, b\_{\tau}); \\\\
+\pi\left(\theta\_{k} | \sigma^{2}\right) & \sim \operatorname{N}(\mu\_{\theta}, \sigma^{2}); \\\\
 \pi\left(\sigma^{2}\right) & \sim \operatorname{Inv-Gamma}(a\_{\sigma}, b\_{\sigma}),\\\\
 \end{align\*}
 
-\\(\mbox{Inv-Gamma}(\alpha,\beta)\\) denotes the inverse gamma distribution with shape \\(\alpha >0\\) and scale \\(\beta >0\\) whose density is
+where \\(\mbox{Inv-Gamma}(\alpha,\beta)\\) denotes the inverse gamma distribution with shape \\(\alpha >0\\) and scale \\(\beta >0\\).
 
-\\[
-\operatorname{Inv-Gamma}(y|\alpha,\beta) = \frac{\beta^{\alpha}}{\Gamma(\alpha)} y^{-(\alpha+1)} \exp( -\beta \frac{1}{y} ).
-\\]
-
-where hyperparameters are chosen as
-\\[a\_{\sigma}=0.0001, b\_{\sigma}=0.0001, \mu\_{\theta}=0, \text { and } ....\\]
-
+The hyperparameters are chosen as
+\\[a\_{\kappa} = a\_{\tau} = 0.1, b\_{\kappa} = b\_{\tau} = 0.1, a\_{\sigma}=1.0, b\_{\sigma}=1.0, \mu\_{\theta}=0, \text { and } ....\\]
 Based on our experience, the inference of \\(\mathbf{\Theta}\\) is highly sensitive to its variance \\(\sigma^2\\). Also, the configuration of latent embeddings highly depends on the scale parameter \\(\gamma\\) of the latent space. Rather than choosing sub-optimal tuning parameters, we use a layer of hyper-priors to learn optimal values of these parameters from data. We choose hyperparameters such that priors are minimally informative to facilitate the flexible Bayesian learning.
 
 
@@ -520,6 +552,18 @@ c.f) with flat prior:
 
 ## tickets {#tickets}
 
+We implement the prposed method to our motivating example.
+
+-   `ftime`: time until the first action taken
+-   `time`: total time of a person's process
+
+We introduce two rudimentary statistcs.
+
+-   `naction` or `#action`: the action sequence length \\(M\_{k}\\). The total number of actions taken by respondent \\(k\\).
+-   `fastness`: `#action` divided by the total time elaped since \\(t\_{k,1}\\).
+
+<!--listend-->
+
 ```sh
 out_dir="tickets/"
 cd $out_dir
@@ -529,9 +573,6 @@ convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
 ```
-
--   &tau;: person's baseline hazard for action transition
--   &theta;: person's xxx to jump to a similar action for the next one
 
 |Name        |Label                                                                               |Value scheme                                          |
 |:-----------|:-----------------------------------------------------------------------------------|:-----------------------------------------------------|
@@ -550,10 +591,8 @@ convert -density 300 time_action.pdf time_action-%d.png
 |WRITHOME    |Index of use of writing skills at home (derived)                                    |NA                                                    |
 |WRITWORK    |Index of use of writing skills at work (derived)                                    |NA                                                    |
 
-![](/ox-hugo/lpa_plot-0.png)
-![](/ox-hugo/lpa_plot-1.png)
-
-{{< figure src="/ox-hugo/lpa_back_line.png" >}}
+| ![](/ox-hugo/lpa_plot-0.png) | ![](/ox-hugo/lpa_plot-1.png) | ![](/ox-hugo/lpa_back_line.png) |
+|------------------------------|------------------------------|---------------------------------|
 
 Response: the smaller, the better
 

@@ -1,8 +1,8 @@
-run-docs: ## Run in development mode (include drafts)
+run-drafts: ## Run in development mode (include content marked as drafts)
 	hugo serve -D
 
-docs: ## Build the site
+deploy-docs: ## Build the site
 	hugo -t hugo-theme-learn -d public --gc --minify --cleanDestinationDir && sh deploy.sh
 
-build-server: ## Hugo server and browse
+run-docs: ## enables full re-renders on changes
 	hugo server --disableFastRender

@@ -1,11 +1,23 @@
 +++
 title = "tickets"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-14T15:55:59-06:00
+lastmod = 2021-12-15T13:19:04-06:00
 draft = false
 weight = 3
 chapter = false
 +++
+
+We implement the prposed method to our motivating example.
+
+-   `ftime`: time until the first action taken
+-   `time`: total time of a person's process
+
+We introduce two rudimentary statistcs.
+
+-   `naction` or `#action`: the action sequence length \\(M\_{k}\\). The total number of actions taken by respondent \\(k\\).
+-   `fastness`: `#action` divided by the total time elaped since \\(t\_{k,1}\\).
+
+<!--listend-->
 
 ```sh
 out_dir="tickets/"
@@ -16,9 +28,6 @@ convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
 ```
-
--   &tau;: person's baseline hazard for action transition
--   &theta;: person's xxx to jump to a similar action for the next one
 
 |Name        |Label                                                                               |Value scheme                                          |
 |:-----------|:-----------------------------------------------------------------------------------|:-----------------------------------------------------|
@@ -37,10 +46,8 @@ convert -density 300 time_action.pdf time_action-%d.png
 |WRITHOME    |Index of use of writing skills at home (derived)                                    |NA                                                    |
 |WRITWORK    |Index of use of writing skills at work (derived)                                    |NA                                                    |
 
-![](figure/lpa_plot-0.png)
-![](figure/lpa_plot-1.png)
-
-{{< figure src="figure/lpa_back_line.png" >}}
+| ![](figure/lpa_plot-0.png) | ![](figure/lpa_plot-1.png) | ![](figure/lpa_back_line.png) |
+|----------------------------|----------------------------|-------------------------------|
 
 Response: the smaller, the better
 
