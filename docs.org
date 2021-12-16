@@ -28,6 +28,7 @@
 #+BEGIN_SRC emacs-lisp
   (jyun/org-latex-set-options 2.5)
 #+END_SRC
+
 * Home :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
@@ -1721,12 +1722,10 @@ for diagnostic and scoring purposes (DiCerbo \& Behrens, 2014).
 *** Benefits of process data
 The availability of process data open new research opportunities including to better understand test-takers' behavior patterns, ..., and ....
 
-
 *** Challenges
 While the availability of rich response process data during problem solving comes the great challenge of building appropriate psychometric models to analyze these data.
 The raw process data are usually formatted as lines of coded and time-stamped strings.
 The vast amount of data on students' potential trial-and-error process makes it less than straightforward to detect patterns in problem solving.
-
 
 *** Exisitng methods and limitations
 Several data analysis techniques and models have been explored to uncover problem-solving patterns. For example, researchers used methods such as cluster analysis (Bergner, Shu, \& von Davier, 2014) and editing distance (Hao, Shu, Bergner, Zhu, \& von Davier, 2014).
@@ -1734,7 +1733,19 @@ Other researchers explored the method of combining Markov movesl and item respon
 In addition, researchers used digraphs to visualize and analyze sequential process data collected from assessment.
 Zhu, Shu, and von Davier (2016) used network visualization and analysis for understanding process data.
 
+cite:&chen_statistical_2019
+[[cite:&chen_continuous-time_2020]]
+[[cite:&tang_latent_2019]]
+cite:&he_identifying_2015
+cite:&ulitzsch_combining_2021
+cite:&qiao_data_2018
+[[cite:&wang_subtask_2020]]
 
+RNN
+[[cite:&tang_exploratory_2019]]
+
+n-gram
+cite:&van_der_ark_identifying_2015
 *** Motivation and our Aim
 Students' response outcomes are a result of a sequence of actions that they take.
 The quality as well as quantity of actions vary across individuals as well as across items.
@@ -1744,7 +1755,6 @@ Models that relate process data to process outcomes are rare in the current lite
 We propose to develop a new, network modeling framework for analyzing time-stamped sequences of actions taken by NAEP test takers. The innovative aspect of our proposal is that we view test takers’ sequences of actions collected in the computer-assisted NAEP assessment system as directed paths between actions in a network of possible actions.  With our framework, researchers and policymakers can quantify and better understand how learners with disabilities process mathematics test items.
 
 We have successfully collaborated to develop novel network-based modeling approaches for analyzing conventional assessment data on two papers (Jin \& Jeon, 2018; Jeon, Jin, Schweinberger, \& Baugh, 2020), with more papers in the pipeline. We will extend this model-based framework for analyzing NAEP process data. Since the number of possible actions is large and many test takers will choose a small subset of the possible actions, the data is sparse. To deal with the sparsity of the data, we use machine learning techniques. These machine learning techniques penalize models that are more complex than warranted by the data.
-
 
 *** Advantages of the proposed method
 Advantage I. An important advantage of our network-based approach is the introduction of a virtual, two-dimensional Euclidean map of the interplay between actions for different test takers. This interactive map could offer substantially enhanced insights into how and why learners with and without disabilities are different in their response behavior on the current NAEP mathematics assessment.
@@ -1757,9 +1767,27 @@ remainder of this article is organized as follows.
 In Section, we introduce . In Section , we present. Applications are given in
 Section, followed by conclusions given in
 Section.
-
+x
 ** Motivating example
 *** Problem Solving in Technology-Rich Environments
+
+% stolen from cite:&chen_statistical_2019
+We introduce a specific item, CLIMATE CONTROL (CC), to demonstrate the data structure and to motivate our research questions. It is part of a CPS unit in PISA 2012 that was designed under the “MicroDYN” framework (Greiff et al., 2012; Wüstenberg et al., 2012), a framework for the development of small dynamic systems of causal relationships for assessing CPS.
+
+
+Interactive tasks as implemented in the problem solving in a technology-rich
+environment (PSTRE) domain in the Programme for the International Assessment of
+Adult Competencies (PIAAC, citealt:&oecd_technical_2019) and the problem solving domain in the
+Programme for International Student Assessment (PISA, OECD, 2014) aim at mirroring
+real-life problem-solving behavior (Goldhammer, Naumann, & Keßel, 2013). While correct
+responses to such tasks can be assumed to stem from examinees having the skill set and
+the motivation required to solve the task, incorrect responses can occur for a variety of
+different reasons, ranging from lack of different subskills and/or metacompetencies required
+to solve the task through misinterpreting instructions to examinees not exerting their best
+Fo
+effort and interacting quickly and superficially with the task at hand.
+
+As a motivating example, we introduce problem solving in technology-rich environments (PSTRE) We introduce an example of pro
 
 OECD Survey of Adult Skills (PIAAC) Log Data
 Downloaded from https://piaac-logdata.tba-hosting.de/
@@ -1875,85 +1903,112 @@ Major challenges to establish a statistcal model taking the process data as an i
 Thanks to the recent development of natual language processing
 
 ** Methods
-We propose to develop a new modeling framework for analyzing time-stamped sequences of actions taken by PS-TRE test takers. The innovative aspect of our proposal is that we view test takers’ sequences of actions collected in the computer-assisted PS-TRE assessment system as ????? of possible actions.  With our framework, researchers and policymakers can quantify and better understand how learners with disabilities (??) process mathematics test items.
+%% stolen from neap proposal
+We propose to develop a new modeling framework for analyzing time-stamped sequences of actions. The innovative aspect of our proposed model is that we view users' sequences of actions as Markov processes of possible actions mapped to Euclidean space.
 
-Let $S$ denotes a set of all possible action. For each state $m \in S$, $A_{m}$ denotes a set of competing transitions $\{l_1, \ldots, l_{n_m}\}$ that can be taken directly after $m$.
-Let \(Y_k(t)\) denote an action of k-th respondent at time $t$.The $k$-th respondent takes a sequence of $M_{k}$ actions. We use \(S_{k} = \{y_{k}(t_{k,1}),y_{k}(t_{k,2}),\ldots, y_{k}(t_{k,M_{k}})\}\) to denote the $k$-th respondent's action sequence.
+With our framework, researchers and policymakers can quantify and better understand learners' problem solving processes.
 
-We define \(  \delta_{k,n,m} = 1 \) if person k's n-th action is m; 0 otherwise. Thus, \( \delta_{k,n,m}  \delta_{k,n+1,l} = 1 \) menas person k's n-th transition ($n < M_{k}$) is m to l.
-Respondents assumed to begin problem solving processes at time $t=0$.
-
-Let \(t_{k,n}\) denote entry time that the \(k\)-th respondent start the $n$-th action. The sojourn time is denoted by $dt_{k,n} = t_{k,n+1} - t_{k,n}$ for $n < M_{k} - 1$.
+*** notations
+Let $S$ denotes a set of all possible actions. For each action $m \in S$, $A_{m}$
+denotes a set of competing actions $\{l_1, \ldots, l_{n_m}\}$ that can be taken
+directly after $m$. Let \(t_{k,n}\) denote entry time that the \(k\)-th
+respondent starts his/her $n$-th action. So, his/her sojourn time in the $n$-th
+action is denoted by $\dd t_{k,n} = t_{k,n+1} - t_{k,n}$ for $n < M_{k} - 1$.
+Respondents are assumed to begin problem solving processes at time $t=0$. Let
+\(Y_k(t)\) denote an action being taken by the $k$-th respondent at time $t$.
+Then, a sequence of the $k$-th respondent's actions is \(S_{k} =
+\{y_{k}(t_{k,1}), y_{k}(t_{k,1}),y_{k}(t_{k,2}), \ldots, y_{k}(t_{k,M_{k}})\}\) whose
+length is $M_{k}$. We define \( \delta_{k,n,m} = 1 \) if respondent $k$'s $n$-th
+action is $m$; $0$ otherwise. Thus, \( \delta_{k,n,m} \delta_{k,n+1,l} = 1 \) means
+respondent $k$'s \(n\)-th transition ($n < M_{k}$) is from action $m$ to action
+$l$.
 
 *** Action embedding
+Instead of using the action symbol as an input in the model, ...
 
-A goal for action embedding is to substitute a symbolic representation with a vectoric representation of actions. Similar tasks are taken for natual language processing is called word embedding.
+A goal for action embedding is to substitute a symbolic representation with a vectoric representation of actions. Similar procedures in natual language processing context is well established, and we will adapot a skip-gram model for the action embedding purpose.
 
-Actions that tend to “behave similarly (/need better term/)” end up close to one another in the embedding space. Instead of using the action symbol as a feature in the model, we can use its vector to exploit such similarities.
-
+A skip-gram model which predict actions within a certain range before and after the current action in the same sentence. This model learns parameters that lead to a high-valued cosine similarity for embeddings of frequently co-occuring actions, where the cosine similarity between two vectors $u_{i}, v_i \in \mathbb{R}^{d}$ is calculated as
 \[
-  p\left(w_{j} \mid w_{0}, u, v\right)=\frac{\exp \left(u\left(w_{0}\right)^{\top} v\left(w_{j}\right)\right)}{\sum_{w \in V} \exp \left(u\left(w_{0}\right)^{\top} v(w)\right)}
+  \frac{\sum_{i=1}^{d} u_{i} v_{i}}{\sqrt{\sum_{i=1}^{d} u_{i}^{2}} \cdot \sqrt{\sum_{i=1}^{d} v_{i}^{2}}}.
 \]
-where \(u: V \rightarrow \mathbb{R}^{k} \) and \(v: V \rightarrow \mathbb{R}^{k}\) are functions which map words to a word embedding—one for the pivot words, and the other for context.
+Actions that tend to “behave similarly” end up close to one another in the embedding space. The notion of "behavior" could refer to syntactic categorization or semantic association.
 
-Word2Vec citep:mikolov_distributed_2013.
-
-- word2vec: skip-gram models coupled with negative sampling
-- negative sampling: to reduce computational cost of the cosine similarity (the denominator is summation of all words in vocabulary).
-- skip-gram: to maximize the probability of predicting context words given a target word. The probability is defined by the cosine similarity (softmax function) based on word embeddings. Words close in the Euclidean space are words 1) with similar meanings, 2) associated with the same part of a sentence, 3) with semantic association. The similarity can be learned from a large corpus. Unseen words in the training sample are embedded, so one can exploit the similarity information.
-- a bag-of-words (CBOW): to predict a target word given context words (neighbor of a target word)
-
-Continuous Skip-gram Model which predict words within a certain range before and after the current word in the same sentence. While a bag-of-words model predicts a word given the neighboring context, a skip-gram model predicts the context (or neighbors) of a word, given the word itself. The model is trained on skip-grams, which are n-grams that allow tokens to be skipped (n-gram is a contiguous sequence of n items from a given sample of text or speech). The context of a word can be represented through a set of skip-gram pairs of ~(target_word, context_word)~ where ~context_word~ appears in the neighboring context of ~target_word~.
-
-The context words for each of the 8 words of this sentence are defined by a window size. The window size determines the span of words on either side of a ~target_word~ that can be considered context word. Take a look at this table of skip-grams for ~target_words~ based on different window sizes.
-
-
-The training objective of the skip-gram model is to maximize the probability of predicting context words given the target word. For a sequence of words, the objective can be written as the average log probability
+The training objective of the skip-gram model is to maximize the probability of predicting neighboring actions given the target action. The objective can be written as the average log probability
 \[
-\frac{1}{T} \sum_{t=1}^{T} \sum_{-c \leq j \leq c, j \neq 0} \log p\left(w_{t+j} \mid w_{t}\right)
+\frac{1}{T} \sum_{t=1}^{T} \sum_{-c \leq j \leq c, j \neq 0} \log p\left(m_{t+j} \mid m_{t}\right)
 \]
-where ~c~ is the size of the training context. The basic skip-gram formulation defines this probability using the softmax function.
-\[
-p\left(w_{O} \mid w_{I}\right)=\frac{\exp \left(v_{w_{O}}^{\prime}{ }^{\top} v_{w_{I}}\right)}{\sum_{w=1}^{W} \exp \left(v_{w}^{\prime}{ }^{\top} v_{w_{I}}\right)}
-\]
-where \(u: V \rightarrow \mathbb{R}^{k} \) and \(v: V \rightarrow \mathbb{R}^{k}\) are functions which map words to a word embedding.
+where ~c~ is the window size of neighboring actions. The skip-gram formulation defines this probability using the softmax function.
+\begin{equation}
+\label{eq:skip-gram}
+  p\left(m_{j} \mid m_{0}, u, v\right)=\frac{\exp(u\left(m_{0}\right)' v\left(m_{j}\right))}{\sum_{m \in S} \exp(u\left(m_{0}\right)' v(m))}
+\end{equation}
+where \(u: S \rightarrow \mathbb{R}^{d} \) and \(v: S \rightarrow \mathbb{R}^{d}\) are functions which map actions to a action embedding.
 
-Word embeddings tend to cluster together when the words they denote behave similarly. The notion of “behavior” in this case usually remains underspecified, but could refer to syntactic categorization (i.e., words most often associated with the same part of speech will cluster together) or semantic association (words that are semantically related cluster together). The similarity between word embedding vectors is often measured through such measures as the dot product or cosine similarity.
-Most prominently, word embeddings assist with the treatment of words which do not appear in the training data of a given problem (such as parsing or part-of-speech tagging). The word embedding function can be learned by exploiting co-occurence data on a large corpus (without any annotation), and thus the vocabulary over which the word embedding function is constructed is larger than the one that the training data consists of, and covers a significant amount of the words in the test data, including “unseen words.” The reliance on co-occurrence statistics is based on the distributional hypothesis (Harris, 1954) which states that co-occurrence of words in similar contexts implies that they have similar meanings.
-This model learns parameters that lead to a high-valued dot product for embeddings of frequently co-occuring pivot and context words (as the probability is pushed to the maximum in such cases). Therefore, through the contexts, words that are similar to each other in their co-occurrence patterns map to vectors that are close to each other in the Euclidean space.
-Skip-gram modeling of the above form coupled with negative sampling is often referred to as one of the =word2vec= models citep:mikolov_distributed_2013. A second proposed model of word2vec is the continuous bag-of-words model (CBOW), which predicts a word from the context—in reverse from the skip-gram model.
+The negative sampling cite:&mikolov_context_2012 is a computational technique proposed by to resolve the intractable denominator in eqref:eq:skip-gram.
+Skip-gram modeling of the above form coupled with negative sampling is often referred to as a =word2vec= model cite:&mikolov_distributed_2013.
+
+The closer the cosine value to 1, the greater the similarity between actions. The closer the cosine value to -1, the greater the dis-similarity between actions.
+
+Online visualization tool
+Embedding projector
+RegExp (regular expression) for metadata
+https://projector.tensorflow.org/
+
+How to convert an action sequence to a sequence??
+**** leftover :noexport:
+The similarity between word embedding vectors is often measured through such measures as the cosine similarity.
+
+The model predicts the neighboring context of an action, given the action itself.
+
+Therefore, through the contexts, words that are similar to each other in their co-occurrence patterns map to vectors that are close to each other in the Euclidean space.
+
+The skip-gram model is to maximize the probability of predicting context words given a target word. The probability is defined by the cosine similarity (softmax function) based on word embeddings.
+
+Words close in the Euclidean space are words 1) with similar meanings, 2) associated with the same part of a sentence, 3) with semantic association. The similarity can be learned from a large corpus. Unseen words in the training sample are embedded, so one can exploit the similarity information.
 
 
 [[id:1b2724b9-324b-463b-967a-3b064a0f115e][Word2Vec | Skip-grams | TensorFlow Core]]
 
-How to convert an action sequence to a sequence
-skip-gram
-negative sampling
-cosine similarity
+negative sampling cite:&mikolov_context_2012: to reduce computational cost of the cosine similarity (the denominator is summation of all words in vocabulary).
+
+a bag-of-words (CBOW): to predict a target word given context words (neighbor of a target word)
+
+
+An action embedding space captures similarity in that space, be it meaning, morphology, context, or some other kind of relationship.
+
+Actions close in the space can be actions 1) with similar functions, 2) with semantic association, or 3) associated with the same part of a sequence,
+
+The notion of “behavior” in this case usually remains underspecified, but could refer to syntactic categorization (i.e., words most often associated with the same part of speech will cluster together) or semantic association (words that are semantically related cluster together). The similarity between word embedding vectors is often measured through such measures as the dot product or cosine similarity.
+
+The context words for each of the 8 words of this sentence are defined by a window size. The window size determines the span of words on either side of a ~target_word~ that can be considered context word. Take a look at this table of skip-grams for ~target_words~ based on different window sizes.
+
+A second proposed model of word2vec is the continuous bag-of-words model (CBOW), which predicts a word from the context—in reverse from the skip-gram model.
+
+While a bag-of-words model predicts a word given the neighboring context,
+
+The model is trained on skip-grams, which are n-grams that allow tokens to be skipped (n-gram is a contiguous sequence of n items from a given sample of text or speech). The context of a word can be represented through a set of skip-gram pairs of ~(target_word, context_word)~ where ~context_word~ appears in the neighboring context of ~target_word~.
 *** data structure
 https://www.rdocumentation.org/packages/msm/versions/1.6.8/topics/msm2Surv
-Given a configured transition matrix, \texttt{msm} [[citep:&jackson_multi-state_2011]]
-
- transform data to a desired "long" format:
+Given a configured transition matrix, we use \texttt{msm} [[cite:&jackson_multi-state_2011]] to transform data to a desired "long" format:
 | person | entry | exit | from | to | observed | cov1   | cov2     | time cov |
 |      1 |     0 |   10 |    1 |  2 |        1 | D_{12} | \theta D_{12} |          |
 |      1 |     0 |   10 |    1 |  3 |        0 | D_{12} | \theta D_{12} |          |
-*** Multistate model
 
-The intensity function $q_{ml}(\cdot)$ represents the instantaneous risk of moving from action $m$ to $l$:
+*** Multistate model (general)
+The intensity function $q_{ml}(t)$ represents the instantaneous rate of jumping from action $m$ to $l$ at time \(t\):
 \begin{align*}
-q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}_{t}\right)}{\delta t}, m \neq l, m, l \in S,
+q_{ml}\left(t ; Y_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}_{t}\right)}{\delta t},
 \end{align*}
-where $\mathcal{F}_t$ denotes the process up to time $t$.
+where $m \neq l$, $m, l \in S$, and $\mathcal{Y}_t$ denotes the process up to time $t$.
 
 Action transition is assumed to follow Semi-Markovian, which means the intensity depends on the sojourn time (\(t - t_{m}\) ; time spent on the current action). This is often called "clock reset" approach as opposed to "clock forward" approach. Let $dt_{m}$ denote the sojourn time.
 
 Cox model
-\begin{align}
-q_{ml}\left(t ; \mathcal{F}_{t}\right) = & q_{ml} (t - t_{m}; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t))\\
-= & \lambda_{ml}(dt_{m})  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}},
-\end{align}
-
+\begin{align*}
+q_{ml}\left(t ; \mathcal{F}_{t}\right) = & q_{ml} (t - t_{m}; \bm{\lambda}, \bm{\beta}, \mathbf{z}(t))\\
+= & \lambda_{ml}(dt_{m})  e^{(\bm{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}},
+\end{align*}
 for person $k = 1,\ldots,N$, where $\mathbf{z}(t)$ is time-varying covariates, $\lambda_{kml}(t)$ is a baseline intensity function, \(D_{ml} \in [-1,1]\) denotes the cosine similarity between actions $m$ and $l$. The cosine similarity is obtained using ~word2vec~ on action sequences of an item. The closer the cosine value to 1, the greater the similarity between actions. The closer the cosine value to -1, the greater the dis-similarity between actions. This mean there are $n_{m}$ corresponding intensity functions for state $m$, and overall $\sum_{m in S} n_m$ intensity functions.
 
 We use the constant baseline hazard based on out-of-state transition speed and person's transition speed:
@@ -1986,7 +2041,7 @@ where $ \alpha^{(A)}_m$ and $\alpha^{(A)}_l$  are the main effects of the curren
 $\beta_{m,l}^{(A)}$ represents the effect of moving from action $A_{i,k,l}$ to $A_{i,k,m}$, while
 $ z_{i,k,l,m}$ indicate observed or unobserved covariates that capture the movement.
 For example, $z_{i,k,l,m}$ can represent a distance between the two actions as in a latent space modeling approach (reference).
-Figure \ref{fg:sequence} illustrates the direct paths for the sequences of actions taken by
+Figure xxx illustrates the direct paths for the sequences of actions taken by
 two students, one represented with dashed paths  and the other with solid paths.
 
 \textcolor{red}{MJ: can we handle directions? choosing the same actions? }
@@ -2011,10 +2066,92 @@ Then, the corresponding transition probability can be defined as
 
 It is possible to include the outcome in this multi-state survival modeling framework. In such case, however, identifying meaningful ``subsequence of actions'' would not be straightforward as appeared in \eqref{eq:no-response1}. Perhaps, we can use this model for parsing action sequence, and use the subsequence for \eqref{eq:no-response1}?
 
+*** Multistate model (intercept only)
+The intensity function $q_{ml}(t)$ represents the instantaneous rate of transition from action $m$ to $l$ at time \(t\):
+\begin{align*}
+q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}_{t}\right)}{\delta t},
+\end{align*}
+where $m \neq l$, $m, l \in S$, and $\mathcal{F}_t$ denotes the process up to time $t$.
+Action transition is assumed to follow Semi-Markovian, which means the intensity depends olny on $\mathcal{F}_{t}$ through time since the current action
+is started. The intensity is assumed to follow a Cox model. We assume the exponential baseline hazard function of a product of out-of-state and respondent's transition speed. The intensity can be written for all possible transitions as
+\begin{equation}
+\label{eq:intensity}
+\begin{split}
+q_{ml}\left(t ; \mathcal{F}_{t}\right)
+= & q_{ml} (t - t_{Y_{(t)}})\\
+= & \kappa_{m} \tau_{k} \exp(\theta_{k} D_{ml}),
+\end{split}
+\end{equation}
+for all $m \in S$, $l \in A_{m}$, respondents $k = 1,\ldots,N$, and \(D_{ml} \in [-1,1]\) denotes the cosine similarity between actions $m$ and $l$. There are $N_m = #\{A_{m}\}$ intensity functions for each action $m$, which leads to $\sum_{m in S} N_m$ intensity functions.
+
+- out-of-action speed $\kappa_{m}$ measures speed of action $m$. The parameter is related to the time to finish action $m$ and move forward to another action.
+  - The larger $\kappa_{m}$, The shorter time to finish the action $m \in S$.(faster out-of-state transition)
+- action transition speed $\tau_{k}$ measures respondents' speed of problem solving after considering average durations of action s/he took.
+  - With large $\tau_{k}$, the respondent is likely to quickly finish each action.
+- $\theta_{k}$ measures respondents' tendency to choose actions "behaving similarly".
+  - With large $\theta_{k}$, the respondent is likely to choose the next action coherently.
+
+*** TODO NEED REVIEW! stolen from the neap proposal :noexport:
+
+We take a network view on action sequences, where nodes are a set of predefined action and links represent action transitions.
+Given that item $k$ is chosen,
+the action network of student $i$ is represented by $L \times L$ adjacency matrix.
+Suppose student $i$ at item $k$ has chosen action $A_{i,k,l}$. The transition probability of moving from $A_{i,k,l}$ to some other action $A_{i,k,m}$ among $L$ actions is modeled with a multinomial logistic model
+\begin{equation}\label{eq:action}
+     \mathbb{P} ( A_{i,k,m}  |  A_{i,k,l} )
+= \frac{ \exp( \alpha^{(A)}_m + \alpha^{(A)}_l + \alpha^{(A)}_{m,l} + \beta_{m,l}^{(A)} z_{i,k,l,m} ) }{ \exp( \alpha^{(A)}_m + \alpha^{(A)}_l + \alpha^{(A)}_{m,l}+ \beta_{m,l}^{(A)} z_{i,k,l,1} ) + \cdots + \exp( \alpha^{(A)}_m + \alpha^{(A)}_l + \alpha^{(A)}_{m,l}+ \beta_{m,l}^{(A)} z_{i,k,l,L} )},
+\end{equation}
+\noindent
+where $ \alpha^{(A)}_m$ and $\alpha^{(A)}_l$  are the main effects of the current and previous actions $m$ and $l$, and  $\alpha^{(A)}_{m,l}$ is the interaction effect of the two actions.
+$\beta_{m,l}^{(A)}$ represents the effect of moving from action $A_{i,k,l}$ to $A_{i,k,m}$, while
+$ z_{i,k,l,m}$ indicate observed or unobserved covariates that capture the movement.
+For example, $z_{i,k,l,m}$ can represent a distance between the two actions as in a latent space modeling approach (reference).
+Figure xxx illustrates the direct paths for the sequences of actions taken by
+two students, one represented with dashed paths  and the other with solid paths.
+
+We assume symmetric transition probabilities between actions.
+We define a function describing transition intensity (hazard) between actions $m$ and $l$ ($m \neq l$):
+\begin{align*}
+  h (t ;  A_{i,k,l} \rightarrow  A_{i,k,m}  ) = & \lim_{\delta t \to 0}  \frac{P(A_{i,k}(t + \delta t) = m | A_{i,k}(t) = l)}{\delta t} \\
+  = & \lambda_{k,l\rightarrow m}(t) \exp( \alpha^{(A)}_m + \alpha^{(A)}_l + \alpha^{(A)}_{m,l} + \beta_{m,l}^{(A)} z_{i,k,l,m} ),
+\end{align*}
+where $\lambda_{k,l\rightarrow m}(t)$ is a baseline intensity function and $A_{i,k}(t)$ is an action taken by person $i$ at $t$ for item $k$.
+The non-transition intensity of action $m$ is
+\[
+  h (t ;  A_{i,k,m} \rightarrow  A_{i,k,m}  ) =   \lambda_{k,m\rightarrow m}(t) \exp( \alpha^{(A)}_m).
+\]
+
+Then, the corresponding transition probability can be defined as
+\begin{align*}
+  \mathbb{P} (t ;  A_{i,k,l} \rightarrow  A_{i,k,m} ) = & \frac{h(t; A_{i,k,l} \rightarrow A_{i,k,m})}{\sum_{l=1}^{L}  h(t; A_{i,k,l} \rightarrow A_{i,k,m})}
+\end{align*}
+
+It is possible to include the outcome in this multi-state survival modeling framework. In such case, however, identifying meaningful ``subsequence of actions'' would not be straightforward as appeared in \eqref{eq:no-response1}. Perhaps, we can use this model for parsing action sequence, and use the subsequence for \eqref{eq:no-response1}?
+
+** Estimation
+:PROPERTIES:
+:ID:       5c29e214-f86d-41d5-89a0-e164602bf6b8
+:END:
+- [[skim:///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::79;;1][3.2 Normal data with a noninformative prior distribution org-id:{ce3939d9-fb55-4b01-8747-0f486c98c9e7}:org-id]]
+- [[skim:///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::591;;1][Continuous distributions org-id:{5c29e214-f86d-41d5-89a0-e164602bf6b8}:org-id]]
+*** software
+- word2vec
+- multistate model + visualization
+
+The action embedding algorithm is written using =TensorFlow= cite:tensorflow2015-whitepaper library in =Python= cite:10.5555/1593511.
+The MCMC algorithm was written in =R= cite:r_core_team_r_2020 and =C++14= [[cite:&ISO:2014:IIIb]] with =Stan= math library  cite:carpenter_stan_2015. The code and documentations, along with example data sets, are found
+in \url{https://jonghyun-yun.github.io/procmod/}.
+
+=tidyLPA= cite:&rosenberg_tidylpa_2018
+=mclust= cite:&scrucca_mclust_2016
+
 *** likelihood
+\(\bm{\tau} = (\tau_{1},\ldots,\tau_{N})'\)
+\(\bm{\theta} = (\theta_{1},\ldots,\theta_{N})'\)
+\(\bm{\kappa} = (\kappa_{1},\ldots,\kappa_{M})'\)
 
 \begin{align*}
-    q_{ml} (t ; \boldsymbol{\lambda}, \boldsymbol{\beta}, \mathbf{z}(t)) = & \lambda_{ml}(t)  e^{(\boldsymbol{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}}\\
+    q_{ml} (t ; \bm{\kappa, \theta, \tau}, \bm{\beta}, \mathbf{z}(t)) = & \lambda_{ml}(t)  e^{(\bm{\beta}' \mathbf{z}(t) +  \theta_{k}) D_{ml}}\\
 q_{ml}\left(t ; \mathcal{F}_{t}\right)= & \lim _{\delta t \rightarrow 0} \frac{P\left(Y(t+\delta t)=l \mid Y(t)=m, \mathcal{F}_{t}\right)}{\delta t}, m \neq l, m, l \in S
 \end{align*}
 
@@ -2046,15 +2183,20 @@ Let $\nu_{mlk}(t) = 1$ if person $k$ jump from actions $m$ to $l$ at time $t$; 0
 \( \delta_{k,n,m}  \delta_{k,n+1,l} = 1 \) for $n < M_{k}$ if person k's n-th transition is m to l.
 
 time at starting state (one after START) is set to the first action (n=1), and the corresponding time is set to 0.
-**** prior
-The proposed method use a fully Bayesian approach for estimating the proposed latent space model, using MCMC methods. Our prior specification is as follows:
-
+We present a fully Bayesian approach for estimating the proposed model.
+*** prior
+For each $m$, $k$, we specify independent priors as follows:
 \begin{align*}
-\pi\left(\kappa_{m}\right) & \sim \operatorname{Gamma}\left(a_{\kappa}, b_{\kappa})\right); \\
-\pi\left(\tau_{k}\right) & \sim \operatorname{Gamma}\left(a_{\kappa}, b_{\kappa})\right); \\
-\pi\left(\theta_{k} | \sigma^{2}\right) & \sim \mathrm{N}\left(0, \sigma^{2}\right); \\
-\pi\left(\sigma^{2}\right) & \sim \operatorname{lnv}-\operatorname{Gamma}\left(a_{\sigma}, b_{\sigma}\right); \\
+\pi\left(\kappa_{m}\right) & \sim \operatorname{Gamma}(a_{\kappa}, b_{\kappa}); \\
+\pi\left(\tau_{k}\right) & \sim \operatorname{Gamma}(a_{\tau}, b_{\tau}); \\
+\pi\left(\theta_{k} | \sigma^{2}\right) & \sim \operatorname{N}(\mu_{\theta}, \sigma^{2}); \\
+\pi\left(\sigma^{2}\right) & \sim \operatorname{Inv-Gamma}(a_{\sigma}, b_{\sigma}),\\
 \end{align*}
+where $\mbox{Inv-Gamma}(\alpha,\beta)$ denotes the inverse gamma distribution with shape $\alpha >0$ and scale $\beta >0$.
+# whose density is
+# \[
+# \operatorname{Inv-Gamma}(y|\alpha,\beta) = \frac{\beta^{\alpha}}{\Gamma(\alpha)} y^{-(\alpha+1)} \exp( -\beta \frac{1}{y} ).
+# \]
 
 # \pi\left(\beta_{k} |\mu_{\beta}, \sigma_{\beta}^{2}\right) & \sim \mathrm{N}\left(\mu_{\beta}, \sigma_{\beta}^{2}\right); \\
 # \pi\left(\mu_{\beta}|\sigma_{\beta}) & \sim \mathrm{N}\left(0, \sigma^{2}_{\mu_{\beta}}\right);\\
@@ -2065,21 +2207,9 @@ The proposed method use a fully Bayesian approach for estimating the proposed la
 # \pi\left(\mu_{\beta}, \sigma_{\beta}^{2}\right) & \propto \sigma_{\beta}^{-2},
 # \end{align*}
 
-inv-Gamma(\theta|\alpha,\beta)
-\[
-p(\theta)=\frac{\beta^{\alpha}}{\Gamma(\alpha)} \theta^{-(\alpha+1)} e^{-\beta / \theta}, \quad \theta>0
-\]
-
-where hyperparameters are chosen as
-\[a_{\sigma}=0.0001, b_{\sigma}=0.0001, \mu_{\theta}=0, \text { and } ....\]
-
+The hyperparameters are chosen as
+\[a_{\kappa} = a_{\tau} = 0.1, b_{\kappa} = b_{\tau} = 0.1, a_{\sigma}=1.0, b_{\sigma}=1.0, \mu_{\theta}=0, \text { and } ....\]
 Based on our experience, the inference of $\mathbf{\Theta}$ is highly sensitive to its variance $\sigma^2$. Also, the configuration of latent embeddings highly depends on the scale parameter $\gamma$ of the latent space. Rather than choosing sub-optimal tuning parameters, we use a layer of hyper-priors to learn optimal values of these parameters from data. We choose hyperparameters such that priors are minimally informative to facilitate the flexible Bayesian learning.
-** Estimation
-:PROPERTIES:
-:ID:       5c29e214-f86d-41d5-89a0-e164602bf6b8
-:END:
-- [[skim:///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::79;;1][3.2 Normal data with a noninformative prior distribution org-id:{ce3939d9-fb55-4b01-8747-0f486c98c9e7}:org-id]]
-- [[skim:///Users/yunj/Zotero/storage/9D6G7MNF/gelman_bayesian_2014.pdf::591;;1][Continuous distributions org-id:{5c29e214-f86d-41d5-89a0-e164602bf6b8}:org-id]]
 *** update \(\kappa_{m}\):
 :PROPERTIES:
 :ID:       bffeec1d-053a-4e74-8d30-40278b23d60c
@@ -2148,12 +2278,71 @@ $\mbox{Inv-Gamma}(\alpha,\beta)$ denotes the inverse gamma distribution with a d
 \[
   p(\sigma_{\beta}^{2}|ee) = inv-Gamma(a + 0.5, b + 0.5 (\beta - \mu_{\beta})^2)
 \]
-** Application
-*** tickets
+** Applications
+*** Tickets
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_BUNDLE: tickets
 :END:
+
+We implement the prposed method to our motivating example.
+
+- ~ftime~: time until the first action taken
+- ~time~: total time of a person's process
+
+We introduce two rudimentary statistcs.
+- ~naction~ or ~#action~: the action sequence length $M_{k}$. The total number of actions taken by respondent $k$.
+- ~fastness~: ~#action~ divided by the total time elaped since $t_{k,1}$.
+
+Multivariate Gaussian mixture for clustering
+
+- Varying variances and varying covariances (Model 6)
+
+  AIC and
+
+#+begin_src emacs-lisp :var out_dir="tickets"
+(insert-file (concat out_dir "/lpa_mods.txt"))
+#+end_src
+
+#+begin_export html
+--------------------------------------------------------------
+tau and theta + naction, spd
+--------------------------------------------------------------
+Compare tidyLPA solutions:
+
+ Model Classes AIC      AWE      BIC      CLC      KIC
+ 6     1       9741.434 9945.767 9809.601 9715.434 9758.434
+ 6     2       6976.934 7402.489 7118.135 6920.782 7008.934
+ 6     3       5955.984 6602.815 6170.221 5869.626 6002.984
+ 6     4       5589.996 6457.851 5877.267 5473.684 5651.996
+
+Best model according to AIC is Model 6 with 4 classes.
+Best model according to AWE is Model 6 with 4 classes.
+Best model according to BIC is Model 6 with 4 classes.
+Best model according to CLC is Model 6 with 4 classes.
+Best model according to KIC is Model 6 with 4 classes.
+
+An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and KIC (Akogul & Erisoglu, 2017), suggests the best solution is Model 6 with 4 classes.
+
+--------------------------------------------------------------
+naction, spd
+--------------------------------------------------------------
+Compare tidyLPA solutions:
+
+ Model Classes AIC      AWE      BIC      CLC      KIC
+ 6     1       5391.087 5462.777 5415.432 5383.087 5399.087
+ 6     2       3693.159 3853.480 3746.718 3672.956 3707.159
+ 6     3       3370.270 3619.131 3453.043 3337.955 3390.270
+ 6     4       3506.481 3844.076 3618.469 3461.861 3532.481
+
+Best model according to AIC is Model 6 with 3 classes.
+Best model according to AWE is Model 6 with 3 classes.
+Best model according to BIC is Model 6 with 3 classes.
+Best model according to CLC is Model 6 with 3 classes.
+Best model according to KIC is Model 6 with 3 classes.
+
+An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and KIC (Akogul & Erisoglu, 2017), suggests the best solution is Model 6 with 3 classes.
+#+end_export
 
 #+BEGIN_SRC sh
 out_dir="tickets/"
@@ -2165,11 +2354,6 @@ convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
 #+END_SRC
 
-#+BEGIN_SRC R
-ftime = timestamp[1] / 1000, naction = n(), time = timestamp[n()] / 1000, spd = naction / (ftime - time)
-#+END_SRC
-- \tau: person's baseline hazard for action transition
-- \theta: person's xxx to jump to a similar action for the next one
 #+begin_export html
 |Name        |Label                                                                               |Value scheme                                          |
 |:-----------|:-----------------------------------------------------------------------------------|:-----------------------------------------------------|
@@ -2189,12 +2373,12 @@ ftime = timestamp[1] / 1000, naction = n(), time = timestamp[n()] / 1000, spd = 
 |WRITWORK    |Index of use of writing skills at work (derived)                                    |NA                                                    |
 #+end_export
 
-[[file:tickets/figure/lpa_plot-0.png]]
-[[file:tickets/figure/lpa_plot-1.png]]
-# [[file:tickets/figure/lpa_back.png]]
-[[file:tickets/figure/lpa_back_line.png]]
+|---------------------------------------+------------------------------------|
+| [[file:tickets/figure/lpa_plot-0.png]]    | [[file:tickets/figure/lpa_plot-1.png]] |
+| [[file:tickets/figure/lpa_back_line.png]] |                                    |
 
 Response: the smaller, the better
+
 #+RESULTS:
 #+begin_export html
 ## mean
@@ -2228,20 +2412,14 @@ Response: the smaller, the better
 | 179|   179|     179| 179| 179|
 #+end_export
 
-
 \tau's covaritates:
 \theta's covaritates:
-[[file:tickets/figure/theta_tau_res.png]]
-[[file:tickets/figure/tau_action.png]]
-[[file:tickets/figure/time_action-3.png]]
-[[file:tickets/figure/time_action_more-2.png]]
-[[file:tickets/figure/time_action_more-5.png]]
-[[file:tickets/figure/time_action_more-7.png]]
-[[file:tickets/figure/time_action_more-8.png]]
-[[file:tickets/figure/time_action_more-9.png]]
-[[file:tickets/figure/time_action_more-10.png]]
-[[file:tickets/figure/time_action_more-11.png]]
-[[file:tickets/figure/time_action_more-13.png]]
+| [[file:tickets/figure/theta_tau_res.png]]       | [[file:tickets/figure/tau_action.png]]          |
+| [[file:tickets/figure/time_action-3.png]]       | [[file:tickets/figure/time_action_more-2.png]]  |
+| [[file:tickets/figure/time_action_more-5.png]]  | [[file:tickets/figure/time_action_more-7.png]]  |
+| [[file:tickets/figure/time_action_more-8.png]]  | [[file:tickets/figure/time_action_more-9.png]]  |
+| [[file:tickets/figure/time_action_more-10.png]] | [[file:tickets/figure/time_action_more-11.png]] |
+| [[file:tickets/figure/time_action_more-13.png]] |                                             |
 
 *** party_invitations-1
 [[file:party_invitations-1/figure/lpa_plot-0.png]]
@@ -2308,10 +2486,8 @@ Response: the larger, the better
 # for html export with bib
 
 #+bibliography: ~/Zotero/myref.bib
-#+bibliography: here
-
-bibliographystyle:unsrt
 bibliography:~/Zotero/myref.bib
+bibliographystyle:unsrtnat
 
 * COMMENT Local Variables
 # Local Variables:
