@@ -2832,6 +2832,40 @@ trans = paste(df$word[1:(n-1)], "->", df$word[2:n])
 trans = trans[trans != "END -> START"]
 length(unique(trans))
 #+end_src
+* collocations
+#+begin_src jupyter-python
+import nltk
+bigrams = nltk.collocations.BigramAssocMeasures()
+trigrams = nltk.collocations.TrigramAssocMeasures()
+bigramFinder = nltk.collocations.BigramCollocationFinder.from_words(tokens)
+trigramFinder = nltk.collocations.TrigramCollocationFinder.from_words(tokens)
+#+end_src
+
+#+begin_src jupyter-python
+import nltk
+from nltk.collocations import *
+bigram_measures = nltk.collocations.BigramAssocMeasures()
+trigram_measures = nltk.collocations.TrigramAssocMeasures()
+fourgram_measures = nltk.collocations.QuadgramAssocMeasures()
+finder = BigramCollocationFinder.from_words(nltk.corpus.genesis.words('english-web.txt'))
+finder.nbest(bigram_measures.pmi, 10)
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+# [goto error]
+: [0;31m[0m
+: [0;31mNameError[0mTraceback (most recent call last)
+: [0;32m<ipython-input-2-52b730f549a9>[0m in [0;36m<module>[0;34m()[0m
+: [1;32m      2[0m [0mbigrams[0m [0;34m=[0m [0mnltk[0m[0;34m.[0m[0mcollocations[0m[0;34m.[0m[0mBigramAssocMeasures[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+: [1;32m      3[0m [0mtrigrams[0m [0;34m=[0m [0mnltk[0m[0;34m.[0m[0mcollocations[0m[0;34m.[0m[0mTrigramAssocMeasures[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+: [0;32m----> 4[0;31m [0mbigramFinder[0m [0;34m=[0m [0mnltk[0m[0;34m.[0m[0mcollocations[0m[0;34m.[0m[0mBigramCollocationFinder[0m[0;34m.[0m[0mfrom_words[0m[0;34m([0m[0mtokens[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+: [0m[1;32m      5[0m [0mtrigramFinder[0m [0;34m=[0m [0mnltk[0m[0;34m.[0m[0mcollocations[0m[0;34m.[0m[0mTrigramCollocationFinder[0m[0;34m.[0m[0mfrom_words[0m[0;34m([0m[0mtokens[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+:
+: [0;31mNameError[0m: name 'tokens' is not defined
+:END:
+
+
 * COMMENT Local Variables
 # Local Variables:
 # eval: (jyun/set-org-babel-default-header-args:R)
