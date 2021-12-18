@@ -1452,7 +1452,7 @@ mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(ali
 |  0.73 (2.54)| -1.45 (3.73)| 0.11 (0.16)| 0.89 (0.16)| 4.52 (3.01)|  29.00 (0.00)|
 #+end_export
 
-* Model :noexport:
+* Model :noexport:ARCHIVE:
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_SECTION: model
@@ -2363,7 +2363,21 @@ Multivariate Gaussian mixture for clustering
 
 - Varying variances and varying covariances (Model 6)
 
-  AIC and
+  AIC and BIC ..
+
+I need one more on cluster analysis:
+- [ ] I want to compare sub-sequences between clusters: longest common subsequence cite:&ulitzsch_combining_2021
+  - common subsequences in LCS? NLP would be useful here: common phrase?
+    - ans: n-grams like tri-grams
+    - ans: most interesting collocations
+- [ ] map respondent to word embedding, mark speed / \tau / \theta
+- [ ] action frequencies cluster: top 5 actions?
+- [ ] how sentences are compared in NLP? Text Summarization
+
+Do
+1) collcations: freq and time -> show what are these actions, explain semantic ass and time efficiency
+2) map respondents marked by \tau, \theta: find neighboring actions?? not necessarily what they did
+3) text summary: how it works? too ambiguous.. it seems to work by removing some sentences
 
 #+begin_src emacs-lisp :var out_dir="tickets"
 (insert-file (concat out_dir "/lpa_mods.txt"))
