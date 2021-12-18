@@ -199,6 +199,12 @@ source("R/preproc-data.R")
 system(paste0("sh run.sh ", out_dir))
 #+end_src
 
+[[file:data/PIAAC_cleaned_data_1110/Problem_solving/PS_BOOKLET_ITEM.csv::PS1_6,Tickets,U21x000S,"MISSING (0), CORRECT (1), INCORRECT (7), Not reached / not attempted (N)"][ITEMCODE]]
+
+item_code = "U01a000S" # party-1
+item_code = "U07x000S" # book order
+item_code = "U21x000S" # ticket
+
 #+begin_src R :tangle R/run_all_in_one.R
 ## item_code = "U04a000S" ## cannot convert to long format (msm)
 ## item_code = "U01b000S"
@@ -372,7 +378,12 @@ for (i in id) {
 ## }
 seqs = seqs[id]
 
-data.table::fwrite(as.data.frame(seqs), "input/item_sentence.txt", col.names=F)
+## weird quotation marks
+## data.table::fwrite(as.data.frame(seqs), "input/item_sentence.txt", col.names=F)
+## all sentences are quotation marked
+## readr::write_delim(as.data.frame(seqs), "input/item_sentence.txt", col_names=F)
+
+str2file(seqs, "input/item_sentence.txt")
 }
 #+end_src
 
@@ -2030,6 +2041,17 @@ mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(ali
 #+end_src
 
 #+begin_src R :tangle diprom/R/utils.R
+## print strings to file
+str2file = function(fstr, fname) {
+if (file.exists(fname)) {
+  ##Delete file if it exists
+  file.remove(fname)
+}
+fcon = file(fname)
+writeLines(fstr, fcon) # R to C index conversion
+close(fcon)
+}
+
 ## stolen from https://github.com/dewittpe/qwraps2/
 frmt <- function(x, digits = 2) {
   sapply(x,

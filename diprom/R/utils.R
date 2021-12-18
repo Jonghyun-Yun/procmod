@@ -1,3 +1,15 @@
+## print strings to file
+str2file = function(fstr, fname) {
+if (file.exists(fname)) {
+  ##Delete file if it exists
+  file.remove(fname)
+}
+fcon = file(fname)
+writeLines(fstr, fcon) # R to C index conversion
+close(fcon)
+}
+
+## stolen from https://github.com/dewittpe/qwraps2/
 frmt <- function(x, digits = 2) {
   sapply(x,
          function(xx) {

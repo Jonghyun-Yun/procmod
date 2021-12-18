@@ -79,7 +79,9 @@ for (i in id) {
 ## }
 seqs = seqs[id]
 
-data.table::fwrite(as.data.frame(seqs), "input/item_sentence.txt", col.names=F)
+## data.table::fwrite(as.data.frame(seqs), "input/item_sentence.txt", col.names=F)
+## readr::write_delim(as.data.frame(seqs), "input/item_sentence.txt", col_names=F)
+str2file(seqs, "input/item_sentence.txt")
 }
 
 filter_item = function(item) {
