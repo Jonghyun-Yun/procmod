@@ -1,0 +1,10 @@
+('TAB-tabbutton2', 'TAB-tabbutton1', 'TAB-tabbutton2', 'TAB-tabbutton1')	18146.613415305645
+('BUTTON_submit-pg2_txt33', 'BUTTON_submit_ok-u21p2pu5_txt2', 'TAB-tabbutton2', 'TAB-tabbutton1')	13900.61358445352
+('TAB-tabbutton2', 'TAB-tabbutton1', 'BUTTON_submit-pg2_txt33', 'BUTTON_submit_ok-u21p2pu5_txt2')	13757.235972261027
+('BUTTON_available-pg1_txt47', 'BUTTON_available-pg7_txt47', 'TAB-tabbutton2', 'TAB-tabbutton1')	11303.596998064697
+('TAB-tabbutton2', 'TAB-tabbutton1', 'BUTTON_available-pg1_txt47', 'BUTTON_available-pg7_txt47')	11239.090504348784
+('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23', 'TAB-tabbutton2', 'TAB-tabbutton1')	10958.105907653215
+('TAB-tabbutton2', 'TAB-tabbutton1', 'COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23')	10886.430727126473
+('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2', 'TAB-tabbutton2', 'TAB-tabbutton1')	10581.094446253328
+('TAB-tabbutton2', 'TAB-tabbutton1', 'COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2')	10554.88642209553
+('BUTTON_submit_ok-u21p2pu5_txt2', 'BUTTON_close-popup2_txt4', 'TAB-tabbutton2', 'TAB-tabbutton1')	10549.213258844778

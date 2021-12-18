@@ -2,20 +2,21 @@ library(diprom)
 library(tidyLPA)
 
 ldir = c(
-## "party_invitations-1/",
+"party_invitations-1/",
 ## "party_invitations-2/",
 ## "cd_tally/",
 ## "sprained_ankle-1/",
-## ## "sprained_ankle-2/", ## didn't run
-## "tickets/",
-## ## "class_attendance/", ## didn't run
+## "sprained_ankle-2/", ## didn't run
+"tickets/",
+## "class_attendance/", ## didn't run
 ## "club_membership-1/",
-## ## "club_membership-2/", ## didn't run
-## "book_order/",
+## "club_membership-2/", ## didn't run
+"book_order/"
 ## "meeting_room/",
 ## "reply_all/", ## failed
-## "locate_email/", ## LPA not working
-"lamp_return/")
+## "locate_email/",
+## "lamp_return/"
+)
 
 ## out_dir="party_invitations-1/"
 ## out_dir="party_invitations-2/"
@@ -32,17 +33,19 @@ ldir = c(
 ## out_dir="locate_email/"
 ## out_dir="lamp_return/"
 
+num_chain = 2
+stopImplicitCluster()
+## doParallel::registerDoParallel(2)
+registerDoParallel(cores = detectCores() - 1)
+
+ldir = ldir[2]
+
 for (out_dir in ldir) {
 flpa_path = paste0(out_dir, "lpa_mods.txt")
   if (file.exists(flpa_path)) {
     ##Delete file if it exists
     file.remove(flpa_path)
   }
-
-num_chain = 2
-stopImplicitCluster()
-## doParallel::registerDoParallel(2)
-registerDoParallel(cores = detectCores() - 1)
 
 source("R/pmean.R")
 source("R/pinfo_preproc.R")

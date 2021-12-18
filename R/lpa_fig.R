@@ -18,9 +18,6 @@ ldir = c(
 ## "lamp_return/"
 )
 
-nc2 = c(4,4,3)
-nc3 = c(2,3,2)
-
 ## out_dir="party_invitations-1/"
 ## out_dir="party_invitations-2/"
 ## out_dir="cd_tally/"
@@ -41,11 +38,12 @@ stopImplicitCluster()
 ## doParallel::registerDoParallel(2)
 registerDoParallel(cores = detectCores() - 1)
 
-kk = 0
 for (out_dir in ldir) {
-
-  kk = kk + 1
-
+  nc2 = c(4,4,3)
+  nc3 = c(2,3,2)
+  
+  kk = which(out_dir == ldir)
+  
   lname = list(paste0(out_dir,"tau_imp.txt"), paste0(out_dir,"theta_imp.txt"))
   
   source("R/pmean.R")

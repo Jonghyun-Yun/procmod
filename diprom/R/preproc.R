@@ -28,7 +28,7 @@ read_piacc = function(piacc_path, item_code, sub_str, ignore_str, core_event = N
   return(item)
 }
 
-item2sen = function(item) {
+item2sen = function(item, sid = NULL) {
 ww = item$word
 id = item$SEQID
 ww0 = ww[1:(length(ww)-1)]
@@ -77,10 +77,18 @@ for (i in id) {
 ##     seqs[i] = gsub("START ", "", seqs[i])
 ##     seqs[i] = gsub(" END", "", seqs[i])
 ## }
-seqs = seqs[id]
 
+if (is.null(sid)) {
+seqs = seqs[id]
+} else {
+seqs = seqs[sid]
+}
+
+## weird quotation marks
 ## data.table::fwrite(as.data.frame(seqs), "input/item_sentence.txt", col.names=F)
+## all sentences are quotation marked
 ## readr::write_delim(as.data.frame(seqs), "input/item_sentence.txt", col_names=F)
+
 str2file(seqs, "input/item_sentence.txt")
 }
 

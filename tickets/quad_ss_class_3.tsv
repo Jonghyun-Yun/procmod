@@ -1,0 +1,10 @@
+('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23', 'BUTTON_close-popup1_txt4', 'NEXT_INQUIRY-REQUEST')	167.4989140713013
+('COMBOBOX-default_menu2.index=1', 'BUTTON_search-default_txt23', 'BUTTON_close-popup1_txt4', 'NEXT_INQUIRY-REQUEST')	166.87796584927142
+('COMBOBOX-default_menu2.index=4', 'BUTTON_search-default_txt23', 'BUTTON_close-popup1_txt4', 'NEXT_INQUIRY-REQUEST')	161.9736493115372
+('COMBOBOX-default_menu1.index=4', 'COMBOBOX-default_menu2.index=1', 'BUTTON_search-default_txt23', 'BUTTON_close-popup1_txt4')	157.73844886132798
+('COMBOBOX-default_menu2.index=1', 'BUTTON_search-default_txt23', 'BUTTON_close-popup1_txt4', 'BOX_PRESS-action=as://switchStateButton(u021_default_form1a,unit21page6,u021_default_popup2)')	157.73844886132798
+('BUTTON_search-default_txt23', 'BUTTON_close-popup1_txt4', 'BOX_PRESS-action=as://switchStateButton(u021_default_form1a,unit21page6,u021_default_popup2)', 'TAB-tabbutton1')	156.2416519162146
+('COMBOBOX-default_menu1.index=3', 'COMBOBOX-default_menu2.index=4', 'BUTTON_search-default_txt23', 'BUTTON_close-popup1_txt4')	155.01540247276068
+('COMBOBOX-default_menu1.index=8', 'COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23', 'BUTTON_close-popup1_txt4')	153.24337260470304
+('COMBOBOX-default_menu1.index=1', 'COMBOBOX-default_menu2.index=1', 'BUTTON_search-default_txt23', 'BUTTON_close-popup1_txt4')	152.5880528777962
+('BUTTON_search-default_txt23', 'BUTTON_close-popup1_txt4', 'COMBOBOX-default_menu2.index=2', 'COMBOBOX-default_menu1.index=8')	142.14933562577085

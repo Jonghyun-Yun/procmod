@@ -1,0 +1,10 @@
+('FOLDER_VIEWED-PartyFolder', 'FOLDER_VIEWED-CanComeFolder')	17.68813777993499
+('MAIL_DRAG-item202', 'FOLDER_VIEWED-undefined')	17.282805542220604
+('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')	13.154464366609322
+('TEXTBOX_ONFOCUS-endtask_txt2.value=Are_you_sure_you_want_to_continue_to_the_next_part_of_this_task?', 'TEXTBOX_KILLFOCUS-endtask_txt2.value=Are_you_sure_you_want_to_continue_to_the_next_part_of_this_task?')	12.467555320445513
+('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')	11.986591990348856
+('FOLDER_VIEWED-PartyFolder', 'MAIL_MOVED-item104.PartyFolder')	10.98942811031423
+('FOLDER_VIEWED-SentFolder', 'FOLDER_VIEWED-InboxFolder')	9.941929765411144
+('FOLDER_VIEWED-TrashFolder', 'MAIL_DRAG-item301')	9.694966598205731
+('MAIL_MOVED-item102.CanComeFolder', 'MAIL_VIEWED-item201')	9.694966598205731
+('MAIL_DRAG-item104', 'FOLDER_VIEWED-undefined')	9.653278129629541

@@ -80,6 +80,8 @@ mod2 %>% plot_profiles()
 mod3 %>% plot_profiles()
 dev.off()
 
+## source("R/lpa_back.R")
+
 source("R/pmean.R")
 dat <- readr::read_csv(paste0(out_dir, "input/dat.csv"), col_names = FALSE)
 rr <- dat[, c(1, 8)] %>% as.data.frame()
@@ -88,18 +90,32 @@ gg <- item %>%
   group_by(pid) %>%
   summarize(ftime = timestamp[1] / 1000, naction = n(), spd = naction / ftime, time = timestamp[n()] / 1000)
 ## binfo = readr::read_csv("./data/PIAAC_cleaned_data_1110/PUFs_noN.csv")
+
+## book_order =minfo= has a fewer SEQID than =item=
+gres <- item %>%
+  group_by(SEQID) %>%
+  summarize(res = response[n()]) %>% mutate(index = 1:n())
+ginfo = plyr::join(minfo, gres)
+rr = ginfo$res
+
 df = mod2[[1]]
 before = df[["dff"]][,1:6]
 after = df[["dff"]][,-c(1:6)]
 df[["dff"]] = before %>% mutate(res = rr) %>% cbind(after)
 
 tt = df[["dff"]]
+tmp <- data.frame(tt,SEQID = ginfo$SEQID, index = ginfo$index)
+save(tmp, file = paste0(out_dir, "lpa_membership.RData"))
+
 mm = aggregate(tt, list(tt$Class), FUN=mean)
 sd = aggregate(tt, list(tt$Class), FUN=sd)
 n = aggregate(tt, list(tt$Class), FUN=length)
 se = sd / sqrt(n)
 
+n = n[,4]
+mm = mm %>% select(4:8)
+sd = sd %>% select(4:8)
+mm$n = n;
+sd$n = 0*n;
+
 save(mm,sd,n, file = paste0(out_dir, "summaryw_res.RData"))
-mm %>% select(4:8) %>% knitr::kable()
-sd %>% select(4:8) %>% knitr::kable()
-n %>% select(4:8) %>% knitr::kable()
