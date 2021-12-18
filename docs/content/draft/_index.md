@@ -1,10 +1,10 @@
 +++
 title = "Draft"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-15T13:19:03-06:00
+lastmod = 2021-12-18T07:30:45-06:00
 draft = false
 weight = 3
-chapter = false
+chapter = true
 +++
 
 <div class="ox-hugo-toc toc">
@@ -13,7 +13,7 @@ chapter = false
 <div class="heading">Table of Contents</div>
 
 - [Introduction](#introduction)
-    - [what's process data?](#what-s-process-data)
+    - [what's process data](#what-s-process-data)
     - [Benefits of process data](#benefits-of-process-data)
     - [Challenges](#challenges)
     - [Exisitng methods and limitations](#exisitng-methods-and-limitations)
@@ -26,7 +26,7 @@ chapter = false
         - [Illustrate a ticket example:](#illustrate-a-ticket-example)
         - [address challenges in details](#address-challenges-in-details)
 - [Methods](#methods)
-    - [notation](#notation)
+    - [notations](#notations)
     - [Action embedding](#action-embedding)
     - [data structure](#data-structure)
     - [Multistate model (general)](#multistate-model--general)
@@ -40,7 +40,7 @@ chapter = false
     - [update \\(\theta\_{k}\\)](#update-theta-k)
     - [update \\(\sigma^{2}\\)](#update-sigma-2)
 - [Applications](#applications)
-    - [tickets](#tickets)
+    - [Tickets](#tickets)
     - [party\_invitations-1](#party-invitations-1)
     - [book\_order](#book-order)
 - [References](#references)
@@ -56,7 +56,7 @@ chapter = false
 %%% stolen from the neap proposal
 
 
-## what's process data? {#what-s-process-data}
+## what's process data {#what-s-process-data}
 
 %Advances in technology have expanded opportunities for educational measurement through changes to item design, item delivery and data collection. Some examples include simulation-, scenario-, and game-based assessment and learning environments.
 
@@ -178,7 +178,7 @@ The OECD Survey of Adult Skills (PIAAC) assesses the proficiency of adults in in
 
 ### Illustrate a ticket example: {#illustrate-a-ticket-example}
 
-<a id="org6d3d922"></a>
+<a id="org79d8564"></a>
 
 {{< figure src="/ox-hugo/tickets_demo.png" caption="Figure 1: An example of PS-TRE items. In this simulated web environment, respondents can access information required for ticket reservation." >}}
 
@@ -231,7 +231,7 @@ We propose to develop a new modeling framework for analyzing time-stamped sequen
 With our framework, researchers and policymakers can quantify and better understand learners' problem solving processes.
 
 
-## notation {#notation}
+## notations {#notations}
 
 Let \\(S\\) denotes a set of all possible actions. For each action \\(m \in S\\), \\(A\_{m}\\)
 denotes a set of competing actions \\(\\{l\_1, \ldots, l\_{n\_m}\\}\\) that can be taken
@@ -423,10 +423,11 @@ for all \\(m \in S\\), \\(l \in A\_{m}\\), respondents \\(k = 1,\ldots,N\\), and
 -   multistate model + visualization
 
 The action embedding algorithm is written using `TensorFlow` <tensorflow2015-whitepaper> library in `Python` <10.5555/1593511>.
-The MCMC algorithm was written in `R` <r_core_team_r_2020> and `C++` <&ISO:2014:IIIb> with `Stan` math library  <carpenter_stan_2015>. The code and documentations, along with example data sets, are found
+The MCMC algorithm was written in `R` <r_core_team_r_2020> and `C++14` <&ISO:2014:IIIb> with `Stan` math library  <carpenter_stan_2015>. The code and documentations, along with example data sets, are found
 in \url{https://jonghyun-yun.github.io/procmod/}.
 
-`tidyLPA` <rosenberg_tidylpa_2018>
+`tidyLPA` <&rosenberg_tidylpa_2018>
+`mclust` <&scrucca_mclust_2016>
 
 
 ## likelihood {#likelihood}
@@ -550,7 +551,7 @@ c.f) with flat prior:
 # Applications {#applications}
 
 
-## tickets {#tickets}
+## Tickets {#tickets}
 
 We implement the prposed method to our motivating example.
 
@@ -562,7 +563,71 @@ We introduce two rudimentary statistcs.
 -   `naction` or `#action`: the action sequence length \\(M\_{k}\\). The total number of actions taken by respondent \\(k\\).
 -   `fastness`: `#action` divided by the total time elaped since \\(t\_{k,1}\\).
 
+Multivariate Gaussian mixture for clustering
+
+-   Varying variances and varying covariances (Model 6)
+
+    AIC and BIC ..
+
+I need one more on cluster analysis:
+
+-   [ ] I want to compare sub-sequences between clusters: longest common subsequence <&ulitzsch_combining_2021>
+    -   common subsequences in LCS? NLP would be useful here: common phrase?
+        -   ans: n-grams like tri-grams
+        -   ans: most interesting collocations
+-   [ ] map respondent to word embedding, mark speed / &tau; / &theta;
+-   [ ] action frequencies cluster: top 5 actions?
+-   [ ] how sentences are compared in NLP? Text Summarization
+
+Do
+
+1.  collcations: freq and time -> show what are these actions, explain semantic ass and time efficiency
+2.  map respondents marked by &tau;, &theta;: find neighboring actions?? not necessarily what they did
+3.  text summary: how it works? too ambiguous.. it seems to work by removing some sentences
+
 <!--listend-->
+
+```emacs-lisp
+(insert-file (concat out_dir "/lpa_mods.txt"))
+```
+
+--------------------------------------------------------------
+tau and theta + naction, spd
+--------------------------------------------------------------
+Compare tidyLPA solutions:
+
+ Model Classes AIC      AWE      BIC      CLC      KIC
+ 6     1       9741.434 9945.767 9809.601 9715.434 9758.434
+ 6     2       6976.934 7402.489 7118.135 6920.782 7008.934
+ 6     3       5955.984 6602.815 6170.221 5869.626 6002.984
+ 6     4       5589.996 6457.851 5877.267 5473.684 5651.996
+
+Best model according to AIC is Model 6 with 4 classes.
+Best model according to AWE is Model 6 with 4 classes.
+Best model according to BIC is Model 6 with 4 classes.
+Best model according to CLC is Model 6 with 4 classes.
+Best model according to KIC is Model 6 with 4 classes.
+
+An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and KIC (Akogul & Erisoglu, 2017), suggests the best solution is Model 6 with 4 classes.
+
+--------------------------------------------------------------
+naction, spd
+--------------------------------------------------------------
+Compare tidyLPA solutions:
+
+ Model Classes AIC      AWE      BIC      CLC      KIC
+ 6     1       5391.087 5462.777 5415.432 5383.087 5399.087
+ 6     2       3693.159 3853.480 3746.718 3672.956 3707.159
+ 6     3       3370.270 3619.131 3453.043 3337.955 3390.270
+ 6     4       3506.481 3844.076 3618.469 3461.861 3532.481
+
+Best model according to AIC is Model 6 with 3 classes.
+Best model according to AWE is Model 6 with 3 classes.
+Best model according to BIC is Model 6 with 3 classes.
+Best model according to CLC is Model 6 with 3 classes.
+Best model according to KIC is Model 6 with 3 classes.
+
+An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and KIC (Akogul & Erisoglu, 2017), suggests the best solution is Model 6 with 3 classes.
 
 ```sh
 out_dir="tickets/"
@@ -573,6 +638,82 @@ convert -density 300 theta_tau_res.pdf theta_tau_res.png
 convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
 ```
+
+{{< figure src="/Users/yunj/Dropbox/research/procmod/procmod-code/_20210426_040805screenshot.png" >}}
+
+[Football Tickets](https://piaac-logdata.tba-hosting.de/confidential/problemsolving/FootballTickets/pages/ft-home.html)
+
+-   calendar: TAB-id=tabbutton2
+-   ticketing: TAB-id=tabbutton1
+-   event type: COMBOBOX-id=u021\_default\_menu1|\*$index=7 (football)
+-   location: COMBOBOX-id=u021\_default\_menu2|\*$index=2 (Bakerton)
+-   response = 1 (correct) 7 (incorrect) 0 missing
+    menu1 and 6 = 9 (8 seems ok too)
+-   N = 1344
+
+[CD Tally](posts/.org)
+
+## Class 4
+
+|bigram                                                               | likelihood_ratio|
+|:--------------------------------------------------------------------|----------------:|
+|('TAB-tabbutton2', 'TAB-tabbutton1')                                 |        3250.4640|
+|('BUTTON_submit-pg2_txt33', 'BUTTON_submit_ok-u21p2pu5_txt2')        |        1593.4218|
+|('BUTTON_submit_ok-u21p2pu5_txt2', 'NEXT_INQUIRY-REQUEST')           |        1203.7973|
+|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2') |        1170.1266|
+|('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23')    |        1132.6405|
+|('CHECKBOX-check11', 'BUTTON_available-pg1_txt47')                   |        1044.0817|
+|('CHECKBOX-check9', 'CHECKBOX-check11')                              |        1012.5782|
+|('CHECKBOX-check2', 'CHECKBOX-check3')                               |         823.4326|
+|('BUTTON_available-pg1_txt47', 'COMBOBOX-pg2_menu1.index=8')         |         666.0548|
+|('COMBOBOX-pg2_menu6.index=8', 'BUTTON_submit-pg2_txt33')            |         644.3896|
+
+## Class 3
+
+|bigram                                                                                                             | likelihood_ratio|
+|:------------------------------------------------------------------------------------------------------------------|----------------:|
+|('BUTTON_search-default_txt23', 'BUTTON_close-popup1_txt4')                                                        |        60.525996|
+|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2')                                               |        30.504433|
+|('COMBOBOX-default_menu2.index=2', 'NEXT_INQUIRY-REQUEST')                                                         |        18.700064|
+|('TAB-tabbutton2', 'TAB-tabbutton1')                                                                               |        14.000061|
+|('CHECKBOX-check4', 'BUTTON_available-pg1_txt47')                                                                  |        13.654947|
+|('COMBOBOX-default_menu1.index=3', 'COMBOBOX-default_menu2.index=1')                                               |        10.670246|
+|('BUTTON_close-popup1_txt4', 'NEXT_INQUIRY-REQUEST')                                                               |        10.305298|
+|('BOX_PRESS-action=as://switchStateButton(u021_default_form1a,unit21page6,u021_default_popup2)', 'TAB-tabbutton1') |         9.835862|
+|('COMBOBOX-default_menu1.index=3', 'COMBOBOX-default_menu1.index=4')                                               |         9.156266|
+|('COMBOBOX-default_menu1.index=3', 'COMBOBOX-default_menu2.index=4')                                               |         9.156266|
+
+## Class 2
+
+|bigram                                                               | likelihood_ratio|
+|:--------------------------------------------------------------------|----------------:|
+|('TAB-tabbutton2', 'TAB-tabbutton1')                                 |        4358.0690|
+|('BUTTON_submit-pg2_txt33', 'BUTTON_submit_ok-u21p2pu5_txt2')        |        2503.5212|
+|('BUTTON_available-pg1_txt47', 'BUTTON_available-pg7_txt47')         |        1248.4710|
+|('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23')    |        1062.6828|
+|('BUTTON_submit_ok-u21p2pu5_txt2', 'NEXT_INQUIRY-REQUEST')           |        1061.0533|
+|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2') |         896.4663|
+|('BUTTON_submit_ok-u21p2pu5_txt2', 'BUTTON_close-popup2_txt4')       |         822.5202|
+|('CHECKBOX-check2', 'CHECKBOX-check3')                               |         577.8453|
+|('CHECKBOX-check9', 'CHECKBOX-check11')                              |         561.1858|
+|('CHECKBOX-check11', 'BUTTON_available-pg1_txt47')                   |         409.1931|
+
+## Class 1
+
+|bigram                                                               | likelihood_ratio|
+|:--------------------------------------------------------------------|----------------:|
+|('TAB-tabbutton2', 'TAB-tabbutton1')                                 |        5518.3265|
+|('BUTTON_submit-pg2_txt33', 'BUTTON_submit_ok-u21p2pu5_txt2')        |        3888.7627|
+|('BUTTON_submit_ok-u21p2pu5_txt2', 'NEXT_INQUIRY-REQUEST')           |        2233.5503|
+|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2') |        1954.7621|
+|('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23')    |        1806.9551|
+|('CHECKBOX-check9', 'CHECKBOX-check11')                              |        1586.1384|
+|('CHECKBOX-check2', 'CHECKBOX-check3')                               |        1576.2932|
+|('CHECKBOX-check11', 'BUTTON_available-pg1_txt47')                   |        1194.1592|
+|('BUTTON_available-pg1_txt47', 'BUTTON_available-pg7_txt47')         |        1155.0621|
+|('COMBOBOX-pg2_menu6.index=8', 'BUTTON_submit-pg2_txt33')            |         995.2568|
+
+## Some covariates
 
 |Name        |Label                                                                               |Value scheme                                          |
 |:-----------|:-----------------------------------------------------------------------------------|:-----------------------------------------------------|
@@ -591,8 +732,9 @@ convert -density 300 time_action.pdf time_action-%d.png
 |WRITHOME    |Index of use of writing skills at home (derived)                                    |NA                                                    |
 |WRITWORK    |Index of use of writing skills at work (derived)                                    |NA                                                    |
 
-| ![](/ox-hugo/lpa_plot-0.png) | ![](/ox-hugo/lpa_plot-1.png) | ![](/ox-hugo/lpa_back_line.png) |
-|------------------------------|------------------------------|---------------------------------|
+| ![](/ox-hugo/lpa_plot-0.png)    | ![](/ox-hugo/lpa_plot-1.png) |
+|---------------------------------|------------------------------|
+| ![](/ox-hugo/lpa_back_line.png) |                              |
 
 Response: the smaller, the better
 
@@ -628,17 +770,14 @@ Response: the smaller, the better
 
 &tau;'s covaritates:
 &theta;'s covaritates:
-![](/ox-hugo/theta_tau_res.png)
-![](/ox-hugo/tau_action.png)
-![](/ox-hugo/time_action-3.png)
-![](/ox-hugo/time_action_more-2.png)
-![](/ox-hugo/time_action_more-5.png)
-![](/ox-hugo/time_action_more-7.png)
-![](/ox-hugo/time_action_more-8.png)
-![](/ox-hugo/time_action_more-9.png)
-![](/ox-hugo/time_action_more-10.png)
-![](/ox-hugo/time_action_more-11.png)
-![](/ox-hugo/time_action_more-13.png)
+
+| ![](/ox-hugo/theta_tau_res.png)       | ![](/ox-hugo/tau_action.png)          |
+|---------------------------------------|---------------------------------------|
+| ![](/ox-hugo/time_action-3.png)       | ![](/ox-hugo/time_action_more-2.png)  |
+| ![](/ox-hugo/time_action_more-5.png)  | ![](/ox-hugo/time_action_more-7.png)  |
+| ![](/ox-hugo/time_action_more-8.png)  | ![](/ox-hugo/time_action_more-9.png)  |
+| ![](/ox-hugo/time_action_more-10.png) | ![](/ox-hugo/time_action_more-11.png) |
+| ![](/ox-hugo/time_action_more-13.png) |                                       |
 
 
 ## party\_invitations-1 {#party-invitations-1}
