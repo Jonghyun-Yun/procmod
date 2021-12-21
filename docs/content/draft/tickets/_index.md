@@ -1,7 +1,7 @@
 +++
 title = "Tickets"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-18T07:30:45-06:00
+lastmod = 2021-12-21T01:34:41-06:00
 draft = false
 weight = 3
 chapter = true
@@ -93,19 +93,13 @@ convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
 ```
 
-{{< figure src="/Users/yunj/Dropbox/research/procmod/procmod-code/_20210426_040805screenshot.png" >}}
-
-[Football Tickets](https://piaac-logdata.tba-hosting.de/confidential/problemsolving/FootballTickets/pages/ft-home.html)
-
--   calendar: TAB-id=tabbutton2
--   ticketing: TAB-id=tabbutton1
--   event type: COMBOBOX-id=u021\_default\_menu1|\*$index=7 (football)
--   location: COMBOBOX-id=u021\_default\_menu2|\*$index=2 (Bakerton)
--   response = 1 (correct) 7 (incorrect) 0 missing
-    menu1 and 6 = 9 (8 seems ok too)
--   N = 1344
-
-[CD Tally](posts/.org)
+```sh
+out_dir="tickets/"
+cd $out_dir
+cd figure
+convert -density 300 lpa_box4.pdf lpa_box4.png
+convert -density 300 lpa_box_back.pdf lpa_box_back.png
+```
 
 ## Class 4
 
@@ -186,9 +180,13 @@ convert -density 300 time_action.pdf time_action-%d.png
 |WRITHOME    |Index of use of writing skills at home (derived)                                    |NA                                                    |
 |WRITWORK    |Index of use of writing skills at work (derived)                                    |NA                                                    |
 
-| ![](figure/lpa_plot-0.png)    | ![](figure/lpa_plot-1.png) |
-|-------------------------------|----------------------------|
-| ![](figure/lpa_back_line.png) |                            |
+| ![](figure/lpa_plot-0.png) | ![](figure/lpa_plot-1.png) |
+|----------------------------|----------------------------|
+
+{{< figure src="figure/lpa_back_line.png" >}}
+
+![](figure/lpa_box4.png)
+![](figure/lpa_box_back.png)
 
 Response: the smaller, the better
 

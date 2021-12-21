@@ -1,7 +1,7 @@
 +++
 title = "Draft"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-18T07:30:45-06:00
+lastmod = 2021-12-21T01:34:40-06:00
 draft = false
 weight = 3
 chapter = true
@@ -178,7 +178,7 @@ The OECD Survey of Adult Skills (PIAAC) assesses the proficiency of adults in in
 
 ### Illustrate a ticket example: {#illustrate-a-ticket-example}
 
-<a id="org79d8564"></a>
+<a id="org9a4ad68"></a>
 
 {{< figure src="/ox-hugo/tickets_demo.png" caption="Figure 1: An example of PS-TRE items. In this simulated web environment, respondents can access information required for ticket reservation." >}}
 
@@ -639,19 +639,13 @@ convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
 ```
 
-{{< figure src="/Users/yunj/Dropbox/research/procmod/procmod-code/_20210426_040805screenshot.png" >}}
-
-[Football Tickets](https://piaac-logdata.tba-hosting.de/confidential/problemsolving/FootballTickets/pages/ft-home.html)
-
--   calendar: TAB-id=tabbutton2
--   ticketing: TAB-id=tabbutton1
--   event type: COMBOBOX-id=u021\_default\_menu1|\*$index=7 (football)
--   location: COMBOBOX-id=u021\_default\_menu2|\*$index=2 (Bakerton)
--   response = 1 (correct) 7 (incorrect) 0 missing
-    menu1 and 6 = 9 (8 seems ok too)
--   N = 1344
-
-[CD Tally](posts/.org)
+```sh
+out_dir="tickets/"
+cd $out_dir
+cd figure
+convert -density 300 lpa_box4.pdf lpa_box4.png
+convert -density 300 lpa_box_back.pdf lpa_box_back.png
+```
 
 ## Class 4
 
@@ -732,9 +726,13 @@ convert -density 300 time_action.pdf time_action-%d.png
 |WRITHOME    |Index of use of writing skills at home (derived)                                    |NA                                                    |
 |WRITWORK    |Index of use of writing skills at work (derived)                                    |NA                                                    |
 
-| ![](/ox-hugo/lpa_plot-0.png)    | ![](/ox-hugo/lpa_plot-1.png) |
-|---------------------------------|------------------------------|
-| ![](/ox-hugo/lpa_back_line.png) |                              |
+| ![](/ox-hugo/lpa_plot-0.png) | ![](/ox-hugo/lpa_plot-1.png) |
+|------------------------------|------------------------------|
+
+{{< figure src="/ox-hugo/lpa_back_line.png" >}}
+
+![](/ox-hugo/lpa_box4.png)
+![](/ox-hugo/lpa_box_back.png)
 
 Response: the smaller, the better
 
