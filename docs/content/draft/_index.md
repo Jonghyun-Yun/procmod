@@ -1,7 +1,7 @@
 +++
 title = "Draft"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-21T01:34:40-06:00
+lastmod = 2021-12-21T14:54:18-06:00
 draft = false
 weight = 3
 chapter = true
@@ -41,8 +41,15 @@ chapter = true
     - [update \\(\sigma^{2}\\)](#update-sigma-2)
 - [Applications](#applications)
     - [Tickets](#tickets)
+        - [collocation](#collocation)
+        - [visualize clusters](#visualize-clusters)
+        - [more plots](#more-plots)
     - [party\_invitations-1](#party-invitations-1)
+        - [collocation](#collocation)
+        - [visual cluster](#visual-cluster)
     - [book\_order](#book-order)
+        - [collocations](#collocations)
+        - [visual clusters](#visual-clusters)
 - [References](#references)
 
 </div>
@@ -178,7 +185,7 @@ The OECD Survey of Adult Skills (PIAAC) assesses the proficiency of adults in in
 
 ### Illustrate a ticket example: {#illustrate-a-ticket-example}
 
-<a id="org9a4ad68"></a>
+<a id="org32c3eda"></a>
 
 {{< figure src="/ox-hugo/tickets_demo.png" caption="Figure 1: An example of PS-TRE items. In this simulated web environment, respondents can access information required for ticket reservation." >}}
 
@@ -591,6 +598,7 @@ Do
 (insert-file (concat out_dir "/lpa_mods.txt"))
 ```
 
+```R
 --------------------------------------------------------------
 tau and theta + naction, spd
 --------------------------------------------------------------
@@ -628,6 +636,7 @@ Best model according to CLC is Model 6 with 3 classes.
 Best model according to KIC is Model 6 with 3 classes.
 
 An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and KIC (Akogul & Erisoglu, 2017), suggests the best solution is Model 6 with 3 classes.
+```
 
 ```sh
 out_dir="tickets/"
@@ -646,6 +655,9 @@ cd figure
 convert -density 300 lpa_box4.pdf lpa_box4.png
 convert -density 300 lpa_box_back.pdf lpa_box_back.png
 ```
+
+
+### collocation {#collocation}
 
 ## Class 4
 
@@ -726,6 +738,9 @@ convert -density 300 lpa_box_back.pdf lpa_box_back.png
 |WRITHOME    |Index of use of writing skills at home (derived)                                    |NA                                                    |
 |WRITWORK    |Index of use of writing skills at work (derived)                                    |NA                                                    |
 
+
+### visualize clusters {#visualize-clusters}
+
 | ![](/ox-hugo/lpa_plot-0.png) | ![](/ox-hugo/lpa_plot-1.png) |
 |------------------------------|------------------------------|
 
@@ -766,6 +781,9 @@ Response: the smaller, the better
 |  75|    75|      75|  75|  75|
 | 179|   179|     179| 179| 179|
 
+
+### more plots {#more-plots}
+
 &tau;'s covaritates:
 &theta;'s covaritates:
 
@@ -779,6 +797,73 @@ Response: the smaller, the better
 
 
 ## party\_invitations-1 {#party-invitations-1}
+
+
+### collocation {#collocation}
+
+## Class  1
+
+
+|bigram                                                                                                                                                                                                           | likelihood_ratio|
+|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-PartyFolder', 'FOLDER_VIEWED-CanComeFolder')                                                                                                                                                     |        17.688138|
+|('MAIL_DRAG-item202', 'FOLDER_VIEWED-undefined')                                                                                                                                                                 |        17.282805|
+|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                                                                                                                                                              |        13.154464|
+|('TEXTBOX_ONFOCUS-endtask_txt2.value=Are_you_sure_you_want_to_continue_to_the_next_part_of_this_task?', 'TEXTBOX_KILLFOCUS-endtask_txt2.value=Are_you_sure_you_want_to_continue_to_the_next_part_of_this_task?') |        12.467555|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                                                                                                                                                                     |        11.986592|
+|('FOLDER_VIEWED-PartyFolder', 'MAIL_MOVED-item104.PartyFolder')                                                                                                                                                  |        10.989428|
+|('FOLDER_VIEWED-SentFolder', 'FOLDER_VIEWED-InboxFolder')                                                                                                                                                        |         9.941930|
+|('FOLDER_VIEWED-TrashFolder', 'MAIL_DRAG-item301')                                                                                                                                                               |         9.694967|
+|('MAIL_MOVED-item102.CanComeFolder', 'MAIL_VIEWED-item201')                                                                                                                                                      |         9.694967|
+|('MAIL_DRAG-item104', 'FOLDER_VIEWED-undefined')                                                                                                                                                                 |         9.653278|
+## Class  2
+
+
+|bigram                                                                    | likelihood_ratio|
+|:-------------------------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |        2502.6131|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |        1968.2782|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |        1873.9550|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |        1486.8755|
+|('MAIL_DRAG-item104', 'FOLDER_VIEWED-CanComeFolder')                      |         718.7690|
+|('MAIL_MOVED-item104.CanComeFolder', 'MAIL_VIEWED-item105')               |         672.6594|
+|('MAIL_VIEWED-item104', 'MAIL_DRAG-item104')                              |         580.9381|
+|('MAIL_MOVED-item101.CanComeFolder', 'MAIL_DRAG-item104')                 |         462.8913|
+|('MAIL_DRAG-item102', 'FOLDER_VIEWED-CannotComeFolder')                   |         448.0094|
+|('MAIL_VIEWED-item201', 'MAIL_VIEWED-item202')                            |         436.9725|
+## Class  3
+
+
+|bigram                                                                    | likelihood_ratio|
+|:-------------------------------------------------------------------------|----------------:|
+|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                       |         556.4045|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |         443.5316|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |         396.8755|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |         358.4323|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |         324.5675|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_VIEWED-item301')                 |         289.3671|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_VIEWED-item201')                    |         167.4030|
+|('FOLDER_VIEWED-CanComeFolder', 'MOVE_FOLDER_ok-moveValidation')          |         147.3766|
+|('MAIL_VIEWED-item103', 'MAIL_VIEWED-item104')                            |         140.9344|
+|('FOLDER_VIEWED-CanComeFolder', 'FOLDER_VIEWED-CanComeFolder')            |         129.5768|
+## Class  4
+
+
+|bigram                                                                    | likelihood_ratio|
+|:-------------------------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |         893.0519|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |         753.8523|
+|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                       |         499.8053|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |         485.6045|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |         465.2566|
+|('FOLDER_VIEWED-TrashFolder', 'MAIL_MOVED-item103.target=TrashFolder')    |         372.2541|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_VIEWED-item301')                 |         340.5003|
+|('FOLDER_VIEWED-TrashFolder', 'MAIL_MOVED-item105.target=TrashFolder')    |         328.1632|
+|('FOLDER_VIEWED-InboxFolder', 'MAIL_MOVED-item103.InboxFolder')           |         289.7540|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item301.CannotComeFolder') |         279.3375|
+
+
+### visual cluster {#visual-cluster}
 
 ![](/ox-hugo/lpa_plot-0.png)
 ![](/ox-hugo/lpa_plot-1.png)
@@ -808,6 +893,58 @@ Response: the larger, the better
 
 
 ## book\_order {#book-order}
+
+
+### collocations {#collocations}
+
+## Class  3
+
+
+|bigram                                                                                                      | likelihood_ratio|
+|:-----------------------------------------------------------------------------------------------------------|----------------:|
+|('TEXTLINK-pg1_txt7.href=u07_pg1_popup1.target=popup', 'BUTTON_close-popup1_txt2')                          |        208.86637|
+|('CHECK_pg7-pg7_txt4', 'BUTTON_close-popup4_txt3')                                                          |        195.79144|
+|('TEXTLINK-default_txt18.href=unit7page7.target=self', 'CHECK_pg7-pg7_txt4')                                |        164.30067|
+|('TEXTLINK-default_txt9.href=unit7page3.target=self', 'TEXTLINK-pg3_txt5.href=unit7page8.target=self')      |        157.00750|
+|('TEXTLINK-default_txt3.href=unit7page1.target=self', 'TEXTLINK-pg1_txt7.href=u07_pg1_popup1.target=popup') |        151.54740|
+|('TEXTLINK-pg6_txt12.href=u07_pg6_popup3.target=popup', 'BUTTON_close-popup3_txt2')                         |        142.00070|
+|('TOOLBAR_back-toolbar_back_btn', 'TEXTLINK-default_txt12.href=unit7page4.target=self')                     |        126.70172|
+|('BUYNOW_pg4-pg4_txt11', 'BUYBOOK_pg4_ok-pg4_pu6_okbtn')                                                    |        118.39287|
+|('TOOLBAR_back-toolbar_back_btn', 'TEXTLINK-default_txt9.href=unit7page3.target=self')                      |        114.73986|
+|('BUYBOOK_pg4_ok-pg4_pu6_okbtn', 'NEXT_INQUIRY-REQUEST')                                                    |         87.20094|
+## Class  2
+
+
+|bigram                                                                         | likelihood_ratio|
+|:------------------------------------------------------------------------------|----------------:|
+|('BUYNOW_pg7-pg7_txt19', 'BUYBOOK_pg7_ok-pg7_pu6_okbtn')                       |        207.41883|
+|('TEXTLINK-default_txt18.href=unit7page7.target=self', 'BUYNOW_pg7-pg7_txt19') |        188.35084|
+|('BUYNOW_pg1-pg1_txt8', 'BUYBOOK_pg1_ok-pg1_pu6_okbtn')                        |        186.42648|
+|('BUYNOW_pg3-pg3_txt4', 'BUYBOOK_pg3_ok-pg3_pu6_okbtn')                        |        175.03323|
+|('TEXTLINK-default_txt3.href=unit7page1.target=self', 'BUYNOW_pg1-pg1_txt8')   |        167.84040|
+|('TEXTLINK-default_txt9.href=unit7page3.target=self', 'BUYNOW_pg3-pg3_txt4')   |        131.17740|
+|('BUYBOOK_pg7_ok-pg7_pu6_okbtn', 'NEXT_INQUIRY-REQUEST')                       |         98.52990|
+|('BUYNOW_pg4-pg4_txt11', 'BUYBOOK_pg4_ok-pg4_pu6_okbtn')                       |         94.84852|
+|('TEXTLINK-default_txt12.href=unit7page4.target=self', 'BUYNOW_pg4-pg4_txt11') |         94.84852|
+|('BUYBOOK_pg1_ok-pg1_pu6_okbtn', 'NEXT_INQUIRY-REQUEST')                       |         90.13419|
+## Class  1
+
+
+|bigram                                                                                                      | likelihood_ratio|
+|:-----------------------------------------------------------------------------------------------------------|----------------:|
+|('BUYNOW_pg4-pg4_txt11', 'BUYBOOK_pg4_ok-pg4_pu6_okbtn')                                                    |         2993.405|
+|('TEXTLINK-pg1_txt7.href=u07_pg1_popup1.target=popup', 'BUTTON_close-popup1_txt2')                          |         2772.062|
+|('CHECK_pg7-pg7_txt4', 'BUTTON_close-popup4_txt3')                                                          |         2701.893|
+|('TEXTLINK-default_txt9.href=unit7page3.target=self', 'TEXTLINK-pg3_txt5.href=unit7page8.target=self')      |         2658.989|
+|('BUYBOOK_pg4_ok-pg4_pu6_okbtn', 'NEXT_INQUIRY-REQUEST')                                                    |         2609.485|
+|('TEXTLINK-default_txt18.href=unit7page7.target=self', 'CHECK_pg7-pg7_txt4')                                |         2227.420|
+|('TEXTLINK-default_txt3.href=unit7page1.target=self', 'TEXTLINK-pg1_txt7.href=u07_pg1_popup1.target=popup') |         2219.096|
+|('TOOLBAR_back-toolbar_back_btn', 'TEXTLINK-default_txt12.href=unit7page4.target=self')                     |         2146.316|
+|('TOOLBAR_back-toolbar_back_btn', 'TOOLBAR_back-toolbar_back_btn')                                          |         1956.254|
+|('TEXTLINK-pg3_txt5.href=unit7page8.target=self', 'TOOLBAR_back-toolbar_back_btn')                          |         1230.032|
+
+
+### visual clusters {#visual-clusters}
 
 ![](/ox-hugo/lpa_plot-0.png)
 ![](/ox-hugo/lpa_plot-1.png)

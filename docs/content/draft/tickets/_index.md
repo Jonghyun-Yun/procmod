@@ -1,11 +1,23 @@
 +++
 title = "Tickets"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-21T01:34:41-06:00
+lastmod = 2021-12-21T14:54:19-06:00
 draft = false
 weight = 3
 chapter = true
 +++
+
+<div class="ox-hugo-toc toc">
+<div></div>
+
+<div class="heading">Table of Contents</div>
+
+- [collocation](#collocation)
+- [visualize clusters](#visualize-clusters)
+- [more plots](#more-plots)
+
+</div>
+<!--endtoc-->
 
 We implement the prposed method to our motivating example.
 
@@ -45,6 +57,7 @@ Do
 (insert-file (concat out_dir "/lpa_mods.txt"))
 ```
 
+```R
 --------------------------------------------------------------
 tau and theta + naction, spd
 --------------------------------------------------------------
@@ -82,6 +95,7 @@ Best model according to CLC is Model 6 with 3 classes.
 Best model according to KIC is Model 6 with 3 classes.
 
 An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and KIC (Akogul & Erisoglu, 2017), suggests the best solution is Model 6 with 3 classes.
+```
 
 ```sh
 out_dir="tickets/"
@@ -100,6 +114,9 @@ cd figure
 convert -density 300 lpa_box4.pdf lpa_box4.png
 convert -density 300 lpa_box_back.pdf lpa_box_back.png
 ```
+
+
+# collocation {#collocation}
 
 ## Class 4
 
@@ -180,6 +197,9 @@ convert -density 300 lpa_box_back.pdf lpa_box_back.png
 |WRITHOME    |Index of use of writing skills at home (derived)                                    |NA                                                    |
 |WRITWORK    |Index of use of writing skills at work (derived)                                    |NA                                                    |
 
+
+# visualize clusters {#visualize-clusters}
+
 | ![](figure/lpa_plot-0.png) | ![](figure/lpa_plot-1.png) |
 |----------------------------|----------------------------|
 
@@ -219,6 +239,9 @@ Response: the smaller, the better
 | 283|   283|     283| 283| 283|
 |  75|    75|      75|  75|  75|
 | 179|   179|     179| 179| 179|
+
+
+# more plots {#more-plots}
 
 &tau;'s covaritates:
 &theta;'s covaritates:
