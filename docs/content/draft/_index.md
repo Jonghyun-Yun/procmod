@@ -1,7 +1,7 @@
 +++
 title = "Draft"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-23T15:03:38-06:00
+lastmod = 2021-12-23T16:14:52-06:00
 draft = false
 weight = 3
 chapter = true
@@ -44,7 +44,6 @@ chapter = true
         - [collocation](#collocation)
         - [visual cluster](#visual-cluster)
         - [response](#response)
-        - [archive](#archive)
     - [cd\_tally](#cd-tally)
         - [collocations](#collocations)
         - [visualise cluster](#visualise-cluster)
@@ -53,12 +52,10 @@ chapter = true
         - [collocation](#collocation)
         - [visualize clusters](#visualize-clusters)
         - [response](#response)
-        - [more plots](#more-plots)
     - [book\_order](#book-order)
         - [collocations](#collocations)
         - [visual clusters](#visual-clusters)
         - [reponse](#reponse)
-        - [archive](#archive)
     - [meeting\_room](#meeting-room)
         - [collocations](#collocations)
         - [visualise cluster](#visualise-cluster)
@@ -202,7 +199,7 @@ The OECD Survey of Adult Skills (PIAAC) assesses the proficiency of adults in in
 
 ### Illustrate a ticket example: {#illustrate-a-ticket-example}
 
-<a id="org27acc71"></a>
+<a id="org9da12ba"></a>
 
 {{< figure src="/ox-hugo/tickets_demo.png" caption="Figure 1: An example of PS-TRE items. In this simulated web environment, respondents can access information required for ticket reservation." >}}
 
@@ -518,33 +515,11 @@ Based on our experience, the inference of \\(\mathbf{\Theta}\\) is highly sensit
 For each \\(m\\), we draw \\(\kappa\_m^{(t)}\\) from
 \\(\mbox{Gamma}\left(  a\_{\tau} + \sum\_{n=1}^{M\_{k}} \sum\_{k=1}^N \mbox{I}(\delta\_{k,n,m} = 1) ,b\_{\tau} + \sum\_{n=1}^{M\_{k}-1}\sum\_{k=1}^{N} \sum\_{ l \in A\_m } dt\_{k,n} \tau\_{k}e^{(\theta\_{k} + \beta) D\_{ml}}\right)\\)
 
-```cpp
-  double post_a = a_kappa + 1.0;
-  double post_b = b_kappa;
-  for (auto &ii : oos_m) {
-    if (status.at(ii)==1) post_a += 1.0;
-    post_b += tdiff(ii) * tau(sid.at(ii)) * std::exp((theta(sid.at(ii)) + beta) * dist(ii));
-  }
-  kappa = stan::math::gamma_rng(post_a, post_b, rng);
-```
-
 
 ## update \\(\tau\_{k}\\) {#update-tau-k}
 
 For each \\(k\\), we draw \\(\tau\_k^{(t)}\\) from
 \\(\mbox{Gamma}\left(  a\_{\tau} + M\_k, b\_{\tau} + \sum\_{n=1}^{M\_{k}} \sum\_{m \in S, l \in A\_m } dt\_{k,n} \kappa\_{m}e^{(\theta\_{k} + \beta) D\_{ml}}\right)\\)
-
-```cpp
-double post_a = a_tau + 1.0;
-double post_b = b_tau;
-for (auto &ii : person_k) {
-    if (status.at(ii) == 1)
-        post_a += 1.0;
-    post_b +=
-        tdiff(ii) * kappa(acfrom.at(ii)) * std::exp((theta_k + beta) * dist(ii));
-}
-tau = stan::math::gamma_rng(post_a, post_b, rng);
-```
 
 
 ## update \\(\theta\_{k}\\) {#update-theta-k}
@@ -612,93 +587,83 @@ Do
 
 ### collocation {#collocation}
 
+
+
 ## Class  1
 
 
-|bigram                                                                                                                                                                                                           | likelihood_ratio|
-|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------:|
-|('FOLDER_VIEWED-PartyFolder', 'FOLDER_VIEWED-CanComeFolder')                                                                                                                                                     |        17.688138|
-|('MAIL_DRAG-item202', 'FOLDER_VIEWED-undefined')                                                                                                                                                                 |        17.282805|
-|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                                                                                                                                                              |        13.154464|
-|('TEXTBOX_ONFOCUS-endtask_txt2.value=Are_you_sure_you_want_to_continue_to_the_next_part_of_this_task?', 'TEXTBOX_KILLFOCUS-endtask_txt2.value=Are_you_sure_you_want_to_continue_to_the_next_part_of_this_task?') |        12.467555|
-|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                                                                                                                                                                     |        11.986592|
-|('FOLDER_VIEWED-PartyFolder', 'MAIL_MOVED-item104.PartyFolder')                                                                                                                                                  |        10.989428|
-|('FOLDER_VIEWED-SentFolder', 'FOLDER_VIEWED-InboxFolder')                                                                                                                                                        |         9.941930|
-|('FOLDER_VIEWED-TrashFolder', 'MAIL_DRAG-item301')                                                                                                                                                               |         9.694967|
-|('MAIL_MOVED-item102.CanComeFolder', 'MAIL_VIEWED-item201')                                                                                                                                                      |         9.694967|
-|('MAIL_DRAG-item104', 'FOLDER_VIEWED-undefined')                                                                                                                                                                 |         9.653278|
+|bigram                                                                    | likelihood_ratio|
+|:-------------------------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |         817.3284|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |         723.4372|
+|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                       |         510.8037|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |         495.2927|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |         416.9918|
+|('FOLDER_VIEWED-TrashFolder', 'MAIL_MOVED-item103.target=TrashFolder')    |         374.2922|
+|('FOLDER_VIEWED-TrashFolder', 'MAIL_MOVED-item105.target=TrashFolder')    |         320.9747|
+|('FOLDER_VIEWED-InboxFolder', 'MAIL_MOVED-item103.InboxFolder')           |         315.7787|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_VIEWED-item301')                 |         292.7040|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item301.CannotComeFolder') |         278.9309|
+
+
 ## Class  2
 
 
 |bigram                                                                    | likelihood_ratio|
 |:-------------------------------------------------------------------------|----------------:|
-|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |        2502.6131|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |        1968.2782|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |        1873.9550|
-|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |        1486.8755|
-|('MAIL_DRAG-item104', 'FOLDER_VIEWED-CanComeFolder')                      |         718.7690|
-|('MAIL_MOVED-item104.CanComeFolder', 'MAIL_VIEWED-item105')               |         672.6594|
-|('MAIL_VIEWED-item104', 'MAIL_DRAG-item104')                              |         580.9381|
-|('MAIL_MOVED-item101.CanComeFolder', 'MAIL_DRAG-item104')                 |         462.8913|
-|('MAIL_DRAG-item102', 'FOLDER_VIEWED-CannotComeFolder')                   |         448.0094|
-|('MAIL_VIEWED-item201', 'MAIL_VIEWED-item202')                            |         436.9725|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |         894.4766|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |         865.1981|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |         654.7479|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |         646.6347|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_VIEWED-item301')                 |         485.7336|
+|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                       |         449.1188|
+|('MAIL_VIEWED-item201', 'MAIL_VIEWED-item202')                            |         310.1378|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_VIEWED-item201')                    |         259.9339|
+|('MAIL_DRAG-item104', 'FOLDER_VIEWED-CanComeFolder')                      |         234.2510|
+|('FOLDER_VIEWED-CanComeFolder', 'FOLDER_VIEWED-CanComeFolder')            |         224.1286|
+
+
 ## Class  3
 
 
 |bigram                                                                    | likelihood_ratio|
 |:-------------------------------------------------------------------------|----------------:|
-|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                       |         556.4045|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |         443.5316|
-|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |         396.8755|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |         358.4323|
-|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |         324.5675|
-|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_VIEWED-item301')                 |         289.3671|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_VIEWED-item201')                    |         167.4030|
-|('FOLDER_VIEWED-CanComeFolder', 'MOVE_FOLDER_ok-moveValidation')          |         147.3766|
-|('MAIL_VIEWED-item103', 'MAIL_VIEWED-item104')                            |         140.9344|
-|('FOLDER_VIEWED-CanComeFolder', 'FOLDER_VIEWED-CanComeFolder')            |         129.5768|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |        1920.6574|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |        1414.3165|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |        1367.2376|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |        1151.9347|
+|('MAIL_MOVED-item104.CanComeFolder', 'MAIL_VIEWED-item105')               |         528.8972|
+|('MAIL_VIEWED-item104', 'MAIL_DRAG-item104')                              |         473.7513|
+|('MAIL_DRAG-item104', 'FOLDER_VIEWED-CanComeFolder')                      |         462.6390|
+|('MAIL_VIEWED-item105', 'NEXT_INQUIRY-REQUEST')                           |         374.3775|
+|('MAIL_MOVED-item101.CanComeFolder', 'MAIL_VIEWED-item102')               |         349.0786|
+|('MAIL_MOVED-item102.CannotComeFolder', 'MAIL_VIEWED-item103')            |         319.1954|
+
+
 ## Class  4
 
 
 |bigram                                                                    | likelihood_ratio|
 |:-------------------------------------------------------------------------|----------------:|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |         893.0519|
-|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |         753.8523|
-|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                       |         499.8053|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |         485.6045|
-|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |         465.2566|
-|('FOLDER_VIEWED-TrashFolder', 'MAIL_MOVED-item103.target=TrashFolder')    |         372.2541|
-|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_VIEWED-item301')                 |         340.5003|
-|('FOLDER_VIEWED-TrashFolder', 'MAIL_MOVED-item105.target=TrashFolder')    |         328.1632|
-|('FOLDER_VIEWED-InboxFolder', 'MAIL_MOVED-item103.InboxFolder')           |         289.7540|
-|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item301.CannotComeFolder') |         279.3375|
+|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                       |        217.80195|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |        215.63280|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |        211.32627|
+|('MAIL_MOVED-item101.CanComeFolder', 'MAIL_DRAG-item104')                 |        148.42662|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |        141.61502|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |         96.50556|
+|('MAIL_DRAG-item104', 'FOLDER_VIEWED-CanComeFolder')                      |         89.07329|
+|('FOLDER_VIEWED-CanComeFolder', 'FOLDER_VIEWED-CannotComeFolder')         |         63.34961|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_VIEWED-item202')                    |         60.13844|
+|('MAIL_VIEWED-item103', 'MAIL_VIEWED-item104')                            |         58.77450|
 
 
 ### visual cluster {#visual-cluster}
 
-```sh
-cd $out_dir
-cd figure
-convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
-convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
-```
-
 ![](/ox-hugo/lpa_box_all_2.png)
 ![](/ox-hugo/lpa_box_all_3.png)
 
-```sh
-cd $out_dir/figure;
-convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
-convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
-```
-
-```emacs-lisp
-(concat
-  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
-  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
-```
-
-{{< figure src="/ox-hugo/lpa_vio_all_3.png" >}}
+![](/ox-hugo/lpa_vio_all_2.png)
+![](/ox-hugo/lpa_vio_all_3.png)
 
 
 ### response {#response}
@@ -727,56 +692,81 @@ Response: the larger, the better
 | -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
 
 
-### archive {#archive}
-
-![](/ox-hugo/lpa_plot-0.png)
-![](/ox-hugo/lpa_plot-1.png)
-
-{{< figure src="/ox-hugo/lpa_back_line.png" >}}
-
-```sh
-out_dir="party_invitations-1/"
-cd $out_dir
-cd figure
-convert -density 300 lpa_box4.pdf lpa_box4.png
-convert -density 300 lpa_box_back.pdf lpa_box_back.png
-```
-
-![](/ox-hugo/lpa_box4.png)
-![](/ox-hugo/lpa_box_back.png)
-
-
 ## cd\_tally {#cd-tally}
 
 
 ### collocations {#collocations}
 
+## Class  1
+
+
+|bigram                                                                     | likelihood_ratio|
+|:--------------------------------------------------------------------------|----------------:|
+|('SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST')              |       1459.57552|
+|('TOOLBAR_spreadApp-spreadApp', 'TOOLBAR_webApp-webApp')                   |       1189.05250|
+|('TOOLBAR_webApp-webApp', 'COMBOBOX-menulist.index=9')                     |        455.87983|
+|('COMBOBOX-menulist.index=9', 'SUBMIT_complete-u03_default_txt14')         |        404.68816|
+|('TOOLBAR_webApp-webApp', 'TOOLBAR_spreadApp-spreadApp')                   |        178.25025|
+|('NEXT_INQUIRY-REQUEST', 'SUBMIT_complete-u03_default_txt14')              |         84.10660|
+|('SUBMIT_complete-u03_default_txt14', 'SUBMIT_complete-u03_default_txt14') |         77.40740|
+|('SUBMIT_complete-u03_default_txt14', 'TOOLBAR_spreadApp-spreadApp')       |         74.16434|
+|('TOOLBAR_webApp-webApp', 'NEXT_INQUIRY-REQUEST')                          |         67.95933|
+|('TOOLBAR_webApp-webApp', 'COMBOBOX-menulist.index=8')                     |         63.94217|
+## Class  2
+
+
+|bigram                                                             | likelihood_ratio|
+|:------------------------------------------------------------------|----------------:|
+|('SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST')      |        2355.3848|
+|('TOOLBAR_spreadApp-spreadApp', 'TOOLBAR_webApp-webApp')           |        1392.4234|
+|('COMBOBOX-menulist.index=9', 'SUBMIT_complete-u03_default_txt14') |         865.4099|
+|('TOOLBAR_webApp-webApp', 'COMBOBOX-menulist.index=9')             |         832.1501|
+|('TOOLBAR_webApp-webApp', 'TOOLBAR_spreadApp-spreadApp')           |         606.5532|
+|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                |         502.3374|
+|('TOOLBAR_ss-sort-ss-sort', 'COMBOBOX-sortablecol1.index=3')       |         485.4294|
+|('MENUITEM_sort-key=sort', 'COMBOBOX-sortablecol1.index=3')        |         453.2708|
+|('MENU-ss-data-menu', 'MENUITEM_sort-key=sort')                    |         435.1334|
+|('COMBOBOX-sortablecol1.index=3', 'RADIO_BTN-priority1asc')        |         322.2008|
+## Class  3
+
+
+|bigram                                                              | likelihood_ratio|
+|:-------------------------------------------------------------------|----------------:|
+|('SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST')       |       340.964425|
+|('COMBOBOX-menulist.index=4', 'SUBMIT_complete-u03_default_txt14')  |       217.307581|
+|('COMBOBOX-menulist.index=11', 'SUBMIT_complete-u03_default_txt14') |        26.081798|
+|('KEYPRESS', 'BREAKOFF-REQUEST')                                    |        14.724331|
+|('COMBOBOX-menulist.index=26', 'SUBMIT_complete-u03_default_txt14') |         7.358132|
+|('COMBOBOX-menulist.index=3', 'SUBMIT_complete-u03_default_txt14')  |         7.358132|
+|('COMBOBOX-menulist.index=7', 'SUBMIT_complete-u03_default_txt14')  |         7.358132|
+|('COMBOBOX-menulist.index=9', 'SUBMIT_complete-u03_default_txt14')  |         7.358132|
+|('GET_HELP-REQUEST', 'COMBOBOX-menulist.index=4')                   |         4.880417|
+|('COMBOBOX-menulist.index=10', 'SUBMIT_complete-u03_default_txt14') |         3.669923|
+## Class  4
+
+
+|bigram                                                                                | likelihood_ratio|
+|:-------------------------------------------------------------------------------------|----------------:|
+|('SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST')                         |         339.8976|
+|('TOOLBAR_spreadApp-spreadApp', 'TOOLBAR_webApp-webApp')                              |         225.6964|
+|('COMBOBOX-menulist.index=9', 'SUBMIT_complete-u03_default_txt14')                    |         206.3333|
+|('TEXTBOX_ONFOCUS-searchtfield.value=', 'KEYPRESS')                                   |         195.4571|
+|('TOOLBAR_webApp-webApp', 'COMBOBOX-menulist.index=9')                                |         192.6315|
+|('TOOLBAR_webApp-webApp', 'TOOLBAR_spreadApp-spreadApp')                              |         179.7811|
+|('CD_FIND_ok-spread-search-btn', 'TOOLBAR_spread-search-next-spread-search-next-btn') |         177.6448|
+|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                                   |         129.0081|
+|('TOOLBAR_ss-sort-ss-sort', 'COMBOBOX-sortablecol1.index=3')                          |         115.3623|
+|('MENU-ss-data-menu', 'MENUITEM_sort-key=sort')                                       |         104.0280|
+
 
 ### visualise cluster {#visualise-cluster}
-
-```sh
-cd $out_dir
-cd figure
-convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
-convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
-```
 
 ![](/ox-hugo/lpa_box_all_2.png)
 ![](/ox-hugo/lpa_box_all_3.png)
 
-```sh
-cd $out_dir/figure;
-convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
-convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
-```
-
-```emacs-lisp
-(concat
-  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
-  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
-```
-
-{{< figure src="/ox-hugo/lpa_vio_all_3.png" >}}
+![](/ox-hugo/lpa_vio_all_2.png)
+![](/ox-hugo/lpa_vio_all_3.png)
+![](/ox-hugo/lpa_vio_all_3.png)
 
 
 ### response {#response}
@@ -804,10 +794,6 @@ convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
 
 
 ## tickets {#tickets}
-
-```emacs-lisp
-(insert-file (concat out_dir "/lpa_mods.txt"))
-```
 
 ```R
 --------------------------------------------------------------
@@ -849,18 +835,69 @@ Best model according to KIC is Model 6 with 3 classes.
 An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and KIC (Akogul & Erisoglu, 2017), suggests the best solution is Model 6 with 3 classes.
 ```
 
-```sh
-out_dir="tickets/"
-cd $out_dir
-cd figure
-convert -density 300 tau_action.pdf tau_action.png
-convert -density 300 theta_tau_res.pdf theta_tau_res.png
-convert -density 300 time_action_more.pdf time_action_more-%d.png
-convert -density 300 time_action.pdf time_action-%d.png
-```
-
 
 ### collocation {#collocation}
+
+## Class  1
+
+
+|bigram                                                               | likelihood_ratio|
+|:--------------------------------------------------------------------|----------------:|
+|('TAB-tabbutton2', 'TAB-tabbutton1')                                 |        5348.6765|
+|('BUTTON_submit-pg2_txt33', 'BUTTON_submit_ok-u21p2pu5_txt2')        |        3823.0690|
+|('BUTTON_submit_ok-u21p2pu5_txt2', 'NEXT_INQUIRY-REQUEST')           |        2159.6960|
+|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2') |        1966.0726|
+|('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23')    |        1898.1312|
+|('CHECKBOX-check2', 'CHECKBOX-check3')                               |        1584.7181|
+|('CHECKBOX-check9', 'CHECKBOX-check11')                              |        1578.2255|
+|('CHECKBOX-check11', 'BUTTON_available-pg1_txt47')                   |        1189.0331|
+|('BUTTON_available-pg1_txt47', 'BUTTON_available-pg7_txt47')         |        1101.9322|
+|('COMBOBOX-pg2_menu6.index=8', 'BUTTON_submit-pg2_txt33')            |         922.0956|
+## Class  2
+
+
+|bigram                                                                                                             | likelihood_ratio|
+|:------------------------------------------------------------------------------------------------------------------|----------------:|
+|('BUTTON_search-default_txt23', 'BUTTON_close-popup1_txt4')                                                        |        55.698957|
+|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2')                                               |        37.495676|
+|('COMBOBOX-default_menu2.index=2', 'NEXT_INQUIRY-REQUEST')                                                         |        17.586276|
+|('TAB-tabbutton2', 'TAB-tabbutton1')                                                                               |        13.757955|
+|('CHECKBOX-check4', 'BUTTON_available-pg1_txt47')                                                                  |        13.533514|
+|('BUTTON_close-popup1_txt4', 'NEXT_INQUIRY-REQUEST')                                                               |        11.074180|
+|('COMBOBOX-default_menu1.index=3', 'COMBOBOX-default_menu2.index=1')                                               |        10.430812|
+|('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23')                                                  |         9.834263|
+|('BOX_PRESS-action=as://switchStateButton(u021_default_form1a,unit21page6,u021_default_popup2)', 'TAB-tabbutton1') |         9.714429|
+|('TAB-tabbutton1', 'NEXT_INQUIRY-REQUEST')                                                                         |         9.489936|
+## Class  3
+
+
+|bigram                                                               | likelihood_ratio|
+|:--------------------------------------------------------------------|----------------:|
+|('TAB-tabbutton2', 'TAB-tabbutton1')                                 |        4082.5863|
+|('BUTTON_submit-pg2_txt33', 'BUTTON_submit_ok-u21p2pu5_txt2')        |        2397.7490|
+|('BUTTON_available-pg1_txt47', 'BUTTON_available-pg7_txt47')         |        1283.7639|
+|('BUTTON_submit_ok-u21p2pu5_txt2', 'NEXT_INQUIRY-REQUEST')           |         991.4217|
+|('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23')    |         884.3631|
+|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2') |         780.2374|
+|('BUTTON_submit_ok-u21p2pu5_txt2', 'BUTTON_close-popup2_txt4')       |         774.0134|
+|('CHECKBOX-check2', 'CHECKBOX-check3')                               |         511.6382|
+|('CHECKBOX-check9', 'CHECKBOX-check11')                              |         481.3976|
+|('CHECKBOX-check11', 'BUTTON_available-pg1_txt47')                   |         378.1517|
+## Class  4
+
+
+|bigram                                                               | likelihood_ratio|
+|:--------------------------------------------------------------------|----------------:|
+|('TAB-tabbutton2', 'TAB-tabbutton1')                                 |        3693.8423|
+|('BUTTON_submit-pg2_txt33', 'BUTTON_submit_ok-u21p2pu5_txt2')        |        1761.9371|
+|('BUTTON_submit_ok-u21p2pu5_txt2', 'NEXT_INQUIRY-REQUEST')           |        1335.2799|
+|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2') |        1273.6836|
+|('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23')    |        1220.8369|
+|('CHECKBOX-check9', 'CHECKBOX-check11')                              |        1099.9491|
+|('CHECKBOX-check11', 'BUTTON_available-pg1_txt47')                   |        1069.7063|
+|('CHECKBOX-check2', 'CHECKBOX-check3')                               |         885.6972|
+|('BUTTON_available-pg1_txt47', 'COMBOBOX-pg2_menu1.index=8')         |         718.7921|
+|('COMBOBOX-pg2_menu6.index=8', 'BUTTON_submit-pg2_txt33')            |         703.2595|
 
 ## Some covariates
 
@@ -884,29 +921,11 @@ convert -density 300 time_action.pdf time_action-%d.png
 
 ### visualize clusters {#visualize-clusters}
 
-```sh
-cd $out_dir
-cd figure
-convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
-convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
-```
-
 ![](/ox-hugo/lpa_box_all_2.png)
 ![](/ox-hugo/lpa_box_all_3.png)
 
-```sh
-cd $out_dir/figure;
-convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
-convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
-```
-
-```emacs-lisp
-(concat
-  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
-  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
-```
-
-{{< figure src="/ox-hugo/lpa_vio_all_3.png" >}}
+![](/ox-hugo/lpa_vio_all_2.png)
+![](/ox-hugo/lpa_vio_all_3.png)
 
 
 ### response {#response}
@@ -933,28 +952,6 @@ Response: the smaller, the better
 |  0.27 (0.48)|  0.25 (0.84)| 0.06 (0.08)| 0.88 (0.13)| -0.10 (1.04)| 429.00 (0.00)|
 | -0.43 (0.11)|  0.06 (0.78)| 0.01 (0.01)| 0.26 (0.07)| -0.08 (0.94)| 321.00 (0.00)|
 | -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
-
-
-### more plots {#more-plots}
-
-| ![](/ox-hugo/lpa_plot-0.png) | ![](/ox-hugo/lpa_plot-1.png) |
-|------------------------------|------------------------------|
-
-{{< figure src="/ox-hugo/lpa_back_line.png" >}}
-
-![](/ox-hugo/lpa_box4.png)
-![](/ox-hugo/lpa_box_back.png)
-
-&tau;'s covaritates:
-&theta;'s covaritates:
-
-| ![](/ox-hugo/theta_tau_res.png)       | ![](/ox-hugo/tau_action.png)          |
-|---------------------------------------|---------------------------------------|
-| ![](/ox-hugo/time_action-3.png)       | ![](/ox-hugo/time_action_more-2.png)  |
-| ![](/ox-hugo/time_action_more-5.png)  | ![](/ox-hugo/time_action_more-7.png)  |
-| ![](/ox-hugo/time_action_more-8.png)  | ![](/ox-hugo/time_action_more-9.png)  |
-| ![](/ox-hugo/time_action_more-10.png) | ![](/ox-hugo/time_action_more-11.png) |
-| ![](/ox-hugo/time_action_more-13.png) |                                       |
 
 
 ## book\_order {#book-order}
@@ -1011,22 +1008,8 @@ Response: the smaller, the better
 
 ### visual clusters {#visual-clusters}
 
-```sh
-cd $out_dir
-cd figure
-convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
-convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
-```
-
 ![](/ox-hugo/lpa_box_all_2.png)
 ![](/ox-hugo/lpa_box_all_3.png)
-
-```sh
-cd $out_dir
-cd figure
-convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png
-convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png
-```
 
 ![](/ox-hugo/lpa_vio_all_2.png)
 ![](/ox-hugo/lpa_vio_all_3.png)
@@ -1058,48 +1041,104 @@ Response: the larger, the better
 | -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
 
 
-### archive {#archive}
-
-![](/ox-hugo/lpa_plot-0.png)
-![](/ox-hugo/lpa_plot-1.png)
-
-{{< figure src="/ox-hugo/lpa_back_line.png" >}}
-
-
 ## meeting\_room {#meeting-room}
 
 
 ### collocations {#collocations}
 
+## Class  1
+
+
+|bigram                                                                          | likelihood_ratio|
+|:-------------------------------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-InboxFolder', 'FOLDER_VIEWED-myMails')                          |         51.88126|
+|('FOLDER_VIEWED-MtgRoomFolder', 'FOLDER_VIEWED-ReservationsFolder')             |         35.22581|
+|('TOOLBAR_webApp-webApp', 'TEXTLINK-default_txt3.href=unit02page2.target=self') |         28.36017|
+|('TOOLBAR_mailApp-mailApp', 'NEXT_INQUIRY-REQUEST')                             |         23.17940|
+|('MAIL_VIEWED-item102', 'MAIL_VIEWED-item103')                                  |         20.35835|
+|('FOLDER_VIEWED-myMails', 'FOLDER_VIEWED-MtgRoomFolder')                        |         14.78127|
+|('FOLDER_UNFOLDED-MtgRoomFolder', 'FOLDER_FOLDED-MtgRoomFolder')                |         14.42721|
+|('MENU-message-menu', 'MENUITEM_move-folder-key=move-folder')                   |         14.42721|
+|('MENU-view-menu', 'MENUITEM_sort-mc-key=sort-mc')                              |         14.42721|
+|('MENUITEM_sort-mc-key=sort-mc', 'MAIL_SORT_ok-sortValidation')                 |         14.42721|
+## Class  2
+
+
+|bigram                                                                                    | likelihood_ratio|
+|:-----------------------------------------------------------------------------------------|----------------:|
+|('BUTTON_RESERVE_submit-SUBMIT_RESERVATION_SUCCESS', 'BUTTON_close-popup1_txt2')          |        2428.7755|
+|('COMBOBOX-zemenulist4.index=3', 'COMBOBOX-zemenulist5.index=4')                          |        1366.9993|
+|('BUTTON_RESERVE_submit-SUBMIT_RESERVATION_FAILURE_conflict', 'BUTTON_close-popup7_txt2') |        1320.6393|
+|('BUTTON_UNFILL_submit-pg5_txt21', 'BUTTON_close-popup3_txt2')                            |        1247.8091|
+|('MAIL_VIEWED-item102', 'MAIL_VIEWED-item103')                                            |        1180.8554|
+|('COMBOBOX-zemenulist4.index=4', 'COMBOBOX-zemenulist5.index=5')                          |        1119.3536|
+|('COMBOBOX-zmenulist6.index=7', 'BUTTON_RESERVE_submit-SUBMIT_RESERVATION_SUCCESS')       |         799.9066|
+|('MAIL_VIEWED-item103', 'MAIL_VIEWED-item104')                                            |         723.1158|
+|('COMBOBOX-menulist.index=6', 'BUTTON_UNFILL_submit-pg5_txt21')                           |         681.4486|
+|('TEXTLINK-pg1_txt4.href=unit02page3.target=self', 'COMBOBOX-zmenulist1.index=2')         |         678.0070|
+## Class  3
+
+
+|bigram                                                                                               | likelihood_ratio|
+|:----------------------------------------------------------------------------------------------------|----------------:|
+|('BUTTON_RESERVE_submit-SUBMIT_RESERVATION_SUCCESS', 'BUTTON_close-popup1_txt2')                     |        3165.7677|
+|('BUTTON_RESERVE_submit-SUBMIT_RESERVATION_FAILURE_conflict', 'BUTTON_close-popup7_txt2')            |        2876.2798|
+|('COMBOBOX-zemenulist4.index=3', 'COMBOBOX-zemenulist5.index=4')                                     |        1909.3797|
+|('BUTTON_UNFILL_submit-pg5_txt21', 'BUTTON_close-popup3_txt2')                                       |        1549.0920|
+|('MAIL_VIEWED-item102', 'MAIL_VIEWED-item103')                                                       |        1436.9996|
+|('COMBOBOX-zemenulist4.index=4', 'COMBOBOX-zemenulist5.index=5')                                     |        1284.4368|
+|('TOOLBAR_mailApp-mailApp', 'TOOLBAR_webApp-webApp')                                                 |        1246.3057|
+|('TEXTLINK-pg1_txt4.href=unit02page3.target=self', 'COMBOBOX-zmenulist1.index=2')                    |         874.2876|
+|('COMBOBOX-zmenulist6.index=7', 'BUTTON_RESERVE_submit-SUBMIT_RESERVATION_SUCCESS')                  |         817.4273|
+|('TEXTLINK-pg3_txt3.href=unit02page2.target=self', 'TEXTLINK-pg2_txt2.href=unit02page1.target=self') |         695.1467|
+## Class  4
+
+
+|bigram                                                                                                                                                                                                               | likelihood_ratio|
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------:|
+|('BUTTON_RESERVE_submit-SUBMIT_RESERVATION_SUCCESS', 'BUTTON_close-popup1_txt2')                                                                                                                                     |         563.2656|
+|('BUTTON_RESERVE_submit-SUBMIT_RESERVATION_FAILURE_conflict', 'BUTTON_close-popup7_txt2')                                                                                                                            |         419.8368|
+|('COMBOBOX-zemenulist4.index=3', 'COMBOBOX-zemenulist5.index=4')                                                                                                                                                     |         332.7030|
+|('TEXTBOX_ONFOCUS-textbox1.value=', 'TEXTBOX_KILLFOCUS-textbox1.value=')                                                                                                                                             |         330.6313|
+|('TEXTBOX_ONFOCUS-textbox1.value=......................................................................', 'TEXTBOX_KILLFOCUS-textbox1.value=......................................................................') |         243.6613|
+|('MAIL_VIEWED-item102', 'MAIL_VIEWED-item103')                                                                                                                                                                       |         221.5643|
+|('BUTTON_UNFILL_submit-pg5_txt21', 'BUTTON_close-popup3_txt2')                                                                                                                                                       |         219.4852|
+|('COMBOBOX-zemenulist4.index=4', 'COMBOBOX-zemenulist5.index=5')                                                                                                                                                     |         200.1086|
+|('TEXTLINK-pg3_txt3.href=unit02page2.target=self', 'TEXTLINK-pg2_txt2.href=unit02page1.target=self')                                                                                                                 |         195.8817|
+|('FOLDER_VIEWED-ReservationsFolder', 'MAIL_MOVED-item101.target=ReservationsFolder')                                                                                                                                 |         194.3509|
+
 
 ### visualise cluster {#visualise-cluster}
-
-```sh
-cd $out_dir
-cd figure
-convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
-convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
-```
 
 ![](/ox-hugo/lpa_box_all_2.png)
 ![](/ox-hugo/lpa_box_all_3.png)
 
-```sh
-cd $out_dir/figure;
-convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
-convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
-```
-
-```emacs-lisp
-(concat
-  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
-  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
-```
-
-{{< figure src="/ox-hugo/lpa_vio_all_3.png" >}}
+![](/ox-hugo/lpa_vio_all_2.png)
+![](/ox-hugo/lpa_vio_all_3.png)
 
 
 ### response {#response}
+
+Loading required package: ggplot2
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
+|------------:|------------:|------------:|------------:|------------:|-------------:|
+|  0.88 (1.77)| -1.05 (1.11)|  1.85 (1.79)|  1.02 (1.83)| -0.23 (1.00)|  57.00 (0.00)|
+| -0.38 (0.57)| -0.33 (0.91)|  0.04 (0.71)| -0.61 (0.49)|  0.42 (1.01)| 175.00 (0.00)|
+|  0.67 (0.94)| -0.08 (0.98)| -0.18 (0.53)|  0.59 (0.79)| -0.45 (0.88)| 144.00 (0.00)|
+| -0.43 (0.43)|  0.69 (0.47)| -0.47 (0.27)| -0.19 (0.58)|  0.02 (0.92)| 186.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
+|------------:|------------:|-----------:|-----------:|------------:|-------------:|
+|  3.06 (1.66)|  1.58 (2.25)| 0.94 (0.14)| 0.00 (0.00)| -0.13 (1.09)|  28.00 (0.00)|
+| -0.53 (0.32)| -0.28 (0.60)| 0.01 (0.01)| 0.83 (0.13)|  0.04 (0.98)| 340.00 (0.00)|
+|  0.48 (0.52)|  0.26 (0.99)| 0.06 (0.08)| 0.12 (0.15)| -0.06 (1.02)| 194.00 (0.00)|
 
 
 ## lamp\_return {#lamp-return}
@@ -1107,32 +1146,75 @@ convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
 
 ### collocations {#collocations}
 
+## Class  1
+
+
+|bigram                                                                                                               | likelihood_ratio|
+|:--------------------------------------------------------------------------------------------------------------------|----------------:|
+|('TEXTBOX_ONFOCUS-u023_pg2_txt19.value=', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=')                                 |         589.8216|
+|('BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4')                                             |         538.4479|
+|('BUTTON_RETURN_submit-u023_pg2_txt22', 'NEXT_INQUIRY-REQUEST')                                                      |         388.4260|
+|('RADIO_BTN-u023_pg2_txt8', 'COMBOBOX-u023_pg2_menu1.index=1')                                                       |         320.5374|
+|('TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834', 'BUTTON_RETURN_submit-u023_pg2_txt22')                               |         306.3855|
+|('TEXTLINK-u023_pg1_txt10.href=unit23page2.target=self', 'RADIO_BTN-u023_pg2_txt8')                                  |         300.3013|
+|('TEXTLINK-u023_pg2_txt21.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6')                            |         237.8251|
+|('TEXTLINK-u023_pg1_txt9.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6')                             |         227.3003|
+|('KEYPRESS', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834')                                                          |         222.5735|
+|('TEXTLINK-u023_default_txt10.href=unit23page1.target=self', 'TEXTLINK-u023_pg1_txt10.href=unit23page2.target=self') |         213.6009|
+## Class  2
+
+
+|bigram                                                                                    | likelihood_ratio|
+|:-----------------------------------------------------------------------------------------|----------------:|
+|('BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4')                  |        1718.9581|
+|('BUTTON_RETURN_submit-u023_pg2_txt22', 'NEXT_INQUIRY-REQUEST')                           |         851.9591|
+|('RADIO_BTN-u023_pg2_txt8', 'COMBOBOX-u023_pg2_menu1.index=1')                            |         814.8844|
+|('KEYPRESS', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834')                               |         806.4828|
+|('TEXTBOX_ONFOCUS-u023_pg2_txt19.value=', 'KEYPRESS')                                     |         790.7215|
+|('TEXTLINK-u023_pg1_txt10.href=unit23page2.target=self', 'RADIO_BTN-u023_pg2_txt8')       |         698.9622|
+|('TEXTBOX_ONFOCUS-u023_pg2_txt19.value=', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=')      |         655.5400|
+|('TEXTLINK-u023_pg2_txt21.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6') |         600.6666|
+|('TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834', 'BUTTON_RETURN_submit-u023_pg2_txt22')    |         586.4540|
+|('TOOLBAR_mailApp-mailApp', 'MAIL_VIEWED-item305')                                        |         529.4708|
+## Class  3
+
+
+|bigram                                                                                   | likelihood_ratio|
+|:----------------------------------------------------------------------------------------|----------------:|
+|('BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4')                 |        1078.8160|
+|('BUTTON_RETURN_submit-u023_pg2_txt22', 'NEXT_INQUIRY-REQUEST')                          |         704.2991|
+|('TEXTBOX_ONFOCUS-u023_pg2_txt19.value=', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=')     |         658.5855|
+|('RADIO_BTN-u023_pg2_txt8', 'COMBOBOX-u023_pg2_menu1.index=1')                           |         649.2960|
+|('KEYPRESS', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834')                              |         639.5205|
+|('TEXTBOX_ONFOCUS-u023_pg2_txt19.value=', 'KEYPRESS')                                    |         604.0866|
+|('TEXTLINK-u023_pg1_txt10.href=unit23page2.target=self', 'RADIO_BTN-u023_pg2_txt8')      |         574.7355|
+|('TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834', 'BUTTON_RETURN_submit-u023_pg2_txt22')   |         554.8621|
+|('MAIL_VIEWED-item305', 'TOOLBAR_webApp-webApp')                                         |         443.4153|
+|('TEXTLINK-u023_pg1_txt9.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6') |         414.3679|
+## Class  4
+
+
+|bigram                                                                                   | likelihood_ratio|
+|:----------------------------------------------------------------------------------------|----------------:|
+|('BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4')                 |        1507.1803|
+|('BUTTON_RETURN_submit-u023_pg2_txt22', 'NEXT_INQUIRY-REQUEST')                          |        1268.0231|
+|('RADIO_BTN-u023_pg2_txt8', 'COMBOBOX-u023_pg2_menu1.index=1')                           |        1084.1788|
+|('KEYPRESS', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834')                              |        1058.9451|
+|('TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834', 'BUTTON_RETURN_submit-u023_pg2_txt22')   |         991.3056|
+|('TEXTBOX_ONFOCUS-u023_pg2_txt19.value=', 'KEYPRESS')                                    |         905.3262|
+|('TEXTLINK-u023_pg1_txt10.href=unit23page2.target=self', 'RADIO_BTN-u023_pg2_txt8')      |         866.1994|
+|('TOOLBAR_mailApp-mailApp', 'MAIL_VIEWED-item305')                                       |         817.2017|
+|('MAIL_VIEWED-item305', 'TOOLBAR_webApp-webApp')                                         |         687.0170|
+|('TEXTLINK-u023_pg1_txt9.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6') |         662.2376|
+
 
 ### visualise cluster {#visualise-cluster}
-
-```sh
-cd $out_dir
-cd figure
-convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
-convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
-```
 
 ![](/ox-hugo/lpa_box_all_2.png)
 ![](/ox-hugo/lpa_box_all_3.png)
 
-```sh
-cd $out_dir/figure;
-convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
-convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
-```
-
-```emacs-lisp
-(concat
-  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
-  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
-```
-
-{{< figure src="/ox-hugo/lpa_vio_all_3.png" >}}
+![](/ox-hugo/lpa_vio_all_2.png)
+![](/ox-hugo/lpa_vio_all_3.png)
 
 
 ### response {#response}
@@ -1143,20 +1225,19 @@ convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
 
 |          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
 |------------:|------------:|------------:|------------:|------------:|-------------:|
-|  1.01 (1.39)| -0.40 (0.91)|  1.06 (1.57)|  0.66 (1.06)| -0.19 (1.07)| 181.00 (0.00)|
-| -0.69 (0.50)|  0.30 (0.89)|  0.32 (0.49)| -0.18 (0.71)|  0.15 (0.98)| 270.00 (0.00)|
-|  0.18 (0.57)|  0.66 (0.34)| -0.30 (0.24)|  0.55 (0.70)| -0.33 (0.89)| 304.00 (0.00)|
-| -0.25 (0.75)| -0.96 (0.94)| -0.86 (0.33)| -1.11 (0.44)|  0.44 (0.91)| 215.00 (0.00)|
+|  0.88 (1.77)| -1.05 (1.11)|  1.85 (1.79)|  1.02 (1.83)| -0.23 (1.00)|  57.00 (0.00)|
+| -0.38 (0.57)| -0.33 (0.91)|  0.04 (0.71)| -0.61 (0.49)|  0.42 (1.01)| 175.00 (0.00)|
+|  0.67 (0.94)| -0.08 (0.98)| -0.18 (0.53)|  0.59 (0.79)| -0.45 (0.88)| 144.00 (0.00)|
+| -0.43 (0.43)|  0.69 (0.47)| -0.47 (0.27)| -0.19 (0.58)|  0.02 (0.92)| 186.00 (0.00)|
 
 ### w/o tau and theta
 
 
 |      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
 |------------:|------------:|-----------:|-----------:|------------:|-------------:|
-|  2.61 (1.42)|  1.00 (1.26)| 0.91 (0.15)| 0.09 (0.15)|  0.02 (1.00)|  69.00 (0.00)|
-|  0.27 (0.48)|  0.25 (0.84)| 0.06 (0.08)| 0.88 (0.13)| -0.10 (1.04)| 429.00 (0.00)|
-| -0.43 (0.11)|  0.06 (0.78)| 0.01 (0.01)| 0.26 (0.07)| -0.08 (0.94)| 321.00 (0.00)|
-| -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
+|  3.06 (1.66)|  1.58 (2.25)| 0.94 (0.14)| 0.00 (0.00)| -0.13 (1.09)|  28.00 (0.00)|
+| -0.53 (0.32)| -0.28 (0.60)| 0.01 (0.01)| 0.83 (0.13)|  0.04 (0.98)| 340.00 (0.00)|
+|  0.48 (0.52)|  0.26 (0.99)| 0.06 (0.08)| 0.12 (0.15)| -0.06 (1.02)| 194.00 (0.00)|
 
 
 # References {#references}
