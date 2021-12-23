@@ -24,10 +24,10 @@ tau and theta + naction, spd
 Compare tidyLPA solutions:
 
  Model Classes AIC      AWE      BIC      CLC      KIC     
- 6     1       9741.434 9945.767 9809.601 9715.434 9758.434
- 6     2       6976.934 7402.489 7118.135 6920.782 7008.934
- 6     3       5955.984 6602.815 6170.221 5869.626 6002.984
- 6     4       5589.996 6457.851 5877.267 5473.684 5651.996
+ 6     1       9336.627 9540.960 9404.793 9310.627 9353.627
+ 6     2       8307.079 8732.981 8448.280 8250.579 8339.079
+ 6     3       7843.555 8490.518 8057.792 7757.066 7890.555
+ 6     4       7446.432 8314.325 7733.704 7330.083 7508.432
 
 Best model according to AIC is Model 6 with 4 classes.
 Best model according to AWE is Model 6 with 4 classes.
@@ -43,15 +43,15 @@ naction, spd
 Compare tidyLPA solutions:
 
  Model Classes AIC      AWE      BIC      CLC      KIC     
- 6     1       5391.087 5462.777 5415.432 5383.087 5399.087
- 6     2       3693.159 3853.480 3746.718 3672.956 3707.159
- 6     3       3370.270 3619.131 3453.043 3337.955 3390.270
- 6     4       3506.481 3844.076 3618.469 3461.861 3532.481
+ 6     1       5377.313 5449.003 5401.658 5369.313 5385.313
+ 6     2       5057.140 5217.764 5110.699 5036.634 5071.140
+ 6     3       4998.436 5247.926 5081.209 4965.492 5018.436
+ 6     4       4934.050 5271.662 5046.037 4889.413 4960.050
 
-Best model according to AIC is Model 6 with 3 classes.
-Best model according to AWE is Model 6 with 3 classes.
-Best model according to BIC is Model 6 with 3 classes.
-Best model according to CLC is Model 6 with 3 classes.
-Best model according to KIC is Model 6 with 3 classes.
+Best model according to AIC is Model 6 with 4 classes.
+Best model according to AWE is Model 6 with 2 classes.
+Best model according to BIC is Model 6 with 4 classes.
+Best model according to CLC is Model 6 with 4 classes.
+Best model according to KIC is Model 6 with 4 classes.
 
-An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and KIC (Akogul & Erisoglu, 2017), suggests the best solution is Model 6 with 3 classes.
+An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and KIC (Akogul & Erisoglu, 2017), suggests the best solution is Model 6 with 4 classes.

@@ -5,10 +5,10 @@ tau and theta
 Compare tidyLPA solutions:
 
  Model Classes AIC      AWE      BIC      CLC      KIC     
- 6     1       5282.108 5353.809 5306.459 5274.108 5290.108
- 6     2       5028.547 5189.740 5082.118 5007.496 5042.547
- 6     3       4967.105 5216.558 5049.896 4934.234 4987.105
- 6     4       4949.354 5287.326 5061.365 4904.404 4975.354
+ 6     1       3197.621 3263.936 3219.278 3189.621 3205.621
+ 6     2       3086.038 3235.052 3133.684 3065.317 3100.038
+ 6     3       3023.400 3254.399 3097.035 2990.671 3043.400
+ 6     4       3012.008 3324.914 3111.633 2967.352 3038.008
 
 Best model according to AIC is Model 6 with 4 classes.
 Best model according to AWE is Model 6 with 2 classes.
@@ -16,21 +16,21 @@ Best model according to BIC is Model 6 with 3 classes.
 Best model according to CLC is Model 6 with 4 classes.
 Best model according to KIC is Model 6 with 4 classes.
 
-An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and KIC (Akogul & Erisoglu, 2017), suggests the best solution is Model 6 with 4 classes.
+An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and KIC (Akogul & Erisoglu, 2017), suggests the best solution is Model 6 with 3 classes.
 
 --------------------------------------------------------------
 tau and theta + naction, spd
 --------------------------------------------------------------
 Compare tidyLPA solutions:
 
- Model Classes AIC       AWE       BIC       CLC       KIC      
- 6     1       10188.459 10392.821 10256.640 10162.459 10205.459
- 6     2       8414.862  8840.750  8556.094  8358.438  8446.862 
- 6     3       8098.896  8746.032  8313.179  8012.325  8145.896 
- 6     4       7970.210  8838.486  8257.543  7853.600  8032.210 
+ Model Classes AIC      AWE      BIC      CLC      KIC     
+ 6     1       5706.797 5896.079 5767.438 5680.797 5723.797
+ 6     2       5068.695 5463.314 5194.309 5012.304 5100.695
+ 6     3       4954.509 5554.117 5145.095 4868.074 5001.509
+ 6     4       4886.754 5691.271 5142.312 4770.353 4948.754
 
 Best model according to AIC is Model 6 with 4 classes.
-Best model according to AWE is Model 6 with 3 classes.
+Best model according to AWE is Model 6 with 2 classes.
 Best model according to BIC is Model 6 with 4 classes.
 Best model according to CLC is Model 6 with 4 classes.
 Best model according to KIC is Model 6 with 4 classes.
@@ -43,13 +43,13 @@ naction, spd
 Compare tidyLPA solutions:
 
  Model Classes AIC      AWE      BIC      CLC      KIC     
- 6     1       5453.506 5525.206 5477.856 5445.506 5461.506
- 6     2       4314.691 4475.281 4368.262 4294.242 4328.691
- 6     3       4157.715 4407.022 4240.506 4124.990 4177.715
- 6     4       4120.629 4458.386 4232.640 4075.894 4146.629
+ 6     1       3049.422 3115.737 3071.079 3041.422 3057.422
+ 6     2       2602.662 2751.501 2650.308 2582.116 2616.662
+ 6     3       2547.703 2778.584 2621.338 2515.092 2567.703
+ 6     4       2439.415 2752.236 2539.039 2394.843 2465.415
 
 Best model according to AIC is Model 6 with 4 classes.
-Best model according to AWE is Model 6 with 3 classes.
+Best model according to AWE is Model 6 with 2 classes.
 Best model according to BIC is Model 6 with 4 classes.
 Best model according to CLC is Model 6 with 4 classes.
 Best model according to KIC is Model 6 with 4 classes.

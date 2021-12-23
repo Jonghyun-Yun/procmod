@@ -1,6 +1,6 @@
 param_path = paste0(out_dir, "param_mean.csv")
 if (file.exists(param_path)) {
-  dout = readr::read_csv(param_path)
+  dout = jyunr::read_csv(param_path)
 } else {
   ss <- summary(mclist)
   mm <- ss$statistics[, "Mean"]
@@ -13,4 +13,4 @@ mtheta <- dout[grep("^theta", dout$vname), 2]
 mtau <- dout[grep("^tau", dout$vname), 2]
 mkappa <- dout[grep("^kappa", dout$vname), 2]
 
-item <- readr::read_csv(paste0(out_dir, "input/item.csv"), col_names = TRUE)
+item <- jyunr::read_csv(paste0(out_dir, "input/item.csv"), col_names = TRUE)

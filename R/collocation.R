@@ -1,21 +1,22 @@
 library(diprom)
+library(jyunr)
 library(tidyLPA)
 
 ldir = c(
 "party_invitations-1/",
-## "party_invitations-2/",
-## "cd_tally/",
-## "sprained_ankle-1/",
+"party_invitations-2/",
+"cd_tally/",
+"sprained_ankle-1/",
 ## "sprained_ankle-2/", ## didn't run
 "tickets/",
 ## "class_attendance/", ## didn't run
-## "club_membership-1/",
+"club_membership-1/",
 ## "club_membership-2/", ## didn't run
-"book_order/"
-## "meeting_room/",
+"book_order/",
+"meeting_room/",
 ## "reply_all/", ## failed
-## "locate_email/",
-## "lamp_return/"
+"locate_email/",
+"lamp_return/"
 )
 
 ## out_dir="party_invitations-1/"
@@ -69,7 +70,7 @@ item = read_piacc(piacc_path, item_code, sub_str, ignore_str)
 mc = max(tmp$Class)
 for (cc in 1:mc) {
 item2sen(item, tmp$SEQID[tmp$Class == cc])
-system(". activate tf; python collocation.py")
+system(". activate tf; python py/collocation.py")
 system(paste0("mv input/bi_ss.tsv input/bi_ss_class_", cc,".tsv"))
 system(paste0("mv input/tri_ss.tsv input/tri_ss_class_", cc,".tsv"))
 system(paste0("mv input/quad_ss.tsv input/quad_ss_class_", cc,".tsv"))

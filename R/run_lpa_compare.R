@@ -39,23 +39,12 @@ stopImplicitCluster()
 ## doParallel::registerDoParallel(2)
 registerDoParallel(cores = detectCores() - 1)
 
-out_dir = ldir[3]
-
-## nc2 = c(4,4,3)
-## nc3 = c(2,3,2)
-
-## cd_tally, book_order are winning for AIC and BIC
-
-nc2 = c(4,4,4,4,4,3,4,4,4,4)
-nc3 = c(4,4,3,4,4,3,3,3,4,3)
-
-## nc2 = c(4,4,4)
-## nc3 = c(4,4,3)
-
-
-kk = which(out_dir == ldir)
-
-lname = list(paste0(out_dir,"tau_imp.txt"), paste0(out_dir,"theta_imp.txt"))
+for (out_dir in ldir) {
+flpa_path = paste0(out_dir, "lpa_mods.txt")
+  if (file.exists(flpa_path)) {
+    ##Delete file if it exists
+    file.remove(flpa_path)
+  }
 
 source("R/pmean.R")
 var = jyunr::read_csv("./data/PIAAC_cleaned_data_1110/PUF_Variables.csv")
@@ -82,77 +71,64 @@ gres <- item %>%
 ginfo = plyr::join(minfo, gres)
 rr = ginfo$res
 
-res = list(tau = minfo$tau, theta = minfo$theta)
-
 ainfo = plyr::join(minfo, gg)
 ainfo = ainfo %>% mutate(ltau = log(tau), laction = log(naction))
+
+mod1 = ainfo %>%
+  select(tau, theta) %>%
+  single_imputation() %>%
+  scale() %>%
+  estimate_profiles(1:4,
+                    variances = c( "varying"),
+                    covariances = c( "varying")) %>%
+  compare_solutions(statistics = c("AIC","AWE", "BIC", "CLC", "KIC"))
 
 mod2 = ainfo %>%
   select(tau, theta, naction, spd) %>%
   single_imputation() %>%
   scale() %>%
-  estimate_profiles(nc2[kk],
+  estimate_profiles(1:4,
                     variances = c( "varying"),
-                    covariances = c( "varying"))
+                    covariances = c( "varying")) %>%
+  compare_solutions(statistics = c("AIC","AWE", "BIC", "CLC", "KIC"))
 
 mod3 = ainfo %>%
   select(naction, spd) %>%
   single_imputation() %>%
   scale() %>%
-  estimate_profiles(nc3[kk],
+  estimate_profiles(1:4,
                     variances = c( "varying"),
-                    covariances = c( "varying"))
+                    covariances = c( "varying")) %>%
+  compare_solutions(statistics = c("AIC","AWE", "BIC", "CLC", "KIC"))
 
-## pdf(paste0(out_dir,"figure/lpa_plot.pdf"))
-## mod2 %>% plot_profiles()
-## mod3 %>% plot_profiles()
-## dev.off()
+sink(flpa_path)
+cat("\n--------------------------------------------------------------\n")
+cat("tau and theta")
+cat("\n--------------------------------------------------------------\n")
+print(mod1)
+cat("\n--------------------------------------------------------------\n")
+cat("tau and theta + naction, spd")
+cat("\n--------------------------------------------------------------\n")
+print(mod2)
+cat("\n--------------------------------------------------------------\n")
+cat("naction, spd")
+cat("\n--------------------------------------------------------------\n")
+print(mod3)
+sink()
 
-## source("R/lpa_back.R")
+## mod1 = ainfo %>%
+##   select(ltau, theta) %>%
+##   single_imputation() %>%
+##   estimate_profiles(3, variances = "varying", covariances = "varying")
 
-source("R/pmean.R")
-var = jyunr::read_csv("./data/PIAAC_cleaned_data_1110/PUF_Variables.csv")
-var = var %>% filter(Domain %in% c("Sampling / weighting", "Not assigned" ,"Sampling / weighting (derived)", "Background questionnaire (trend)"  ,"Background questionnaire", "Background questionnaire (derived)"))
-param = data.frame(SEQID = unique(item$SEQID), theta = mtheta$mean, tau = mtau$mean)
-pinfo = jyunr::read_csv("./data/PIAAC_cleaned_data_1110/PUFs_spss.csv")
-pinfo = pinfo %>% select(SEQID) %>% cbind(pinfo[,names(pinfo) %in% toupper(var$Name)])
-minfo = plyr::join(param, pinfo, by = 'SEQID', type = "inner")
-dx = minfo[,4:ncol(minfo)]
+## mod2 = ainfo %>%
+##   select(ltau, theta, laction, spd) %>%
+##   single_imputation() %>%
+##   estimate_profiles(2, variances = c("varying"), covariances = c("zero"))
 
-## dat <- readr::read_csv(paste0(out_dir, "input/dat.csv"), col_names = FALSE)
-## rr <- dat[, c(1, 8)] %>% as.data.frame()
-## rr <- rr[!duplicated(rr), 2]
-gg <- item %>%
-  group_by(SEQID) %>%
-  summarize(ftime = timestamp[1] / 1000, naction = n(),
-            time = timestamp[n()] / 1000, spd = naction / time)
-## binfo = readr::read_csv("./data/PIAAC_cleaned_data_1110/PUFs_noN.csv")
+## mod3 = ainfo %>%
+##   select(laction, spd) %>%
+##   single_imputation() %>%
+##   estimate_profiles(2, variances = "varying", covariances = "varying")
 
-## book_order =minfo= has a fewer SEQID than =item=
-gres <- item %>%
-  group_by(SEQID) %>%
-  summarize(res = response[n()], time = timestamp[n()] / 1000) %>% mutate(index = 1:n())
-ginfo = plyr::join(minfo, gres)
-rr = ginfo$res
-
-df = mod2[[1]]
-before = df[["dff"]][,1:6]
-after = df[["dff"]][,-c(1:6)]
-df[["dff"]] = before %>% mutate(res = rr) %>% cbind(after)
-
-tt = df[["dff"]]
-tmp <- data.frame(tt,SEQID = ginfo$SEQID, index = ginfo$index)
-save(tmp, file = paste0(out_dir, "lpa_membership.RData"))
-
-mm = aggregate(tt, list(tt$Class), FUN=mean)
-sd = aggregate(tt, list(tt$Class), FUN=sd)
-n = aggregate(tt, list(tt$Class), FUN=length)
-se = sd / sqrt(n)
-
-n = n[,4]
-mm = mm %>% select(4:8)
-sd = sd %>% select(4:8)
-mm$n = n;
-sd$n = 0*n;
-
-save(mm,sd,n, file = paste0(out_dir, "summaryw_res.RData"))
+}

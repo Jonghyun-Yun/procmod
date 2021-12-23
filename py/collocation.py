@@ -1,3 +1,11 @@
+import io
+
+def tuple2file(fobj, fname):
+  out_m = io.open(fname, 'w', encoding='utf-8')
+  for vv in fobj:
+    out_m.write('\t'.join([str(x) for x in vv]) + "\n")
+  out_m.close()
+
 with open('input/item_sentence.txt') as f:
     lines = f.readlines()
 
@@ -30,14 +38,6 @@ biagram_collocation.apply_word_filter(filter_stops)
 
 scored = biagram_collocation.score_ngrams(bigram_measures.likelihood_ratio)
 bi_ss = sorted(scored, key=lambda score: score[1], reverse = True)[0:10]
-
-import io
-
-def tuple2file(fobj, fname):
-  out_m = io.open(fname, 'w', encoding='utf-8')
-  for vv in fobj:
-    out_m.write('\t'.join([str(x) for x in vv]) + "\n")
-  out_m.close()
 
 triagram_collocation = TrigramCollocationFinder.from_words(words)
 triagram_collocation.apply_word_filter(filter_stops)

@@ -1,10 +1,12 @@
+mod = mod2
+mod$name = "2"
+
 bf = ainfo %>% select(AGEG5LFS, ICTHOME, READHOME, WRITHOME, NUMHOME, NFEHRS, ICTWORK, READWORK, WRITWORK, NUMWORK, INFLUENCE, EARNHRDCL, TASKDISC, LEARNATWORK)
 bname = names(bf)
-var = readr::read_csv("./data/PIAAC_cleaned_data_1110/PUF_Variables.csv")
-var = var %>% filter(Domain %in% c("Sampling / weighting", "Not assigned" ,"Sampling / weighting (derived)", "Background questionnaire (trend)"  ,"Background questionnaire", "Background questionnaire (derived)")
-)
+var = jyunr::read_csv("./data/PIAAC_cleaned_data_1110/PUF_Variables.csv")
+var = var %>% filter(Domain %in% c("Sampling / weighting", "Not assigned" ,"Sampling / weighting (derived)", "Background questionnaire (trend)"  ,"Background questionnaire", "Background questionnaire (derived)"))
 param = data.frame(SEQID = unique(item$SEQID), theta = mtheta$mean, tau = mtau$mean)
-pinfo = readr::read_csv("./data/PIAAC_cleaned_data_1110/PUFs_spss.csv")
+pinfo = jyunr::read_csv("./data/PIAAC_cleaned_data_1110/PUFs_spss.csv")
 pinfo = pinfo %>% select(SEQID) %>% cbind(pinfo[,names(pinfo) %in% toupper(var$Name)])
 minfo = plyr::join(param, pinfo, by = 'SEQID', type = "inner")
 dx = minfo[,4:ncol(minfo)]
@@ -16,13 +18,15 @@ bf[bf==999999999999] = NA ## back to NA
 bf = bf %>%
   single_imputation() %>%
   scale() %>% as.data.frame
-df = mod2[[1]]
+ftime = ainfo$ftime %>% scale()
+df = mod[[1]]
 before = df[["dff"]][,1:6]
 after = df[["dff"]][,-c(1:6)]
-df[["dff"]] = before %>% mutate(AGEG5LFS = bf$AGEG5LFS, ICTHOME = bf$ICTHOME, READHOME = bf$READHOME, WRITHOME = bf$WRITHOME, NUMHOME = bf$NUMHOME, NFEHRS = bf$NFEHRS, ICTWORK = bf$ICTWORK, READWORK = bf$READWORK, WRITWORK = bf$WRITWORK, NUMWORK = bf$NUMWORK, INFLUENCE = bf$INFLUENCE, EARNHRDCL = bf$EARNHRDCL, TASKDISC = bf$TASKDISC, LEARNATWORK = bf$LEARNATWORK) %>% cbind(after)
+df[["dff"]] = before %>% mutate(AGEG5LFS = bf$AGEG5LFS, ICTHOME = bf$ICTHOME, READHOME = bf$READHOME, WRITHOME = bf$WRITHOME, NUMHOME = bf$NUMHOME, NFEHRS = bf$NFEHRS, ICTWORK = bf$ICTWORK, READWORK = bf$READWORK, WRITWORK = bf$WRITWORK, NUMWORK = bf$NUMWORK, INFLUENCE = bf$INFLUENCE, EARNHRDCL = bf$EARNHRDCL, TASKDISC = bf$TASKDISC, LEARNATWORK = bf$LEARNATWORK) %>% cbind(after) %>% mutate(ftime)
 variables = c("tau", "theta", "naction", "spd", bname)
 
 tt = df[["dff"]]
+
 mm = aggregate(tt, list(tt$Class), FUN=mean)
 sd = aggregate(tt, list(tt$Class), FUN=sd)
 n = aggregate(tt, list(tt$Class), FUN=length)

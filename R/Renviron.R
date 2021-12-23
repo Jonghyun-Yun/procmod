@@ -1,4 +1,5 @@
 library(diprom)
+library(jyunr)
 ## library(coda)
 ## library(dplyr)
 ## library(ggplot2)
