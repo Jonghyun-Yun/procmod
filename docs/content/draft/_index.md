@@ -1,7 +1,7 @@
 +++
 title = "Draft"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-23T09:00:26-06:00
+lastmod = 2021-12-23T09:59:16-06:00
 draft = false
 weight = 3
 chapter = true
@@ -199,7 +199,7 @@ The OECD Survey of Adult Skills (PIAAC) assesses the proficiency of adults in in
 
 ### Illustrate a ticket example: {#illustrate-a-ticket-example}
 
-<a id="org9bfd322"></a>
+<a id="org8fd4aa2"></a>
 
 {{< figure src="/ox-hugo/tickets_demo.png" caption="Figure 1: An example of PS-TRE items. In this simulated web environment, respondents can access information required for ticket reservation." >}}
 
@@ -683,6 +683,20 @@ convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
 ![](/ox-hugo/lpa_box_all_2.png)
 ![](/ox-hugo/lpa_box_all_3.png)
 
+```sh
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+```
+
+```emacs-lisp
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+```
+
+{{< figure src="/ox-hugo/lpa_vio_all_3.png" >}}
+
 
 ### response {#response}
 
@@ -818,6 +832,20 @@ convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
 ![](/ox-hugo/lpa_box_all_2.png)
 ![](/ox-hugo/lpa_box_all_3.png)
 
+```sh
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+```
+
+```emacs-lisp
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+```
+
+{{< figure src="/ox-hugo/lpa_vio_all_3.png" >}}
+
 
 ### response {#response}
 
@@ -894,6 +922,20 @@ convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
 ![](/ox-hugo/lpa_box_all_2.png)
 ![](/ox-hugo/lpa_box_all_3.png)
 
+```sh
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+```
+
+```emacs-lisp
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+```
+
+{{< figure src="/ox-hugo/lpa_vio_all_3.png" >}}
+
 
 ## book\_order {#book-order}
 
@@ -959,6 +1001,16 @@ convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
 ![](/ox-hugo/lpa_box_all_2.png)
 ![](/ox-hugo/lpa_box_all_3.png)
 
+```sh
+cd $out_dir
+cd figure
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png
+```
+
+![](book_order/figure/lpa_vio_all_2.png)
+![](/ox-hugo/lpa_vio_all_3.png)
+
 
 ### reponse {#reponse}
 
@@ -1009,6 +1061,20 @@ convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
 ![](/ox-hugo/lpa_box_all_2.png)
 ![](/ox-hugo/lpa_box_all_3.png)
 
+```sh
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+```
+
+```emacs-lisp
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+```
+
+{{< figure src="/ox-hugo/lpa_vio_all_3.png" >}}
+
 
 ## lamp\_return {#lamp-return}
 
@@ -1027,6 +1093,20 @@ convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
 
 ![](/ox-hugo/lpa_box_all_3.png)
 ![](/ox-hugo/lpa_box_all_2.png)
+
+```sh
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+```
+
+```emacs-lisp
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+```
+
+{{< figure src="/ox-hugo/lpa_vio_all_3.png" >}}
 
 
 # References {#references}

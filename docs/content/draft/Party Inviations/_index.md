@@ -1,7 +1,7 @@
 +++
 title = "party_invitations-1"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-23T09:00:26-06:00
+lastmod = 2021-12-23T09:59:17-06:00
 draft = false
 weight = 3
 chapter = true
@@ -96,6 +96,20 @@ convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
 
 ![](party_invitations-1/figure/lpa_box_all_2.png)
 ![](party_invitations-1/figure/lpa_box_all_3.png)
+
+```sh
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+```
+
+```emacs-lisp
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+```
+
+{{< figure src="party_invitations-1/figure/lpa_vio_all_3.png" >}}
 
 
 # response {#response}
