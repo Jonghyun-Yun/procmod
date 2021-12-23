@@ -1,7 +1,7 @@
 +++
 title = "party_invitations-1"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-21T14:54:19-06:00
+lastmod = 2021-12-23T09:00:26-06:00
 draft = false
 weight = 3
 chapter = true
@@ -14,6 +14,8 @@ chapter = true
 
 - [collocation](#collocation)
 - [visual cluster](#visual-cluster)
+- [response](#response)
+- [archive](#archive)
 
 </div>
 <!--endtoc-->
@@ -85,10 +87,18 @@ chapter = true
 
 # visual cluster {#visual-cluster}
 
-![](party_invitations-1/figure/lpa_plot-0.png)
-![](party_invitations-1/figure/lpa_plot-1.png)
+```sh
+cd $out_dir
+cd figure
+convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
+convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
+```
 
-{{< figure src="party_invitations-1/figure/lpa_back_line.png" >}}
+![](party_invitations-1/figure/lpa_box_all_2.png)
+![](party_invitations-1/figure/lpa_box_all_3.png)
+
+
+# response {#response}
 
 Response: the larger, the better
 
@@ -110,3 +120,22 @@ Response: the larger, the better
 |------------:|------------:|-----------:|-----------:|-----------:|-------------:|
 |  1.82 (4.16)| -3.09 (9.85)| 0.98 (0.05)| 0.02 (0.05)| 0.70 (1.25)|  10.00 (0.00)|
 | -0.02 (0.90)|  0.03 (0.00)| 0.00 (0.01)| 1.00 (0.01)| 2.07 (1.23)| 960.00 (0.00)|
+
+
+# archive {#archive}
+
+![](party_invitations-1/figure/lpa_plot-0.png)
+![](party_invitations-1/figure/lpa_plot-1.png)
+
+{{< figure src="party_invitations-1/figure/lpa_back_line.png" >}}
+
+```sh
+out_dir="party_invitations-1/"
+cd $out_dir
+cd figure
+convert -density 300 lpa_box4.pdf lpa_box4.png
+convert -density 300 lpa_box_back.pdf lpa_box_back.png
+```
+
+![](party_invitations-1/figure/lpa_box4.png)
+![](party_invitations-1/figure/lpa_box_back.png)
