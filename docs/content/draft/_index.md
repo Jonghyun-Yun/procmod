@@ -1,7 +1,7 @@
 +++
 title = "Draft"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-23T09:59:16-06:00
+lastmod = 2021-12-23T15:03:38-06:00
 draft = false
 weight = 3
 chapter = true
@@ -45,14 +45,15 @@ chapter = true
         - [visual cluster](#visual-cluster)
         - [response](#response)
         - [archive](#archive)
+    - [cd\_tally](#cd-tally)
+        - [collocations](#collocations)
+        - [visualise cluster](#visualise-cluster)
+        - [response](#response)
     - [tickets](#tickets)
         - [collocation](#collocation)
         - [visualize clusters](#visualize-clusters)
         - [response](#response)
         - [more plots](#more-plots)
-    - [cd\_tally](#cd-tally)
-        - [collocations](#collocations)
-        - [visualise cluster](#visualise-cluster)
     - [book\_order](#book-order)
         - [collocations](#collocations)
         - [visual clusters](#visual-clusters)
@@ -61,9 +62,11 @@ chapter = true
     - [meeting\_room](#meeting-room)
         - [collocations](#collocations)
         - [visualise cluster](#visualise-cluster)
+        - [response](#response)
     - [lamp\_return](#lamp-return)
         - [collocations](#collocations)
         - [visualise cluster](#visualise-cluster)
+        - [response](#response)
 - [References](#references)
 
 </div>
@@ -199,7 +202,7 @@ The OECD Survey of Adult Skills (PIAAC) assesses the proficiency of adults in in
 
 ### Illustrate a ticket example: {#illustrate-a-ticket-example}
 
-<a id="org8fd4aa2"></a>
+<a id="org27acc71"></a>
 
 {{< figure src="/ox-hugo/tickets_demo.png" caption="Figure 1: An example of PS-TRE items. In this simulated web environment, respondents can access information required for ticket reservation." >}}
 
@@ -703,23 +706,25 @@ convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
 Response: the larger, the better
 
 
-### clustering w/ tau and theta
+### w/ tau and theta
 
 
-|          tau|        theta|      naction|           spd|         res|             n|
-|------------:|------------:|------------:|-------------:|-----------:|-------------:|
-|  2.06 (1.10)| -1.49 (0.96)|  0.08 (3.72)| -4.43 (11.77)| 0.43 (1.13)|   7.00 (0.00)|
-|  0.02 (0.65)|  0.63 (0.43)| -0.21 (0.38)|   0.03 (0.00)| 2.77 (0.56)| 443.00 (0.00)|
-| -0.65 (0.57)| -0.58 (1.11)| -0.28 (0.70)|   0.03 (0.00)| 1.18 (1.32)| 309.00 (0.00)|
-|  0.83 (1.33)| -0.43 (0.89)|  0.84 (1.51)|   0.03 (0.00)| 1.90 (1.24)| 211.00 (0.00)|
+|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
+|------------:|------------:|------------:|------------:|------------:|-------------:|
+|  1.01 (1.39)| -0.40 (0.91)|  1.06 (1.57)|  0.66 (1.06)| -0.19 (1.07)| 181.00 (0.00)|
+| -0.69 (0.50)|  0.30 (0.89)|  0.32 (0.49)| -0.18 (0.71)|  0.15 (0.98)| 270.00 (0.00)|
+|  0.18 (0.57)|  0.66 (0.34)| -0.30 (0.24)|  0.55 (0.70)| -0.33 (0.89)| 304.00 (0.00)|
+| -0.25 (0.75)| -0.96 (0.94)| -0.86 (0.33)| -1.11 (0.44)|  0.44 (0.91)| 215.00 (0.00)|
 
-### clustering w/o tau and theta
+### w/o tau and theta
 
 
-|      naction|          spd|      CPROB1|      CPROB2|         res|             n|
-|------------:|------------:|-----------:|-----------:|-----------:|-------------:|
-|  1.82 (4.16)| -3.09 (9.85)| 0.98 (0.05)| 0.02 (0.05)| 0.70 (1.25)|  10.00 (0.00)|
-| -0.02 (0.90)|  0.03 (0.00)| 0.00 (0.01)| 1.00 (0.01)| 2.07 (1.23)| 960.00 (0.00)|
+|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
+|------------:|------------:|-----------:|-----------:|------------:|-------------:|
+|  2.61 (1.42)|  1.00 (1.26)| 0.91 (0.15)| 0.09 (0.15)|  0.02 (1.00)|  69.00 (0.00)|
+|  0.27 (0.48)|  0.25 (0.84)| 0.06 (0.08)| 0.88 (0.13)| -0.10 (1.04)| 429.00 (0.00)|
+| -0.43 (0.11)|  0.06 (0.78)| 0.01 (0.01)| 0.26 (0.07)| -0.08 (0.94)| 321.00 (0.00)|
+| -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
 
 
 ### archive {#archive}
@@ -739,6 +744,63 @@ convert -density 300 lpa_box_back.pdf lpa_box_back.png
 
 ![](/ox-hugo/lpa_box4.png)
 ![](/ox-hugo/lpa_box_back.png)
+
+
+## cd\_tally {#cd-tally}
+
+
+### collocations {#collocations}
+
+
+### visualise cluster {#visualise-cluster}
+
+```sh
+cd $out_dir
+cd figure
+convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
+convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
+```
+
+![](/ox-hugo/lpa_box_all_2.png)
+![](/ox-hugo/lpa_box_all_3.png)
+
+```sh
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+```
+
+```emacs-lisp
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+```
+
+{{< figure src="/ox-hugo/lpa_vio_all_3.png" >}}
+
+
+### response {#response}
+
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
+|------------:|------------:|------------:|------------:|------------:|-------------:|
+|  1.01 (1.39)| -0.40 (0.91)|  1.06 (1.57)|  0.66 (1.06)| -0.19 (1.07)| 181.00 (0.00)|
+| -0.69 (0.50)|  0.30 (0.89)|  0.32 (0.49)| -0.18 (0.71)|  0.15 (0.98)| 270.00 (0.00)|
+|  0.18 (0.57)|  0.66 (0.34)| -0.30 (0.24)|  0.55 (0.70)| -0.33 (0.89)| 304.00 (0.00)|
+| -0.25 (0.75)| -0.96 (0.94)| -0.86 (0.33)| -1.11 (0.44)|  0.44 (0.91)| 215.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
+|------------:|------------:|-----------:|-----------:|------------:|-------------:|
+|  2.61 (1.42)|  1.00 (1.26)| 0.91 (0.15)| 0.09 (0.15)|  0.02 (1.00)|  69.00 (0.00)|
+|  0.27 (0.48)|  0.25 (0.84)| 0.06 (0.08)| 0.88 (0.13)| -0.10 (1.04)| 429.00 (0.00)|
+| -0.43 (0.11)|  0.06 (0.78)| 0.01 (0.01)| 0.26 (0.07)| -0.08 (0.94)| 321.00 (0.00)|
+| -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
 
 
 ## tickets {#tickets}
@@ -851,35 +913,26 @@ convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
 
 Response: the smaller, the better
 
-## mean
+
+### w/ tau and theta
 
 
-|        tau|      theta|    naction|        spd|      res|
-|----------:|----------:|----------:|----------:|--------:|
-| -0.4123013|  0.1939430|  0.0105633|  0.2949513| 3.710588|
-|  0.9344900| -0.6655596|  0.3971435|  0.1263112| 5.219081|
-|  1.1296467| -1.7866636| -1.9230219| -1.9932064| 7.000000|
-| -0.9718218|  1.3403763|  0.1527688| -0.0648598| 3.145251|
+|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
+|------------:|------------:|------------:|------------:|------------:|-------------:|
+|  1.01 (1.39)| -0.40 (0.91)|  1.06 (1.57)|  0.66 (1.06)| -0.19 (1.07)| 181.00 (0.00)|
+| -0.69 (0.50)|  0.30 (0.89)|  0.32 (0.49)| -0.18 (0.71)|  0.15 (0.98)| 270.00 (0.00)|
+|  0.18 (0.57)|  0.66 (0.34)| -0.30 (0.24)|  0.55 (0.70)| -0.33 (0.89)| 304.00 (0.00)|
+| -0.25 (0.75)| -0.96 (0.94)| -0.86 (0.33)| -1.11 (0.44)|  0.44 (0.91)| 215.00 (0.00)|
 
-## sd
-
-
-|       tau|    theta|   naction|       spd|      res|
-|---------:|--------:|---------:|---------:|--------:|
-| 0.4111353| 0.384638| 0.6375695| 0.2628682| 2.989527|
-| 0.9065238| 0.553052| 1.2095532| 0.3520752| 2.745995|
-| 0.9047816| 1.085768| 0.1671354| 2.6734464| 0.000000|
-| 0.2688267| 0.354953| 0.5181867| 0.3940398| 2.883724|
-
-## n
+### w/o tau and theta
 
 
-| tau| theta| naction| spd| res|
-|---:|-----:|-------:|---:|---:|
-| 425|   425|     425| 425| 425|
-| 283|   283|     283| 283| 283|
-|  75|    75|      75|  75|  75|
-| 179|   179|     179| 179| 179|
+|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
+|------------:|------------:|-----------:|-----------:|------------:|-------------:|
+|  2.61 (1.42)|  1.00 (1.26)| 0.91 (0.15)| 0.09 (0.15)|  0.02 (1.00)|  69.00 (0.00)|
+|  0.27 (0.48)|  0.25 (0.84)| 0.06 (0.08)| 0.88 (0.13)| -0.10 (1.04)| 429.00 (0.00)|
+| -0.43 (0.11)|  0.06 (0.78)| 0.01 (0.01)| 0.26 (0.07)| -0.08 (0.94)| 321.00 (0.00)|
+| -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
 
 
 ### more plots {#more-plots}
@@ -902,39 +955,6 @@ Response: the smaller, the better
 | ![](/ox-hugo/time_action_more-8.png)  | ![](/ox-hugo/time_action_more-9.png)  |
 | ![](/ox-hugo/time_action_more-10.png) | ![](/ox-hugo/time_action_more-11.png) |
 | ![](/ox-hugo/time_action_more-13.png) |                                       |
-
-
-## cd\_tally {#cd-tally}
-
-
-### collocations {#collocations}
-
-
-### visualise cluster {#visualise-cluster}
-
-```sh
-cd $out_dir
-cd figure
-convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
-convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
-```
-
-![](/ox-hugo/lpa_box_all_2.png)
-![](/ox-hugo/lpa_box_all_3.png)
-
-```sh
-cd $out_dir/figure;
-convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
-convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
-```
-
-```emacs-lisp
-(concat
-  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
-  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
-```
-
-{{< figure src="/ox-hugo/lpa_vio_all_3.png" >}}
 
 
 ## book\_order {#book-order}
@@ -1008,7 +1028,7 @@ convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png
 convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png
 ```
 
-![](book_order/figure/lpa_vio_all_2.png)
+![](/ox-hugo/lpa_vio_all_2.png)
 ![](/ox-hugo/lpa_vio_all_3.png)
 
 
@@ -1020,19 +1040,22 @@ Response: the larger, the better
 ### w/ tau and theta
 
 
-|          tau|        theta|      naction|          spd|         res|             n|
-|------------:|------------:|------------:|------------:|-----------:|-------------:|
-| -0.18 (0.88)|  0.37 (0.49)|  0.21 (0.68)|  0.11 (0.42)| 2.27 (2.45)| 450.00 (0.00)|
-|  0.83 (1.06)| -1.67 (0.83)| -1.34 (0.12)| -0.25 (0.80)| 6.32 (1.92)|  88.00 (0.00)|
-|  0.31 (1.32)| -0.79 (1.73)|  0.95 (2.48)| -0.96 (3.97)| 4.23 (3.05)|  26.00 (0.00)|
+|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
+|------------:|------------:|------------:|------------:|------------:|-------------:|
+|  1.01 (1.39)| -0.40 (0.91)|  1.06 (1.57)|  0.66 (1.06)| -0.19 (1.07)| 181.00 (0.00)|
+| -0.69 (0.50)|  0.30 (0.89)|  0.32 (0.49)| -0.18 (0.71)|  0.15 (0.98)| 270.00 (0.00)|
+|  0.18 (0.57)|  0.66 (0.34)| -0.30 (0.24)|  0.55 (0.70)| -0.33 (0.89)| 304.00 (0.00)|
+| -0.25 (0.75)| -0.96 (0.94)| -0.86 (0.33)| -1.11 (0.44)|  0.44 (0.91)| 215.00 (0.00)|
 
 ### w/o tau and theta
 
 
-|      naction|          spd|      CPROB1|      CPROB2|         res|             n|
-|------------:|------------:|-----------:|-----------:|-----------:|-------------:|
-| -0.04 (0.83)|  0.08 (0.45)| 0.99 (0.03)| 0.01 (0.03)| 2.91 (2.80)| 535.00 (0.00)|
-|  0.73 (2.54)| -1.45 (3.73)| 0.11 (0.16)| 0.89 (0.16)| 4.52 (3.01)|  29.00 (0.00)|
+|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
+|------------:|------------:|-----------:|-----------:|------------:|-------------:|
+|  2.61 (1.42)|  1.00 (1.26)| 0.91 (0.15)| 0.09 (0.15)|  0.02 (1.00)|  69.00 (0.00)|
+|  0.27 (0.48)|  0.25 (0.84)| 0.06 (0.08)| 0.88 (0.13)| -0.10 (1.04)| 429.00 (0.00)|
+| -0.43 (0.11)|  0.06 (0.78)| 0.01 (0.01)| 0.26 (0.07)| -0.08 (0.94)| 321.00 (0.00)|
+| -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
 
 
 ### archive {#archive}
@@ -1076,6 +1099,9 @@ convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
 {{< figure src="/ox-hugo/lpa_vio_all_3.png" >}}
 
 
+### response {#response}
+
+
 ## lamp\_return {#lamp-return}
 
 
@@ -1091,8 +1117,8 @@ convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
 convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
 ```
 
-![](/ox-hugo/lpa_box_all_3.png)
 ![](/ox-hugo/lpa_box_all_2.png)
+![](/ox-hugo/lpa_box_all_3.png)
 
 ```sh
 cd $out_dir/figure;
@@ -1107,6 +1133,30 @@ convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
 ```
 
 {{< figure src="/ox-hugo/lpa_vio_all_3.png" >}}
+
+
+### response {#response}
+
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
+|------------:|------------:|------------:|------------:|------------:|-------------:|
+|  1.01 (1.39)| -0.40 (0.91)|  1.06 (1.57)|  0.66 (1.06)| -0.19 (1.07)| 181.00 (0.00)|
+| -0.69 (0.50)|  0.30 (0.89)|  0.32 (0.49)| -0.18 (0.71)|  0.15 (0.98)| 270.00 (0.00)|
+|  0.18 (0.57)|  0.66 (0.34)| -0.30 (0.24)|  0.55 (0.70)| -0.33 (0.89)| 304.00 (0.00)|
+| -0.25 (0.75)| -0.96 (0.94)| -0.86 (0.33)| -1.11 (0.44)|  0.44 (0.91)| 215.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
+|------------:|------------:|-----------:|-----------:|------------:|-------------:|
+|  2.61 (1.42)|  1.00 (1.26)| 0.91 (0.15)| 0.09 (0.15)|  0.02 (1.00)|  69.00 (0.00)|
+|  0.27 (0.48)|  0.25 (0.84)| 0.06 (0.08)| 0.88 (0.13)| -0.10 (1.04)| 429.00 (0.00)|
+| -0.43 (0.11)|  0.06 (0.78)| 0.01 (0.01)| 0.26 (0.07)| -0.08 (0.94)| 321.00 (0.00)|
+| -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
 
 
 # References {#references}
