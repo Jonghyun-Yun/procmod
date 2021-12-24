@@ -20,8 +20,8 @@
 #+setupfile: ~/org/latex_header.setup
 #+setupfile: ~/org/orgmode_header.setup
 
-#+property: header-args :eval never-export
-#+property: header-args:R :eval never-export
+#+property: header-args :eval never-export :exports none
+#+property: header-args:R :eval never-export :exports none
 #+property: header-args:ein :session localhost
 #+property: header-args:jupyter-python :session *jupyter-piacc* :kernel tf
 
@@ -1310,12 +1310,12 @@ convert -density 300 lpa_back_line.pdf lpa_back_line.png
 
 Response: the larger, the better
 
-#+begin_src R :exports results :var ob_out_dir=(jyun/get-heading) :results output html
-library(diprom)
-load(paste0(ob_out_dir, "/summaryw_res.RData"))
+#+begin_src R :exports results :var ob_out_dir=(jyun/get-nth-up-heading) :results output html
+library(jyunr)
+load(paste0(out_dir, "/summaryw_res_mod2.RData"))
 cat("\n### w/ tau and theta\n")
 mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
-load(paste0(ob_out_dir, "/mod3_summaryw_res.RData"))
+load(paste0(out_dir, "/summaryw_res_mod3.RData"))
 cat("\n### w/o tau and theta\n")
 mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
 #+end_src
@@ -1452,7 +1452,7 @@ mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(ali
 |  0.73 (2.54)| -1.45 (3.73)| 0.11 (0.16)| 0.89 (0.16)| 4.52 (3.01)|  29.00 (0.00)|
 #+end_export
 
-* Model :noexport:ARCHIVE:
+* Model :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_SECTION: model
@@ -2343,10 +2343,12 @@ $\mbox{Inv-Gamma}(\alpha,\beta)$ denotes the inverse gamma distribution with a d
   p(\sigma_{\beta}^{2}|ee) = inv-Gamma(a + 0.5, b + 0.5 (\beta - \mu_{\beta})^2)
 \]
 ** Applications
-*** Tickets
 :PROPERTIES:
+:header-args:R: :exports results :eval never-export
 :EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: Tickets
+:EXPORT_HUGO_BUNDLE: applications
+:EXPORT_HUGO_WEIGHT: 50
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :chapter true
 :END:
 
 We implement the prposed method to our motivating example.
@@ -2377,6 +2379,659 @@ Do
 1) collcations: freq and time -> show what are these actions, explain semantic ass and time efficiency
 2) map respondents marked by \tau, \theta: find neighboring actions?? not necessarily what they did
 3) text summary: how it works? too ambiguous.. it seems to work by removing some sentences
+*** party_invitations-1
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: party_invitations-1
+:EXPORT_HUGO_WEIGHT: 10
+:END:
+**** collocation
+#+begin_src R :var out_dir=(jyun/get-nth-up-heading) :results html
+out_dir = paste0(out_dir,"/")
+mc = "4"
+for (class in 1:mc) {
+tt = read.delim(paste0(out_dir,"bi_ss_class_",class,".tsv"), header=F)
+names(tt) = c("bigram","likelihood_ratio")
+cat("\n\n## Class ", class, "\n")
+print(knitr::kable(tt))
+}
+#+end_src
+
+#+begin_export html
+
+
+## Class  1
+
+
+|bigram                                                                    | likelihood_ratio|
+|:-------------------------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |         817.3284|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |         723.4372|
+|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                       |         510.8037|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |         495.2927|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |         416.9918|
+|('FOLDER_VIEWED-TrashFolder', 'MAIL_MOVED-item103.target=TrashFolder')    |         374.2922|
+|('FOLDER_VIEWED-TrashFolder', 'MAIL_MOVED-item105.target=TrashFolder')    |         320.9747|
+|('FOLDER_VIEWED-InboxFolder', 'MAIL_MOVED-item103.InboxFolder')           |         315.7787|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_VIEWED-item301')                 |         292.7040|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item301.CannotComeFolder') |         278.9309|
+
+
+## Class  2
+
+
+|bigram                                                                    | likelihood_ratio|
+|:-------------------------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |         894.4766|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |         865.1981|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |         654.7479|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |         646.6347|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_VIEWED-item301')                 |         485.7336|
+|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                       |         449.1188|
+|('MAIL_VIEWED-item201', 'MAIL_VIEWED-item202')                            |         310.1378|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_VIEWED-item201')                    |         259.9339|
+|('MAIL_DRAG-item104', 'FOLDER_VIEWED-CanComeFolder')                      |         234.2510|
+|('FOLDER_VIEWED-CanComeFolder', 'FOLDER_VIEWED-CanComeFolder')            |         224.1286|
+
+
+## Class  3
+
+
+|bigram                                                                    | likelihood_ratio|
+|:-------------------------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |        1920.6574|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |        1414.3165|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |        1367.2376|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |        1151.9347|
+|('MAIL_MOVED-item104.CanComeFolder', 'MAIL_VIEWED-item105')               |         528.8972|
+|('MAIL_VIEWED-item104', 'MAIL_DRAG-item104')                              |         473.7513|
+|('MAIL_DRAG-item104', 'FOLDER_VIEWED-CanComeFolder')                      |         462.6390|
+|('MAIL_VIEWED-item105', 'NEXT_INQUIRY-REQUEST')                           |         374.3775|
+|('MAIL_MOVED-item101.CanComeFolder', 'MAIL_VIEWED-item102')               |         349.0786|
+|('MAIL_MOVED-item102.CannotComeFolder', 'MAIL_VIEWED-item103')            |         319.1954|
+
+
+## Class  4
+
+
+|bigram                                                                    | likelihood_ratio|
+|:-------------------------------------------------------------------------|----------------:|
+|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                       |        217.80195|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |        215.63280|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |        211.32627|
+|('MAIL_MOVED-item101.CanComeFolder', 'MAIL_DRAG-item104')                 |        148.42662|
+|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |        141.61502|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |         96.50556|
+|('MAIL_DRAG-item104', 'FOLDER_VIEWED-CanComeFolder')                      |         89.07329|
+|('FOLDER_VIEWED-CanComeFolder', 'FOLDER_VIEWED-CannotComeFolder')         |         63.34961|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_VIEWED-item202')                    |         60.13844|
+|('MAIL_VIEWED-item103', 'MAIL_VIEWED-item104')                            |         58.77450|
+#+end_export
+
+**** visual cluster
+
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading)
+cd $out_dir
+cd figure
+convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
+convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
+#+end_src
+
+[[file:party_invitations-1/figure/lpa_box_all_2.png]]
+[[file:party_invitations-1/figure/lpa_box_all_3.png]]
+
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading)
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+#+end_src
+
+#+RESULTS:
+
+#+begin_src emacs-lisp :var out_dir=(jyun/get-nth-up-heading) :results value raw replace
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+#+end_src
+
+[[file:party_invitations-1/figure/lpa_vio_all_2.png]]
+[[file:party_invitations-1/figure/lpa_vio_all_3.png]]
+
+**** response
+Response: the larger, the better
+
+#+begin_src R :exports results :var ob_out_dir=(jyun/get-nth-up-heading) :results output html
+library(jyunr)
+library('magrittr')
+load(paste0(out_dir, "/summaryw_res_mod2.RData"))
+cat("\n### w/ tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+load(paste0(out_dir, "/summaryw_res_mod3.RData"))
+cat("\n### w/o tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+Loading required package: ggplot2
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
+|------------:|------------:|------------:|------------:|------------:|-------------:|
+|  0.88 (1.77)| -1.05 (1.11)|  1.85 (1.79)|  1.02 (1.83)| -0.23 (1.00)|  57.00 (0.00)|
+| -0.38 (0.57)| -0.33 (0.91)|  0.04 (0.71)| -0.61 (0.49)|  0.42 (1.01)| 175.00 (0.00)|
+|  0.67 (0.94)| -0.08 (0.98)| -0.18 (0.53)|  0.59 (0.79)| -0.45 (0.88)| 144.00 (0.00)|
+| -0.43 (0.43)|  0.69 (0.47)| -0.47 (0.27)| -0.19 (0.58)|  0.02 (0.92)| 186.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
+|------------:|------------:|-----------:|-----------:|------------:|-------------:|
+|  3.06 (1.66)|  1.58 (2.25)| 0.94 (0.14)| 0.00 (0.00)| -0.13 (1.09)|  28.00 (0.00)|
+| -0.53 (0.32)| -0.28 (0.60)| 0.01 (0.01)| 0.83 (0.13)|  0.04 (0.98)| 340.00 (0.00)|
+|  0.48 (0.52)|  0.26 (0.99)| 0.06 (0.08)| 0.12 (0.15)| -0.06 (1.02)| 194.00 (0.00)|
+#+end_export
+
+#+begin_export html
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
+|------------:|------------:|------------:|------------:|------------:|-------------:|
+|  1.01 (1.39)| -0.40 (0.91)|  1.06 (1.57)|  0.66 (1.06)| -0.19 (1.07)| 181.00 (0.00)|
+| -0.69 (0.50)|  0.30 (0.89)|  0.32 (0.49)| -0.18 (0.71)|  0.15 (0.98)| 270.00 (0.00)|
+|  0.18 (0.57)|  0.66 (0.34)| -0.30 (0.24)|  0.55 (0.70)| -0.33 (0.89)| 304.00 (0.00)|
+| -0.25 (0.75)| -0.96 (0.94)| -0.86 (0.33)| -1.11 (0.44)|  0.44 (0.91)| 215.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
+|------------:|------------:|-----------:|-----------:|------------:|-------------:|
+|  2.61 (1.42)|  1.00 (1.26)| 0.91 (0.15)| 0.09 (0.15)|  0.02 (1.00)|  69.00 (0.00)|
+|  0.27 (0.48)|  0.25 (0.84)| 0.06 (0.08)| 0.88 (0.13)| -0.10 (1.04)| 429.00 (0.00)|
+| -0.43 (0.11)|  0.06 (0.78)| 0.01 (0.01)| 0.26 (0.07)| -0.08 (0.94)| 321.00 (0.00)|
+| -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
+#+end_export
+**** archive :noexport:
+[[file:party_invitations-1/figure/lpa_plot-0.png]]
+[[file:party_invitations-1/figure/lpa_plot-1.png]]
+# [[file:party_invitations-1/figure/lpa_back.png]]
+[[file:party_invitations-1/figure/lpa_back_line.png]]
+
+#+begin_src sh
+out_dir="party_invitations-1/"
+cd $out_dir
+cd figure
+convert -density 300 lpa_box4.pdf lpa_box4.png
+convert -density 300 lpa_box_back.pdf lpa_box_back.png
+#+end_src
+
+#+RESULTS:
+
+[[file:party_invitations-1/figure/lpa_box4.png]]
+[[file:party_invitations-1/figure/lpa_box_back.png]]
+
+*** party_invitations-2
+**** collocations
+#+begin_src R :var out_dir=(jyun/get-nth-up-heading) :results html
+out_dir = paste0(out_dir,"/")
+mc = "4"
+for (class in 1:mc) {
+tt = read.delim(paste0(out_dir,"bi_ss_class_",class,".tsv"), header=F)
+names(tt) = c("bigram","likelihood_ratio")
+cat("## Class ", class, "\n")
+print(knitr::kable(tt))
+}
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+## Class  1
+
+
+|bigram                                                                               | likelihood_ratio|
+|:------------------------------------------------------------------------------------|----------------:|
+|('MENU-file-menu', 'MENUITEM_newfolder-key=newfolder')                               |        2528.3556|
+|('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS')                         |        1799.8624|
+|('MAIL_VIEWED-item105', 'MAIL_DRAG-item105')                                         |        1342.5568|
+|('MAIL_VIEWED-item103', 'MAIL_DRAG-item103')                                         |        1298.1635|
+|('MAIL_VIEWED-item101', 'MAIL_DRAG-item101')                                         |        1172.5856|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                                         |        1108.3516|
+|('MENUITEM_newfolder-key=newfolder', 'TEXTBOX_ONFOCUS-createfoldernameinput.value=') |         992.6872|
+|('FOLDER_VIEWED-item0', 'MAIL_MOVED-item101.target=item0')                           |         944.8772|
+|('MAIL_VIEWED-item104', 'MAIL_DRAG-item104')                                         |         824.0098|
+|('FOLDER_VIEWED-item0', 'MAIL_MOVED-item103.target=item0')                           |         818.9305|
+## Class  2
+
+
+|bigram                                                                               | likelihood_ratio|
+|:------------------------------------------------------------------------------------|----------------:|
+|('MENU-file-menu', 'MENUITEM_newfolder-key=newfolder')                               |        149.15848|
+|('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS')                         |        143.13642|
+|('FOLDER_UNFOLDED-PartyFolder', 'FOLDER_FOLDED-PartyFolder')                         |         84.27078|
+|('MAIL_VIEWED-item104', 'MAIL_VIEWED-item105')                                       |         77.60177|
+|('MENUITEM_newfolder-key=newfolder', 'TEXTBOX_ONFOCUS-createfoldernameinput.value=') |         70.86729|
+|('MAIL_VIEWED-item102', 'MAIL_VIEWED-item103')                                       |         69.67765|
+|('FOLDER_UNFOLDED-myMails', 'FOLDER_FOLDED-myMails')                                 |         68.68677|
+|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endunit_txt4')                                  |         60.63236|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')                  |         52.70685|
+|('MAIL_VIEWED-item103', 'MAIL_VIEWED-item104')                                       |         51.41539|
+## Class  3
+
+
+|bigram                                                                               | likelihood_ratio|
+|:------------------------------------------------------------------------------------|----------------:|
+|('MENU-file-menu', 'MENUITEM_newfolder-key=newfolder')                               |         2995.612|
+|('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS')                         |         2770.209|
+|('MAIL_VIEWED-item105', 'MAIL_DRAG-item105')                                         |         2528.411|
+|('MAIL_VIEWED-item101', 'MAIL_DRAG-item101')                                         |         2279.772|
+|('MAIL_VIEWED-item103', 'MAIL_DRAG-item103')                                         |         1976.424|
+|('FOLDER_VIEWED-item0', 'MAIL_MOVED-item101.target=item0')                           |         1835.078|
+|('FOLDER_VIEWED-item0', 'MAIL_MOVED-item103.target=item0')                           |         1787.390|
+|('FOLDER_VIEWED-item0', 'MAIL_MOVED-item105.target=item0')                           |         1719.341|
+|('MENUITEM_newfolder-key=newfolder', 'TEXTBOX_ONFOCUS-createfoldernameinput.value=') |         1487.584|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                                         |         1375.493|
+## Class  4
+
+
+|bigram                                                  | likelihood_ratio|
+|:-------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-CanComeFolder', 'NEXT_INQUIRY-REQUEST') |         6.843888|
+|('TOOLBAR_mailApp-mailApp', 'NEXT_INQUIRY-REQUEST')     |         2.256425|
+#+end_export
+
+**** visualise cluster
+***** with tau, theta
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
+cd $out_dir
+cd figure
+convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
+convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
+#+end_src
+
+#+RESULTS:
+
+#+begin_src emacs-lisp :var out_dir=(jyun/get-nth-up-heading 2) :results value raw replace
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_box_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_box_all_3.png")))
+#+end_src
+
+#+RESULTS:
+[[file:party_invitations-2/figure/lpa_box_all_2.png]]
+[[file:party_invitations-2/figure/lpa_box_all_3.png]]
+
+***** w.o. tau, theta
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+#+end_src
+
+#+RESULTS:
+
+#+begin_src emacs-lisp :var out_dir=(jyun/get-nth-up-heading 2) :results value raw replace
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+#+end_src
+
+#+RESULTS:
+[[file:party_invitations-2/figure/lpa_vio_all_2.png]]
+[[file:party_invitations-2/figure/lpa_vio_all_3.png]]
+
+**** response
+#+begin_src R :exports results :var ob_out_dir=(jyun/get-nth-up-heading) :results output html
+library(jyunr)
+library('magrittr')
+load(paste0(out_dir, "/summaryw_res_mod2.RData"))
+cat("\n### w/ tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+load(paste0(out_dir, "/summaryw_res_mod3.RData"))
+cat("\n### w/o tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|         res|             n|
+|------------:|------------:|------------:|------------:|-----------:|-------------:|
+|  0.69 (1.21)| -0.14 (0.54)|  0.69 (1.07)|  0.36 (1.03)| 4.23 (3.00)| 342.00 (0.00)|
+| -0.12 (0.68)| -0.86 (0.82)| -1.14 (0.24)| -1.13 (0.45)| 6.96 (0.47)| 165.00 (0.00)|
+| -0.48 (0.54)|  0.80 (0.40)|  0.09 (0.39)|  0.30 (0.68)| 2.32 (2.49)| 404.00 (0.00)|
+| -0.40 (0.24)| -2.33 (0.16)| -1.48 (0.01)| -1.01 (0.87)| 7.00 (0.00)|  56.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|         res|             n|
+|------------:|------------:|-----------:|-----------:|-----------:|-------------:|
+| -1.40 (0.09)| -1.46 (0.29)| 0.90 (0.11)| 0.00 (0.00)| 7.00 (0.00)| 112.00 (0.00)|
+|  1.71 (1.57)|  1.31 (1.21)| 0.00 (0.00)| 0.82 (0.19)| 4.75 (2.93)|  72.00 (0.00)|
+|  0.50 (0.55)|  0.60 (0.71)| 0.00 (0.00)| 0.11 (0.09)| 2.81 (2.76)| 377.00 (0.00)|
+| -0.38 (0.49)| -0.39 (0.51)| 0.02 (0.07)| 0.02 (0.03)| 4.28 (2.99)| 406.00 (0.00)|
+#+end_export
+
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: party_invitations-2
+:EXPORT_HUGO_WEIGHT: 15
+:END:
+*** cd_tally
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: cd_tally
+:EXPORT_HUGO_WEIGHT: 20
+:END:
+**** collocations
+#+begin_src R :var out_dir=(jyun/get-nth-up-heading) :results html
+out_dir = paste0(out_dir,"/")
+mc = "4"
+for (class in 1:mc) {
+tt = read.delim(paste0(out_dir,"bi_ss_class_",class,".tsv"), header=F)
+names(tt) = c("bigram","likelihood_ratio")
+cat("## Class ", class, "\n")
+print(knitr::kable(tt))
+}
+#+end_src
+
+#+begin_export html
+## Class  1
+
+
+|bigram                                                                     | likelihood_ratio|
+|:--------------------------------------------------------------------------|----------------:|
+|('SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST')              |       1459.57552|
+|('TOOLBAR_spreadApp-spreadApp', 'TOOLBAR_webApp-webApp')                   |       1189.05250|
+|('TOOLBAR_webApp-webApp', 'COMBOBOX-menulist.index=9')                     |        455.87983|
+|('COMBOBOX-menulist.index=9', 'SUBMIT_complete-u03_default_txt14')         |        404.68816|
+|('TOOLBAR_webApp-webApp', 'TOOLBAR_spreadApp-spreadApp')                   |        178.25025|
+|('NEXT_INQUIRY-REQUEST', 'SUBMIT_complete-u03_default_txt14')              |         84.10660|
+|('SUBMIT_complete-u03_default_txt14', 'SUBMIT_complete-u03_default_txt14') |         77.40740|
+|('SUBMIT_complete-u03_default_txt14', 'TOOLBAR_spreadApp-spreadApp')       |         74.16434|
+|('TOOLBAR_webApp-webApp', 'NEXT_INQUIRY-REQUEST')                          |         67.95933|
+|('TOOLBAR_webApp-webApp', 'COMBOBOX-menulist.index=8')                     |         63.94217|
+## Class  2
+
+
+|bigram                                                             | likelihood_ratio|
+|:------------------------------------------------------------------|----------------:|
+|('SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST')      |        2355.3848|
+|('TOOLBAR_spreadApp-spreadApp', 'TOOLBAR_webApp-webApp')           |        1392.4234|
+|('COMBOBOX-menulist.index=9', 'SUBMIT_complete-u03_default_txt14') |         865.4099|
+|('TOOLBAR_webApp-webApp', 'COMBOBOX-menulist.index=9')             |         832.1501|
+|('TOOLBAR_webApp-webApp', 'TOOLBAR_spreadApp-spreadApp')           |         606.5532|
+|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                |         502.3374|
+|('TOOLBAR_ss-sort-ss-sort', 'COMBOBOX-sortablecol1.index=3')       |         485.4294|
+|('MENUITEM_sort-key=sort', 'COMBOBOX-sortablecol1.index=3')        |         453.2708|
+|('MENU-ss-data-menu', 'MENUITEM_sort-key=sort')                    |         435.1334|
+|('COMBOBOX-sortablecol1.index=3', 'RADIO_BTN-priority1asc')        |         322.2008|
+## Class  3
+
+
+|bigram                                                              | likelihood_ratio|
+|:-------------------------------------------------------------------|----------------:|
+|('SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST')       |       340.964425|
+|('COMBOBOX-menulist.index=4', 'SUBMIT_complete-u03_default_txt14')  |       217.307581|
+|('COMBOBOX-menulist.index=11', 'SUBMIT_complete-u03_default_txt14') |        26.081798|
+|('KEYPRESS', 'BREAKOFF-REQUEST')                                    |        14.724331|
+|('COMBOBOX-menulist.index=26', 'SUBMIT_complete-u03_default_txt14') |         7.358132|
+|('COMBOBOX-menulist.index=3', 'SUBMIT_complete-u03_default_txt14')  |         7.358132|
+|('COMBOBOX-menulist.index=7', 'SUBMIT_complete-u03_default_txt14')  |         7.358132|
+|('COMBOBOX-menulist.index=9', 'SUBMIT_complete-u03_default_txt14')  |         7.358132|
+|('GET_HELP-REQUEST', 'COMBOBOX-menulist.index=4')                   |         4.880417|
+|('COMBOBOX-menulist.index=10', 'SUBMIT_complete-u03_default_txt14') |         3.669923|
+## Class  4
+
+
+|bigram                                                                                | likelihood_ratio|
+|:-------------------------------------------------------------------------------------|----------------:|
+|('SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST')                         |         339.8976|
+|('TOOLBAR_spreadApp-spreadApp', 'TOOLBAR_webApp-webApp')                              |         225.6964|
+|('COMBOBOX-menulist.index=9', 'SUBMIT_complete-u03_default_txt14')                    |         206.3333|
+|('TEXTBOX_ONFOCUS-searchtfield.value=', 'KEYPRESS')                                   |         195.4571|
+|('TOOLBAR_webApp-webApp', 'COMBOBOX-menulist.index=9')                                |         192.6315|
+|('TOOLBAR_webApp-webApp', 'TOOLBAR_spreadApp-spreadApp')                              |         179.7811|
+|('CD_FIND_ok-spread-search-btn', 'TOOLBAR_spread-search-next-spread-search-next-btn') |         177.6448|
+|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                                   |         129.0081|
+|('TOOLBAR_ss-sort-ss-sort', 'COMBOBOX-sortablecol1.index=3')                          |         115.3623|
+|('MENU-ss-data-menu', 'MENUITEM_sort-key=sort')                                       |         104.0280|
+#+end_export
+
+**** visualise cluster
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading)
+cd $out_dir
+cd figure
+convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
+convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
+#+end_src
+
+[[file:cd_tally/figure/lpa_box_all_2.png]]
+[[file:cd_tally/figure/lpa_box_all_3.png]]
+
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading)
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+#+end_src
+
+#+RESULTS:
+
+#+begin_src emacs-lisp :var out_dir=(jyun/get-nth-up-heading) :results value raw replace
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+#+end_src
+
+[[file:cd_tally/figure/lpa_vio_all_2.png]]
+[[file:cd_tally/figure/lpa_vio_all_3.png]]
+
+**** response
+#+begin_src R :exports results :var ob_out_dir=(jyun/get-nth-up-heading) :results output html
+library(jyunr)
+library('magrittr')
+load(paste0(out_dir, "/summaryw_res_mod2.RData"))
+cat("\n### w/ tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+load(paste0(out_dir, "/summaryw_res_mod3.RData"))
+cat("\n### w/o tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+#+end_src
+
+#+begin_export html
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
+|------------:|------------:|------------:|------------:|------------:|-------------:|
+|  1.01 (1.39)| -0.40 (0.91)|  1.06 (1.57)|  0.66 (1.06)| -0.19 (1.07)| 181.00 (0.00)|
+| -0.69 (0.50)|  0.30 (0.89)|  0.32 (0.49)| -0.18 (0.71)|  0.15 (0.98)| 270.00 (0.00)|
+|  0.18 (0.57)|  0.66 (0.34)| -0.30 (0.24)|  0.55 (0.70)| -0.33 (0.89)| 304.00 (0.00)|
+| -0.25 (0.75)| -0.96 (0.94)| -0.86 (0.33)| -1.11 (0.44)|  0.44 (0.91)| 215.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
+|------------:|------------:|-----------:|-----------:|------------:|-------------:|
+|  2.61 (1.42)|  1.00 (1.26)| 0.91 (0.15)| 0.09 (0.15)|  0.02 (1.00)|  69.00 (0.00)|
+|  0.27 (0.48)|  0.25 (0.84)| 0.06 (0.08)| 0.88 (0.13)| -0.10 (1.04)| 429.00 (0.00)|
+| -0.43 (0.11)|  0.06 (0.78)| 0.01 (0.01)| 0.26 (0.07)| -0.08 (0.94)| 321.00 (0.00)|
+| -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
+#+end_export
+
+
+*** sprained_ankle-1
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: sprained_ankle-1
+:EXPORT_HUGO_WEIGHT: 25
+:END:
+
+**** collocations
+#+begin_src R :var out_dir=(jyun/get-nth-up-heading) :results html
+out_dir = paste0(out_dir,"/")
+mc = "4"
+for (class in 1:mc) {
+tt = read.delim(paste0(out_dir,"bi_ss_class_",class,".tsv"), header=F)
+names(tt) = c("bigram","likelihood_ratio")
+cat("## Class ", class, "\n")
+print(knitr::kable(tt))
+}
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+## Class  1
+
+
+|bigram                                                                              | likelihood_ratio|
+|:-----------------------------------------------------------------------------------|----------------:|
+|('TEXTLINK-default_txt3.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4') |        1344.4991|
+|('RADIO_BTN-u06arg5_prop1', 'NEXT_INQUIRY-REQUEST')                                 |         934.3955|
+|('RADIO_BTN-u06arg2_prop4', 'RADIO_BTN-u06arg3_prop1')                              |         912.2600|
+|('RADIO_BTN-u06arg4_prop2', 'RADIO_BTN-u06arg5_prop1')                              |         616.5295|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop2')                              |         477.9250|
+|('RADIO_BTN-u06arg1_prop3', 'RADIO_BTN-u06arg2_prop4')                              |         461.9316|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop3')                              |         221.0925|
+|('RADIO_BTN-u06arg4_prop3', 'RADIO_BTN-u06arg5_prop1')                              |         177.5447|
+|('BUTTON_close-popup1_txt4', 'RADIO_BTN-u06arg1_prop3')                             |         166.0958|
+|('RADIO_BTN-u06arg1_prop1', 'RADIO_BTN-u06arg2_prop4')                              |         165.2207|
+## Class  2
+
+
+|bigram                                                                                                                           | likelihood_ratio|
+|:--------------------------------------------------------------------------------------------------------------------------------|----------------:|
+|('TEXTLINK-default_txt3.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                              |        1075.1198|
+|('TEXTLINK-default_txt6.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                              |         434.3967|
+|('TEXTBOX_ONFOCUS-default_txt2.value=Treatment_sprained_ankle', 'TEXTBOX_KILLFOCUS-default_txt2.value=Treatment_sprained_ankle') |         278.0813|
+|('RADIO_BTN-u06arg5_prop1', 'NEXT_INQUIRY-REQUEST')                                                                              |         254.3394|
+|('RADIO_BTN-u06arg4_prop2', 'RADIO_BTN-u06arg5_prop1')                                                                           |         238.1879|
+|('RADIO_BTN-u06arg2_prop4', 'RADIO_BTN-u06arg3_prop1')                                                                           |         236.0504|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop2')                                                                           |         183.0596|
+|('RADIO_BTN-u06arg1_prop3', 'RADIO_BTN-u06arg2_prop4')                                                                           |         181.7720|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop1')                                                                           |         178.4015|
+|('TEXTLINK-default_txt9.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                              |         172.8964|
+## Class  3
+
+
+|bigram                                                                                                                           | likelihood_ratio|
+|:--------------------------------------------------------------------------------------------------------------------------------|----------------:|
+|('TEXTBOX_ONFOCUS-default_txt2.value=Treatment_sprained_ankle', 'TEXTBOX_KILLFOCUS-default_txt2.value=Treatment_sprained_ankle') |        379.02638|
+|('TEXTLINK-default_txt3.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                              |        375.52227|
+|('TEXTLINK-default_txt6.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                              |        251.72685|
+|('RADIO_BTN-u06arg1_prop1', 'RADIO_BTN-u06arg2_prop1')                                                                           |        126.47143|
+|('RADIO_BTN-u06arg5_prop1', 'NEXT_INQUIRY-REQUEST')                                                                              |        111.10380|
+|('TEXTLINK-default_txt15.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                             |         95.97460|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop1')                                                                           |         82.03548|
+|('TEXTLINK-default_txt9.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                              |         81.23657|
+|('RADIO_BTN-u06arg4_prop1', 'RADIO_BTN-u06arg5_prop1')                                                                           |         74.60586|
+|('TEXTLINK-default_txt12.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                             |         74.02665|
+## Class  4
+
+
+|bigram                                                                              | likelihood_ratio|
+|:-----------------------------------------------------------------------------------|----------------:|
+|('RADIO_BTN-u06arg5_prop1', 'NEXT_INQUIRY-REQUEST')                                 |        553.96719|
+|('RADIO_BTN-u06arg2_prop4', 'RADIO_BTN-u06arg3_prop1')                              |        362.95333|
+|('TEXTLINK-default_txt3.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4') |        357.06437|
+|('RADIO_BTN-u06arg1_prop3', 'RADIO_BTN-u06arg2_prop4')                              |        350.83133|
+|('RADIO_BTN-u06arg4_prop2', 'RADIO_BTN-u06arg5_prop1')                              |        319.63262|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop2')                              |        272.33694|
+|('RADIO_BTN-u06arg4_prop1', 'RADIO_BTN-u06arg5_prop1')                              |         80.41556|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop3')                              |         67.51748|
+|('RADIO_BTN-u06arg1_prop1', 'RADIO_BTN-u06arg2_prop1')                              |         66.65437|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop1')                              |         62.16008|
+#+end_export
+
+**** visualise cluster
+***** with tau, theta
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
+cd $out_dir
+cd figure
+convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
+convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
+#+end_src
+
+#+RESULTS:
+
+#+begin_src emacs-lisp :var out_dir=(jyun/get-nth-up-heading 2) :results value raw replace
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_box_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_box_all_3.png")))
+#+end_src
+
+#+RESULTS:
+[[file:sprained_ankle-1/figure/lpa_box_all_2.png]]
+[[file:sprained_ankle-1/figure/lpa_box_all_3.png]]
+
+***** w.o. tau, theta
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+#+end_src
+
+#+RESULTS:
+
+#+begin_src emacs-lisp :var out_dir=(jyun/get-nth-up-heading 2) :results value raw replace
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+#+end_src
+
+#+RESULTS:
+[[file:sprained_ankle-1/figure/lpa_vio_all_2.png]]
+[[file:sprained_ankle-1/figure/lpa_vio_all_3.png]]
+
+**** response
+#+begin_src R :exports results :var ob_out_dir=(jyun/get-nth-up-heading) :results output html
+library(jyunr)
+library('magrittr')
+load(paste0(out_dir, "/summaryw_res_mod2.RData"))
+cat("\n### w/ tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+load(paste0(out_dir, "/summaryw_res_mod3.RData"))
+cat("\n### w/o tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|         res|             n|
+|------------:|------------:|------------:|------------:|-----------:|-------------:|
+| -0.60 (0.46)|  0.34 (0.57)| -0.19 (0.31)| -0.48 (0.32)| 4.35 (2.98)| 385.00 (0.00)|
+|  0.27 (0.95)| -0.68 (1.03)|  0.16 (0.97)| -0.06 (0.65)| 6.01 (2.23)| 314.00 (0.00)|
+|  1.22 (1.51)| -0.37 (1.40)|  0.82 (2.25)|  1.88 (1.66)| 6.76 (1.18)| 101.00 (0.00)|
+|  0.14 (0.58)|  0.74 (0.36)| -0.39 (0.23)|  0.10 (0.62)| 4.06 (3.01)| 163.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|         res|             n|
+|------------:|------------:|-----------:|-----------:|-----------:|-------------:|
+| -0.27 (0.27)| -0.43 (0.35)| 0.79 (0.10)| 0.00 (0.00)| 4.50 (2.96)| 556.00 (0.00)|
+|  1.48 (2.22)|  2.17 (1.63)| 0.00 (0.00)| 0.93 (0.12)| 6.57 (1.56)|  83.00 (0.00)|
+| -0.06 (0.74)|  0.69 (0.39)| 0.08 (0.12)| 0.05 (0.08)| 5.89 (2.33)| 190.00 (0.00)|
+|  0.29 (1.16)| -0.55 (0.41)| 0.08 (0.13)| 0.03 (0.06)| 5.52 (2.59)| 134.00 (0.00)|
+#+end_export
+
+*** tickets
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: tickets
+:EXPORT_HUGO_WEIGHT: 30
+:END:
+
 
 #+begin_src emacs-lisp :var out_dir="tickets"
 (insert-file (concat out_dir "/lpa_mods.txt"))
@@ -2432,123 +3087,81 @@ convert -density 300 time_action_more.pdf time_action_more-%d.png
 convert -density 300 time_action.pdf time_action-%d.png
 #+END_SRC
 
-#+begin_src sh
-out_dir="tickets/"
-cd $out_dir
-cd figure
-convert -density 300 lpa_box4.pdf lpa_box4.png
-convert -density 300 lpa_box_back.pdf lpa_box_back.png
-#+end_src
-
-#+transclude: [[id:a183bf8a-10f9-4ccb-861b-9658d5b2b9f5][ticket]] :only-contents 
+ # #+transclude: [[id:a183bf8a-10f9-4ccb-861b-9658d5b2b9f5][ticket]] :only-contents
 
 **** collocation
-#+begin_src R :var out_dir="tickets/" :results none
-tt = readr::read_tsv(paste0(out_dir,"bi_ss_class_4.tsv"), col_names=F, progress = F)
+#+begin_src R :var out_dir=(jyun/get-nth-up-heading) :results html
+out_dir = paste0(out_dir,"/")
+mc = "4"
+for (class in 1:mc) {
+tt = read.delim(paste0(out_dir,"bi_ss_class_",class,".tsv"), header=F)
 names(tt) = c("bigram","likelihood_ratio")
+cat("## Class ", class, "\n")
+print(knitr::kable(tt))
+}
 #+end_src
 
-#+begin_src R :results html :exports results
-knitr::kable(tt)
-#+end_src
-
-#+RESULTS:
 #+begin_export html
-## Class 4
+## Class  1
+
 
 |bigram                                                               | likelihood_ratio|
 |:--------------------------------------------------------------------|----------------:|
-|('TAB-tabbutton2', 'TAB-tabbutton1')                                 |        3250.4640|
-|('BUTTON_submit-pg2_txt33', 'BUTTON_submit_ok-u21p2pu5_txt2')        |        1593.4218|
-|('BUTTON_submit_ok-u21p2pu5_txt2', 'NEXT_INQUIRY-REQUEST')           |        1203.7973|
-|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2') |        1170.1266|
-|('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23')    |        1132.6405|
-|('CHECKBOX-check11', 'BUTTON_available-pg1_txt47')                   |        1044.0817|
-|('CHECKBOX-check9', 'CHECKBOX-check11')                              |        1012.5782|
-|('CHECKBOX-check2', 'CHECKBOX-check3')                               |         823.4326|
-|('BUTTON_available-pg1_txt47', 'COMBOBOX-pg2_menu1.index=8')         |         666.0548|
-|('COMBOBOX-pg2_menu6.index=8', 'BUTTON_submit-pg2_txt33')            |         644.3896|
-#+end_export
+|('TAB-tabbutton2', 'TAB-tabbutton1')                                 |        5348.6765|
+|('BUTTON_submit-pg2_txt33', 'BUTTON_submit_ok-u21p2pu5_txt2')        |        3823.0690|
+|('BUTTON_submit_ok-u21p2pu5_txt2', 'NEXT_INQUIRY-REQUEST')           |        2159.6960|
+|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2') |        1966.0726|
+|('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23')    |        1898.1312|
+|('CHECKBOX-check2', 'CHECKBOX-check3')                               |        1584.7181|
+|('CHECKBOX-check9', 'CHECKBOX-check11')                              |        1578.2255|
+|('CHECKBOX-check11', 'BUTTON_available-pg1_txt47')                   |        1189.0331|
+|('BUTTON_available-pg1_txt47', 'BUTTON_available-pg7_txt47')         |        1101.9322|
+|('COMBOBOX-pg2_menu6.index=8', 'BUTTON_submit-pg2_txt33')            |         922.0956|
+## Class  2
 
-#+begin_src R :var out_dir="tickets/" :results none
-tt = readr::read_tsv(paste0(out_dir,"bi_ss_class_3.tsv"), col_names=F, progress = F)
-names(tt) = c("bigram","likelihood_ratio")
-#+end_src
-
-#+begin_src R :results html :exports results
-knitr::kable(tt)
-#+end_src
-
-#+RESULTS:
-#+begin_export html
-## Class 3
 
 |bigram                                                                                                             | likelihood_ratio|
 |:------------------------------------------------------------------------------------------------------------------|----------------:|
-|('BUTTON_search-default_txt23', 'BUTTON_close-popup1_txt4')                                                        |        60.525996|
-|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2')                                               |        30.504433|
-|('COMBOBOX-default_menu2.index=2', 'NEXT_INQUIRY-REQUEST')                                                         |        18.700064|
-|('TAB-tabbutton2', 'TAB-tabbutton1')                                                                               |        14.000061|
-|('CHECKBOX-check4', 'BUTTON_available-pg1_txt47')                                                                  |        13.654947|
-|('COMBOBOX-default_menu1.index=3', 'COMBOBOX-default_menu2.index=1')                                               |        10.670246|
-|('BUTTON_close-popup1_txt4', 'NEXT_INQUIRY-REQUEST')                                                               |        10.305298|
-|('BOX_PRESS-action=as://switchStateButton(u021_default_form1a,unit21page6,u021_default_popup2)', 'TAB-tabbutton1') |         9.835862|
-|('COMBOBOX-default_menu1.index=3', 'COMBOBOX-default_menu1.index=4')                                               |         9.156266|
-|('COMBOBOX-default_menu1.index=3', 'COMBOBOX-default_menu2.index=4')                                               |         9.156266|
-#+end_export
+|('BUTTON_search-default_txt23', 'BUTTON_close-popup1_txt4')                                                        |        55.698957|
+|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2')                                               |        37.495676|
+|('COMBOBOX-default_menu2.index=2', 'NEXT_INQUIRY-REQUEST')                                                         |        17.586276|
+|('TAB-tabbutton2', 'TAB-tabbutton1')                                                                               |        13.757955|
+|('CHECKBOX-check4', 'BUTTON_available-pg1_txt47')                                                                  |        13.533514|
+|('BUTTON_close-popup1_txt4', 'NEXT_INQUIRY-REQUEST')                                                               |        11.074180|
+|('COMBOBOX-default_menu1.index=3', 'COMBOBOX-default_menu2.index=1')                                               |        10.430812|
+|('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23')                                                  |         9.834263|
+|('BOX_PRESS-action=as://switchStateButton(u021_default_form1a,unit21page6,u021_default_popup2)', 'TAB-tabbutton1') |         9.714429|
+|('TAB-tabbutton1', 'NEXT_INQUIRY-REQUEST')                                                                         |         9.489936|
+## Class  3
 
-#+begin_src R :var out_dir="tickets/" :results none
-tt = readr::read_tsv(paste0(out_dir,"bi_ss_class_2.tsv"), col_names=F, progress = F)
-names(tt) = c("bigram","likelihood_ratio")
-#+end_src
-
-#+begin_src R :results html :exports results
-knitr::kable(tt)
-#+end_src
-
-#+RESULTS:
-#+begin_export html
-## Class 2
 
 |bigram                                                               | likelihood_ratio|
 |:--------------------------------------------------------------------|----------------:|
-|('TAB-tabbutton2', 'TAB-tabbutton1')                                 |        4358.0690|
-|('BUTTON_submit-pg2_txt33', 'BUTTON_submit_ok-u21p2pu5_txt2')        |        2503.5212|
-|('BUTTON_available-pg1_txt47', 'BUTTON_available-pg7_txt47')         |        1248.4710|
-|('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23')    |        1062.6828|
-|('BUTTON_submit_ok-u21p2pu5_txt2', 'NEXT_INQUIRY-REQUEST')           |        1061.0533|
-|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2') |         896.4663|
-|('BUTTON_submit_ok-u21p2pu5_txt2', 'BUTTON_close-popup2_txt4')       |         822.5202|
-|('CHECKBOX-check2', 'CHECKBOX-check3')                               |         577.8453|
-|('CHECKBOX-check9', 'CHECKBOX-check11')                              |         561.1858|
-|('CHECKBOX-check11', 'BUTTON_available-pg1_txt47')                   |         409.1931|
-#+end_export
+|('TAB-tabbutton2', 'TAB-tabbutton1')                                 |        4082.5863|
+|('BUTTON_submit-pg2_txt33', 'BUTTON_submit_ok-u21p2pu5_txt2')        |        2397.7490|
+|('BUTTON_available-pg1_txt47', 'BUTTON_available-pg7_txt47')         |        1283.7639|
+|('BUTTON_submit_ok-u21p2pu5_txt2', 'NEXT_INQUIRY-REQUEST')           |         991.4217|
+|('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23')    |         884.3631|
+|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2') |         780.2374|
+|('BUTTON_submit_ok-u21p2pu5_txt2', 'BUTTON_close-popup2_txt4')       |         774.0134|
+|('CHECKBOX-check2', 'CHECKBOX-check3')                               |         511.6382|
+|('CHECKBOX-check9', 'CHECKBOX-check11')                              |         481.3976|
+|('CHECKBOX-check11', 'BUTTON_available-pg1_txt47')                   |         378.1517|
+## Class  4
 
-#+begin_src R :var out_dir="tickets/" :results none
-tt = readr::read_tsv(paste0(out_dir,"bi_ss_class_1.tsv"), col_names=F, progress = F)
-names(tt) = c("bigram","likelihood_ratio")
-#+end_src
-
-#+begin_src R :results html :exports results
-knitr::kable(tt)
-#+end_src
-
-#+RESULTS:
-#+begin_export html
-## Class 1
 
 |bigram                                                               | likelihood_ratio|
 |:--------------------------------------------------------------------|----------------:|
-|('TAB-tabbutton2', 'TAB-tabbutton1')                                 |        5518.3265|
-|('BUTTON_submit-pg2_txt33', 'BUTTON_submit_ok-u21p2pu5_txt2')        |        3888.7627|
-|('BUTTON_submit_ok-u21p2pu5_txt2', 'NEXT_INQUIRY-REQUEST')           |        2233.5503|
-|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2') |        1954.7621|
-|('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23')    |        1806.9551|
-|('CHECKBOX-check9', 'CHECKBOX-check11')                              |        1586.1384|
-|('CHECKBOX-check2', 'CHECKBOX-check3')                               |        1576.2932|
-|('CHECKBOX-check11', 'BUTTON_available-pg1_txt47')                   |        1194.1592|
-|('BUTTON_available-pg1_txt47', 'BUTTON_available-pg7_txt47')         |        1155.0621|
-|('COMBOBOX-pg2_menu6.index=8', 'BUTTON_submit-pg2_txt33')            |         995.2568|
+|('TAB-tabbutton2', 'TAB-tabbutton1')                                 |        3693.8423|
+|('BUTTON_submit-pg2_txt33', 'BUTTON_submit_ok-u21p2pu5_txt2')        |        1761.9371|
+|('BUTTON_submit_ok-u21p2pu5_txt2', 'NEXT_INQUIRY-REQUEST')           |        1335.2799|
+|('COMBOBOX-default_menu1.index=7', 'COMBOBOX-default_menu2.index=2') |        1273.6836|
+|('COMBOBOX-default_menu2.index=2', 'BUTTON_search-default_txt23')    |        1220.8369|
+|('CHECKBOX-check9', 'CHECKBOX-check11')                              |        1099.9491|
+|('CHECKBOX-check11', 'BUTTON_available-pg1_txt47')                   |        1069.7063|
+|('CHECKBOX-check2', 'CHECKBOX-check3')                               |         885.6972|
+|('BUTTON_available-pg1_txt47', 'COMBOBOX-pg2_menu1.index=8')         |         718.7921|
+|('COMBOBOX-pg2_menu6.index=8', 'BUTTON_submit-pg2_txt33')            |         703.2595|
 #+end_export
 
 #+begin_export html
@@ -2573,6 +3186,95 @@ knitr::kable(tt)
 #+end_export
 
 **** visualize clusters
+
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading)
+cd $out_dir
+cd figure
+convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
+convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
+#+end_src
+
+[[file:tickets/figure/lpa_box_all_2.png]]
+[[file:tickets/figure/lpa_box_all_3.png]]
+
+
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading)
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+#+end_src
+
+
+#+begin_src emacs-lisp :var out_dir=(jyun/get-nth-up-heading) :results value raw replace
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+#+end_src
+
+[[file:tickets/figure/lpa_vio_all_2.png]]
+[[file:tickets/figure/lpa_vio_all_3.png]]
+
+
+**** response
+Response: the smaller, the better
+
+#+begin_src R :exports results :var ob_out_dir=(jyun/get-nth-up-heading) :results output html
+library(jyunr)
+library('magrittr')
+load(paste0(out_dir, "/summaryw_res_mod2.RData"))
+cat("\n### w/ tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+load(paste0(out_dir, "/summaryw_res_mod3.RData"))
+cat("\n### w/o tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
+|------------:|------------:|------------:|------------:|------------:|-------------:|
+|  0.88 (1.77)| -1.05 (1.11)|  1.85 (1.79)|  1.02 (1.83)| -0.23 (1.00)|  57.00 (0.00)|
+| -0.38 (0.57)| -0.33 (0.91)|  0.04 (0.71)| -0.61 (0.49)|  0.42 (1.01)| 175.00 (0.00)|
+|  0.67 (0.94)| -0.08 (0.98)| -0.18 (0.53)|  0.59 (0.79)| -0.45 (0.88)| 144.00 (0.00)|
+| -0.43 (0.43)|  0.69 (0.47)| -0.47 (0.27)| -0.19 (0.58)|  0.02 (0.92)| 186.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
+|------------:|------------:|-----------:|-----------:|------------:|-------------:|
+|  3.06 (1.66)|  1.58 (2.25)| 0.94 (0.14)| 0.00 (0.00)| -0.13 (1.09)|  28.00 (0.00)|
+| -0.53 (0.32)| -0.28 (0.60)| 0.01 (0.01)| 0.83 (0.13)|  0.04 (0.98)| 340.00 (0.00)|
+|  0.48 (0.52)|  0.26 (0.99)| 0.06 (0.08)| 0.12 (0.15)| -0.06 (1.02)| 194.00 (0.00)|
+#+end_export
+
+#+begin_export html
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
+|------------:|------------:|------------:|------------:|------------:|-------------:|
+|  1.01 (1.39)| -0.40 (0.91)|  1.06 (1.57)|  0.66 (1.06)| -0.19 (1.07)| 181.00 (0.00)|
+| -0.69 (0.50)|  0.30 (0.89)|  0.32 (0.49)| -0.18 (0.71)|  0.15 (0.98)| 270.00 (0.00)|
+|  0.18 (0.57)|  0.66 (0.34)| -0.30 (0.24)|  0.55 (0.70)| -0.33 (0.89)| 304.00 (0.00)|
+| -0.25 (0.75)| -0.96 (0.94)| -0.86 (0.33)| -1.11 (0.44)|  0.44 (0.91)| 215.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
+|------------:|------------:|-----------:|-----------:|------------:|-------------:|
+|  2.61 (1.42)|  1.00 (1.26)| 0.91 (0.15)| 0.09 (0.15)|  0.02 (1.00)|  69.00 (0.00)|
+|  0.27 (0.48)|  0.25 (0.84)| 0.06 (0.08)| 0.88 (0.13)| -0.10 (1.04)| 429.00 (0.00)|
+| -0.43 (0.11)|  0.06 (0.78)| 0.01 (0.01)| 0.26 (0.07)| -0.08 (0.94)| 321.00 (0.00)|
+| -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
+#+end_export
+**** more plots :noexport:
+
 |------------------------------------+------------------------------------|
 | [[file:tickets/figure/lpa_plot-0.png]] | [[file:tickets/figure/lpa_plot-1.png]] |
 
@@ -2582,41 +3284,6 @@ knitr::kable(tt)
 [[file:~/Dropbox/research/procmod/procmod-code/tickets/figure/lpa_box4.png]]
 [[file:~/Dropbox/research/procmod/procmod-code/tickets/figure/lpa_box_back.png]]
 
-
-Response: the smaller, the better
-#+RESULTS:
-#+begin_export html
-## mean
-
-
-|        tau|      theta|    naction|        spd|      res|
-|----------:|----------:|----------:|----------:|--------:|
-| -0.4123013|  0.1939430|  0.0105633|  0.2949513| 3.710588|
-|  0.9344900| -0.6655596|  0.3971435|  0.1263112| 5.219081|
-|  1.1296467| -1.7866636| -1.9230219| -1.9932064| 7.000000|
-| -0.9718218|  1.3403763|  0.1527688| -0.0648598| 3.145251|
-
-## sd
-
-
-|       tau|    theta|   naction|       spd|      res|
-|---------:|--------:|---------:|---------:|--------:|
-| 0.4111353| 0.384638| 0.6375695| 0.2628682| 2.989527|
-| 0.9065238| 0.553052| 1.2095532| 0.3520752| 2.745995|
-| 0.9047816| 1.085768| 0.1671354| 2.6734464| 0.000000|
-| 0.2688267| 0.354953| 0.5181867| 0.3940398| 2.883724|
-
-## n
-
-
-| tau| theta| naction| spd| res|
-|---:|-----:|-------:|---:|---:|
-| 425|   425|     425| 425| 425|
-| 283|   283|     283| 283| 283|
-|  75|    75|      75|  75|  75|
-| 179|   179|     179| 179| 179|
-#+end_export
-**** more plots
 \tau's covaritates:
 \theta's covaritates:
 | [[file:tickets/figure/theta_tau_res.png]]       | [[file:tickets/figure/tau_action.png]]          |
@@ -2626,15 +3293,18 @@ Response: the smaller, the better
 | [[file:tickets/figure/time_action_more-10.png]] | [[file:tickets/figure/time_action_more-11.png]] |
 | [[file:tickets/figure/time_action_more-13.png]] |                                             |
 
-*** party_invitations-1
+
+*** club_membership-1
 :PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: Party Inviations
+:EXPORT_HUGO_BUNDLE: club_membership-1
+:EXPORT_HUGO_WEIGHT: 35
 :END:
-**** collocation
-#+begin_src R :var out_dir="party_invitations-1/" :results html
-class = "4"
-for (class in c(4,3,2,1) {
+
+**** collocations
+#+begin_src R :var out_dir=(jyun/get-nth-up-heading) :results html
+out_dir = paste0(out_dir,"/")
+mc = "3"
+for (class in 1:mc) {
 tt = read.delim(paste0(out_dir,"bi_ss_class_",class,".tsv"), header=F)
 names(tt) = c("bigram","likelihood_ratio")
 cat("## Class ", class, "\n")
@@ -2644,135 +3314,131 @@ print(knitr::kable(tt))
 
 #+RESULTS:
 #+begin_export html
-Error: unexpected '{' in "for (class in c(4,3,2,1) {"
-## Class  4
-
-
-|bigram                                                                    | likelihood_ratio|
-|:-------------------------------------------------------------------------|----------------:|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |         893.0519|
-|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |         753.8523|
-|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                       |         499.8053|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |         485.6045|
-|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |         465.2566|
-|('FOLDER_VIEWED-TrashFolder', 'MAIL_MOVED-item103.target=TrashFolder')    |         372.2541|
-|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_VIEWED-item301')                 |         340.5003|
-|('FOLDER_VIEWED-TrashFolder', 'MAIL_MOVED-item105.target=TrashFolder')    |         328.1632|
-|('FOLDER_VIEWED-InboxFolder', 'MAIL_MOVED-item103.InboxFolder')           |         289.7540|
-|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item301.CannotComeFolder') |         279.3375|
-Error: unexpected '}' in "}"
-#+end_export
-
-#+begin_export html
 ## Class  1
 
 
-|bigram                                                                                                                                                                                                           | likelihood_ratio|
-|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------:|
-|('FOLDER_VIEWED-PartyFolder', 'FOLDER_VIEWED-CanComeFolder')                                                                                                                                                     |        17.688138|
-|('MAIL_DRAG-item202', 'FOLDER_VIEWED-undefined')                                                                                                                                                                 |        17.282805|
-|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                                                                                                                                                              |        13.154464|
-|('TEXTBOX_ONFOCUS-endtask_txt2.value=Are_you_sure_you_want_to_continue_to_the_next_part_of_this_task?', 'TEXTBOX_KILLFOCUS-endtask_txt2.value=Are_you_sure_you_want_to_continue_to_the_next_part_of_this_task?') |        12.467555|
-|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                                                                                                                                                                     |        11.986592|
-|('FOLDER_VIEWED-PartyFolder', 'MAIL_MOVED-item104.PartyFolder')                                                                                                                                                  |        10.989428|
-|('FOLDER_VIEWED-SentFolder', 'FOLDER_VIEWED-InboxFolder')                                                                                                                                                        |         9.941930|
-|('FOLDER_VIEWED-TrashFolder', 'MAIL_DRAG-item301')                                                                                                                                                               |         9.694967|
-|('MAIL_MOVED-item102.CanComeFolder', 'MAIL_VIEWED-item201')                                                                                                                                                      |         9.694967|
-|('MAIL_DRAG-item104', 'FOLDER_VIEWED-undefined')                                                                                                                                                                 |         9.653278|
+|bigram                                                                                                 | likelihood_ratio|
+|:------------------------------------------------------------------------------------------------------|----------------:|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=...', 'TEXTBOX_KILLFOCUS-u019_email_message.value=...')     |        1350.7463|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=....', 'TEXTBOX_KILLFOCUS-u019_email_message.value=....')   |         834.1867|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=', 'KEYPRESS')                                              |         743.0269|
+|('TOOLBAR_mailApp-mailApp', 'TEXTBOX_ONFOCUS-u019_email_message.value=')                               |         706.1838|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=', 'TEXTBOX_KILLFOCUS-u019_email_message.value=')           |         423.1183|
+|('TEXTBOX_ONFOCUS-email.value=', 'TEXTBOX_KILLFOCUS-email.value=')                                     |         365.8373|
+|('CELL_CHANGE-content_spreadsheet_ColaD_row65', 'TOOLBAR_mailApp-mailApp')                             |         317.9156|
+|('TEXTBOX_ONFOCUS-searchtfield.value=', 'KEYPRESS')                                                    |         305.8994|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=.....', 'TEXTBOX_KILLFOCUS-u019_email_message.value=.....') |         282.9375|
+|('TOOLBAR_ss-find-ss-find', 'TEXTBOX_ONFOCUS-searchtfield.value=')                                     |         226.6560|
 ## Class  2
 
 
-|bigram                                                                    | likelihood_ratio|
-|:-------------------------------------------------------------------------|----------------:|
-|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |        2502.6131|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |        1968.2782|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |        1873.9550|
-|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |        1486.8755|
-|('MAIL_DRAG-item104', 'FOLDER_VIEWED-CanComeFolder')                      |         718.7690|
-|('MAIL_MOVED-item104.CanComeFolder', 'MAIL_VIEWED-item105')               |         672.6594|
-|('MAIL_VIEWED-item104', 'MAIL_DRAG-item104')                              |         580.9381|
-|('MAIL_MOVED-item101.CanComeFolder', 'MAIL_DRAG-item104')                 |         462.8913|
-|('MAIL_DRAG-item102', 'FOLDER_VIEWED-CannotComeFolder')                   |         448.0094|
-|('MAIL_VIEWED-item201', 'MAIL_VIEWED-item202')                            |         436.9725|
+|bigram                                                                                                 | likelihood_ratio|
+|:------------------------------------------------------------------------------------------------------|----------------:|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=....', 'TEXTBOX_KILLFOCUS-u019_email_message.value=....')   |        1637.1887|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=...', 'TEXTBOX_KILLFOCUS-u019_email_message.value=...')     |        1353.0898|
+|('TOOLBAR_mailApp-mailApp', 'TEXTBOX_ONFOCUS-u019_email_message.value=')                               |        1270.2396|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=', 'KEYPRESS')                                              |         990.1056|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=', 'TEXTBOX_KILLFOCUS-u019_email_message.value=')           |         562.8241|
+|('TEXTBOX_ONFOCUS-email.value=', 'TEXTBOX_KILLFOCUS-email.value=')                                     |         521.7128|
+|('TEXTBOX_ONFOCUS-searchtfield.value=', 'KEYPRESS')                                                    |         476.3342|
+|('TEXTBOX_KILLFOCUS-searchtfield.value=.....', 'MEM_FIND_ok-spread-search-btn')                        |         382.0834|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=.....', 'TEXTBOX_KILLFOCUS-u019_email_message.value=.....') |         370.8978|
+|('NEXT_INQUIRY-REQUEST', 'TEXTBOX_ONFOCUS-u019_email_message.value=...')                               |         345.2553|
 ## Class  3
 
 
-|bigram                                                                    | likelihood_ratio|
-|:-------------------------------------------------------------------------|----------------:|
-|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                       |         556.4045|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |         443.5316|
-|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |         396.8755|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |         358.4323|
-|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |         324.5675|
-|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_VIEWED-item301')                 |         289.3671|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_VIEWED-item201')                    |         167.4030|
-|('FOLDER_VIEWED-CanComeFolder', 'MOVE_FOLDER_ok-moveValidation')          |         147.3766|
-|('MAIL_VIEWED-item103', 'MAIL_VIEWED-item104')                            |         140.9344|
-|('FOLDER_VIEWED-CanComeFolder', 'FOLDER_VIEWED-CanComeFolder')            |         129.5768|
-## Class  4
-
-
-|bigram                                                                    | likelihood_ratio|
-|:-------------------------------------------------------------------------|----------------:|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item101.CanComeFolder')       |         893.0519|
-|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item102.CannotComeFolder') |         753.8523|
-|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')                       |         499.8053|
-|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')       |         485.6045|
-|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                              |         465.2566|
-|('FOLDER_VIEWED-TrashFolder', 'MAIL_MOVED-item103.target=TrashFolder')    |         372.2541|
-|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_VIEWED-item301')                 |         340.5003|
-|('FOLDER_VIEWED-TrashFolder', 'MAIL_MOVED-item105.target=TrashFolder')    |         328.1632|
-|('FOLDER_VIEWED-InboxFolder', 'MAIL_MOVED-item103.InboxFolder')           |         289.7540|
-|('FOLDER_VIEWED-CannotComeFolder', 'MAIL_MOVED-item301.CannotComeFolder') |         279.3375|
+|bigram                                                                                                                                                                                       | likelihood_ratio|
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------:|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=...', 'TEXTBOX_KILLFOCUS-u019_email_message.value=...')                                                                                           |        1102.4764|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=....', 'TEXTBOX_KILLFOCUS-u019_email_message.value=....')                                                                                         |         986.7735|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=', 'TEXTBOX_KILLFOCUS-u019_email_message.value=')                                                                                                 |         776.3836|
+|('TEXTBOX_ONFOCUS-email.value=', 'TEXTBOX_KILLFOCUS-email.value=')                                                                                                                           |         563.2145|
+|('TEXTBOX_ONFOCUS-clientzone_box3_textbox3.value=', 'TEXTBOX_KILLFOCUS-clientzone_box3_textbox3.value=')                                                                                     |         280.6153|
+|('TEXTBOX_ONFOCUS-popup2_txt1.value=The_email_has_been_sent._Please_click_Next_to_continue.', 'TEXTBOX_KILLFOCUS-popup2_txt1.value=The_email_has_been_sent._Please_click_Next_to_continue.') |         280.6153|
+|('TOOLBAR_mailApp-mailApp', 'TEXTBOX_ONFOCUS-u019_email_message.value=')                                                                                                                     |         257.7530|
+|('TEXTBOX_ONFOCUS-u019_mc_txt4.value=secretary@bikeclub.org', 'TEXTBOX_KILLFOCUS-u019_mc_txt4.value=secretary@bikeclub.org')                                                                 |         251.1673|
+|('TEXTBOX_ONFOCUS-searchtfield.value=', 'KEYPRESS')                                                                                                                                          |         241.1137|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=', 'KEYPRESS')                                                                                                                                    |         215.5836|
 #+end_export
 
-**** visual cluster
-[[file:party_invitations-1/figure/lpa_plot-0.png]]
-[[file:party_invitations-1/figure/lpa_plot-1.png]]
-# [[file:party_invitations-1/figure/lpa_back.png]]
-[[file:party_invitations-1/figure/lpa_back_line.png]]
-
-#+begin_src sh
-out_dir="party_invitations-1/"
+**** visualise cluster
+***** with tau, theta
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
 cd $out_dir
 cd figure
-convert -density 300 lpa_box4.pdf lpa_box4.png
-convert -density 300 lpa_box_back.pdf lpa_box_back.png
+convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
+convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
 #+end_src
 
 #+RESULTS:
 
-[[file:party_invitations-1/figure/lpa_box4.png]]
-[[file:party_invitations-1/figure/lpa_box_back.png]]
+#+begin_src emacs-lisp :var out_dir=(jyun/get-nth-up-heading 2) :results value raw replace
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_box_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_box_all_3.png")))
+#+end_src
 
-Response: the larger, the better
+#+RESULTS:
+[[file:club_membership-1/figure/lpa_box_all_2.png]]
+[[file:club_membership-1/figure/lpa_box_all_3.png]]
+
+***** w.o. tau, theta
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+#+end_src
+
+#+RESULTS:
+
+#+begin_src emacs-lisp :var out_dir=(jyun/get-nth-up-heading 2) :results value raw replace
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+#+end_src
+
+#+RESULTS:
+[[file:club_membership-1/figure/lpa_vio_all_2.png]]
+[[file:club_membership-1/figure/lpa_vio_all_3.png]]
+
+**** response
+#+begin_src R :exports results :var ob_out_dir=(jyun/get-nth-up-heading) :results output html
+library(jyunr)
+library('magrittr')
+load(paste0(out_dir, "/summaryw_res_mod2.RData"))
+cat("\n### w/ tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+load(paste0(out_dir, "/summaryw_res_mod3.RData"))
+cat("\n### w/o tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+#+end_src
 
 #+RESULTS:
 #+begin_export html
 
-### clustering w/ tau and theta
+### w/ tau and theta
 
 
-|          tau|        theta|      naction|           spd|         res|             n|
-|------------:|------------:|------------:|-------------:|-----------:|-------------:|
-|  2.06 (1.10)| -1.49 (0.96)|  0.08 (3.72)| -4.43 (11.77)| 0.43 (1.13)|   7.00 (0.00)|
-|  0.02 (0.65)|  0.63 (0.43)| -0.21 (0.38)|   0.03 (0.00)| 2.77 (0.56)| 443.00 (0.00)|
-| -0.65 (0.57)| -0.58 (1.11)| -0.28 (0.70)|   0.03 (0.00)| 1.18 (1.32)| 309.00 (0.00)|
-|  0.83 (1.33)| -0.43 (0.89)|  0.84 (1.51)|   0.03 (0.00)| 1.90 (1.24)| 211.00 (0.00)|
+|          tau|        theta|      naction|          spd|         res|             n|
+|------------:|------------:|------------:|------------:|-----------:|-------------:|
+| -0.86 (0.59)|  0.18 (0.87)| -0.29 (0.72)| -0.67 (0.46)| 2.68 (2.70)| 228.00 (0.00)|
+|  0.63 (0.57)| -0.03 (0.95)| -0.22 (0.50)|  0.19 (0.73)| 1.31 (1.32)| 255.00 (0.00)|
+|  0.42 (1.21)| -0.40 (1.32)|  1.51 (1.45)|  1.30 (1.29)| 2.04 (2.28)|  81.00 (0.00)|
 
-### clustering w/o tau and theta
+### w/o tau and theta
 
 
 |      naction|          spd|      CPROB1|      CPROB2|         res|             n|
 |------------:|------------:|-----------:|-----------:|-----------:|-------------:|
-|  1.82 (4.16)| -3.09 (9.85)| 0.98 (0.05)| 0.02 (0.05)| 0.70 (1.25)|  10.00 (0.00)|
-| -0.02 (0.90)|  0.03 (0.00)| 0.00 (0.01)| 1.00 (0.01)| 2.07 (1.23)| 960.00 (0.00)|
+| -0.36 (0.68)| -0.70 (0.41)| 0.84 (0.12)| 0.12 (0.11)| 2.45 (2.58)| 293.00 (0.00)|
+| -0.10 (0.40)|  0.49 (0.49)| 0.10 (0.14)| 0.82 (0.14)| 1.34 (1.39)| 194.00 (0.00)|
+|  1.63 (1.41)|  1.42 (1.26)| 0.02 (0.06)| 0.06 (0.11)| 1.70 (1.94)|  77.00 (0.00)|
 #+end_export
 
 *** book_order
 :PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:EXPORT_HUGO_BUNDLE: Book order
+:EXPORT_HUGO_BUNDLE: book_order
+:EXPORT_HUGO_WEIGHT: 40
 :END:
 **** collocations
 #+begin_src R :var out_dir="book_order/" :results html
@@ -2832,16 +3498,350 @@ print(knitr::kable(tt))
 |('TEXTLINK-pg3_txt5.href=unit7page8.target=self', 'TOOLBAR_back-toolbar_back_btn')                          |         1230.032|
 #+end_export
 
-
 **** visual clusters
+
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading)
+cd $out_dir
+cd figure
+convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
+convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
+#+end_src
+
+[[file:book_order/figure/lpa_box_all_2.png]]
+[[file:book_order/figure/lpa_box_all_3.png]]
+
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading)
+cd $out_dir
+cd figure
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png
+#+end_src
+
+[[file:book_order/figure/lpa_vio_all_2.png]]
+[[file:book_order/figure/lpa_vio_all_3.png]]
+
+
+**** reponse
+Response: the larger, the better
+
+#+begin_src R :exports results :var ob_out_dir=(jyun/get-nth-up-heading) :results output html
+library(jyunr)
+library('magrittr')
+load(paste0(out_dir, "/summaryw_res_mod2.RData"))
+cat("\n### w/ tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+load(paste0(out_dir, "/summaryw_res_mod3.RData"))
+cat("\n### w/o tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+#+end_src
+
+#+begin_export html
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
+|------------:|------------:|------------:|------------:|------------:|-------------:|
+|  1.01 (1.39)| -0.40 (0.91)|  1.06 (1.57)|  0.66 (1.06)| -0.19 (1.07)| 181.00 (0.00)|
+| -0.69 (0.50)|  0.30 (0.89)|  0.32 (0.49)| -0.18 (0.71)|  0.15 (0.98)| 270.00 (0.00)|
+|  0.18 (0.57)|  0.66 (0.34)| -0.30 (0.24)|  0.55 (0.70)| -0.33 (0.89)| 304.00 (0.00)|
+| -0.25 (0.75)| -0.96 (0.94)| -0.86 (0.33)| -1.11 (0.44)|  0.44 (0.91)| 215.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
+|------------:|------------:|-----------:|-----------:|------------:|-------------:|
+|  2.61 (1.42)|  1.00 (1.26)| 0.91 (0.15)| 0.09 (0.15)|  0.02 (1.00)|  69.00 (0.00)|
+|  0.27 (0.48)|  0.25 (0.84)| 0.06 (0.08)| 0.88 (0.13)| -0.10 (1.04)| 429.00 (0.00)|
+| -0.43 (0.11)|  0.06 (0.78)| 0.01 (0.01)| 0.26 (0.07)| -0.08 (0.94)| 321.00 (0.00)|
+| -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
+#+end_export
+
+**** more plots :noexport:
 
 [[file:book_order/figure/lpa_plot-0.png]]
 [[file:book_order/figure/lpa_plot-1.png]]
 # [[file:book_order/figure/lpa_back.png]]
 [[file:book_order/figure/lpa_back_line.png]]
 
-Response: the larger, the better
+*** meeting_room
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: meeting_room
+:EXPORT_HUGO_WEIGHT: 50
+:END:
 
+**** collocations
+#+begin_src R :var out_dir=(jyun/get-nth-up-heading) :results html
+out_dir = paste0(out_dir,"/")
+mc = "4"
+for (class in 1:mc) {
+tt = read.delim(paste0(out_dir,"bi_ss_class_",class,".tsv"), header=F)
+names(tt) = c("bigram","likelihood_ratio")
+cat("## Class ", class, "\n")
+print(knitr::kable(tt))
+}
+#+end_src
+
+#+begin_export html
+## Class  1
+
+
+|bigram                                                                          | likelihood_ratio|
+|:-------------------------------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-InboxFolder', 'FOLDER_VIEWED-myMails')                          |         51.88126|
+|('FOLDER_VIEWED-MtgRoomFolder', 'FOLDER_VIEWED-ReservationsFolder')             |         35.22581|
+|('TOOLBAR_webApp-webApp', 'TEXTLINK-default_txt3.href=unit02page2.target=self') |         28.36017|
+|('TOOLBAR_mailApp-mailApp', 'NEXT_INQUIRY-REQUEST')                             |         23.17940|
+|('MAIL_VIEWED-item102', 'MAIL_VIEWED-item103')                                  |         20.35835|
+|('FOLDER_VIEWED-myMails', 'FOLDER_VIEWED-MtgRoomFolder')                        |         14.78127|
+|('FOLDER_UNFOLDED-MtgRoomFolder', 'FOLDER_FOLDED-MtgRoomFolder')                |         14.42721|
+|('MENU-message-menu', 'MENUITEM_move-folder-key=move-folder')                   |         14.42721|
+|('MENU-view-menu', 'MENUITEM_sort-mc-key=sort-mc')                              |         14.42721|
+|('MENUITEM_sort-mc-key=sort-mc', 'MAIL_SORT_ok-sortValidation')                 |         14.42721|
+## Class  2
+
+
+|bigram                                                                                    | likelihood_ratio|
+|:-----------------------------------------------------------------------------------------|----------------:|
+|('BUTTON_RESERVE_submit-SUBMIT_RESERVATION_SUCCESS', 'BUTTON_close-popup1_txt2')          |        2428.7755|
+|('COMBOBOX-zemenulist4.index=3', 'COMBOBOX-zemenulist5.index=4')                          |        1366.9993|
+|('BUTTON_RESERVE_submit-SUBMIT_RESERVATION_FAILURE_conflict', 'BUTTON_close-popup7_txt2') |        1320.6393|
+|('BUTTON_UNFILL_submit-pg5_txt21', 'BUTTON_close-popup3_txt2')                            |        1247.8091|
+|('MAIL_VIEWED-item102', 'MAIL_VIEWED-item103')                                            |        1180.8554|
+|('COMBOBOX-zemenulist4.index=4', 'COMBOBOX-zemenulist5.index=5')                          |        1119.3536|
+|('COMBOBOX-zmenulist6.index=7', 'BUTTON_RESERVE_submit-SUBMIT_RESERVATION_SUCCESS')       |         799.9066|
+|('MAIL_VIEWED-item103', 'MAIL_VIEWED-item104')                                            |         723.1158|
+|('COMBOBOX-menulist.index=6', 'BUTTON_UNFILL_submit-pg5_txt21')                           |         681.4486|
+|('TEXTLINK-pg1_txt4.href=unit02page3.target=self', 'COMBOBOX-zmenulist1.index=2')         |         678.0070|
+## Class  3
+
+
+|bigram                                                                                               | likelihood_ratio|
+|:----------------------------------------------------------------------------------------------------|----------------:|
+|('BUTTON_RESERVE_submit-SUBMIT_RESERVATION_SUCCESS', 'BUTTON_close-popup1_txt2')                     |        3165.7677|
+|('BUTTON_RESERVE_submit-SUBMIT_RESERVATION_FAILURE_conflict', 'BUTTON_close-popup7_txt2')            |        2876.2798|
+|('COMBOBOX-zemenulist4.index=3', 'COMBOBOX-zemenulist5.index=4')                                     |        1909.3797|
+|('BUTTON_UNFILL_submit-pg5_txt21', 'BUTTON_close-popup3_txt2')                                       |        1549.0920|
+|('MAIL_VIEWED-item102', 'MAIL_VIEWED-item103')                                                       |        1436.9996|
+|('COMBOBOX-zemenulist4.index=4', 'COMBOBOX-zemenulist5.index=5')                                     |        1284.4368|
+|('TOOLBAR_mailApp-mailApp', 'TOOLBAR_webApp-webApp')                                                 |        1246.3057|
+|('TEXTLINK-pg1_txt4.href=unit02page3.target=self', 'COMBOBOX-zmenulist1.index=2')                    |         874.2876|
+|('COMBOBOX-zmenulist6.index=7', 'BUTTON_RESERVE_submit-SUBMIT_RESERVATION_SUCCESS')                  |         817.4273|
+|('TEXTLINK-pg3_txt3.href=unit02page2.target=self', 'TEXTLINK-pg2_txt2.href=unit02page1.target=self') |         695.1467|
+## Class  4
+
+
+|bigram                                                                                                                                                                                                               | likelihood_ratio|
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------:|
+|('BUTTON_RESERVE_submit-SUBMIT_RESERVATION_SUCCESS', 'BUTTON_close-popup1_txt2')                                                                                                                                     |         563.2656|
+|('BUTTON_RESERVE_submit-SUBMIT_RESERVATION_FAILURE_conflict', 'BUTTON_close-popup7_txt2')                                                                                                                            |         419.8368|
+|('COMBOBOX-zemenulist4.index=3', 'COMBOBOX-zemenulist5.index=4')                                                                                                                                                     |         332.7030|
+|('TEXTBOX_ONFOCUS-textbox1.value=', 'TEXTBOX_KILLFOCUS-textbox1.value=')                                                                                                                                             |         330.6313|
+|('TEXTBOX_ONFOCUS-textbox1.value=......................................................................', 'TEXTBOX_KILLFOCUS-textbox1.value=......................................................................') |         243.6613|
+|('MAIL_VIEWED-item102', 'MAIL_VIEWED-item103')                                                                                                                                                                       |         221.5643|
+|('BUTTON_UNFILL_submit-pg5_txt21', 'BUTTON_close-popup3_txt2')                                                                                                                                                       |         219.4852|
+|('COMBOBOX-zemenulist4.index=4', 'COMBOBOX-zemenulist5.index=5')                                                                                                                                                     |         200.1086|
+|('TEXTLINK-pg3_txt3.href=unit02page2.target=self', 'TEXTLINK-pg2_txt2.href=unit02page1.target=self')                                                                                                                 |         195.8817|
+|('FOLDER_VIEWED-ReservationsFolder', 'MAIL_MOVED-item101.target=ReservationsFolder')                                                                                                                                 |         194.3509|
+#+end_export
+
+**** visualise cluster
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading)
+cd $out_dir
+cd figure
+convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
+convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
+#+end_src
+
+[[file:meeting_room/figure/lpa_box_all_2.png]]
+[[file:meeting_room/figure/lpa_box_all_3.png]]
+
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading)
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+#+end_src
+
+#+RESULTS:
+
+#+begin_src emacs-lisp :var out_dir=(jyun/get-nth-up-heading) :results value raw replace
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+#+end_src
+
+[[file:meeting_room/figure/lpa_vio_all_2.png]]
+[[file:meeting_room/figure/lpa_vio_all_3.png]]
+
+**** response
+#+begin_src R :exports results :var ob_out_dir=(jyun/get-nth-up-heading) :results output html
+library(jyunr)
+library('magrittr')
+load(paste0(out_dir, "/summaryw_res_mod2.RData"))
+cat("\n### w/ tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+load(paste0(out_dir, "/summaryw_res_mod3.RData"))
+cat("\n### w/o tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+#+end_src
+
+#+begin_export html
+Loading required package: ggplot2
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
+|------------:|------------:|------------:|------------:|------------:|-------------:|
+|  0.88 (1.77)| -1.05 (1.11)|  1.85 (1.79)|  1.02 (1.83)| -0.23 (1.00)|  57.00 (0.00)|
+| -0.38 (0.57)| -0.33 (0.91)|  0.04 (0.71)| -0.61 (0.49)|  0.42 (1.01)| 175.00 (0.00)|
+|  0.67 (0.94)| -0.08 (0.98)| -0.18 (0.53)|  0.59 (0.79)| -0.45 (0.88)| 144.00 (0.00)|
+| -0.43 (0.43)|  0.69 (0.47)| -0.47 (0.27)| -0.19 (0.58)|  0.02 (0.92)| 186.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
+|------------:|------------:|-----------:|-----------:|------------:|-------------:|
+|  3.06 (1.66)|  1.58 (2.25)| 0.94 (0.14)| 0.00 (0.00)| -0.13 (1.09)|  28.00 (0.00)|
+| -0.53 (0.32)| -0.28 (0.60)| 0.01 (0.01)| 0.83 (0.13)|  0.04 (0.98)| 340.00 (0.00)|
+|  0.48 (0.52)|  0.26 (0.99)| 0.06 (0.08)| 0.12 (0.15)| -0.06 (1.02)| 194.00 (0.00)|
+#+end_export
+
+*** locate_email
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: locate_email
+:EXPORT_HUGO_WEIGHT: 55
+:END:
+
+**** collocations
+#+begin_src R :var out_dir=(jyun/get-nth-up-heading) :results html
+out_dir = paste0(out_dir,"/")
+mc = "4"
+for (class in 1:mc) {
+tt = read.delim(paste0(out_dir,"bi_ss_class_",class,".tsv"), header=F)
+names(tt) = c("bigram","likelihood_ratio")
+cat("## Class ", class, "\n")
+print(knitr::kable(tt))
+}
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+## Class  1
+
+
+|bigram                                                        | likelihood_ratio|
+|:-------------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-item700', 'MAIL_VIEWED-item701')              |         182.6112|
+|('MENU-message-menu', 'MENUITEM_move-folder-key=move-folder') |         180.9275|
+|('FOLDER_VIEWED-item402', 'MOVE_FOLDER_ok-moveValidation')    |         161.4272|
+|('FOLDER_VIEWED-item401', 'MOVE_FOLDER_ok-moveValidation')    |         131.4655|
+|('FOLDER_VIEWED-item401', 'MAIL_MOVED-item701.item401')       |         126.2251|
+|('MAIL_VIEWED-item701', 'TOOLBAR_move-move')                  |         125.6678|
+|('MAIL_VIEWED-item702', 'TOOLBAR_move-move')                  |         122.8810|
+|('TOOLBAR_move-move', 'FOLDER_VIEWED-item402')                |         117.3310|
+|('FOLDER_VIEWED-item800', 'MAIL_MOVED-item703.item800')       |         101.4094|
+|('MOVE_FOLDER_ok-moveValidation', 'MAIL_VIEWED-item702')      |         100.2878|
+## Class  2
+
+
+|bigram                                                        | likelihood_ratio|
+|:-------------------------------------------------------------|----------------:|
+|('MENU-file-menu', 'MENUITEM_newfolder-key=newfolder')        |         774.2367|
+|('FOLDER_VIEWED-item403', 'MAIL_MOVED-item186.item403')       |         576.8293|
+|('FOLDER_VIEWED-item403', 'MAIL_MOVED-item113.item403')       |         529.6047|
+|('FOLDER_VIEWED-item401', 'MAIL_MOVED-item114.item401')       |         523.2631|
+|('FOLDER_VIEWED-item403', 'MAIL_MOVED-item265.item403')       |         517.8293|
+|('MAIL_VIEWED-item217', 'MAIL_DRAG-item217')                  |         499.2203|
+|('FOLDER_VIEWED-item403', 'MAIL_MOVED-item237.item403')       |         494.3152|
+|('FOLDER_VIEWED-item403', 'MAIL_MOVED-item220.item403')       |         488.4443|
+|('FOLDER_VIEWED-item800', 'MAIL_MOVED-item217.item800')       |         475.1347|
+|('MENU-message-menu', 'MENUITEM_move-folder-key=move-folder') |         440.1133|
+## Class  3
+
+
+|bigram                                                  | likelihood_ratio|
+|:-------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-item401', 'MAIL_MOVED-item701.item401') |         354.0859|
+|('FOLDER_VIEWED-item402', 'MAIL_MOVED-item702.item402') |         348.3190|
+|('FOLDER_VIEWED-item800', 'MAIL_MOVED-item703.item800') |         282.8238|
+|('MAIL_VIEWED-item702', 'MAIL_DRAG-item702')            |         218.0837|
+|('MAIL_DRAG-item703', 'FOLDER_VIEWED-item800')          |         196.8630|
+|('MAIL_VIEWED-item703', 'MAIL_DRAG-item703')            |         193.5513|
+|('MAIL_VIEWED-item701', 'MAIL_DRAG-item701')            |         174.3833|
+|('MAIL_DRAG-item701', 'FOLDER_VIEWED-item401')          |         157.7659|
+|('MAIL_DRAG-item702', 'FOLDER_VIEWED-item402')          |         139.2227|
+|('FOLDER_VIEWED-item403', 'MAIL_MOVED-item113.item403') |         134.2558|
+## Class  4
+
+
+|bigram                                                  | likelihood_ratio|
+|:-------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-item402', 'MAIL_MOVED-item702.item402') |         822.9731|
+|('FOLDER_VIEWED-item401', 'MAIL_MOVED-item701.item401') |         733.5614|
+|('FOLDER_VIEWED-item800', 'MAIL_MOVED-item703.item800') |         556.5832|
+|('MAIL_VIEWED-item703', 'MAIL_DRAG-item703')            |         423.0686|
+|('MAIL_VIEWED-item702', 'MAIL_DRAG-item702')            |         365.1577|
+|('MAIL_DRAG-item703', 'FOLDER_VIEWED-item800')          |         355.7715|
+|('MAIL_VIEWED-item701', 'MAIL_DRAG-item701')            |         345.9375|
+|('MAIL_MOVED-item702.item402', 'MAIL_VIEWED-item703')   |         339.9250|
+|('MAIL_DRAG-item702', 'FOLDER_VIEWED-item402')          |         256.4684|
+|('FOLDER_VIEWED-item700', 'MAIL_VIEWED-item701')        |         241.3214|
+#+end_export
+
+**** visualise cluster
+***** with tau, theta
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
+cd $out_dir
+cd figure
+convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
+convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
+#+end_src
+
+#+begin_src emacs-lisp :var out_dir=(jyun/get-nth-up-heading 2) :results value raw replace
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_box_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_box_all_3.png")))
+#+end_src
+
+#+RESULTS:
+[[file:locate_email/figure/lpa_box_all_2.png]]
+[[file:locate_email/figure/lpa_box_all_3.png]]
+
+***** w.o. tau, theta
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+#+end_src
+
+#+RESULTS:
+
+#+begin_src emacs-lisp :var out_dir=(jyun/get-nth-up-heading 2) :results value raw replace
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+#+end_src
+
+#+RESULTS:
+[[file:locate_email/figure/lpa_vio_all_2.png]]
+[[file:locate_email/figure/lpa_vio_all_3.png]]
+
+**** response
+#+begin_src R :exports results :var ob_out_dir=(jyun/get-nth-up-heading) :results output html
+library(jyunr)
+library('magrittr')
+load(paste0(out_dir, "/summaryw_res_mod2.RData"))
+cat("\n### w/ tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+load(paste0(out_dir, "/summaryw_res_mod3.RData"))
+cat("\n### w/o tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+#+end_src
+
+#+RESULTS:
 #+begin_export html
 
 ### w/ tau and theta
@@ -2849,18 +3849,166 @@ Response: the larger, the better
 
 |          tau|        theta|      naction|          spd|         res|             n|
 |------------:|------------:|------------:|------------:|-----------:|-------------:|
-| -0.18 (0.88)|  0.37 (0.49)|  0.21 (0.68)|  0.11 (0.42)| 2.27 (2.45)| 450.00 (0.00)|
-|  0.83 (1.06)| -1.67 (0.83)| -1.34 (0.12)| -0.25 (0.80)| 6.32 (1.92)|  88.00 (0.00)|
-|  0.31 (1.32)| -0.79 (1.73)|  0.95 (2.48)| -0.96 (3.97)| 4.23 (3.05)|  26.00 (0.00)|
+| -0.43 (0.67)| -1.14 (0.59)| -0.71 (0.32)| -0.93 (0.54)| 1.23 (1.29)| 145.00 (0.00)|
+|  0.81 (1.17)|  0.22 (0.90)|  1.04 (1.07)|  0.87 (0.95)| 0.58 (1.06)| 181.00 (0.00)|
+| -0.52 (0.53)|  0.46 (0.87)| -0.08 (0.52)|  0.18 (0.63)| 1.56 (1.30)|  96.00 (0.00)|
+| -0.25 (0.57)|  0.58 (0.45)| -0.56 (0.13)| -0.28 (0.54)| 2.25 (0.92)| 140.00 (0.00)|
 
 ### w/o tau and theta
 
 
 |      naction|          spd|      CPROB1|      CPROB2|         res|             n|
 |------------:|------------:|-----------:|-----------:|-----------:|-------------:|
-| -0.04 (0.83)|  0.08 (0.45)| 0.99 (0.03)| 0.01 (0.03)| 2.91 (2.80)| 535.00 (0.00)|
-|  0.73 (2.54)| -1.45 (3.73)| 0.11 (0.16)| 0.89 (0.16)| 4.52 (3.01)|  29.00 (0.00)|
+| -1.05 (0.04)| -1.46 (0.27)| 0.97 (0.04)| 0.00 (0.00)| 0.00 (0.00)|  47.00 (0.00)|
+|  1.16 (1.09)|  1.04 (0.92)| 0.00 (0.00)| 0.92 (0.13)| 0.61 (1.10)| 161.00 (0.00)|
+| -0.05 (0.44)| -0.27 (0.48)| 0.02 (0.08)| 0.13 (0.13)| 1.27 (1.30)| 124.00 (0.00)|
+| -0.57 (0.13)| -0.29 (0.63)| 0.00 (0.00)| 0.03 (0.06)| 2.13 (1.02)| 230.00 (0.00)|
 #+end_export
+
+*** lamp_return
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: lamp_return
+:EXPORT_HUGO_WEIGHT: 60
+:END:
+**** collocations
+#+begin_src R :var out_dir=(jyun/get-nth-up-heading) :results html
+out_dir = paste0(out_dir,"/")
+mc = "4"
+for (class in 1:mc) {
+tt = read.delim(paste0(out_dir,"bi_ss_class_",class,".tsv"), header=F)
+names(tt) = c("bigram","likelihood_ratio")
+cat("## Class ", class, "\n")
+print(knitr::kable(tt))
+}
+#+end_src
+
+#+begin_export html
+## Class  1
+
+
+|bigram                                                                                                               | likelihood_ratio|
+|:--------------------------------------------------------------------------------------------------------------------|----------------:|
+|('TEXTBOX_ONFOCUS-u023_pg2_txt19.value=', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=')                                 |         589.8216|
+|('BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4')                                             |         538.4479|
+|('BUTTON_RETURN_submit-u023_pg2_txt22', 'NEXT_INQUIRY-REQUEST')                                                      |         388.4260|
+|('RADIO_BTN-u023_pg2_txt8', 'COMBOBOX-u023_pg2_menu1.index=1')                                                       |         320.5374|
+|('TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834', 'BUTTON_RETURN_submit-u023_pg2_txt22')                               |         306.3855|
+|('TEXTLINK-u023_pg1_txt10.href=unit23page2.target=self', 'RADIO_BTN-u023_pg2_txt8')                                  |         300.3013|
+|('TEXTLINK-u023_pg2_txt21.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6')                            |         237.8251|
+|('TEXTLINK-u023_pg1_txt9.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6')                             |         227.3003|
+|('KEYPRESS', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834')                                                          |         222.5735|
+|('TEXTLINK-u023_default_txt10.href=unit23page1.target=self', 'TEXTLINK-u023_pg1_txt10.href=unit23page2.target=self') |         213.6009|
+## Class  2
+
+
+|bigram                                                                                    | likelihood_ratio|
+|:-----------------------------------------------------------------------------------------|----------------:|
+|('BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4')                  |        1718.9581|
+|('BUTTON_RETURN_submit-u023_pg2_txt22', 'NEXT_INQUIRY-REQUEST')                           |         851.9591|
+|('RADIO_BTN-u023_pg2_txt8', 'COMBOBOX-u023_pg2_menu1.index=1')                            |         814.8844|
+|('KEYPRESS', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834')                               |         806.4828|
+|('TEXTBOX_ONFOCUS-u023_pg2_txt19.value=', 'KEYPRESS')                                     |         790.7215|
+|('TEXTLINK-u023_pg1_txt10.href=unit23page2.target=self', 'RADIO_BTN-u023_pg2_txt8')       |         698.9622|
+|('TEXTBOX_ONFOCUS-u023_pg2_txt19.value=', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=')      |         655.5400|
+|('TEXTLINK-u023_pg2_txt21.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6') |         600.6666|
+|('TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834', 'BUTTON_RETURN_submit-u023_pg2_txt22')    |         586.4540|
+|('TOOLBAR_mailApp-mailApp', 'MAIL_VIEWED-item305')                                        |         529.4708|
+## Class  3
+
+
+|bigram                                                                                   | likelihood_ratio|
+|:----------------------------------------------------------------------------------------|----------------:|
+|('BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4')                 |        1078.8160|
+|('BUTTON_RETURN_submit-u023_pg2_txt22', 'NEXT_INQUIRY-REQUEST')                          |         704.2991|
+|('TEXTBOX_ONFOCUS-u023_pg2_txt19.value=', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=')     |         658.5855|
+|('RADIO_BTN-u023_pg2_txt8', 'COMBOBOX-u023_pg2_menu1.index=1')                           |         649.2960|
+|('KEYPRESS', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834')                              |         639.5205|
+|('TEXTBOX_ONFOCUS-u023_pg2_txt19.value=', 'KEYPRESS')                                    |         604.0866|
+|('TEXTLINK-u023_pg1_txt10.href=unit23page2.target=self', 'RADIO_BTN-u023_pg2_txt8')      |         574.7355|
+|('TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834', 'BUTTON_RETURN_submit-u023_pg2_txt22')   |         554.8621|
+|('MAIL_VIEWED-item305', 'TOOLBAR_webApp-webApp')                                         |         443.4153|
+|('TEXTLINK-u023_pg1_txt9.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6') |         414.3679|
+## Class  4
+
+
+|bigram                                                                                   | likelihood_ratio|
+|:----------------------------------------------------------------------------------------|----------------:|
+|('BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4')                 |        1507.1803|
+|('BUTTON_RETURN_submit-u023_pg2_txt22', 'NEXT_INQUIRY-REQUEST')                          |        1268.0231|
+|('RADIO_BTN-u023_pg2_txt8', 'COMBOBOX-u023_pg2_menu1.index=1')                           |        1084.1788|
+|('KEYPRESS', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834')                              |        1058.9451|
+|('TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834', 'BUTTON_RETURN_submit-u023_pg2_txt22')   |         991.3056|
+|('TEXTBOX_ONFOCUS-u023_pg2_txt19.value=', 'KEYPRESS')                                    |         905.3262|
+|('TEXTLINK-u023_pg1_txt10.href=unit23page2.target=self', 'RADIO_BTN-u023_pg2_txt8')      |         866.1994|
+|('TOOLBAR_mailApp-mailApp', 'MAIL_VIEWED-item305')                                       |         817.2017|
+|('MAIL_VIEWED-item305', 'TOOLBAR_webApp-webApp')                                         |         687.0170|
+|('TEXTLINK-u023_pg1_txt9.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6') |         662.2376|
+#+end_export
+
+**** visualise cluster
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading)
+cd $out_dir
+cd figure
+convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
+convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
+#+end_src
+
+
+[[file:lamp_return/figure/lpa_box_all_2.png]]
+[[file:lamp_return/figure/lpa_box_all_3.png]]
+
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading)
+cd $out_dir/figure;
+convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
+convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
+#+end_src
+
+#+RESULTS:
+
+#+begin_src emacs-lisp :var out_dir=(jyun/get-nth-up-heading) :results value raw replace
+(concat
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
+  (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_3.png")))
+#+end_src
+
+[[file:lamp_return/figure/lpa_vio_all_2.png]]
+[[file:lamp_return/figure/lpa_vio_all_3.png]]
+
+**** response
+#+begin_src R :exports results :var ob_out_dir=(jyun/get-nth-up-heading) :results output html
+library(jyunr)
+library('magrittr')
+load(paste0(out_dir, "/summaryw_res_mod2.RData"))
+cat("\n### w/ tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+load(paste0(out_dir, "/summaryw_res_mod3.RData"))
+cat("\n### w/o tau and theta\n")
+mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(align = "r")
+#+end_src
+
+
+#+begin_export html
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
+|------------:|------------:|------------:|------------:|------------:|-------------:|
+|  0.88 (1.77)| -1.05 (1.11)|  1.85 (1.79)|  1.02 (1.83)| -0.23 (1.00)|  57.00 (0.00)|
+| -0.38 (0.57)| -0.33 (0.91)|  0.04 (0.71)| -0.61 (0.49)|  0.42 (1.01)| 175.00 (0.00)|
+|  0.67 (0.94)| -0.08 (0.98)| -0.18 (0.53)|  0.59 (0.79)| -0.45 (0.88)| 144.00 (0.00)|
+| -0.43 (0.43)|  0.69 (0.47)| -0.47 (0.27)| -0.19 (0.58)|  0.02 (0.92)| 186.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
+|------------:|------------:|-----------:|-----------:|------------:|-------------:|
+|  3.06 (1.66)|  1.58 (2.25)| 0.94 (0.14)| 0.00 (0.00)| -0.13 (1.09)|  28.00 (0.00)|
+| -0.53 (0.32)| -0.28 (0.60)| 0.01 (0.01)| 0.83 (0.13)|  0.04 (0.98)| 340.00 (0.00)|
+|  0.48 (0.52)|  0.26 (0.99)| 0.06 (0.08)| 0.12 (0.15)| -0.06 (1.02)| 194.00 (0.00)|
+#+end_export
+
 
 ** References
 #+csl_style: ~/Zotero/styles/chicago-author-date.csl

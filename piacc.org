@@ -20,7 +20,7 @@
 #+setupfile: ~/org/latex_header.setup
 #+setupfile: ~/org/orgmode_header.setup
 
-#+property: header-args :eval never-export
+#+property: header-args :eval never-export :eval no
 #+property: header-args:ein :session localhost
 #+property: header-args:jupyter-python :session *jupyter-piacc* :kernel tf
 
@@ -1235,7 +1235,6 @@ close(fcon)
 
 ** pre-proc + lpa
 #+begin_src R :tangle R/run_lpa_compare.R :noweb yes
-
 <<lpa_prep>>
 
 for (out_dir in ldir) {
@@ -1778,9 +1777,11 @@ for (out_dir in ldir) {
   mod = mod2
   mod$name = "2"
   <<draw_lpa_back>>
+  <<draw_lpa_back_vio>>
   mod = mod3
   mod$name = "3"
   <<draw_lpa_back>>
+  <<draw_lpa_back_vio>>
 }
 #+end_src
 
@@ -1790,13 +1791,13 @@ for (out_dir in ldir) {
 ## nc3 = c(2,3,2)
 
 ## cd_tally, book_order are winning for AIC and BIC
+## "club_membership-1/": 3 3
 
 nc2 = c(4,4,4,4,4,3,4,4,4,4)
 nc3 = c(4,4,3,4,4,3,3,3,4,3)
 
 ## nc2 = c(4,4,4)
 ## nc3 = c(4,4,3)
-
 
 kk = which(out_dir == ldir)
 
@@ -1880,6 +1881,59 @@ fsize = set_fig_size(width = 'psychometrikaV2')
 ## ggsave(file=paste0(out_dir,"figure/lpa_box_back.pdf"),width=fsize[1],height=fsize[2])
 pdf(file=paste0(out_dir,"figure/lpa_box_all_",mod$name,".pdf"),width=fsize[1],height=fsize[2])
 gridExtra::grid.arrange(b1,b2,nrow=2)
+dev.off()
+#+end_src
+
+#+name: draw_lpa_back_vio
+#+begin_src R :noweb yes
+## source("R/lpa_back.R")
+## library(gridExtra)
+<<background_vname>>
+<<background_df>>
+prob = numeric(nrow(tt))
+res = scale(ginfo$res)
+time = scale(ginfo$time)
+for (kk in 1:length(prob))
+  prob[kk] = tt[kk,paste0('CPROB',tt$Class[kk])]
+tmp = tt %>% mutate(cluster = Class, prob = prob, time = time) %>% select(c(3:6),ftime, time, prob, cluster)
+df_long = clust2long(tmp, `tau` = "tau", `theta` = "theta", `naction` = "N[actions]", `spd` = "speed", `ftime` = "ftime", `time` = "time")
+
+v1 = vio_clust(df_long, 1, "bottom", grid = "Y",
+               axis_title_size = 15, axis_text = "y",
+               plot_margin = margin(t = 10, r = 0, b = 0, l = 0),
+               axis_title_just = "Fm", panel_border = T) +
+  scale_x_continuous(breaks = tmp$cluster) +
+  scale_y_continuous(limits = c(-4, 4),
+                     ##labels = c(rep("",1),-2,0,2,rep("",1)),
+                     expand = c(0, 0)) +
+  ylab("Standardized value") +
+  xlab("") +
+  scale_color_tab20c(1) + scale_fill_tab20c(4)
+
+## fsize = set_fig_size(width = 'psychometrikaV2')
+## ggsave(file=paste0(out_dir,"figure/lpa_box4.pdf"),width=fsize[1],height=fsize[2])
+
+tmp = tt %>% mutate(cluster = Class, prob = prob, res = res) %>% select(res, c(7:11), prob, cluster)
+df_long = clust2long(tmp, `res` = "response", `AGEG5LFS` = "Age", `ICTHOME` = "ICT", `READHOME` = "Read", `WRITHOME` = "Write", `NUMHOME` = "Numeracy")
+v2 = vio_clust(df_long, 1, "bottom", grid = "Y",
+               axis_title_size = 15, axis_text = "y",
+               plot_margin = margin(t = 10, r = 0, b = 0, l = 0),
+               axis_title_just = "Fm", panel_border = T) +
+  scale_x_continuous(breaks = tmp$cluster) +
+  scale_y_continuous(limits = c(-4, 4),
+                     ##labels = c(rep("",1),-2,0,2,rep("",1)),
+                     expand = c(0, 0)) +
+  ylab("Standardized value") +
+  xlab("") +
+  scale_color_tab20c(1) + scale_fill_tab20c(4)
+
+## ggsave(file="bb.pdf",width=7,height=7,family="sans")
+## https://disq.us/p/2940ij3
+## Golden ratio to set aesthetic figure height
+fsize = set_fig_size(width = 'psychometrikaV2')
+## ggsave(file=paste0(out_dir,"figure/lpa_box_back.pdf"),width=fsize[1],height=fsize[2])
+pdf(file=paste0(out_dir,"figure/lpa_vio_all_",mod$name,".pdf"),width=fsize[1],height=fsize[2])
+gridExtra::grid.arrange(v1,v2,nrow=2)
 dev.off()
 #+end_src
 
@@ -2009,42 +2063,45 @@ classplot = plot_profiles.default(x =  list(df_plot = df_plot, df_raw = df_raw))
 #+end_src
 
 ** responses in clusters
-#+begin_src R :noweb yes :tangle R/lpa-res.R
+#+name: lpa_res
+#+begin_src R :noweb yes :tangle R/lpa_res.R
 <<lpa_prep>>
 
-out_dir = ldir[3]
+for (out_dir in ldir) {
+  cathead(out_dir)
+  <<draw_lpa_fig>>
+  mod = mod2
+  mod$name = "2"
+  <<background_vname>>
+  <<background_df>>
+  <<lpa_membership_res>>
 
-<<draw_lpa_fig>>
-
-## source("R/lpa_back.R")
-
-<<get_traits>>
+  mod = mod3
+  mod$name = "3"
+  <<background_vname>>
+  <<background_df>>
+  <<lpa_membership_res>>
+}
 #+end_src
 
-#+begin_src R :noweb yes :tangle R/lpa-res.R
-df = mod2[[1]]
-before = df[["dff"]][,1:6]
-after = df[["dff"]][,-c(1:6)]
-df[["dff"]] = before %>% mutate(res = rr) %>% cbind(after)
+#+name: lpa_membership_res
+#+begin_src R
+memb <- data.frame(tt,SEQID = ginfo$SEQID, index = ginfo$index, res = ginfo$res)
+save(memb, file = paste0(out_dir, "lpa_membership_mod",mod$name,".RData"))
 
-tt = df[["dff"]]
-tmp <- data.frame(tt,SEQID = ginfo$SEQID, index = ginfo$index)
-save(tmp, file = paste0(out_dir, "lpa_membership.RData"))
-#+end_src
-
-#+begin_src R :noweb yes :tangle R/lpa-res.R
-mm = aggregate(tt, list(tt$Class), FUN=mean)
-sd = aggregate(tt, list(tt$Class), FUN=sd)
-n = aggregate(tt, list(tt$Class), FUN=length)
+memb_tt = tt %>% mutate(res = ginfo$res)
+mm = aggregate(memb_tt, list(memb_tt$Class), FUN=mean)
+sd = aggregate(memb_tt, list(memb_tt$Class), FUN=sd)
+n = aggregate(memb_tt, list(memb_tt$Class), FUN=length)
 se = sd / sqrt(n)
 
 n = n[,4]
-mm = mm %>% select(4:8)
-sd = sd %>% select(4:8)
+mm = mm %>% select(4:7,res)
+sd = sd %>% select(4:7,res)
 mm$n = n;
 sd$n = 0*n;
 
-save(mm,sd,n, file = paste0(out_dir, "summaryw_res.RData"))
+save(mm,sd,n, file = paste0(out_dir, "summaryw_res_mod",mod$name,".RData"))
 #+end_src
 
 #+begin_src R
@@ -2806,6 +2863,7 @@ trans = trans[trans != "END -> START"]
 length(unique(trans))
 #+end_src
 * Collocations
+** practice with =nltk.corpus=
 #+begin_src jupyter-python
 import nltk
 from nltk.collocations import *
@@ -2981,34 +3039,73 @@ tuple2file(quad_ss, "input/quad_ss.tsv")
 
 #+RESULTS:
 
-[[id:a183bf8a-10f9-4ccb-861b-9658d5b2b9f5][ticket]]
+** R script for collocations
 
-#+begin_src R :noweb yes :tangle R/collocation.R :results none
+#+begin_src R :noweb yes :tangle R/collocation.R :results none :eval no
 <<lpa_prep>>
-out_dir = ldir[3]
 
-item_code = "U01a000S" # party-1
-## item_code = "U21x000S" # ticket
-item_code = "U07x000S" # book order
+item_code_book = c(
+"U01a000S",
+"U01b000S",
+"U03a000S",
+"U06a000S",
+"U21x000S",
+"U19a000S",
+"U07x000S",
+"U02x000S",
+"U11b000S",
+"U23x000S")
+
+## ## Party Invitations - 1;
+## item_code = "U01a000S"
+## ## Party Invitations - 2;
+## item_code = "U01b000S"
+## ## CD Tally;
+## item_code = "U03a000S"
+## ## Sprained Ankle - 1;
+## item_code = "U06a000S"
+## ## Tickets;
+## item_code = "U21x000S"
+## ## Club Membership - 1;
+## item_code = "U19a000S"
+## ## Book Order;
+## item_code = "U07x000S"
+## ## Meeting Room;
+## item_code = "U02x000S"
+## ## Locate Email;
+## item_code = "U11b000S"
+## ## Lamp Return;
+## item_code = "U23x000S"
+
+for (out_dir in ldir) {
+## out_dir = ldir[1]
+
+kk = which(out_dir == ldir)
+item_code = item_code_book[kk]
 
 source("R/itemcode.R")
 
 <<piacc_path>>
 
-load(paste0(out_dir, "lpa_membership.RData"))
+load(paste0(out_dir, "lpa_membership_mod2.RData"))
 item = read_piacc(piacc_path, item_code, sub_str, ignore_str)
 
-mc = max(tmp$Class)
+mc = max(memb$Class)
 for (cc in 1:mc) {
-item2sen(item, tmp$SEQID[tmp$Class == cc])
-system(". activate tf; python py/collocation.py")
-system(paste0("mv input/bi_ss.tsv input/bi_ss_class_", cc,".tsv"))
-system(paste0("mv input/tri_ss.tsv input/tri_ss_class_", cc,".tsv"))
-system(paste0("mv input/quad_ss.tsv input/quad_ss_class_", cc,".tsv"))
-}
-system(paste0("mv input/*.tsv ", out_dir))
-#+end_src
+item2sen(item, memb$SEQID[memb$Class == cc])
 
+system(". activate tf; python py/collocation.py")
+## library(reticulate)
+## conda_python("tf")
+## source_python("py/collocation.py")
+
+file.rename("input/bi_ss.tsv", paste0("input/bi_ss_class_", cc,".tsv"))
+file.rename("input/tri_ss.tsv", paste0("input/tri_ss_class_", cc,".tsv"))
+file.rename("input/quad_ss.tsv", paste0("input/quad_ss_class_", cc,".tsv"))
+    }
+system(paste0("mv input/*.tsv ", out_dir))
+  }
+#+end_src
 
 * COMMENT Local Variables
 # Local Variables:

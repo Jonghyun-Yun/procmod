@@ -1,7 +1,7 @@
 +++
 title = "Applications"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-23T16:14:53-06:00
+lastmod = 2021-12-23T18:54:31-06:00
 draft = false
 weight = 50
 chapter = true
@@ -16,13 +16,31 @@ chapter = true
     - [collocation](#collocation)
     - [visual cluster](#visual-cluster)
     - [response](#response)
+- [party\_invitations-2](#party-invitations-2)
+    - [collocations](#collocations)
+    - [visualise cluster](#visualise-cluster)
+        - [with tau, theta](#with-tau-theta)
+        - [w.o. tau, theta](#w-dot-o-dot-tau-theta)
+    - [response](#response)
 - [cd\_tally](#cd-tally)
     - [collocations](#collocations)
     - [visualise cluster](#visualise-cluster)
     - [response](#response)
+- [sprained\_ankle-1](#sprained-ankle-1)
+    - [collocations](#collocations)
+    - [visualise cluster](#visualise-cluster)
+        - [with tau, theta](#with-tau-theta)
+        - [w.o. tau, theta](#w-dot-o-dot-tau-theta)
+    - [response](#response)
 - [tickets](#tickets)
     - [collocation](#collocation)
     - [visualize clusters](#visualize-clusters)
+    - [response](#response)
+- [club\_membership-1](#club-membership-1)
+    - [collocations](#collocations)
+    - [visualise cluster](#visualise-cluster)
+        - [with tau, theta](#with-tau-theta)
+        - [w.o. tau, theta](#w-dot-o-dot-tau-theta)
     - [response](#response)
 - [book\_order](#book-order)
     - [collocations](#collocations)
@@ -31,6 +49,12 @@ chapter = true
 - [meeting\_room](#meeting-room)
     - [collocations](#collocations)
     - [visualise cluster](#visualise-cluster)
+    - [response](#response)
+- [locate\_email](#locate-email)
+    - [collocations](#collocations)
+    - [visualise cluster](#visualise-cluster)
+        - [with tau, theta](#with-tau-theta)
+        - [w.o. tau, theta](#w-dot-o-dot-tau-theta)
     - [response](#response)
 - [lamp\_return](#lamp-return)
     - [collocations](#collocations)
@@ -165,22 +189,116 @@ Response: the larger, the better
 ### w/ tau and theta
 
 
-|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
-|------------:|------------:|------------:|------------:|------------:|-------------:|
-|  1.01 (1.39)| -0.40 (0.91)|  1.06 (1.57)|  0.66 (1.06)| -0.19 (1.07)| 181.00 (0.00)|
-| -0.69 (0.50)|  0.30 (0.89)|  0.32 (0.49)| -0.18 (0.71)|  0.15 (0.98)| 270.00 (0.00)|
-|  0.18 (0.57)|  0.66 (0.34)| -0.30 (0.24)|  0.55 (0.70)| -0.33 (0.89)| 304.00 (0.00)|
-| -0.25 (0.75)| -0.96 (0.94)| -0.86 (0.33)| -1.11 (0.44)|  0.44 (0.91)| 215.00 (0.00)|
+|          tau|        theta|      naction|          spd|         res|             n|
+|------------:|------------:|------------:|------------:|-----------:|-------------:|
+| -0.86 (0.59)|  0.18 (0.87)| -0.29 (0.72)| -0.67 (0.46)| 2.68 (2.70)| 228.00 (0.00)|
+|  0.63 (0.57)| -0.03 (0.95)| -0.22 (0.50)|  0.19 (0.73)| 1.31 (1.32)| 255.00 (0.00)|
+|  0.42 (1.21)| -0.40 (1.32)|  1.51 (1.45)|  1.30 (1.29)| 2.04 (2.28)|  81.00 (0.00)|
 
 ### w/o tau and theta
 
 
-|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
-|------------:|------------:|-----------:|-----------:|------------:|-------------:|
-|  2.61 (1.42)|  1.00 (1.26)| 0.91 (0.15)| 0.09 (0.15)|  0.02 (1.00)|  69.00 (0.00)|
-|  0.27 (0.48)|  0.25 (0.84)| 0.06 (0.08)| 0.88 (0.13)| -0.10 (1.04)| 429.00 (0.00)|
-| -0.43 (0.11)|  0.06 (0.78)| 0.01 (0.01)| 0.26 (0.07)| -0.08 (0.94)| 321.00 (0.00)|
-| -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
+|      naction|          spd|      CPROB1|      CPROB2|         res|             n|
+|------------:|------------:|-----------:|-----------:|-----------:|-------------:|
+| -0.36 (0.68)| -0.70 (0.41)| 0.84 (0.12)| 0.12 (0.11)| 2.45 (2.58)| 293.00 (0.00)|
+| -0.10 (0.40)|  0.49 (0.49)| 0.10 (0.14)| 0.82 (0.14)| 1.34 (1.39)| 194.00 (0.00)|
+|  1.63 (1.41)|  1.42 (1.26)| 0.02 (0.06)| 0.06 (0.11)| 1.70 (1.94)|  77.00 (0.00)|
+
+
+# party\_invitations-2 {#party-invitations-2}
+
+
+## collocations {#collocations}
+
+## Class  1
+
+
+|bigram                                                                               | likelihood_ratio|
+|:------------------------------------------------------------------------------------|----------------:|
+|('MENU-file-menu', 'MENUITEM_newfolder-key=newfolder')                               |        2528.3556|
+|('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS')                         |        1799.8624|
+|('MAIL_VIEWED-item105', 'MAIL_DRAG-item105')                                         |        1342.5568|
+|('MAIL_VIEWED-item103', 'MAIL_DRAG-item103')                                         |        1298.1635|
+|('MAIL_VIEWED-item101', 'MAIL_DRAG-item101')                                         |        1172.5856|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                                         |        1108.3516|
+|('MENUITEM_newfolder-key=newfolder', 'TEXTBOX_ONFOCUS-createfoldernameinput.value=') |         992.6872|
+|('FOLDER_VIEWED-item0', 'MAIL_MOVED-item101.target=item0')                           |         944.8772|
+|('MAIL_VIEWED-item104', 'MAIL_DRAG-item104')                                         |         824.0098|
+|('FOLDER_VIEWED-item0', 'MAIL_MOVED-item103.target=item0')                           |         818.9305|
+## Class  2
+
+
+|bigram                                                                               | likelihood_ratio|
+|:------------------------------------------------------------------------------------|----------------:|
+|('MENU-file-menu', 'MENUITEM_newfolder-key=newfolder')                               |        149.15848|
+|('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS')                         |        143.13642|
+|('FOLDER_UNFOLDED-PartyFolder', 'FOLDER_FOLDED-PartyFolder')                         |         84.27078|
+|('MAIL_VIEWED-item104', 'MAIL_VIEWED-item105')                                       |         77.60177|
+|('MENUITEM_newfolder-key=newfolder', 'TEXTBOX_ONFOCUS-createfoldernameinput.value=') |         70.86729|
+|('MAIL_VIEWED-item102', 'MAIL_VIEWED-item103')                                       |         69.67765|
+|('FOLDER_UNFOLDED-myMails', 'FOLDER_FOLDED-myMails')                                 |         68.68677|
+|('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endunit_txt4')                                  |         60.63236|
+|('FOLDER_VIEWED-CanComeFolder', 'MAIL_MOVED-item104.CanComeFolder')                  |         52.70685|
+|('MAIL_VIEWED-item103', 'MAIL_VIEWED-item104')                                       |         51.41539|
+## Class  3
+
+
+|bigram                                                                               | likelihood_ratio|
+|:------------------------------------------------------------------------------------|----------------:|
+|('MENU-file-menu', 'MENUITEM_newfolder-key=newfolder')                               |         2995.612|
+|('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS')                         |         2770.209|
+|('MAIL_VIEWED-item105', 'MAIL_DRAG-item105')                                         |         2528.411|
+|('MAIL_VIEWED-item101', 'MAIL_DRAG-item101')                                         |         2279.772|
+|('MAIL_VIEWED-item103', 'MAIL_DRAG-item103')                                         |         1976.424|
+|('FOLDER_VIEWED-item0', 'MAIL_MOVED-item101.target=item0')                           |         1835.078|
+|('FOLDER_VIEWED-item0', 'MAIL_MOVED-item103.target=item0')                           |         1787.390|
+|('FOLDER_VIEWED-item0', 'MAIL_MOVED-item105.target=item0')                           |         1719.341|
+|('MENUITEM_newfolder-key=newfolder', 'TEXTBOX_ONFOCUS-createfoldernameinput.value=') |         1487.584|
+|('MAIL_VIEWED-item102', 'MAIL_DRAG-item102')                                         |         1375.493|
+## Class  4
+
+
+|bigram                                                  | likelihood_ratio|
+|:-------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-CanComeFolder', 'NEXT_INQUIRY-REQUEST') |         6.843888|
+|('TOOLBAR_mailApp-mailApp', 'NEXT_INQUIRY-REQUEST')     |         2.256425|
+
+
+## visualise cluster {#visualise-cluster}
+
+
+### with tau, theta {#with-tau-theta}
+
+{{< figure src="party_invitations-2/figure/lpa_box_all_3.png" >}}
+
+
+### w.o. tau, theta {#w-dot-o-dot-tau-theta}
+
+{{< figure src="party_invitations-2/figure/lpa_vio_all_3.png" >}}
+
+
+## response {#response}
+
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|         res|             n|
+|------------:|------------:|------------:|------------:|-----------:|-------------:|
+|  0.69 (1.21)| -0.14 (0.54)|  0.69 (1.07)|  0.36 (1.03)| 4.23 (3.00)| 342.00 (0.00)|
+| -0.12 (0.68)| -0.86 (0.82)| -1.14 (0.24)| -1.13 (0.45)| 6.96 (0.47)| 165.00 (0.00)|
+| -0.48 (0.54)|  0.80 (0.40)|  0.09 (0.39)|  0.30 (0.68)| 2.32 (2.49)| 404.00 (0.00)|
+| -0.40 (0.24)| -2.33 (0.16)| -1.48 (0.01)| -1.01 (0.87)| 7.00 (0.00)|  56.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|         res|             n|
+|------------:|------------:|-----------:|-----------:|-----------:|-------------:|
+| -1.40 (0.09)| -1.46 (0.29)| 0.90 (0.11)| 0.00 (0.00)| 7.00 (0.00)| 112.00 (0.00)|
+|  1.71 (1.57)|  1.31 (1.21)| 0.00 (0.00)| 0.82 (0.19)| 4.75 (2.93)|  72.00 (0.00)|
+|  0.50 (0.55)|  0.60 (0.71)| 0.00 (0.00)| 0.11 (0.09)| 2.81 (2.76)| 377.00 (0.00)|
+| -0.38 (0.49)| -0.39 (0.51)| 0.02 (0.07)| 0.02 (0.03)| 4.28 (2.99)| 406.00 (0.00)|
 
 
 # cd\_tally {#cd-tally}
@@ -257,7 +375,6 @@ Response: the larger, the better
 
 ![](cd_tally/figure/lpa_vio_all_2.png)
 ![](cd_tally/figure/lpa_vio_all_3.png)
-![](cd_tally/figure/lpa_vio_all_3.png)
 
 
 ## response {#response}
@@ -282,6 +399,110 @@ Response: the larger, the better
 |  0.27 (0.48)|  0.25 (0.84)| 0.06 (0.08)| 0.88 (0.13)| -0.10 (1.04)| 429.00 (0.00)|
 | -0.43 (0.11)|  0.06 (0.78)| 0.01 (0.01)| 0.26 (0.07)| -0.08 (0.94)| 321.00 (0.00)|
 | -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
+
+
+# sprained\_ankle-1 {#sprained-ankle-1}
+
+
+## collocations {#collocations}
+
+## Class  1
+
+
+|bigram                                                                              | likelihood_ratio|
+|:-----------------------------------------------------------------------------------|----------------:|
+|('TEXTLINK-default_txt3.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4') |        1344.4991|
+|('RADIO_BTN-u06arg5_prop1', 'NEXT_INQUIRY-REQUEST')                                 |         934.3955|
+|('RADIO_BTN-u06arg2_prop4', 'RADIO_BTN-u06arg3_prop1')                              |         912.2600|
+|('RADIO_BTN-u06arg4_prop2', 'RADIO_BTN-u06arg5_prop1')                              |         616.5295|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop2')                              |         477.9250|
+|('RADIO_BTN-u06arg1_prop3', 'RADIO_BTN-u06arg2_prop4')                              |         461.9316|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop3')                              |         221.0925|
+|('RADIO_BTN-u06arg4_prop3', 'RADIO_BTN-u06arg5_prop1')                              |         177.5447|
+|('BUTTON_close-popup1_txt4', 'RADIO_BTN-u06arg1_prop3')                             |         166.0958|
+|('RADIO_BTN-u06arg1_prop1', 'RADIO_BTN-u06arg2_prop4')                              |         165.2207|
+## Class  2
+
+
+|bigram                                                                                                                           | likelihood_ratio|
+|:--------------------------------------------------------------------------------------------------------------------------------|----------------:|
+|('TEXTLINK-default_txt3.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                              |        1075.1198|
+|('TEXTLINK-default_txt6.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                              |         434.3967|
+|('TEXTBOX_ONFOCUS-default_txt2.value=Treatment_sprained_ankle', 'TEXTBOX_KILLFOCUS-default_txt2.value=Treatment_sprained_ankle') |         278.0813|
+|('RADIO_BTN-u06arg5_prop1', 'NEXT_INQUIRY-REQUEST')                                                                              |         254.3394|
+|('RADIO_BTN-u06arg4_prop2', 'RADIO_BTN-u06arg5_prop1')                                                                           |         238.1879|
+|('RADIO_BTN-u06arg2_prop4', 'RADIO_BTN-u06arg3_prop1')                                                                           |         236.0504|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop2')                                                                           |         183.0596|
+|('RADIO_BTN-u06arg1_prop3', 'RADIO_BTN-u06arg2_prop4')                                                                           |         181.7720|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop1')                                                                           |         178.4015|
+|('TEXTLINK-default_txt9.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                              |         172.8964|
+## Class  3
+
+
+|bigram                                                                                                                           | likelihood_ratio|
+|:--------------------------------------------------------------------------------------------------------------------------------|----------------:|
+|('TEXTBOX_ONFOCUS-default_txt2.value=Treatment_sprained_ankle', 'TEXTBOX_KILLFOCUS-default_txt2.value=Treatment_sprained_ankle') |        379.02638|
+|('TEXTLINK-default_txt3.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                              |        375.52227|
+|('TEXTLINK-default_txt6.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                              |        251.72685|
+|('RADIO_BTN-u06arg1_prop1', 'RADIO_BTN-u06arg2_prop1')                                                                           |        126.47143|
+|('RADIO_BTN-u06arg5_prop1', 'NEXT_INQUIRY-REQUEST')                                                                              |        111.10380|
+|('TEXTLINK-default_txt15.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                             |         95.97460|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop1')                                                                           |         82.03548|
+|('TEXTLINK-default_txt9.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                              |         81.23657|
+|('RADIO_BTN-u06arg4_prop1', 'RADIO_BTN-u06arg5_prop1')                                                                           |         74.60586|
+|('TEXTLINK-default_txt12.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4')                                             |         74.02665|
+## Class  4
+
+
+|bigram                                                                              | likelihood_ratio|
+|:-----------------------------------------------------------------------------------|----------------:|
+|('RADIO_BTN-u06arg5_prop1', 'NEXT_INQUIRY-REQUEST')                                 |        553.96719|
+|('RADIO_BTN-u06arg2_prop4', 'RADIO_BTN-u06arg3_prop1')                              |        362.95333|
+|('TEXTLINK-default_txt3.href=u06a_popup1.target=popup', 'BUTTON_close-popup1_txt4') |        357.06437|
+|('RADIO_BTN-u06arg1_prop3', 'RADIO_BTN-u06arg2_prop4')                              |        350.83133|
+|('RADIO_BTN-u06arg4_prop2', 'RADIO_BTN-u06arg5_prop1')                              |        319.63262|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop2')                              |        272.33694|
+|('RADIO_BTN-u06arg4_prop1', 'RADIO_BTN-u06arg5_prop1')                              |         80.41556|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop3')                              |         67.51748|
+|('RADIO_BTN-u06arg1_prop1', 'RADIO_BTN-u06arg2_prop1')                              |         66.65437|
+|('RADIO_BTN-u06arg3_prop1', 'RADIO_BTN-u06arg4_prop1')                              |         62.16008|
+
+
+## visualise cluster {#visualise-cluster}
+
+
+### with tau, theta {#with-tau-theta}
+
+{{< figure src="sprained_ankle-1/figure/lpa_box_all_3.png" >}}
+
+
+### w.o. tau, theta {#w-dot-o-dot-tau-theta}
+
+{{< figure src="sprained_ankle-1/figure/lpa_vio_all_3.png" >}}
+
+
+## response {#response}
+
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|         res|             n|
+|------------:|------------:|------------:|------------:|-----------:|-------------:|
+| -0.60 (0.46)|  0.34 (0.57)| -0.19 (0.31)| -0.48 (0.32)| 4.35 (2.98)| 385.00 (0.00)|
+|  0.27 (0.95)| -0.68 (1.03)|  0.16 (0.97)| -0.06 (0.65)| 6.01 (2.23)| 314.00 (0.00)|
+|  1.22 (1.51)| -0.37 (1.40)|  0.82 (2.25)|  1.88 (1.66)| 6.76 (1.18)| 101.00 (0.00)|
+|  0.14 (0.58)|  0.74 (0.36)| -0.39 (0.23)|  0.10 (0.62)| 4.06 (3.01)| 163.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|         res|             n|
+|------------:|------------:|-----------:|-----------:|-----------:|-------------:|
+| -0.27 (0.27)| -0.43 (0.35)| 0.79 (0.10)| 0.00 (0.00)| 4.50 (2.96)| 556.00 (0.00)|
+|  1.48 (2.22)|  2.17 (1.63)| 0.00 (0.00)| 0.93 (0.12)| 6.57 (1.56)|  83.00 (0.00)|
+| -0.06 (0.74)|  0.69 (0.39)| 0.08 (0.12)| 0.05 (0.08)| 5.89 (2.33)| 190.00 (0.00)|
+|  0.29 (1.16)| -0.55 (0.41)| 0.08 (0.13)| 0.03 (0.06)| 5.52 (2.59)| 134.00 (0.00)|
 
 
 # tickets {#tickets}
@@ -423,6 +644,25 @@ An analytic hierarchy process, based on the fit indices AIC, AWE, BIC, CLC, and 
 
 Response: the smaller, the better
 
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|     AGEG5LFS|             n|
+|------------:|------------:|------------:|------------:|------------:|-------------:|
+|  0.88 (1.77)| -1.05 (1.11)|  1.85 (1.79)|  1.02 (1.83)| -0.23 (1.00)|  57.00 (0.00)|
+| -0.38 (0.57)| -0.33 (0.91)|  0.04 (0.71)| -0.61 (0.49)|  0.42 (1.01)| 175.00 (0.00)|
+|  0.67 (0.94)| -0.08 (0.98)| -0.18 (0.53)|  0.59 (0.79)| -0.45 (0.88)| 144.00 (0.00)|
+| -0.43 (0.43)|  0.69 (0.47)| -0.47 (0.27)| -0.19 (0.58)|  0.02 (0.92)| 186.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|     AGEG5LFS|             n|
+|------------:|------------:|-----------:|-----------:|------------:|-------------:|
+|  3.06 (1.66)|  1.58 (2.25)| 0.94 (0.14)| 0.00 (0.00)| -0.13 (1.09)|  28.00 (0.00)|
+| -0.53 (0.32)| -0.28 (0.60)| 0.01 (0.01)| 0.83 (0.13)|  0.04 (0.98)| 340.00 (0.00)|
+|  0.48 (0.52)|  0.26 (0.99)| 0.06 (0.08)| 0.12 (0.15)| -0.06 (1.02)| 194.00 (0.00)|
+
 
 ### w/ tau and theta
 
@@ -443,6 +683,93 @@ Response: the smaller, the better
 |  0.27 (0.48)|  0.25 (0.84)| 0.06 (0.08)| 0.88 (0.13)| -0.10 (1.04)| 429.00 (0.00)|
 | -0.43 (0.11)|  0.06 (0.78)| 0.01 (0.01)| 0.26 (0.07)| -0.08 (0.94)| 321.00 (0.00)|
 | -1.05 (0.21)| -1.29 (0.35)| 0.00 (0.00)| 0.07 (0.09)|  0.46 (0.89)| 151.00 (0.00)|
+
+
+# club\_membership-1 {#club-membership-1}
+
+
+## collocations {#collocations}
+
+## Class  1
+
+
+|bigram                                                                                                 | likelihood_ratio|
+|:------------------------------------------------------------------------------------------------------|----------------:|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=...', 'TEXTBOX_KILLFOCUS-u019_email_message.value=...')     |        1350.7463|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=....', 'TEXTBOX_KILLFOCUS-u019_email_message.value=....')   |         834.1867|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=', 'KEYPRESS')                                              |         743.0269|
+|('TOOLBAR_mailApp-mailApp', 'TEXTBOX_ONFOCUS-u019_email_message.value=')                               |         706.1838|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=', 'TEXTBOX_KILLFOCUS-u019_email_message.value=')           |         423.1183|
+|('TEXTBOX_ONFOCUS-email.value=', 'TEXTBOX_KILLFOCUS-email.value=')                                     |         365.8373|
+|('CELL_CHANGE-content_spreadsheet_ColaD_row65', 'TOOLBAR_mailApp-mailApp')                             |         317.9156|
+|('TEXTBOX_ONFOCUS-searchtfield.value=', 'KEYPRESS')                                                    |         305.8994|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=.....', 'TEXTBOX_KILLFOCUS-u019_email_message.value=.....') |         282.9375|
+|('TOOLBAR_ss-find-ss-find', 'TEXTBOX_ONFOCUS-searchtfield.value=')                                     |         226.6560|
+## Class  2
+
+
+|bigram                                                                                                 | likelihood_ratio|
+|:------------------------------------------------------------------------------------------------------|----------------:|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=....', 'TEXTBOX_KILLFOCUS-u019_email_message.value=....')   |        1637.1887|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=...', 'TEXTBOX_KILLFOCUS-u019_email_message.value=...')     |        1353.0898|
+|('TOOLBAR_mailApp-mailApp', 'TEXTBOX_ONFOCUS-u019_email_message.value=')                               |        1270.2396|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=', 'KEYPRESS')                                              |         990.1056|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=', 'TEXTBOX_KILLFOCUS-u019_email_message.value=')           |         562.8241|
+|('TEXTBOX_ONFOCUS-email.value=', 'TEXTBOX_KILLFOCUS-email.value=')                                     |         521.7128|
+|('TEXTBOX_ONFOCUS-searchtfield.value=', 'KEYPRESS')                                                    |         476.3342|
+|('TEXTBOX_KILLFOCUS-searchtfield.value=.....', 'MEM_FIND_ok-spread-search-btn')                        |         382.0834|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=.....', 'TEXTBOX_KILLFOCUS-u019_email_message.value=.....') |         370.8978|
+|('NEXT_INQUIRY-REQUEST', 'TEXTBOX_ONFOCUS-u019_email_message.value=...')                               |         345.2553|
+## Class  3
+
+
+|bigram                                                                                                                                                                                       | likelihood_ratio|
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------:|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=...', 'TEXTBOX_KILLFOCUS-u019_email_message.value=...')                                                                                           |        1102.4764|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=....', 'TEXTBOX_KILLFOCUS-u019_email_message.value=....')                                                                                         |         986.7735|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=', 'TEXTBOX_KILLFOCUS-u019_email_message.value=')                                                                                                 |         776.3836|
+|('TEXTBOX_ONFOCUS-email.value=', 'TEXTBOX_KILLFOCUS-email.value=')                                                                                                                           |         563.2145|
+|('TEXTBOX_ONFOCUS-clientzone_box3_textbox3.value=', 'TEXTBOX_KILLFOCUS-clientzone_box3_textbox3.value=')                                                                                     |         280.6153|
+|('TEXTBOX_ONFOCUS-popup2_txt1.value=The_email_has_been_sent._Please_click_Next_to_continue.', 'TEXTBOX_KILLFOCUS-popup2_txt1.value=The_email_has_been_sent._Please_click_Next_to_continue.') |         280.6153|
+|('TOOLBAR_mailApp-mailApp', 'TEXTBOX_ONFOCUS-u019_email_message.value=')                                                                                                                     |         257.7530|
+|('TEXTBOX_ONFOCUS-u019_mc_txt4.value=secretary@bikeclub.org', 'TEXTBOX_KILLFOCUS-u019_mc_txt4.value=secretary@bikeclub.org')                                                                 |         251.1673|
+|('TEXTBOX_ONFOCUS-searchtfield.value=', 'KEYPRESS')                                                                                                                                          |         241.1137|
+|('TEXTBOX_ONFOCUS-u019_email_message.value=', 'KEYPRESS')                                                                                                                                    |         215.5836|
+
+
+## visualise cluster {#visualise-cluster}
+
+
+### with tau, theta {#with-tau-theta}
+
+{{< figure src="club_membership-1/figure/lpa_box_all_3.png" >}}
+
+
+### w.o. tau, theta {#w-dot-o-dot-tau-theta}
+
+{{< figure src="club_membership-1/figure/lpa_vio_all_3.png" >}}
+
+
+## response {#response}
+
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|         res|             n|
+|------------:|------------:|------------:|------------:|-----------:|-------------:|
+| -0.86 (0.59)|  0.18 (0.87)| -0.29 (0.72)| -0.67 (0.46)| 2.68 (2.70)| 228.00 (0.00)|
+|  0.63 (0.57)| -0.03 (0.95)| -0.22 (0.50)|  0.19 (0.73)| 1.31 (1.32)| 255.00 (0.00)|
+|  0.42 (1.21)| -0.40 (1.32)|  1.51 (1.45)|  1.30 (1.29)| 2.04 (2.28)|  81.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|         res|             n|
+|------------:|------------:|-----------:|-----------:|-----------:|-------------:|
+| -0.36 (0.68)| -0.70 (0.41)| 0.84 (0.12)| 0.12 (0.11)| 2.45 (2.58)| 293.00 (0.00)|
+| -0.10 (0.40)|  0.49 (0.49)| 0.10 (0.14)| 0.82 (0.14)| 1.34 (1.39)| 194.00 (0.00)|
+|  1.63 (1.41)|  1.42 (1.26)| 0.02 (0.06)| 0.06 (0.11)| 1.70 (1.94)|  77.00 (0.00)|
 
 
 # book\_order {#book-order}
@@ -630,6 +957,110 @@ Loading required package: ggplot2
 |  3.06 (1.66)|  1.58 (2.25)| 0.94 (0.14)| 0.00 (0.00)| -0.13 (1.09)|  28.00 (0.00)|
 | -0.53 (0.32)| -0.28 (0.60)| 0.01 (0.01)| 0.83 (0.13)|  0.04 (0.98)| 340.00 (0.00)|
 |  0.48 (0.52)|  0.26 (0.99)| 0.06 (0.08)| 0.12 (0.15)| -0.06 (1.02)| 194.00 (0.00)|
+
+
+# locate\_email {#locate-email}
+
+
+## collocations {#collocations}
+
+## Class  1
+
+
+|bigram                                                        | likelihood_ratio|
+|:-------------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-item700', 'MAIL_VIEWED-item701')              |         182.6112|
+|('MENU-message-menu', 'MENUITEM_move-folder-key=move-folder') |         180.9275|
+|('FOLDER_VIEWED-item402', 'MOVE_FOLDER_ok-moveValidation')    |         161.4272|
+|('FOLDER_VIEWED-item401', 'MOVE_FOLDER_ok-moveValidation')    |         131.4655|
+|('FOLDER_VIEWED-item401', 'MAIL_MOVED-item701.item401')       |         126.2251|
+|('MAIL_VIEWED-item701', 'TOOLBAR_move-move')                  |         125.6678|
+|('MAIL_VIEWED-item702', 'TOOLBAR_move-move')                  |         122.8810|
+|('TOOLBAR_move-move', 'FOLDER_VIEWED-item402')                |         117.3310|
+|('FOLDER_VIEWED-item800', 'MAIL_MOVED-item703.item800')       |         101.4094|
+|('MOVE_FOLDER_ok-moveValidation', 'MAIL_VIEWED-item702')      |         100.2878|
+## Class  2
+
+
+|bigram                                                        | likelihood_ratio|
+|:-------------------------------------------------------------|----------------:|
+|('MENU-file-menu', 'MENUITEM_newfolder-key=newfolder')        |         774.2367|
+|('FOLDER_VIEWED-item403', 'MAIL_MOVED-item186.item403')       |         576.8293|
+|('FOLDER_VIEWED-item403', 'MAIL_MOVED-item113.item403')       |         529.6047|
+|('FOLDER_VIEWED-item401', 'MAIL_MOVED-item114.item401')       |         523.2631|
+|('FOLDER_VIEWED-item403', 'MAIL_MOVED-item265.item403')       |         517.8293|
+|('MAIL_VIEWED-item217', 'MAIL_DRAG-item217')                  |         499.2203|
+|('FOLDER_VIEWED-item403', 'MAIL_MOVED-item237.item403')       |         494.3152|
+|('FOLDER_VIEWED-item403', 'MAIL_MOVED-item220.item403')       |         488.4443|
+|('FOLDER_VIEWED-item800', 'MAIL_MOVED-item217.item800')       |         475.1347|
+|('MENU-message-menu', 'MENUITEM_move-folder-key=move-folder') |         440.1133|
+## Class  3
+
+
+|bigram                                                  | likelihood_ratio|
+|:-------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-item401', 'MAIL_MOVED-item701.item401') |         354.0859|
+|('FOLDER_VIEWED-item402', 'MAIL_MOVED-item702.item402') |         348.3190|
+|('FOLDER_VIEWED-item800', 'MAIL_MOVED-item703.item800') |         282.8238|
+|('MAIL_VIEWED-item702', 'MAIL_DRAG-item702')            |         218.0837|
+|('MAIL_DRAG-item703', 'FOLDER_VIEWED-item800')          |         196.8630|
+|('MAIL_VIEWED-item703', 'MAIL_DRAG-item703')            |         193.5513|
+|('MAIL_VIEWED-item701', 'MAIL_DRAG-item701')            |         174.3833|
+|('MAIL_DRAG-item701', 'FOLDER_VIEWED-item401')          |         157.7659|
+|('MAIL_DRAG-item702', 'FOLDER_VIEWED-item402')          |         139.2227|
+|('FOLDER_VIEWED-item403', 'MAIL_MOVED-item113.item403') |         134.2558|
+## Class  4
+
+
+|bigram                                                  | likelihood_ratio|
+|:-------------------------------------------------------|----------------:|
+|('FOLDER_VIEWED-item402', 'MAIL_MOVED-item702.item402') |         822.9731|
+|('FOLDER_VIEWED-item401', 'MAIL_MOVED-item701.item401') |         733.5614|
+|('FOLDER_VIEWED-item800', 'MAIL_MOVED-item703.item800') |         556.5832|
+|('MAIL_VIEWED-item703', 'MAIL_DRAG-item703')            |         423.0686|
+|('MAIL_VIEWED-item702', 'MAIL_DRAG-item702')            |         365.1577|
+|('MAIL_DRAG-item703', 'FOLDER_VIEWED-item800')          |         355.7715|
+|('MAIL_VIEWED-item701', 'MAIL_DRAG-item701')            |         345.9375|
+|('MAIL_MOVED-item702.item402', 'MAIL_VIEWED-item703')   |         339.9250|
+|('MAIL_DRAG-item702', 'FOLDER_VIEWED-item402')          |         256.4684|
+|('FOLDER_VIEWED-item700', 'MAIL_VIEWED-item701')        |         241.3214|
+
+
+## visualise cluster {#visualise-cluster}
+
+
+### with tau, theta {#with-tau-theta}
+
+{{< figure src="locate_email/figure/lpa_box_all_3.png" >}}
+
+
+### w.o. tau, theta {#w-dot-o-dot-tau-theta}
+
+{{< figure src="locate_email/figure/lpa_vio_all_3.png" >}}
+
+
+## response {#response}
+
+
+### w/ tau and theta
+
+
+|          tau|        theta|      naction|          spd|         res|             n|
+|------------:|------------:|------------:|------------:|-----------:|-------------:|
+| -0.43 (0.67)| -1.14 (0.59)| -0.71 (0.32)| -0.93 (0.54)| 1.23 (1.29)| 145.00 (0.00)|
+|  0.81 (1.17)|  0.22 (0.90)|  1.04 (1.07)|  0.87 (0.95)| 0.58 (1.06)| 181.00 (0.00)|
+| -0.52 (0.53)|  0.46 (0.87)| -0.08 (0.52)|  0.18 (0.63)| 1.56 (1.30)|  96.00 (0.00)|
+| -0.25 (0.57)|  0.58 (0.45)| -0.56 (0.13)| -0.28 (0.54)| 2.25 (0.92)| 140.00 (0.00)|
+
+### w/o tau and theta
+
+
+|      naction|          spd|      CPROB1|      CPROB2|         res|             n|
+|------------:|------------:|-----------:|-----------:|-----------:|-------------:|
+| -1.05 (0.04)| -1.46 (0.27)| 0.97 (0.04)| 0.00 (0.00)| 0.00 (0.00)|  47.00 (0.00)|
+|  1.16 (1.09)|  1.04 (0.92)| 0.00 (0.00)| 0.92 (0.13)| 0.61 (1.10)| 161.00 (0.00)|
+| -0.05 (0.44)| -0.27 (0.48)| 0.02 (0.08)| 0.13 (0.13)| 1.27 (1.30)| 124.00 (0.00)|
+| -0.57 (0.13)| -0.29 (0.63)| 0.00 (0.00)| 0.03 (0.06)| 2.13 (1.02)| 230.00 (0.00)|
 
 
 # lamp\_return {#lamp-return}
