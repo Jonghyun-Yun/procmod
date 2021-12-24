@@ -5,9 +5,9 @@
 
 #+html: <img src="https://i.pinimg.com/originals/99/27/88/992788e0eeabd4fea4208ec94374ea89.jpg" align="right" width="30%">
 
-PRODA: PROcessing process DAta
 
-* [[https://jonghyun-yun.github.io/procmod/][GitHub Pages]]
+* PRODA: PROcessing process DAta
+[[https://jonghyun-yun.github.io/procmod/][GitHub Pages]]
 * Getting started...
 
 * Building the Stan math library
