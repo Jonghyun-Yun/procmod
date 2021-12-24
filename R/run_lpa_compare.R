@@ -55,14 +55,14 @@ pinfo = pinfo %>% select(SEQID) %>% cbind(pinfo[,names(pinfo) %in% toupper(var$N
 minfo = plyr::join(param, pinfo, by = 'SEQID', type = "inner")
 dx = minfo[,4:ncol(minfo)]
 
-## dat <- readr::read_csv(paste0(out_dir, "input/dat.csv"), col_names = FALSE)
+## dat <- jyunr::read_csv(paste0(out_dir, "input/dat.csv"), col_names = FALSE)
 ## rr <- dat[, c(1, 8)] %>% as.data.frame()
 ## rr <- rr[!duplicated(rr), 2]
 gg <- item %>%
   group_by(SEQID) %>%
   summarize(ftime = timestamp[1] / 1000, naction = n(),
             time = timestamp[n()] / 1000, spd = naction / time)
-## binfo = readr::read_csv("./data/PIAAC_cleaned_data_1110/PUFs_noN.csv")
+## binfo = jyunr::read_csv("./data/PIAAC_cleaned_data_1110/PUFs_noN.csv")
 
 ## book_order =minfo= has a fewer SEQID than =item=
 gres <- item %>%

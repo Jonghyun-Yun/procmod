@@ -3,6 +3,8 @@
 #+include: ~/org/OSX.org::CMakeLists
 #+include: ~/org/OSX.org::compile_commands
 
+#+html: <img src="https://i.pinimg.com/originals/99/27/88/992788e0eeabd4fea4208ec94374ea89.jpg" align="right" width="30%">
+
 * [[https://jonghyun-yun.github.io/procmod/][GitHub Pages]]
 * Getting started...
 

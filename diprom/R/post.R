@@ -27,7 +27,7 @@ get_nchain = function(out_dir) {
 read_output = function(num_chain, cnames) {
   dlist <- list()
   for (cid in 1:num_chain) {
-    dlist[[cid]] <- readr::read_csv(paste0(out_dir, "sample_chain", cid, ".csv"), col_names = F, skip = 0) %>% as.data.frame()
+    dlist[[cid]] <- jyunr::read_csv(paste0(out_dir, "sample_chain", cid, ".csv"), col_names = F, skip = 0) %>% as.data.frame()
     colnames(dlist[[cid]]) <- cnames
   }
   return(dlist)

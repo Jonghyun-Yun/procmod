@@ -1,4 +1,4 @@
-mvar <- readr::read_csv(paste0(out_dir, "input/mvar.csv"), col_names = F) %>% as.matrix()
+mvar <- jyunr::read_csv(paste0(out_dir, "input/mvar.csv"), col_names = F) %>% as.matrix()
 M = M_ = mvar[1]
 N = N_ = mvar[2]
 dq = dq_ = mvar[3]
