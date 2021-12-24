@@ -1,0 +1,10 @@
+('TEXTBOX_ONFOCUS-u019_email_message.value=...', 'TEXTBOX_KILLFOCUS-u019_email_message.value=...')	1350.7463230097787
+('TEXTBOX_ONFOCUS-u019_email_message.value=....', 'TEXTBOX_KILLFOCUS-u019_email_message.value=....')	834.1867294658957
+('TEXTBOX_ONFOCUS-u019_email_message.value=', 'KEYPRESS')	743.0268945844841
+('TOOLBAR_mailApp-mailApp', 'TEXTBOX_ONFOCUS-u019_email_message.value=')	706.1837651530961
+('TEXTBOX_ONFOCUS-u019_email_message.value=', 'TEXTBOX_KILLFOCUS-u019_email_message.value=')	423.11826285500854
+('TEXTBOX_ONFOCUS-email.value=', 'TEXTBOX_KILLFOCUS-email.value=')	365.83732916014094
+('CELL_CHANGE-content_spreadsheet_ColaD_row65', 'TOOLBAR_mailApp-mailApp')	317.9156228278375
+('TEXTBOX_ONFOCUS-searchtfield.value=', 'KEYPRESS')	305.8994153370265
+('TEXTBOX_ONFOCUS-u019_email_message.value=.....', 'TEXTBOX_KILLFOCUS-u019_email_message.value=.....')	282.93754907303827
+('TOOLBAR_ss-find-ss-find', 'TEXTBOX_ONFOCUS-searchtfield.value=')	226.65596295113352

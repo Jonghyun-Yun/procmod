@@ -1,0 +1,10 @@
+('TEXTBOX_ONFOCUS-u019_email_message.value=....', 'TEXTBOX_KILLFOCUS-u019_email_message.value=....')	1637.1887026997033
+('TEXTBOX_ONFOCUS-u019_email_message.value=...', 'TEXTBOX_KILLFOCUS-u019_email_message.value=...')	1353.089809611707
+('TOOLBAR_mailApp-mailApp', 'TEXTBOX_ONFOCUS-u019_email_message.value=')	1270.23960255285
+('TEXTBOX_ONFOCUS-u019_email_message.value=', 'KEYPRESS')	990.1056048011744
+('TEXTBOX_ONFOCUS-u019_email_message.value=', 'TEXTBOX_KILLFOCUS-u019_email_message.value=')	562.8241004287603
+('TEXTBOX_ONFOCUS-email.value=', 'TEXTBOX_KILLFOCUS-email.value=')	521.7128105620393
+('TEXTBOX_ONFOCUS-searchtfield.value=', 'KEYPRESS')	476.334207177158
+('TEXTBOX_KILLFOCUS-searchtfield.value=.....', 'MEM_FIND_ok-spread-search-btn')	382.08339569737046
+('TEXTBOX_ONFOCUS-u019_email_message.value=.....', 'TEXTBOX_KILLFOCUS-u019_email_message.value=.....')	370.89778253952335
+('NEXT_INQUIRY-REQUEST', 'TEXTBOX_ONFOCUS-u019_email_message.value=...')	345.2553264226942

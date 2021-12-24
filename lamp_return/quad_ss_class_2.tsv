@@ -1,0 +1,10 @@
+('BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4', 'BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4')	7073.849497050091
+('BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4', 'TOOLBAR_mailApp-mailApp', 'MAIL_VIEWED-item305')	5252.692682171724
+('TEXTLINK-u023_default_txt10.href=unit23page1.target=self', 'TEXTLINK-u023_pg1_txt9.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4')	5234.22736960162
+('TEXTLINK-u023_pg2_txt21.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4', 'TOOLBAR_mailApp-mailApp')	5210.599049568284
+('TEXTLINK-u023_pg1_txt9.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4', 'TOOLBAR_mailApp-mailApp')	5064.060037402445
+('COMBOBOX-u023_pg2_menu1.index=1', 'TEXTLINK-u023_pg2_txt21.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4')	5013.7913316462245
+('TEXTLINK-u023_pg2_txt21.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4', 'TOOLBAR_back-toolbar_back_btn')	4882.881416619944
+('KEYPRESS', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834', 'BUTTON_RETURN_submit-u023_pg2_txt22', 'NEXT_INQUIRY-REQUEST')	4833.31636628182
+('TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=', 'TEXTLINK-u023_pg2_txt21.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4')	4743.510673981024
+('TEXTLINK-u023_pg1_txt9.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4', 'TOOLBAR_back-toolbar_back_btn')	4726.279231420511

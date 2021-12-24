@@ -1,0 +1,10 @@
+('MENU-file-menu', 'MENUITEM_newfolder-key=newfolder', 'TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS')	15004.589807160617
+('MAIL_VIEWED-item105', 'MAIL_DRAG-item105', 'FOLDER_VIEWED-item0', 'MAIL_MOVED-item105.target=item0')	14019.448254452705
+('MENU-file-menu', 'MENUITEM_newfolder-key=newfolder', 'MENU-file-menu', 'MENUITEM_newfolder-key=newfolder')	12042.4086602383
+('MAIL_DRAG-item105', 'FOLDER_VIEWED-item0', 'MAIL_MOVED-item105.target=item0', 'NEXT_INQUIRY-REQUEST')	11264.699386468203
+('MAIL_DRAG-item105', 'FOLDER_VIEWED-item0', 'MAIL_MOVED-item105.target=item0', 'MAIL_VIEWED-item102')	10929.211102278492
+('MAIL_DRAG-item105', 'FOLDER_VIEWED-item0', 'MAIL_MOVED-item105.target=item0', 'MAIL_VIEWED-item104')	10213.262819567366
+('MAIL_MOVED-item104.CanComeFolder', 'MAIL_VIEWED-item105', 'MAIL_DRAG-item105', 'FOLDER_VIEWED-item0')	9716.975767622256
+('MENU-file-menu', 'MENU-file-menu', 'MENUITEM_newfolder-key=newfolder', 'TEXTBOX_ONFOCUS-createfoldernameinput.value=')	9670.82994743654
+('FOLDER_VIEWED-item0', 'MAIL_MOVED-item105.target=item0', 'MENU-file-menu', 'MENUITEM_newfolder-key=newfolder')	9506.225314526466
+('FOLDER_VIEWED-item0', 'MAIL_MOVED-item101.target=item0', 'MAIL_VIEWED-item102', 'MAIL_DRAG-item102')	9423.919901194306

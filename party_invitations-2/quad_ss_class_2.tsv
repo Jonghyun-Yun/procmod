@@ -1,0 +1,10 @@
+('MENU-file-menu', 'MENUITEM_newfolder-key=newfolder', 'TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS')	730.0292380661981
+('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=ACCOMMODATIONS', 'ADD_FOLDER_ok-addValidation')	510.16594312845666
+('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=Special_accomodations', 'ADD_FOLDER_ok-addValidation')	489.2758495635086
+('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=accommadations', 'ADD_FOLDER_ok-addValidation')	489.2758495635086
+('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=accomodation', 'ADD_FOLDER_ok-addValidation')	489.2758495635086
+('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=guest_staying_over', 'ADD_FOLDER_ok-addValidation')	489.2758495635086
+('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=need_hotel', 'ADD_FOLDER_ok-addValidation')	489.2758495635086
+('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=needs_accomodations', 'ADD_FOLDER_ok-addValidation')	489.2758495635086
+('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=over_night', 'ADD_FOLDER_ok-addValidation')	489.2758495635086
+('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=staying_over_night', 'ADD_FOLDER_ok-addValidation')	489.2758495635086

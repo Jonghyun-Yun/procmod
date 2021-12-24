@@ -1,0 +1,10 @@
+('SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST')	2355.384754411117
+('TOOLBAR_spreadApp-spreadApp', 'TOOLBAR_webApp-webApp')	1392.4233899310866
+('COMBOBOX-menulist.index=9', 'SUBMIT_complete-u03_default_txt14')	865.4099259480456
+('TOOLBAR_webApp-webApp', 'COMBOBOX-menulist.index=9')	832.1501262056515
+('TOOLBAR_webApp-webApp', 'TOOLBAR_spreadApp-spreadApp')	606.5532298358037
+('NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')	502.33736354463167
+('TOOLBAR_ss-sort-ss-sort', 'COMBOBOX-sortablecol1.index=3')	485.4294219651823
+('MENUITEM_sort-key=sort', 'COMBOBOX-sortablecol1.index=3')	453.2708302163212
+('MENU-ss-data-menu', 'MENUITEM_sort-key=sort')	435.13338699666906
+('COMBOBOX-sortablecol1.index=3', 'RADIO_BTN-priority1asc')	322.20076382826744

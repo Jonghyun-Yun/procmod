@@ -38,11 +38,45 @@ num_chain = 2
 stopImplicitCluster()
 ## doParallel::registerDoParallel(2)
 registerDoParallel(cores = detectCores() - 1)
-out_dir = ldir[3]
 
-item_code = "U01a000S" # party-1
-## item_code = "U21x000S" # ticket
-item_code = "U07x000S" # book order
+item_code_book = c(
+"U01a000S",
+"U01b000S",
+"U03a000S",
+"U06a000S",
+"U21x000S",
+"U19a000S",
+"U07x000S",
+"U02x000S",
+"U11b000S",
+"U23x000S")
+
+## ## Party Invitations - 1;
+## item_code = "U01a000S"
+## ## Party Invitations - 2;
+## item_code = "U01b000S"
+## ## CD Tally;
+## item_code = "U03a000S"
+## ## Sprained Ankle - 1;
+## item_code = "U06a000S"
+## ## Tickets;
+## item_code = "U21x000S"
+## ## Club Membership - 1;
+## item_code = "U19a000S"
+## ## Book Order;
+## item_code = "U07x000S"
+## ## Meeting Room;
+## item_code = "U02x000S"
+## ## Locate Email;
+## item_code = "U11b000S"
+## ## Lamp Return;
+## item_code = "U23x000S"
+
+for (out_dir in ldir) {
+## out_dir = ldir[1]
+
+kk = which(out_dir == ldir)
+item_code = item_code_book[kk]
 
 source("R/itemcode.R")
 
@@ -64,15 +98,21 @@ piacc_background_path = "./data/PIAAC_cleaned_data_1110/Prgusap1_2017.csv"
 piacc_background_spss = "./data/PIAAC_cleaned_data_1110/Prgusap1_2017.sav"
 ## xxx = foreign::read.spss("./data/PIAAC_cleaned_data_1110/Prgusap1_2017.sav")
 
-load(paste0(out_dir, "lpa_membership.RData"))
+load(paste0(out_dir, "lpa_membership_mod2.RData"))
 item = read_piacc(piacc_path, item_code, sub_str, ignore_str)
 
-mc = max(tmp$Class)
+mc = max(memb$Class)
 for (cc in 1:mc) {
-item2sen(item, tmp$SEQID[tmp$Class == cc])
+item2sen(item, memb$SEQID[memb$Class == cc])
+
 system(". activate tf; python py/collocation.py")
-system(paste0("mv input/bi_ss.tsv input/bi_ss_class_", cc,".tsv"))
-system(paste0("mv input/tri_ss.tsv input/tri_ss_class_", cc,".tsv"))
-system(paste0("mv input/quad_ss.tsv input/quad_ss_class_", cc,".tsv"))
-}
+## library(reticulate)
+## conda_python("tf")
+## source_python("py/collocation.py")
+
+file.rename("input/bi_ss.tsv", paste0("input/bi_ss_class_", cc,".tsv"))
+file.rename("input/tri_ss.tsv", paste0("input/tri_ss_class_", cc,".tsv"))
+file.rename("input/quad_ss.tsv", paste0("input/quad_ss_class_", cc,".tsv"))
+    }
 system(paste0("mv input/*.tsv ", out_dir))
+  }

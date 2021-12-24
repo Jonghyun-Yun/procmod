@@ -1,0 +1,10 @@
+('TEXTBOX_ONFOCUS-u023_pg2_txt19.value=', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=')	589.8216284039127
+('BUTTON_obtain-u023_pg12_txt6', 'BUTTON_OBTAIN_close-u023_popup2_txt4')	538.4478613729317
+('BUTTON_RETURN_submit-u023_pg2_txt22', 'NEXT_INQUIRY-REQUEST')	388.42602775714874
+('RADIO_BTN-u023_pg2_txt8', 'COMBOBOX-u023_pg2_menu1.index=1')	320.53741509402926
+('TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834', 'BUTTON_RETURN_submit-u023_pg2_txt22')	306.38546676345106
+('TEXTLINK-u023_pg1_txt10.href=unit23page2.target=self', 'RADIO_BTN-u023_pg2_txt8')	300.3012901306171
+('TEXTLINK-u023_pg2_txt21.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6')	237.82513620740863
+('TEXTLINK-u023_pg1_txt9.href=unit23page12.target=self', 'BUTTON_obtain-u023_pg12_txt6')	227.30034133928976
+('KEYPRESS', 'TEXTBOX_KILLFOCUS-u023_pg2_txt19.value=7834')	222.5734514790174
+('TEXTLINK-u023_default_txt10.href=unit23page1.target=self', 'TEXTLINK-u023_pg1_txt10.href=unit23page2.target=self')	213.60087643071037
