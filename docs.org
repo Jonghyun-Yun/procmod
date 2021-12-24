@@ -29,6 +29,8 @@
   (jyun/org-latex-set-options 2.5)
 #+END_SRC
 
+#+html: <img src="https://i.pinimg.com/originals/99/27/88/992788e0eeabd4fea4208ec94374ea89.jpg" align="right" width="30%">
+
 * Home :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
