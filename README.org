@@ -6,9 +6,19 @@
 #+html: <img src="https://i.pinimg.com/originals/99/27/88/992788e0eeabd4fea4208ec94374ea89.jpg" align="right" width="30%">
 
 
-* PRODA: PROcessing process DAta
-[[https://jonghyun-yun.github.io/procmod/][GitHub Pages]]
+* PRODA: PROcessing process DAta :export:
+[[https://jonghyun-yun.github.io/proda/][GitHub Pages]]
 * Getting started...
+* Installation
+* How to use
+  In the project root folder, use ~cmake~ and then ~make~ to build the executable program ~main~.
+#+BEGIN_SRC sh
+cmake .
+make -j8
+./main $num_chain $niter $nburn $thin parallel/serial
+#+END_SRC
+
+    *You can safely ignore anything after this line. These are for my own reference.*
 
 * Building the Stan math library
   First, you need to build ~Stan Math Library~ obtained from https://github.com/stan-dev/math. I am using
@@ -85,19 +95,9 @@ You need to set ~MATH~ variable to indicate the Stan Math Library path (here, it
   target_link_libraries(main ${CMAKE_CXX_FLAGS} ${MATH}/lib/sundials_5.2.0/lib/libsundials_nvecserial.a ${MATH}/lib/sundials_5.2.0/lib/libsundials_cvodes.a ${MATH}/lib/sundials_5.2.0/lib/libsundials_idas.a ${MATH}/lib/sundials_5.2.0/lib/libsundials_kinsol.a ${MATH}/lib/tbb/libtbb.dylib ${MATH}/lib/tbb/libtbbmalloc.dylib ${MATH}/lib/tbb/libtbbmalloc_proxy.dylib)
  #+end_src
 
-* How to use
-  In the project root folder, use ~cmake~ and then ~make~ to build the executable program ~main~.
-#+BEGIN_SRC sh
-cmake .
-make -j8
-./main $num_chain $niter $nburn $thin parallel/serial
-#+END_SRC
-
-    *You can safely ignore anything after this line. These are for my own reference.*
-    
 * Generate =compile_commands.json= using CMAKE
-  This is for compiling with the -g flag for debugging. If you are not using ~gdb~, please ignore this part.
-  The executable will be compiled in a ~Debug~ directory.
+This is for compiling with the -g flag for debugging. If you are not using ~gdb~, please ignore this part.
+The executable will be compiled in a ~Debug~ directory.
 #+begin_src sh
 rm -r CMakeFiles/ Debug/ cmake_install.cmake CMakeCache.txt Makefile compile_commands.json
 # export CXX="/usr/local/opt/llvm/bin/clang++"
@@ -105,14 +105,7 @@ rm -r CMakeFiles/ Debug/ cmake_install.cmake CMakeCache.txt Makefile compile_com
 cmake -H. -BDebug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
 ln -s Debug/compile_commands.json
 #+end_src
-
-* CCLS issue
-** https://github.com/MaskRay/ccls/issues/622#issuecomment-623115650
-
-#+BEGIN_SRC sh
-cmake -H. -BRelease -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/Users/yunj/local/clang+llvm-10.0.0-x86_64-apple-darwin/ -DCMAKE_INSTALL_PREFIX=/usr/local/Cellar/ccls/HEAD-c5acf62 -DUSE_SYSTEM_RAPIDJSON=OFF -DCMAKE_CXX_COMPILER=/Users/yunj/local/clang+llvm-10.0.0-x86_64-apple-darwin/bin/clang++
-#+END_SRC
-* To use GDB for debugging
+* COMMENT To use GDB for debugging
   MakeFile in a project root doesn't build main with debugging flag (-g). Instead, use one in Debug (folder).
   https://cs.baylor.edu/~donahoo/tools/gdb/tutorial.html
   #+BEGIN_SRC sh
@@ -134,7 +127,7 @@ cmake -H. -BRelease -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/Users/yunj/l
         ))
   #+end_src
 
-* Check if CCLS works
+* COMMENT Check if CCLS works
 To see if ccls works:
 #+BEGIN_SRC sh :async
 rm -rf .ccls-cache
