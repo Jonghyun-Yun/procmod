@@ -1,7 +1,7 @@
 +++
 title = "Draft"
 author = ["Jonghyun Yun"]
-lastmod = 2021-12-27T09:16:12-06:00
+lastmod = 2022-01-04T06:49:55-06:00
 draft = false
 weight = 3
 chapter = true
@@ -106,7 +106,7 @@ chapter = true
 %Advances in technology have expanded opportunities for educational measurement through changes to item design, item delivery and data collection. Some examples include simulation-, scenario-, and game-based assessment and learning environments.
 
 The NAEP computerized testing format provides an interactive environment for students.
-Students can choose among a set of available actions and take one or more steps to finish a task. All student actions are automatically recorded in system log (Kerr, Chung, \\& Iseli, 2011), which can be used %immediately for providing instant feedback to students
+Students can choose among a set of available actions and take one or more steps to finish a task. All student actions are automatically recorded in system log (Kerr, Chung, \\& Iseli, 2011), which can be used immediately for providing instant feedback to students
 for diagnostic and scoring purposes (DiCerbo \\& Behrens, 2014).
 
 
@@ -124,10 +124,10 @@ The vast amount of data on students' potential trial-and-error process makes it 
 
 ## Exisitng methods and limitations {#exisitng-methods-and-limitations}
 
-Several data analysis techniques and models have been explored to uncover problem-solving patterns. For example, researchers used methods such as cluster analysis (Bergner, Shu, \\& von Davier, 2014) and editing distance (Hao, Shu, Bergner, Zhu, \\& von Davier, 2014).
-Other researchers explored the method of combining Markov movesl and item response theory (IRT) framework. Process mining techniques such as Petri net were also used to study behavioral patterns (Howard, Johnson, \\& Neitzel, 2010).
+Several data analysis techniques and models have been explored to uncover problem-solving patterns. For example, researchers used methods such as cluster analysis <&bergner_visualization_2014> and editing distance <&zhu_using_2016>.
+Other researchers explored the method of combining Markov movesl and item response theory (IRT) framework. Process mining techniques such as Petri net were also used to study behavioral patterns <&howard_reflecting_2010>
 In addition, researchers used digraphs to visualize and analyze sequential process data collected from assessment.
-Zhu, Shu, and von Davier (2016) used network visualization and analysis for understanding process data.
+<&zhu_using_2016> used network visualization and analysis for understanding process data.
 
 <&chen_statistical_2019>
 <&chen_continuous-time_2020>
@@ -223,7 +223,7 @@ The OECD Survey of Adult Skills (PIAAC) assesses the proficiency of adults in in
 
 ### Illustrate a ticket example: {#illustrate-a-ticket-example}
 
-<a id="org2e9348a"></a>
+<a id="org423991b"></a>
 
 {{< figure src="/ox-hugo/tickets_demo.png" caption="Figure 1: An example of PS-TRE items. In this simulated web environment, respondents can access information required for ticket reservation." >}}
 
