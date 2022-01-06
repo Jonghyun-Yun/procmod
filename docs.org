@@ -44,13 +44,17 @@ A notice disclaimer
 
 #+end_export
 
-* TODOs :noexport:
+* TODO goals :noexport:
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_SECTION: todo
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :chapter true
 :EXPORT_HUGO_WEIGHT: 1
 :EXPORT_TITLE: TODO
+:END:
+:LOGBOOK:
+- State "NEXT"       from "DONE"       [2021-12-30 Thu 02:16]
+- State "NEXT"       from "TODO"       [2021-12-30 Thu 02:16]
 :END:
 
 ** pattern discovery
@@ -1765,7 +1769,7 @@ attr(dat, "trans")
 %Advances in technology have expanded opportunities for educational measurement through changes to item design, item delivery and data collection. Some examples include simulation-, scenario-, and game-based assessment and learning environments.
 
 The NAEP computerized testing format provides an interactive environment for students.
-Students can choose among a set of available actions and take one or more steps to finish a task. All student actions are automatically recorded in system log (Kerr, Chung, \& Iseli, 2011), which can be used %immediately for providing instant feedback to students
+Students can choose among a set of available actions and take one or more steps to finish a task. All student actions are automatically recorded in system log (Kerr, Chung, \& Iseli, 2011), which can be used immediately for providing instant feedback to students
 for diagnostic and scoring purposes (DiCerbo \& Behrens, 2014).
 
 *** Benefits of process data
@@ -1777,10 +1781,10 @@ The raw process data are usually formatted as lines of coded and time-stamped st
 The vast amount of data on students' potential trial-and-error process makes it less than straightforward to detect patterns in problem solving.
 
 *** Exisitng methods and limitations
-Several data analysis techniques and models have been explored to uncover problem-solving patterns. For example, researchers used methods such as cluster analysis (Bergner, Shu, \& von Davier, 2014) and editing distance (Hao, Shu, Bergner, Zhu, \& von Davier, 2014).
-Other researchers explored the method of combining Markov movesl and item response theory (IRT) framework. Process mining techniques such as Petri net were also used to study behavioral patterns (Howard, Johnson, \& Neitzel, 2010).
+Several data analysis techniques and models have been explored to uncover problem-solving patterns. For example, researchers used methods such as cluster analysis [[citep:&bergner_visualization_2014]] and editing distance citep:&zhu_using_2016.
+Other researchers explored the method of combining Markov movesl and item response theory (IRT) framework. Process mining techniques such as Petri net were also used to study behavioral patterns [[citep:&howard_reflecting_2010]]
 In addition, researchers used digraphs to visualize and analyze sequential process data collected from assessment.
-Zhu, Shu, and von Davier (2016) used network visualization and analysis for understanding process data.
+[[cite:&zhu_using_2016]] used network visualization and analysis for understanding process data.
 
 cite:&chen_statistical_2019
 [[cite:&chen_continuous-time_2020]]
@@ -2538,6 +2542,11 @@ convert -density 300 lpa_box_back.pdf lpa_box_back.png
 [[file:party_invitations-1/figure/lpa_box_back.png]]
 
 *** party_invitations-2
+:PROPERTIES:
+:EXPORT_HUGO_BUNDLE: party_invitations-2
+:EXPORT_HUGO_WEIGHT: 15
+:END:
+
 **** collocations
 #+begin_src R :var out_dir=(jyun/get-nth-up-heading) :results html
 out_dir = paste0(out_dir,"/")
@@ -4270,7 +4279,6 @@ mat2mean_sd(mm,sd,denote_sd = "paren", markup = "markdown") %>% knitr::kable(ali
 | -0.53 (0.32)| -0.28 (0.60)| 0.01 (0.01)| 0.83 (0.13)| 2.62 (0.57)| 340.00 (0.00)|
 |  0.48 (0.52)|  0.26 (0.99)| 0.06 (0.08)| 0.12 (0.15)| 2.72 (0.50)| 194.00 (0.00)|
 #+end_export
-
 
 ** References
 #+csl_style: ~/Zotero/styles/chicago-author-date.csl
