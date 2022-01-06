@@ -2616,8 +2616,7 @@ print(knitr::kable(tt))
 #+end_export
 
 **** visualise cluster
-***** with tau, theta
-#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 1)
 cd $out_dir
 cd figure
 convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
@@ -2635,8 +2634,7 @@ convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
 [[file:party_invitations-2/figure/lpa_box_all_2.png]]
 [[file:party_invitations-2/figure/lpa_box_all_3.png]]
 
-***** w.o. tau, theta
-#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 1)
 cd $out_dir/figure;
 convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
 convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
@@ -2985,8 +2983,7 @@ print(knitr::kable(tt))
 #+end_export
 
 **** visualise cluster
-***** with tau, theta
-#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 1)
 cd $out_dir
 cd figure
 convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
@@ -3005,8 +3002,7 @@ convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
 [[file:sprained_ankle-1/figure/lpa_box_all_2.png]]
 [[file:sprained_ankle-1/figure/lpa_box_all_3.png]]
 
-***** w.o. tau, theta
-#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 1)
 cd $out_dir/figure;
 convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
 convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
@@ -3444,8 +3440,7 @@ print(knitr::kable(tt))
 #+end_export
 
 **** visualise cluster
-***** with tau, theta
-#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 1)
 cd $out_dir
 cd figure
 convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
@@ -3464,8 +3459,7 @@ convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
 [[file:club_membership-1/figure/lpa_box_all_2.png]]
 [[file:club_membership-1/figure/lpa_box_all_3.png]]
 
-***** w.o. tau, theta
-#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 1)
 cd $out_dir/figure;
 convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
 convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
@@ -3995,8 +3989,7 @@ print(knitr::kable(tt))
 #+end_export
 
 **** visualise cluster
-***** with tau, theta
-#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 1)
 cd $out_dir
 cd figure
 convert -density 300 lpa_box_all_3.pdf lpa_box_all_3.png
@@ -4015,8 +4008,7 @@ convert -density 300 lpa_box_all_2.pdf lpa_box_all_2.png
 [[file:locate_email/figure/lpa_box_all_2.png]]
 [[file:locate_email/figure/lpa_box_all_3.png]]
 
-***** w.o. tau, theta
-#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 2)
+#+begin_src sh :var out_dir=(jyun/get-nth-up-heading 1)
 cd $out_dir/figure;
 convert -density 300 lpa_vio_all_3.pdf lpa_vio_all_3.png;
 convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
