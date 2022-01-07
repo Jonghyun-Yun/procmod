@@ -3302,7 +3302,6 @@ convert -density 300 lpa_vio_all_2.pdf lpa_vio_all_2.png;
 
 #+RESULTS:
 
-
 #+begin_src emacs-lisp :var out_dir=(jyun/get-nth-up-heading) :results value raw replace
 (concat
   (format "[[file:%s]]\n" (concat out_dir "/figure/lpa_vio_all_2.png"))
