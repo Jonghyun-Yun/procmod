@@ -1,7 +1,7 @@
 +++
 title = "Applications"
 author = ["Jonghyun Yun"]
-lastmod = 2022-01-06T22:55:45-06:00
+lastmod = 2022-01-06T23:40:30-06:00
 draft = false
 weight = 50
 chapter = true
