@@ -1,7 +1,7 @@
 +++
 title = "Applications"
 author = ["Jonghyun Yun"]
-lastmod = 2022-01-06T20:01:52-06:00
+lastmod = 2022-01-06T22:55:45-06:00
 draft = false
 weight = 50
 chapter = true
@@ -1228,7 +1228,7 @@ Response: the larger, the better
 ### w/ tau and theta
 
 
-|          tau|        theta|      naction|          spd|         res|             n|
+|          tau|        theta|      naction|          spd|         res|             n    |
 |------------:|------------:|------------:|------------:|-----------:|-------------:|
 |  0.88 (1.77)| -1.05 (1.11)|  1.85 (1.79)|  1.02 (1.83)| 2.81 (0.44)|  57.00 (0.00)|
 | -0.38 (0.57)| -0.33 (0.91)|  0.04 (0.71)| -0.61 (0.49)| 2.54 (0.60)| 175.00 (0.00)|
