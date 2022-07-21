@@ -1,7 +1,7 @@
 +++
 title = "Draft"
 author = ["Jonghyun Yun"]
-lastmod = 2022-01-20T16:10:27-06:00
+lastmod = 2022-07-21T16:17:18-05:00
 draft = false
 weight = 30
 chapter = false
@@ -21,10 +21,11 @@ chapter = false
     - [Advantages of the proposed method](#advantages-of-the-proposed-method)
     - [paper org.](#paper-org-dot)
 - [Motivating example](#motivating-example)
-    - [Problem Solving in Technology-Rich Environments](#problem-solving-in-technology-rich-environments)
-        - [Questions we like to answer (from Dr. Jeon's proposal)](#questions-we-like-to-answer--from-dr-dot-jeon-s-proposal----posts-dot-org)
+    - [Intro - PIACC-PSTRE](#intro-piacc-pstre)
+    - [Specific item - Tickets](#specific-item-tickets)
         - [Illustrate a ticket example:](#illustrate-a-ticket-example)
         - [address challenges in details](#address-challenges-in-details)
+        - [Questions we like to answer (from Dr. Jeon's proposal)](#questions-we-like-to-answer--from-dr-dot-jeon-s-proposal----posts-dot-org)
 - [Methods](#methods)
     - [notations](#notations)
     - [Action embedding](#action-embedding)
@@ -54,6 +55,7 @@ chapter = false
             - [cluster boxplots](#cluster-boxplots)
             - [cluster violins](#cluster-violins)
         - [response](#response)
+- [Discussion](#discussion)
 - [References](#references)
 
 </div>
@@ -83,8 +85,7 @@ The availability of process data open new research opportunities including to be
 
 ## Challenges {#challenges}
 
-While the availability of rich response process data during problem solving comes the great challenge of building appropriate psychometric models to analyze these data.
-The raw process data are usually formatted as lines of coded and time-stamped strings.
+While the availability of rich response process data during problem solving comes the great challenge of building appropriate psychometric models to analyze these data. The raw process data are usually formatted as lines of coded and time-stamped strings. The variable length of the process and the sparsity of the process remain challenging to the quantitative model development.
 The vast amount of data on students' potential trial-and-error process makes it less than straightforward to detect patterns in problem solving.
 
 
@@ -95,16 +96,16 @@ Other researchers explored the method of combining Markov movesl and item respon
 In addition, researchers used digraphs to visualize and analyze sequential process data collected from assessment.
 <&zhu_using_2016> used network visualization and analysis for understanding process data.
 
-<&chen_statistical_2019>
-<&chen_continuous-time_2020>
-<&tang_latent_2019>
-<&he_identifying_2015>
-<&ulitzsch_combining_2021>
+-   <&chen_statistical_2019>
+-   <&chen_continuous-time_2020> Markov decision process, a human expert needs to score utilities of actions.
+-   <&tang_latent_2019> MDS usgin the dissimlarity of actions sequences
+-   <&he_identifying_2015>
+-   Graph model to cluster action sequences <&ulitzsch_combining_2021>
+
 <&qiao_data_2018>
 <&wang_subtask_2020>
 
-RNN
-<&tang_exploratory_2019>
+-   recurrent neural network to encode action sequences to fixed sized vectors. <&tang_exploratory_2019>
 
 n-gram
 <&van_der_ark_identifying_2015>
@@ -142,56 +143,31 @@ x
 # Motivating example {#motivating-example}
 
 
-## Problem Solving in Technology-Rich Environments {#problem-solving-in-technology-rich-environments}
-
-% stolen from <&chen_statistical_2019>
-We introduce a specific item, CLIMATE CONTROL (CC), to demonstrate the data structure and to motivate our research questions. It is part of a CPS unit in PISA 2012 that was designed under the “MicroDYN” framework (Greiff et al., 2012; Wüstenberg et al., 2012), a framework for the development of small dynamic systems of causal relationships for assessing CPS.
+## Intro - PIACC-PSTRE {#intro-piacc-pstre}
 
 Interactive tasks as implemented in the problem solving in a technology-rich
 environment (PSTRE) domain in the Programme for the International Assessment of
-Adult Competencies (PIAAC, <&oecd_technical_2019>) and the problem solving domain in the
-Programme for International Student Assessment (PISA, OECD, 2014) aim at mirroring
-real-life problem-solving behavior (Goldhammer, Naumann, & Keßel, 2013). While correct
-responses to such tasks can be assumed to stem from examinees having the skill set and
-the motivation required to solve the task, incorrect responses can occur for a variety of
-different reasons, ranging from lack of different subskills and/or metacompetencies required
-to solve the task through misinterpreting instructions to examinees not exerting their best
-Fo
-effort and interacting quickly and superficially with the task at hand.
+Adult Competencies (PIAAC, <&oecd_technical_2019>) assesses the
+proficiency of adults in key information-processing skills - literacy, numeracy
+and problem solving. During the PIAAC assessement, user interactions were logged
+automatically. This means that most of the users’ actions within the assessment
+tool were recorded and stored with time stamps in separate files called log
+files.
 
-As a motivating example, we introduce problem solving in technology-rich environments (PSTRE) We introduce an example of pro
-
-OECD Survey of Adult Skills (PIAAC) Log Data
-Downloaded from <https://piaac-logdata.tba-hosting.de/>
-Problem Solving Items:
-
-The Programme for the International Assessment of Adult Competencies (PIAAC) is a programme of assessment and analysis of adult skills. The major survey conducted as part of PIAAC is the Survey of Adult Skills. The Survey measures adults’ proficiency in key information-processing skills - literacy, numeracy and problem solving - and gathers information and data on how adults use their skills at home, at work and in the wider community.
-
-This international survey is conducted in over 40 countries/economies and measures the key cognitive and workplace skills needed for individuals to participate in society and for economies to prosper.
-
-The OECD Survey of Adult Skills (PIAAC) assesses the proficiency of adults in information processing skills. During the PIAAC assessement, user interactions were logged automatically. This means that most of the users’ actions within the assessment tool were recorded and stored with time stamps in separate files called log files.
-
-> This refers to the ability to use technology to solve problems and accomplish complex tasks. It is not a measurement of “computer literacy”, but rather of the cognitive skills required in the information age – an age in which the accessibility of boundless information has made it essential for people to be able to decide what information they need, to evaluate it critically, and to use it to solve problems. In this survey, higher-order skills are identified along with basic proficiency.
+Th survey of adult skills (PIAAC) log data has been downloaded from <https://piaac-logdata.tba-hosting.de/>
 
 
-### [Questions we like to answer (from Dr. Jeon's proposal)](posts/.org) {#questions-we-like-to-answer--from-dr-dot-jeon-s-proposal----posts-dot-org}
+## Specific item - Tickets {#specific-item-tickets}
 
--   which sequences or actions are effective? given the person's ability and item difficulty
--   is the same sequence (strategy) effective for all items or not?
--   is the same sequence effective for all people?
--   if effective sequences are not the same across all items, can we extract some common features of effective sequences ?
--   which sequences or actions are more or less effective for students with disability?
--   any other person covariates? ability? that is, does the effectiveness of sequences depend on person abilities? (interaction between sequence and ability)
--   does the effect of the sequence change depending on how long it took? for instance,  when it was taken in a shorter time, a sequence might have a positive effect, while it might have a negative effect when it was taken in a longer time.
--   instead of using the log time (continuous), it may be better or useful to use a categorical variable?
--   the effect of sequences on the success probability may be a function of item difficulty or other item features, for instance, item position, item types (e.g., multiple-choice vs. open-ended), item contents (algebra, geometry) ?
+% stolen from <&chen_statistical_2019>
+We introduce a specific item, Ticket Reservation (Tickets), to demonstrate the data structure and to motivate our research questions.
 
 
 ### Illustrate a ticket example: {#illustrate-a-ticket-example}
 
-<a id="org06a7d21"></a>
+<a id="orgdc67964"></a>
 
-{{< figure src="tickets_demo.png" caption="Figure 1: An example of PS-TRE items. In this simulated web environment, respondents can access information required for ticket reservation." >}}
+{{< figure src="tickets_demo.png" caption="Figure 1: An example of PSTRE items. In this simulated web environment, respondents can access information required for ticket reservation." >}}
 
 This  item  involves  a  scenario  in  which  the respondent  is asked to reserve all fooball game tickets that an entire group can attend. A group of friend provides thier availabilities via an online calendar. Respondents  access  and  evaluate  information from ticket-reservation web pages and online calendars in simulated web environment. Respondents are able to:
 
@@ -229,17 +205,34 @@ On average, repondents spend 182 (IQR: 107) seconds on this time, and take 23 (I
 ### address challenges in details {#address-challenges-in-details}
 
 The process data consists of pairs of actions and time stamps of each respondents.
-Major challenges to establish a statistcal model taking the process data as an input are 1) unequal length of respondents' actions sequences; 2) large number of distinct actions transitions; and 3) ...
+Major challenges to establish a statistcal model taking the process data as an input are 1) unequal length of respondents' actions sequences; 2) high cardinality of actions; and 3)
 
-Thanks to the recent development of natual language processing
+
+### [Questions we like to answer (from Dr. Jeon's proposal)](posts/.org) {#questions-we-like-to-answer--from-dr-dot-jeon-s-proposal----posts-dot-org}
+
+While correct responses to such tasks can be assumed to stem from examinees
+having the skill set and the motivation required to solve the task, incorrect
+responses can occur for a variety of different reasons, ranging from lack of
+different subskills and/or metacompetencies required to solve the task through
+misinterpreting instructions to examinees not exerting their best effort and
+interacting quickly and superficially with the task at hand.
+
+-   which sequences or actions are effective? given the person's ability and item difficulty
+-   is the same sequence (strategy) effective for all items or not?
+-   is the same sequence effective for all people?
+-   if effective sequences are not the same across all items, can we extract some common features of effective sequences ?
+-   which sequences or actions are more or less effective for students with disability?
+-   any other person covariates? ability? that is, does the effectiveness of sequences depend on person abilities? (interaction between sequence and ability)
+-   does the effect of the sequence change depending on how long it took? for instance,  when it was taken in a shorter time, a sequence might have a positive effect, while it might have a negative effect when it was taken in a longer time.
+-   instead of using the log time (continuous), it may be better or useful to use a categorical variable?
+-   the effect of sequences on the success probability may be a function of item difficulty or other item features, for instance, item position, item types (e.g., multiple-choice vs. open-ended), item contents (algebra, geometry) ?
 
 
 # Methods {#methods}
 
-%% stolen from neap proposal
-We propose to develop a new modeling framework for analyzing time-stamped sequences of actions. The innovative aspect of our proposed model is that we view users' sequences of actions as Markov processes of possible actions mapped to Euclidean space.
-
-With our framework, researchers and policymakers can quantify and better understand learners' problem solving processes.
+We propose to develop a new modeling framework for analyzing time-stamped
+sequences of actions. The innovative aspect of our proposed model is that we
+view users' sequences of actions as Markov processes of actions embedded in Euclidean space.
 
 
 ## notations {#notations}
@@ -247,7 +240,7 @@ With our framework, researchers and policymakers can quantify and better underst
 Let \\(S\\) denotes a set of all possible actions. For each action \\(m \in S\\), \\(A\_{m}\\)
 denotes a set of competing actions \\(\\{l\_1, \ldots, l\_{n\_m}\\}\\) that can be taken
 directly after \\(m\\). Let \\(t\_{k,n}\\) denote entry time that the \\(k\\)-th
-respondent starts his/her $n$-th action. So, his/her sojourn time in the $n$-th
+respondent starts his/her \\(n\\)-th action. So, his/her sojourn time in the $n$-th
 action is denoted by \\(\dd t\_{k,n} = t\_{k,n+1} - t\_{k,n}\\) for \\(n < M\_{k} - 1\\).
 Respondents are assumed to begin problem solving processes at time \\(t=0\\). Let
 \\(Y\_k(t)\\) denote an action being taken by the $k$-th respondent at time \\(t\\).
@@ -393,6 +386,8 @@ It is possible to include the outcome in this multi-state survival modeling fram
 
 ## Multistate model (intercept only) {#multistate-model--intercept-only}
 
+\\(\theta\\): large -> majority process, small -> minority process??
+
 The intensity function \\(q\_{ml}(t)\\) represents the instantaneous rate of transition from action \\(m\\) to \\(l\\) at time \\(t\\):
 
 \begin{align\*}
@@ -434,8 +429,7 @@ for all \\(m \in S\\), \\(l \in A\_{m}\\), respondents \\(k = 1,\ldots,N\\), and
 -   multistate model + visualization
 
 The action embedding algorithm is written using `TensorFlow` <tensorflow2015-whitepaper> library in `Python` <10.5555/1593511>.
-The MCMC algorithm was written in `R` <r_core_team_r_2020> and `C++14` <&ISO:2014:IIIb> with `Stan` math library  <carpenter_stan_2015>. The code and documentations, along with example data sets, are found
-in \url{https://jonghyun-yun.github.io/procmod/}.
+The MCMC algorithm for the multi-state survival model was written in `C++14` <&ISO:2014:IIIb> with `Stan` math library <carpenter_stan_2015>, and post MCMC analytic tools were developed using `R` <r_core_team_r_2020>. The code and documentations, along with example data sets, are found in \url{https://jonghyun-yun.github.io/procmod/}.
 
 `tidyLPA` <&rosenberg_tidylpa_2018>
 `mclust` <&scrucca_mclust_2016>
@@ -883,6 +877,14 @@ Response: the larger, the better
 |  1.92 (2.18)|  2.16 (2.33)| 0.00 (0.01)| 0.05 (0.10)| 3.00 (2.90)|  21.00 (0.00)|
 
 
+# Discussion {#discussion}
+
+With our framework, researchers and policymakers can quantify and better
+understand learners' problem solving processes.
+
+
 # References {#references}
 
 <~/Zotero/myref.bib>
+
+**\***
