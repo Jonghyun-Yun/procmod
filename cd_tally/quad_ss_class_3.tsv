@@ -1,1 +1,10 @@
-('GET_HELP-REQUEST', 'COMBOBOX-menulist.index=4', 'SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST')	1126.304847492875
+('TOOLBAR_webApp-webApp', 'COMBOBOX-menulist.index=9', 'SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST')	862.363942136292
+('COMBOBOX-menulist.index=9', 'SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4')	787.8566220815179
+('TOOLBAR_spreadApp-spreadApp', 'TOOLBAR_webApp-webApp', 'TOOLBAR_spreadApp-spreadApp', 'TOOLBAR_webApp-webApp')	744.423334055047
+('TOOLBAR_spreadApp-spreadApp', 'TOOLBAR_webApp-webApp', 'COMBOBOX-menulist.index=9', 'SUBMIT_complete-u03_default_txt14')	710.3162072291957
+('TOOLBAR_webApp-webApp', 'TOOLBAR_spreadApp-spreadApp', 'TOOLBAR_webApp-webApp', 'TOOLBAR_spreadApp-spreadApp')	693.6579962481192
+('TOOLBAR_webApp-webApp', 'TOOLBAR_spreadApp-spreadApp', 'TOOLBAR_webApp-webApp', 'COMBOBOX-menulist.index=9')	682.1145714800685
+('TOOLBAR_spreadApp-spreadApp', 'TOOLBAR_webApp-webApp', 'SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST')	680.7447984927012
+('KEYPRESS', 'COMBOBOX-menulist.index=9', 'SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST')	665.1546762851937
+('TOOLBAR_webApp-webApp', 'TOOLBAR_spreadApp-spreadApp', 'TOOLBAR_webApp-webApp', 'NEXT_INQUIRY-REQUEST')	633.2392305714521
+('SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST', 'END_CANCEL-endtask_txt4', 'TOOLBAR_spreadApp-spreadApp')	559.7111114242298

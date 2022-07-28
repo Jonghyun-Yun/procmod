@@ -98,20 +98,24 @@ piacc_background_path = "./data/PIAAC_cleaned_data_1110/Prgusap1_2017.csv"
 piacc_background_spss = "./data/PIAAC_cleaned_data_1110/Prgusap1_2017.sav"
 ## xxx = foreign::read.spss("./data/PIAAC_cleaned_data_1110/Prgusap1_2017.sav")
 
-load(paste0(out_dir, "lpa_membership_mod2.RData"))
+load(paste0(out_dir, "lpa_membership_mod3.RData"))
 item = read_piacc(piacc_path, item_code, sub_str, ignore_str)
 
 mc = max(memb$Class)
 for (cc in 1:mc) {
 item2sen(item, memb$SEQID[memb$Class == cc])
 
-system(". activate tf; python py/collocation.py")
+## system("conda activate tf; python py/collocation.py")
 ## library(reticulate)
 ## conda_python("tf")
 ## source_python("py/collocation.py")
+## library(reticulate)
+reticulate::use_condaenv("tf")
+## reticulate::use_python()
+reticulate::source_python("py/collocation.py")
 
-file.rename("input/bi_ss.tsv", paste0("input/bi_ss_class_", cc,".tsv"))
-file.rename("input/tri_ss.tsv", paste0("input/tri_ss_class_", cc,".tsv"))
+file.rename("input/bi_ss.tsv", paste0("input/mod3_bi_ss_class_", cc,".tsv"))
+file.rename("input/tri_ss.tsv", paste0("input/mod3_tri_ss_class_", cc,".tsv"))
 file.rename("input/quad_ss.tsv", paste0("input/quad_ss_class_", cc,".tsv"))
     }
 system(paste0("mv input/*.tsv ", out_dir))

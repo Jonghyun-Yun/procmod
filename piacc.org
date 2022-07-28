@@ -20,9 +20,9 @@
 #+setupfile: ~/org/latex_header.setup
 #+setupfile: ~/org/orgmode_header.setup
 
-#+property: header-args :eval never-export :eval no
+#+property: header-args :eval never-export
 #+property: header-args:ein :session localhost
-#+property: header-args:jupyter-python :session *jupyter-piacc* :kernel tf
+#+property: header-args:jupyter-python :session jupyter-piacc :kernel tf
 
 #+begin_src emacs-lisp :results silent
   (jyun/org-latex-set-options 2.5)
@@ -497,8 +497,8 @@ readr::write_csv(data.frame(Dml), "input/Dml.csv", col_names = FALSE)
 :PROPERTIES:
 :header-args:R: :tangle R/background.R
 :END:
-#+begin_src R :results silent
-binfo = readr::read_csv("./data/PIAAC_cleaned_data_1110/Prgusap1_2012.csv")
+#+begin_src R
+binfo = readr::read_csv("procmod-code/data/PIAAC_cleaned_data_1110/Prgusap1_2012.csv")
 ## binfo = foreign::read.spss("./data/PIAAC_cleaned_data_1110/Prgusap1_2012.sav")
 item = readr::read_csv("input/item.csv")
 pal = readr::read_csv("./data/PIAAC_cleaned_data_1110/PUFs_values.csv", col_types = readr::cols(.default = readr::col_character()))
@@ -2864,7 +2864,7 @@ length(unique(trans))
 #+end_src
 * Collocations
 ** practice with =nltk.corpus=
-#+begin_src jupyter-python
+#+begin_src jupyter-python :eval yes
 import nltk
 from nltk.collocations import *
 bigram_measures = nltk.collocations.BigramAssocMeasures()
@@ -3003,8 +3003,6 @@ scored = triagram_collocation.score_ngrams(trigram_measures.likelihood_ratio)
 tri_ss = sorted(scored, key=lambda score: score[1], reverse = True)[0:10]
 #+end_src
 
-#+RESULTS:
-
 #+begin_src jupyter-python :tangle py/collocation.py
 quadagram_collocation = QuadgramCollocationFinder.from_words(words)
 quadagram_collocation.apply_word_filter(filter_stops)
@@ -3087,20 +3085,24 @@ source("R/itemcode.R")
 
 <<piacc_path>>
 
-load(paste0(out_dir, "lpa_membership_mod2.RData"))
+load(paste0(out_dir, "lpa_membership_mod3.RData"))
 item = read_piacc(piacc_path, item_code, sub_str, ignore_str)
 
 mc = max(memb$Class)
 for (cc in 1:mc) {
 item2sen(item, memb$SEQID[memb$Class == cc])
 
-system(". activate tf; python py/collocation.py")
+## system("conda activate tf; python py/collocation.py")
 ## library(reticulate)
 ## conda_python("tf")
 ## source_python("py/collocation.py")
+## library(reticulate)
+reticulate::use_condaenv("tf")
+## reticulate::use_python()
+reticulate::source_python("py/collocation.py")
 
-file.rename("input/bi_ss.tsv", paste0("input/bi_ss_class_", cc,".tsv"))
-file.rename("input/tri_ss.tsv", paste0("input/tri_ss_class_", cc,".tsv"))
+file.rename("input/bi_ss.tsv", paste0("input/mod3_bi_ss_class_", cc,".tsv"))
+file.rename("input/tri_ss.tsv", paste0("input/mod3_tri_ss_class_", cc,".tsv"))
 file.rename("input/quad_ss.tsv", paste0("input/quad_ss_class_", cc,".tsv"))
     }
 system(paste0("mv input/*.tsv ", out_dir))

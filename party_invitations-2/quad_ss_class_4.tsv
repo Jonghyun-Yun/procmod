@@ -1,0 +1,10 @@
+('MENU-file-menu', 'MENUITEM_newfolder-key=newfolder', 'TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS')	4891.957639521403
+('MAIL_VIEWED-item105', 'MAIL_DRAG-item105', 'FOLDER_VIEWED-item0', 'MAIL_MOVED-item105.target=item0')	3815.239250500159
+('MENU-edit-menu', 'MENUITEM_newfolder-key=newfolder', 'TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS')	3242.2869442719298
+('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=needs_accommodations', 'ADD_FOLDER_ok-addValidation')	3199.3793762861433
+('MENUITEM_newfolder-key=newfolder', 'TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=needs_accommodations')	3184.977569886542
+('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=Needs_Accomodations', 'ADD_FOLDER_ok-addValidation')	3175.487324759765
+('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=Accommodations', 'ADD_FOLDER_ok-addValidation')	3162.0690401872557
+('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=accomodations', 'ADD_FOLDER_ok-addValidation')	3162.0690401872557
+('MENUITEM_newfolder-key=newfolder', 'TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=Needs_Accomodations')	3160.987464071547
+('TEXTBOX_ONFOCUS-createfoldernameinput.value=', 'KEYPRESS', 'TEXTBOX_KILLFOCUS-createfoldernameinput.value=Accomodations', 'ADD_FOLDER_ok-addValidation')	3159.2169401697984
