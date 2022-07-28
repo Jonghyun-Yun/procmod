@@ -1,0 +1,10 @@
+('SUBMIT_complete-u03_default_txt14', 'NEXT_INQUIRY-REQUEST')	1486.2898203021678
+('TOOLBAR_spreadApp-spreadApp', 'TOOLBAR_webApp-webApp')	909.084997343798
+('TOOLBAR_webApp-webApp', 'COMBOBOX-menulist.index=9')	415.20157418177166
+('COMBOBOX-menulist.index=9', 'SUBMIT_complete-u03_default_txt14')	308.73771560301225
+('COMBOBOX-menulist.index=4', 'SUBMIT_complete-u03_default_txt14')	176.97870088549854
+('NEXT_INQUIRY-REQUEST', 'SUBMIT_complete-u03_default_txt14')	117.60547496040354
+('TOOLBAR_webApp-webApp', 'TOOLBAR_spreadApp-spreadApp')	103.84381353330272
+('SUBMIT_complete-u03_default_txt14', 'SUBMIT_complete-u03_default_txt14')	96.02468414840284
+('NEXT_INQUIRY-REQUEST', 'TOOLBAR_spreadApp-spreadApp')	70.42173332392007
+('TOOLBAR_webApp-webApp', 'COMBOBOX-menulist.index=8')	64.24855738822039
